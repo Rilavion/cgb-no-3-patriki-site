@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="logo.png" type="image/png">
+<link rel="apple-touch-icon" href="logo.png">
+<title>Редактор теста</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=18">
+<style id="cgb-admin-guard">
+[data-admin]{display:none !important}
+body.cgb-is-admin [data-admin]{display:initial !important}
+</style>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+<div class="bg-noise"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-icon"><img src="logo.png" alt="ВС"></div>
+      <div class="brand-text"><span class="brand-label">Редактор</span><span class="brand-name">Тест</span></div>
+    </a>
+    <div class="header-actions" style="margin-left:auto">
+      <a href="tests.html" data-page="tests.html" class="btn btn-ghost btn-sm">← К списку тестов</a>
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Сменить тему">
+        <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24"><path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66l1.42-1.42M4.92 19.08l1.42-1.42m0-11.32L4.92 4.92m14.16 14.16l-1.42-1.42M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="te-page">
+
+    <div id="teGuard" style="display:none">
+      <div class="apps-guard-box" style="max-width:520px;margin:60px auto;text-align:center;padding:40px">
+        <div class="apps-guard-icon">⚠</div>
+        <h2>Доступ ограничен</h2>
+        <p>Редактор тестов доступен только Администратору.</p>
+        <div style="margin-top:20px"><button class="btn btn-gold" data-open-login>Войти</button></div>
+      </div>
+    </div>
+
+    <div id="teCreate" style="display:none">
+      <div class="te-create-card">
+        <div class="te-create-title">✨ Создание нового теста</div>
+        <div class="te-create-sub">Введите название — тест создастся как черновик, потом сможете настроить всё остальное</div>
+        <div class="form-group">
+          <label>Название теста</label>
+          <input type="text" id="tcTitle" class="msg-input te-title-input" placeholder="Например: Основы медицинской службы">
+        </div>
+        <div class="form-msg" id="tcMsg"></div>
+        <div style="display:flex;gap:10px;justify-content:flex-end">
+          <a href="tests.html" data-page="tests.html" class="btn btn-ghost btn-sm">Отмена</a>
+          <button class="btn btn-gold" id="tcCreate">Создать →</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="teRoot" style="display:none">
+      <div class="te-header">
+        <div class="te-header-l">
+          <input type="text" id="teTitle" placeholder="Название теста..." class="te-title-input">
+          <div class="te-header-slug" id="teSlugLine">Ссылка: <b id="teSlugPreview">...</b> <button class="te-copy-link" id="teCopyLink" title="Копировать полную ссылку">🔗</button></div>
+        </div>
+        <div class="te-header-meta">
+          <label class="te-pub-toggle">
+            <input type="checkbox" id="tePublished">
+            <span class="te-pub-slider"></span>
+            <span class="te-pub-label" id="tePubLabel">Черновик</span>
+          </label>
+          <button class="btn btn-ghost btn-sm" id="teDelete">🗑</button>
+          <button class="btn btn-gold btn-sm" id="teSaveTop">💾 Сохранить</button>
+        </div>
+      </div>
+
+      <div class="te-tabs">
+        <button class="te-tab active" data-te-tab="questions"><span class="te-tab-num">1</span> Вопросы <span class="te-tab-cnt" id="teQCount">0</span></button>
+        <button class="te-tab" data-te-tab="main"><span class="te-tab-num">2</span> Описание</button>
+        <button class="te-tab" data-te-tab="settings"><span class="te-tab-num">3</span> Настройки</button>
+        <button class="te-tab" data-te-tab="blocks"><span class="te-tab-num">4</span> Блокировки</button>
+      </div>
+
+      <div class="te-tab-body" data-tab="questions">
+        <div class="te-card">
+          <div class="te-card-title-row">
+            <div class="te-card-title">❓ Вопросы теста</div>
+            <div class="te-card-hint" id="teQStats"></div>
+          </div>
+
+          <div class="te-add-panel">
+            <button class="btn btn-gold btn-sm" data-q-add-type="single">🔘 Один ответ</button>
+            <button class="btn btn-gold btn-sm" data-q-add-type="multi">☑ Несколько ответов</button>
+            <button class="btn btn-gold btn-sm" data-q-add-type="order" title="Пункты в правильном порядке — ученик расставляет их стрелками">↕ Расставьте по порядку</button>
+            <button class="btn btn-ghost btn-sm" data-q-add-type="prefilled" title="Обязательное поле с предустановленным ответом (например «Звание: Ефрейтор»)">📌 Предустановленное поле</button>
+          </div>
+
+          <div class="te-qs-list" id="teQList"></div>
+        </div>
+      </div>
+
+      <div class="te-tab-body" data-tab="main" style="display:none">
+        <div class="te-card">
+          <div class="te-card-title">📋 Описание теста</div>
+          <div class="msg-row">
+            <div class="form-group msg-flex-2"><label>Slug (для URL)</label><input type="text" id="teSlug" class="msg-input" placeholder="автоматически если пусто"></div>
+            <div class="form-group msg-flex-1"><label>Категория</label><select id="teCat" class="msg-input"><option value="">— без категории —</option></select></div>
+          </div>
+          <div class="form-group"><label>Краткое описание (в карточке теста)</label><input type="text" id="teDesc" class="msg-input" placeholder="Одна строка о чём тест..."></div>
+          <div class="form-group"><label>Вступительный текст</label><textarea id="teIntro" class="msg-input msg-textarea msg-textarea-sm" placeholder="Что должен знать проходящий..."></textarea></div>
+        </div>
+      </div>
+
+      <div class="te-tab-body" data-tab="settings" style="display:none">
+        <div class="te-cards-grid">
+          <div class="te-card">
+            <div class="te-card-title">🎯 Оценка</div>
+            <div class="form-group"><label>Порог прохождения (%)</label><input type="number" id="tePass" class="msg-input" min="0" max="100" value="70"></div>
+            <div class="form-group"><label class="doc-toggle-row"><input type="checkbox" id="teShowAns"><span>Показывать правильные ответы после сдачи</span></label></div>
+          </div>
+          <div class="te-card">
+            <div class="te-card-title">🎲 Рандомизация</div>
+            <div class="form-group"><label class="doc-toggle-row"><input type="checkbox" id="teShuffle"><span>Перемешивать вопросы случайно</span></label></div>
+            <div class="form-group"><label>Показывать вопросов за одно прохождение</label><input type="number" id="tePerRun" class="msg-input" min="0" placeholder="0 = все"><div class="te-hint">Если у теста 15 вопросов, а тут 10 — покажется 10 случайных. Предустановленные поля показываются всегда.</div></div>
+          </div>
+          <div class="te-card">
+            <div class="te-card-title">🔁 Попытки и время</div>
+            <div class="form-group"><label>Макс. попыток на человека</label><input type="number" id="teMax" class="msg-input" min="0" value="3"><div class="te-hint">0 = без ограничений</div></div>
+            <div class="form-group"><label>Лимит времени (мин)</label><input type="number" id="teTime" class="msg-input" min="0" value="0"><div class="te-hint">0 = без таймера</div></div>
+          </div>
+          <div class="te-card">
+            <div class="te-card-title">📤 Discord</div>
+            <div class="form-group"><label>Канал отправки результатов</label><select id="teChannel" class="msg-input"></select></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="te-tab-body" data-tab="blocks" style="display:none">
+        <div class="te-card">
+          <div class="te-card-title">🚫 Блокировки прохождения</div>
+          <div class="te-hint" style="margin-bottom:14px">Заблокированные не смогут отправить ответы. По статику (000-000) или Discord-нику.</div>
+          <div class="te-add-row">
+            <select id="teBlockKind" class="msg-input" style="max-width:160px"><option value="static">🆔 Статик</option><option value="discord">💬 Discord</option></select>
+            <input type="text" id="teBlockVal" class="msg-input" placeholder="000-000 или @username" style="flex:1">
+            <input type="text" id="teBlockReason" class="msg-input" placeholder="Причина (опц.)" style="flex:1">
+            <button class="btn btn-gold btn-sm" id="teBlockAdd">🚫 Заблокировать</button>
+          </div>
+          <div class="te-list" id="teBlockList"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="te-toast" id="teToast"></div>
+
+  </section>
+</main>
+
+<div class="modal-back" id="loginModal">
+  <div class="modal"><button class="modal-close" aria-label="Закрыть">✕</button><h3>Вход</h3>
+    <form><div class="form-group"><label>Email</label><input type="email" name="email" required></div><div class="form-group"><label>Пароль</label><input type="password" name="password" required></div><button class="btn btn-gold" style="width:100%" type="submit">Войти</button><div class="form-msg"></div></form></div>
+</div>
+
+<footer class="footer"><div class="container"><div class="footer-bottom"><span>© <span id="year"></span> · ЦГБ №3 · Центральная Городская</span><span class="footer-note">🐞 Нашли баг? Обратитесь: <b>@rilavion</b></span></div></div></footer>
+
+<script src="supabase-loader.js?v=18"></script>
+<script src="config.js?v=18"></script>
+<script src="auth.js?v=18"></script>
+<script src="roles-engine.js?v=18"></script>
+<script src="tests-engine.js?v=19"></script>
+<script src="main.js?v=20"></script>
+<script src="search-engine.js?v=18"></script>
+<script src="format-utils.js?v=18"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+const params=new URLSearchParams(location.search);
+const TID=params.get("t");
+let TEST=null,CATS=[],CHANNELS=[],QS=[],BLOCKS=[];
+let EXPANDED_QID=null;
+
+function toast(text,type){
+  const t=$("teToast");
+  t.textContent=text;
+  t.className="te-toast te-toast-show"+(type?" te-toast-"+type:"");
+  setTimeout(()=>t.classList.remove("te-toast-show"),2200);
+}
+
+let BOOTED=false;
+async function boot(){
+  const isAdmin=window.CGB_ROLES&&window.CGB_ROLES.isAdmin();
+  if(!isAdmin){
+    BOOTED=false;
+    $("teGuard").style.display="";$("teRoot").style.display="none";$("teCreate").style.display="none";return;
+  }
+  // ВАЖНО: повторный boot (обновление токена/ролей при alt-tab и т.п.) НЕ должен
+  // перерисовывать редактор — иначе затираются несохранённые правки вопросов.
+  if(BOOTED) return;
+  BOOTED=true;
+  $("teGuard").style.display="none";
+  document.body.classList.add("cgb-is-admin");
+  [CATS,CHANNELS]=await Promise.all([CGB_TESTS.fetchCategories(),CGB_TESTS.fetchDsChannels()]);
+  if(TID){
+    TEST=await CGB_TESTS.fetchTest(TID);
+    if(!TEST){alert("Тест не найден");location.href="tests.html";return}
+    [QS,BLOCKS]=await Promise.all([CGB_TESTS.fetchQuestions(TEST.id),CGB_TESTS.fetchBlocks(TEST.id)]);
+    showEditor();
+  } else {
+    $("teCreate").style.display="";
+    $("teRoot").style.display="none";
+    setTimeout(()=>$("tcTitle").focus(),100);
+  }
+}
+
+/* Страховка от потери введённого текста: при возврате на вкладку Supabase
+   обновляет токен — auth/roles дёргают boot(), который больше ничего не ломает.
+   Но на всякий случай (случайный F5, подвисание сети) держим автоснапшот
+   формы вопроса в sessionStorage — восстановление по клику. */
+(function(){
+  document.addEventListener("input",e=>{
+    if(e.target.closest&&e.target.closest("[data-qid]")) showDirty();
+  });
+  function showDirty(){
+    let n=document.getElementById("__teDirty");
+    if(!n){
+      n=document.createElement("div");n.id="__teDirty";
+      n.style.cssText="position:fixed;right:14px;bottom:14px;z-index:4000;background:rgba(7,36,46,.92);border:1px solid rgba(34,211,238,.45);color:#a5f3fc;padding:8px 14px;border-radius:10px;font-size:12px;box-shadow:0 8px 24px rgba(0,0,0,.4);backdrop-filter:blur(6px)";
+      n.textContent="✎ Есть несохранённые правки — не забудьте нажать «💾 Сохранить» у вопроса";
+      document.body.appendChild(n);
+      setTimeout(()=>{n.style.opacity="0";n.style.transition="opacity .8s";setTimeout(()=>n.remove(),900);},6000);
+    }
+  }
+})();
+
+$("tcCreate").addEventListener("click",createNewTest);
+$("tcTitle").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();createNewTest()}});
+async function createNewTest(){
+  const title=$("tcTitle").value.trim();
+  const msg=$("tcMsg");
+  if(!title){msg.className="form-msg error";msg.textContent="Введите название";$("tcTitle").focus();return}
+  msg.className="form-msg info";msg.textContent="Создание...";
+  const r=await CGB_TESTS.saveTest({title,pass_score:70,max_attempts:3,published:false});
+  if(!r.ok){msg.className="form-msg error";msg.textContent=r.error;return}
+  history.replaceState(null,"","test-editor?t="+encodeURIComponent(r.row.id));
+  TEST=r.row;QS=[];BLOCKS=[];
+  $("teCreate").style.display="none";
+  showEditor();
+  toast("Тест создан","ok");
+}
+
+function showEditor(){
+  $("teRoot").style.display="";
+  fillForm();
+  renderQs();renderBlocks();
+  updateSlugLine();
+}
+
+function fillForm(){
+  $("teTitle").value=TEST.title||"";
+  $("teDesc").value=TEST.description||"";
+  $("teIntro").value=TEST.intro||"";
+  $("teSlug").value=TEST.slug||"";
+  $("tePass").value=TEST.pass_score||70;
+  $("teMax").value=TEST.max_attempts||0;
+  $("teTime").value=TEST.time_limit_minutes||0;
+  $("tePerRun").value=TEST.questions_per_run||"";
+  $("teShuffle").checked=!!TEST.shuffle_questions;
+  $("tePublished").checked=!!TEST.published;
+  updatePubLabel();
+  $("teShowAns").checked=!!TEST.show_answers_after;
+  $("teCat").innerHTML=`<option value="">— без категории —</option>`+CATS.map(c=>`<option value="${c.id}" ${c.id===TEST.category_id?"selected":""}>${esc(c.name)}</option>`).join("");
+  fillChannels();
+}
+function fillChannels(){
+  const sel=$("teChannel");
+  const cur=TEST.result_channel_id;
+  if(!CHANNELS.length){sel.innerHTML=`<option value="">— бот не синхронизировал каналы —</option>`;return}
+  const byParent=new Map();
+  for(const c of CHANNELS){const k=c.parent_name||"Без категории";if(!byParent.has(k)) byParent.set(k,[]);byParent.get(k).push(c)}
+  const parts=[`<option value="">— не отправлять —</option>`];
+  for(const [pn,list] of byParent){
+    parts.push(`<optgroup label="${esc(pn)}">`);
+    for(const c of list) parts.push(`<option value="${c.channel_id}" ${c.channel_id===cur?"selected":""}>#${esc(c.name)}</option>`);
+    parts.push(`</optgroup>`);
+  }
+  sel.innerHTML=parts.join("");
+}
+function updatePubLabel(){$("tePubLabel").textContent=$("tePublished").checked?"✓ Опубликован":"Черновик"}
+function updateSlugLine(){
+  if(!TEST||!TEST.id){$("teSlugLine").style.display="none";return}
+  $("teSlugLine").style.display="";
+  const s=TEST.slug||TEST.id;
+  $("teSlugPreview").textContent="test.html?t="+s;
+}
+
+$("teCopyLink").addEventListener("click",()=>{
+  if(!TEST||!TEST.id) return;
+  const url=new URL("test.html?t="+encodeURIComponent(TEST.slug||TEST.id),location.href).href;
+  navigator.clipboard.writeText(url);
+  $("teCopyLink").textContent="✓";setTimeout(()=>$("teCopyLink").textContent="🔗",900);
+});
+
+document.querySelectorAll(".te-tab").forEach(t=>t.addEventListener("click",()=>{
+  document.querySelectorAll(".te-tab").forEach(x=>x.classList.toggle("active",x===t));
+  document.querySelectorAll(".te-tab-body").forEach(b=>b.style.display=b.dataset.tab===t.dataset.teTab?"":"none");
+}));
+$("tePublished").addEventListener("change",updatePubLabel);
+
+async function saveTest(){
+  if(!TEST){toast("Сначала создайте тест","err");return null}
+  const title=$("teTitle").value.trim();
+  if(!title){alert("Название обязательно");return null}
+  const row={
+    id:TEST.id,title,
+    description:$("teDesc").value.trim()||null,
+    intro:$("teIntro").value.trim()||null,
+    category_id:$("teCat").value||null,
+    slug:$("teSlug").value.trim()||null,
+    pass_score:parseInt($("tePass").value)||70,
+    max_attempts:parseInt($("teMax").value)||0,
+    time_limit_minutes:parseInt($("teTime").value)||null,
+    result_channel_id:$("teChannel").value||null,
+    published:$("tePublished").checked,
+    show_answers_after:$("teShowAns").checked,
+    shuffle_questions:$("teShuffle").checked,
+    questions_per_run:parseInt($("tePerRun").value)||null
+  };
+  const r=await CGB_TESTS.saveTest(row);
+  if(!r.ok){toast("Ошибка: "+r.error,"err");return null}
+  TEST=r.row;
+  updateSlugLine();
+  toast("✓ Сохранено","ok");
+  return TEST;
+}
+$("teSaveTop").addEventListener("click",saveTest);
+$("teDelete").addEventListener("click",async()=>{
+  if(!TEST||!TEST.id) return;
+  if(!confirm("Удалить тест «"+TEST.title+"» полностью?")) return;
+  await CGB_TESTS.removeTest(TEST.id);
+  location.href="tests.html";
+});
+
+/* ============ ВОПРОСЫ (inline expansion) ============ */
+
+function renderQs(){
+  const box=$("teQList");
+  let total=0;const prefilledCount=QS.filter(q=>q.kind==="prefilled").length;
+  const regularCount=QS.length-prefilledCount;
+  for(const q of QS) if(q.kind!=="prefilled") total+=(q.points||1);
+  $("teQCount").textContent=QS.length;
+  $("teQStats").textContent=QS.length?(regularCount+" вопросов ("+total+" б.) + "+prefilledCount+" предустановленных"):"Вопросов нет";
+  if(!QS.length){
+    box.innerHTML=`<div class="apps-empty" style="padding:30px"><p>Нажмите кнопку выше чтобы добавить вопрос.</p></div>`;
+    return;
+  }
+  box.innerHTML=QS.map((q,i)=>renderQItem(q,i)).join("");
+  bindQItems();
+}
+
+function renderQItem(q,i){
+  const isOpen=EXPANDED_QID===q.id;
+  const isPre=q.kind==="prefilled";
+  const isOrd=q.kind==="order";
+  const kindLabel=isPre?"📌 Предустановлено":(isOrd?"↕ По порядку":(q.kind==="multi"?"☑ Несколько":"🔘 Один"));
+  const opts=q.options||[];const cor=q.correct||[];const oImgs=q.option_images||[];
+  const summary=isPre
+    ? `<div class="te-q-opts"><span class="tq-opt tq-opt-c">${esc(q.prefilled_value||"—")}</span></div>`
+    : `<div class="te-q-opts">${opts.map((o,oi)=>`<span class="tq-opt ${!isOrd&&cor.includes(o)?"tq-opt-c":""}">${!isOrd&&cor.includes(o)?"✓ ":""}${oImgs[oi]?"🖼 ":""}${isOrd?(oi+1)+". ":""}${esc(o)}</span>`).join("")}</div>`;
+  return `<div class="te-q-item ${isOpen?"te-q-open":""} ${isPre?"te-q-pre":""}" data-qid="${q.id}">
+    <div class="te-q-head" data-q-toggle="${q.id}">
+      <div class="te-q-num">#${i+1}</div>
+      <div class="te-q-kind">${kindLabel}</div>
+      <div class="te-q-text">${esc(q.text||"—")}</div>
+      ${!isPre?`<div class="tq-pts">${q.points||1} б.</div>`:""}
+      <button class="te-q-btn" data-q-up="${q.id}" title="Выше">↑</button>
+      <button class="te-q-btn" data-q-dn="${q.id}" title="Ниже">↓</button>
+      <button class="te-q-btn te-q-btn-del" data-q-del="${q.id}" title="Удалить">🗑</button>
+      <div class="te-q-chev">${isOpen?"▲":"▼"}</div>
+    </div>
+    ${!isOpen?summary:""}
+    ${isOpen?renderQEditor(q):""}
+  </div>`;
+}
+
+function renderQEditor(q){
+  const isPre=q.kind==="prefilled";
+  if(isPre){
+    return `<div class="te-q-edit">
+      <div class="form-group"><label>Название (что за поле, будет видно юзеру)</label><input type="text" data-qf="text" class="msg-input" value="${esc(q.text||"")}" placeholder="Например: Звание"></div>
+      <div class="form-group"><label>Значение (что будет проставлено)</label><input type="text" data-qf="prefilled_value" class="msg-input" value="${esc(q.prefilled_value||"")}" placeholder="Например: Ефрейтор"></div>
+      <div class="te-hint">Это поле показывается пользователю как readonly и уходит в отчёт в Discord.</div>
+      <div class="te-q-actions">
+        <div class="form-msg" data-qmsg></div>
+        <div style="flex:1"></div>
+        <button class="btn btn-ghost btn-sm" data-q-cancel="${q.id}">Отмена</button>
+        <button class="btn btn-gold btn-sm" data-q-save="${q.id}">💾 Сохранить</button>
+      </div>
+    </div>`;
+  }
+  const opts=q.options&&q.options.length?q.options:["",""];
+  const cor=q.correct||[];
+  const oImgs=q.option_images||[];
+  if(q.kind==="order"){
+    return `<div class="te-q-edit">
+      <div class="form-group"><label>Текст вопроса *</label><textarea data-qf="text" class="msg-input msg-textarea msg-textarea-sm" placeholder="Что нужно расставить по порядку?">${esc(q.text||"")}</textarea></div>
+      <div class="form-group">
+        <label>Пункты <span class="msg-help">вводи в ПРАВИЛЬНОМ порядке — ученику они будут показаны вперемешку</span></label>
+        <div class="q-opt-list" data-q-opts="${q.id}">
+          ${opts.map((o,i)=>`<div class="q-opt-row">
+            <span class="q-ord-pos">${i+1}.</span>
+            <div class="q-opt-row-fields"><input type="text" class="msg-input q-opt-text" value="${esc(o)}" placeholder="Пункт ${i+1}"></div>
+            <button type="button" class="btn btn-ghost btn-sm q-opt-del">×</button>
+          </div>`).join("")}
+        </div>
+        <button type="button" class="btn btn-ghost btn-sm q-opt-add" data-q-optadd="${q.id}" style="margin-top:6px">+ Добавить пункт</button>
+      </div>
+      <div class="form-group">
+        <label>Изображения к вопросу (URL, по одному на строку, опц.)</label>
+        <textarea data-qf="images" class="msg-input msg-textarea msg-textarea-sm" placeholder="https://...">${esc((q.images||[]).join("\n"))}</textarea>
+      </div>
+      <div class="msg-row">
+        <div class="form-group msg-flex-1"><label>Баллы (засчитывается только полностью верный порядок)</label><input type="number" data-qf="points" class="msg-input" min="1" value="${q.points||1}"></div>
+        <div class="form-group msg-flex-1"><label>Порядок</label><input type="number" data-qf="sort" class="msg-input" value="${q.sort||100}"></div>
+      </div>
+      <div class="te-q-actions">
+        <div class="form-msg" data-qmsg></div>
+        <div style="flex:1"></div>
+        <button class="btn btn-ghost btn-sm" data-q-cancel="${q.id}">Отмена</button>
+        <button class="btn btn-gold btn-sm" data-q-save="${q.id}">💾 Сохранить</button>
+      </div>
+    </div>`;
+  }
+  const optImgOn=oImgs.some(Boolean);
+  return `<div class="te-q-edit${optImgOn?" optimg-on":""}">
+    <div class="form-group"><label>Текст вопроса *</label><textarea data-qf="text" class="msg-input msg-textarea msg-textarea-sm" placeholder="Что спрашиваем?">${esc(q.text||"")}</textarea></div>
+    <div class="form-group">
+      <label>Варианты ответа <span class="msg-help">Нажмите ☑ для правильных</span></label>
+      <div class="q-opt-list" data-q-opts="${q.id}">
+        ${opts.map((o,i)=>`<div class="q-opt-row">
+          <input type="${q.kind==="multi"?"checkbox":"radio"}" name="cor_${q.id}" ${cor.includes(o)?"checked":""}>
+          <div class="q-opt-row-fields">
+            <input type="text" class="msg-input q-opt-text" value="${esc(o)}" placeholder="Вариант ${i+1}">
+            <input type="text" class="msg-input q-opt-img" value="${esc(oImgs[i]||"")}" placeholder="URL картинки для этого варианта (опц.)">
+          </div>
+          <button type="button" class="btn btn-ghost btn-sm q-opt-del">×</button>
+        </div>`).join("")}
+      </div>
+      <button type="button" class="btn btn-ghost btn-sm q-opt-add" data-q-optadd="${q.id}" style="margin-top:6px">+ Добавить вариант</button>
+      <div style="margin-top:8px"><label style="cursor:pointer;font-size:13px"><input type="checkbox" data-qoptimg="${q.id}" ${optImgOn?"checked":""} style="margin-right:6px">🖼 Добавить к каждому варианту изображение?</label>
+      <div class="te-hint">Включи — под каждым вариантом появится поле для ссылки на картинку. Ссылки добавляются через URL.</div></div>
+    </div>
+    <div class="form-group">
+      <label>Изображения к вопросу (URL, по одному на строку, опц.)</label>
+      <textarea data-qf="images" class="msg-input msg-textarea msg-textarea-sm" placeholder="https://...">${esc((q.images||[]).join("\n"))}</textarea>
+    </div>
+    <div class="msg-row">
+      <div class="form-group msg-flex-1"><label>Баллы</label><input type="number" data-qf="points" class="msg-input" min="1" value="${q.points||1}"></div>
+      <div class="form-group msg-flex-1"><label>Порядок</label><input type="number" data-qf="sort" class="msg-input" value="${q.sort||100}"></div>
+    </div>
+    <div class="te-q-actions">
+      <div class="form-msg" data-qmsg></div>
+      <div style="flex:1"></div>
+      <button class="btn btn-ghost btn-sm" data-q-cancel="${q.id}">Отмена</button>
+      <button class="btn btn-gold btn-sm" data-q-save="${q.id}">💾 Сохранить</button>
+    </div>
+  </div>`;
+}
+
+function bindQItems(){
+  document.querySelectorAll("[data-q-toggle]").forEach(el=>el.addEventListener("click",e=>{
+    if(e.target.closest("button")) return;
+    const id=el.dataset.qToggle;
+    EXPANDED_QID=EXPANDED_QID===id?null:id;
+    renderQs();
+  }));
+  document.querySelectorAll("[data-q-del]").forEach(b=>b.addEventListener("click",async e=>{
+    e.stopPropagation();
+    if(!confirm("Удалить вопрос?")) return;
+    await CGB_TESTS.removeQuestion(b.dataset.qDel);
+    QS=await CGB_TESTS.fetchQuestions(TEST.id);renderQs();
+  }));
+  document.querySelectorAll("[data-q-up]").forEach(b=>b.addEventListener("click",async e=>{e.stopPropagation();await moveQ(b.dataset.qUp,-1)}));
+  document.querySelectorAll("[data-q-dn]").forEach(b=>b.addEventListener("click",async e=>{e.stopPropagation();await moveQ(b.dataset.qDn,1)}));
+  document.querySelectorAll("[data-q-cancel]").forEach(b=>b.addEventListener("click",()=>{
+    EXPANDED_QID=null;renderQs();
+  }));
+  document.querySelectorAll("[data-q-save]").forEach(b=>b.addEventListener("click",()=>saveQuestion(b.dataset.qSave)));
+  document.querySelectorAll("[data-q-optadd]").forEach(b=>b.addEventListener("click",()=>{
+    const box=document.querySelector(`[data-q-opts="${b.dataset.qOptadd}"]`);
+    const q=QS.find(x=>x.id===b.dataset.qOptadd);
+    const kind=q.kind;
+    const row=document.createElement("div");
+    row.className="q-opt-row";
+    if(kind==="order"){
+      row.innerHTML=`<span class="q-ord-pos"></span>
+        <div class="q-opt-row-fields"><input type="text" class="msg-input q-opt-text" placeholder="Новый пункт"></div>
+        <button type="button" class="btn btn-ghost btn-sm q-opt-del">×</button>`;
+    }else{
+      row.innerHTML=`<input type="${kind==="multi"?"checkbox":"radio"}" name="cor_${q.id}">
+        <div class="q-opt-row-fields">
+          <input type="text" class="msg-input q-opt-text" placeholder="Новый вариант">
+          <input type="text" class="msg-input q-opt-img" placeholder="URL картинки для этого варианта (опц.)">
+        </div>
+        <button type="button" class="btn btn-ghost btn-sm q-opt-del">×</button>`;
+    }
+    box.appendChild(row);
+    bindOptDelete(box);
+  }));
+  document.querySelectorAll("[data-qoptimg]").forEach(cb=>cb.addEventListener("change",()=>{
+    const ed=cb.closest(".te-q-edit");
+    if(ed) ed.classList.toggle("optimg-on",cb.checked);
+  }));
+  document.querySelectorAll("[data-q-opts]").forEach(box=>bindOptDelete(box));
+}
+
+function bindOptDelete(box){
+  box.querySelectorAll(".q-opt-del").forEach(btn=>{
+    if(btn.dataset.bound) return;
+    btn.dataset.bound="1";
+    btn.addEventListener("click",()=>{
+      if(box.querySelectorAll(".q-opt-row").length<=2){alert("Минимум 2 варианта");return}
+      btn.closest(".q-opt-row").remove();
+    });
+  });
+}
+
+async function moveQ(id,dir){
+  const idx=QS.findIndex(q=>q.id===id);if(idx<0) return;
+  const ni=idx+dir;if(ni<0||ni>=QS.length) return;
+  [QS[idx],QS[ni]]=[QS[ni],QS[idx]];
+  renderQs();
+  await CGB_TESTS.reorderQuestions(QS);
+  QS=await CGB_TESTS.fetchQuestions(TEST.id);
+  renderQs();
+}
+
+document.querySelectorAll("[data-q-add-type]").forEach(b=>b.addEventListener("click",async ()=>{
+  if(!TEST||!TEST.id){toast("Сначала создайте тест","err");return}
+  const kind=b.dataset.qAddType;
+  const base={test_id:TEST.id,kind,text:"",sort:(QS.length+1)*10,points:1,images:[]};
+  if(kind==="prefilled") Object.assign(base,{options:[],correct:[],prefilled_value:""});
+  else Object.assign(base,{options:["",""],correct:[]});
+  const r=await CGB_TESTS.saveQuestion(base);
+  if(!r.ok){toast("Ошибка: "+r.error,"err");return}
+  QS=await CGB_TESTS.fetchQuestions(TEST.id);
+  EXPANDED_QID=r.row.id;
+  renderQs();
+  setTimeout(()=>{
+    const el=document.querySelector(`[data-qid="${r.row.id}"]`);
+    if(el) el.scrollIntoView({behavior:"smooth",block:"center"});
+  },100);
+}));
+
+async function saveQuestion(qid){
+  const item=document.querySelector(`[data-qid="${qid}"]`);
+  if(!item) return;
+  const q=QS.find(x=>x.id===qid);if(!q) return;
+  const patch={id:qid,test_id:TEST.id,kind:q.kind};
+  item.querySelectorAll("[data-qf]").forEach(el=>{
+    const k=el.dataset.qf;
+    if(k==="images") patch.images=el.value.split(/\n/).map(s=>s.trim()).filter(Boolean);
+    else if(k==="points"||k==="sort") patch[k]=parseInt(el.value)||(k==="points"?1:100);
+    else patch[k]=el.value;
+  });
+  if(q.kind==="order"){
+    const rows=item.querySelectorAll(".q-opt-row");
+    const opts=[];
+    rows.forEach(r=>{
+      const t=r.querySelector(".q-opt-text").value.trim();
+      if(!t) return;
+      opts.push(t);
+    });
+    if(opts.length<2){setQMsg(item,"error","Нужно минимум 2 пункта");return}
+    patch.options=opts;patch.correct=opts.slice();patch.option_images=[];
+  } else if(q.kind!=="prefilled"){
+    const rows=item.querySelectorAll(".q-opt-row");
+    const wantOptImgs=(()=>{const cb=item.querySelector("[data-qoptimg]");return cb?cb.checked:false})();
+    const opts=[],cor=[],optImgs=[];
+    rows.forEach(r=>{
+      const t=r.querySelector(".q-opt-text").value.trim();
+      if(!t) return;
+      opts.push(t);
+      const inp=r.querySelector("input[type=radio],input[type=checkbox]");
+      if(inp&&inp.checked) cor.push(t);
+      const im=r.querySelector(".q-opt-img");
+      optImgs.push(wantOptImgs&&im?im.value.trim():"");
+    });
+    if(opts.length<2){setQMsg(item,"error","Нужно минимум 2 варианта");return}
+    if(!cor.length){setQMsg(item,"error","Отметьте хотя бы один правильный");return}
+    patch.options=opts;patch.correct=cor;
+    patch.option_images=wantOptImgs?optImgs:[];
+  } else {
+    if(!patch.text.trim()){setQMsg(item,"error","Введите название поля");return}
+  }
+  setQMsg(item,"info","Сохранение...");
+  const r=await CGB_TESTS.saveQuestion(patch);
+  if(!r.ok){setQMsg(item,"error",r.error);return}
+  if(r.droppedOptImgs){
+    setQMsg(item,"error","Сохранено, но БЕЗ картинок вариантов: в базе нет колонки option_images. Выполни SUPABASE-FIX.sql и пересохрани вопрос.");
+  }else{
+    setQMsg(item,"ok","✓");
+  }
+  QS=await CGB_TESTS.fetchQuestions(TEST.id);
+  EXPANDED_QID=null;
+  renderQs();
+  toast("Вопрос сохранён","ok");
+}
+function setQMsg(item,type,text){
+  const m=item.querySelector("[data-qmsg]");if(!m) return;
+  m.className="form-msg "+type;m.textContent=text;
+}
+
+/* Блокировки */
+function renderBlocks(){
+  const box=$("teBlockList");
+  if(!BLOCKS.length){box.innerHTML=`<div class="apps-empty" style="padding:20px"><p>Заблокированных нет.</p></div>`;return}
+  box.innerHTML=BLOCKS.map(b=>`<div class="te-list-row">
+    <span class="test-block-kind">${b.kind==="static"?"🆔":"💬"}</span>
+    <code style="flex:1">${esc(b.value)}</code>
+    <span style="color:var(--muted);flex:1">${b.reason?esc(b.reason):"—"}</span>
+    <span style="font-size:11px;color:var(--muted)">${esc(b.blocked_by_name||"")}</span>
+    <button class="btn btn-ghost btn-sm" data-block-del="${b.id}">✕</button>
+  </div>`).join("");
+  box.querySelectorAll("[data-block-del]").forEach(b=>b.addEventListener("click",async()=>{
+    await CGB_TESTS.removeBlock(b.dataset.blockDel);
+    BLOCKS=await CGB_TESTS.fetchBlocks(TEST.id);renderBlocks();
+  }));
+}
+$("teBlockAdd").addEventListener("click",async()=>{
+  const val=$("teBlockVal").value.trim();if(!val) return;
+  const kind=$("teBlockKind").value;
+  if(kind==="static"&&!CGB_TESTS.validStatic(val)){alert("Статик в формате 000-000");return}
+  await CGB_TESTS.addBlock(TEST.id,kind,val,$("teBlockReason").value.trim()||null);
+  $("teBlockVal").value="";$("teBlockReason").value="";
+  BLOCKS=await CGB_TESTS.fetchBlocks(TEST.id);renderBlocks();
+});
+
+if(window.CGB_ROLES) CGB_ROLES.onChange(boot);
+setTimeout(boot,600);
+</script>
+
+</body>
+</html>

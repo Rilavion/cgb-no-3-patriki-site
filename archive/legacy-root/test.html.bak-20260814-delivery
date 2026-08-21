@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="logo.png" type="image/png">
+<link rel="apple-touch-icon" href="logo.png">
+<title>ЦГБ №3 — Прохождение теста</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=17">
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+<div class="bg-noise"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-icon"><img src="logo.png" alt="ВС"></div>
+      <div class="brand-text"><span class="brand-label">Министерство Здравоохранения</span><span class="brand-name">ЦГБ №3 · Тестирование</span></div>
+    </a>
+    <div class="header-actions" style="margin-left:auto">
+      <a href="tests.html" data-page="tests.html" class="btn btn-ghost btn-sm">← Ко всем тестам</a>
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Сменить тему">
+        <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24"><path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66l1.42-1.42M4.92 19.08l1.42-1.42m0-11.32L4.92 4.92m14.16 14.16l-1.42-1.42M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="test-page">
+    <div class="container">
+      <div id="testRoot"><div class="apps-empty">Загрузка теста...</div></div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container"><div class="footer-bottom"><span>© <span id="year"></span> · ЦГБ №3 · Центральная Городская</span><span class="footer-note">🐞 Нашли баг? Обратитесь: <b>@rilavion</b></span></div></div>
+</footer>
+
+<script src="supabase-loader.js?v=17"></script>
+<script src="config.js?v=17"></script>
+<script src="auth.js?v=17"></script>
+<script src="tests-engine.js?v=19"></script>
+<script src="main.js?v=20"></script>
+<script src="search-engine.js?v=17"></script>
+<script src="format-utils.js?v=17"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const root=$("testRoot");
+
+const params=new URLSearchParams(location.search);
+const TID=params.get("t");
+let TEST=null,QS=[],PINGS=[],BLOCKS=[];
+let USER={fio:"",static_id:"",discord:""};
+let ANSWERS={};
+let STARTED_AT=null,TIMER=null,DEADLINE=null;
+
+async function boot(){
+  if(!TID){root.innerHTML=`<div class="apps-empty"><h3>Тест не указан</h3><p><a href="tests.html" data-page="tests.html">← К списку тестов</a></p></div>`;return}
+  TEST=await CGB_TESTS.fetchTest(TID);
+  if(!TEST){root.innerHTML=`<div class="apps-empty"><h3>Тест не найден</h3><p>Возможно он ещё не опубликован или ссылка устарела.<br><a href="tests.html" data-page="tests.html">← К списку тестов</a></p></div>`;return}
+  document.title="Тест · "+TEST.title;
+  [QS,PINGS,BLOCKS]=await Promise.all([CGB_TESTS.fetchQuestions(TEST.id),CGB_TESTS.fetchPingLines(TEST.id),CGB_TESTS.fetchBlocks(TEST.id)]);
+  renderIntro();
+}
+
+function renderIntro(){
+  const pingHtml=PINGS.length?`<div class="test-intro-pings"><b>Особенности этого теста:</b>${PINGS.map(p=>`<div>• ${esc(p.key)}: <b>${esc(p.value)}</b></div>`).join("")}</div>`:"";
+  const maxA=TEST.max_attempts>0?TEST.max_attempts:"∞";
+  root.innerHTML=`
+    <div class="test-intro">
+      <div class="test-intro-badge">${TEST.published?"":"⚠ ЧЕРНОВИК — НЕ ОПУБЛИКОВАН"}</div>
+      <h1 class="test-intro-title">${esc(TEST.title)}</h1>
+      ${TEST.description?`<div class="test-intro-desc">${esc(TEST.description)}</div>`:""}
+      ${TEST.intro?`<div class="test-intro-body">${esc(TEST.intro).replace(/\n/g,"<br>")}</div>`:""}
+      ${pingHtml}
+      <div class="test-intro-stats">
+        <div class="test-intro-stat"><b>${QS.length}</b><span>вопросов</span></div>
+        <div class="test-intro-stat"><b>${TEST.pass_score}%</b><span>для сдачи</span></div>
+        <div class="test-intro-stat"><b>${maxA}</b><span>попыток</span></div>
+        ${TEST.time_limit_minutes?`<div class="test-intro-stat"><b>${TEST.time_limit_minutes} мин</b><span>лимит</span></div>`:""}
+      </div>
+      <div class="test-intro-form">
+        <h3>Данные проходящего</h3>
+        <div class="form-group"><label>ФИО (персонажа) *</label><input type="text" id="fFio" class="msg-input" placeholder="Иван Иванов"></div>
+        <div class="msg-row">
+          <div class="form-group msg-flex-1"><label>Статик * <span class="msg-help">формат 000-000</span></label><input type="text" id="fStatic" class="msg-input" placeholder="123-456" maxlength="7"></div>
+          <div class="form-group msg-flex-1"><label>Discord (@user) *</label><input type="text" id="fDiscord" class="msg-input" placeholder="@username"></div>
+        </div>
+        <div class="form-msg" id="fMsg"></div>
+        <button class="btn btn-gold" id="fStartBtn" style="width:100%;padding:14px;font-size:16px">▶ Начать тест</button>
+      </div>
+    </div>
+  `;
+  $("fStatic").addEventListener("input",e=>{
+    let v=e.target.value.replace(/\D/g,"");
+    if(v.length>3) v=v.slice(0,3)+"-"+v.slice(3,6);
+    e.target.value=v;
+  });
+  $("fStartBtn").addEventListener("click",tryStart);
+}
+
+async function tryStart(){
+  const fio=$("fFio").value.trim();
+  const st=$("fStatic").value.trim();
+  const dc=$("fDiscord").value.trim();
+  const msg=$("fMsg");
+  msg.className="form-msg";msg.textContent="";
+  if(!fio){msg.className="form-msg error";msg.textContent="Введите ФИО";return}
+  if(!CGB_TESTS.validStatic(st)){msg.className="form-msg error";msg.textContent="Статик должен быть в формате 000-000";return}
+  if(!dc){msg.className="form-msg error";msg.textContent="Введите Discord для получения результата";return}
+  if(!QS.length){msg.className="form-msg error";msg.textContent="В тесте нет вопросов";return}
+  msg.className="form-msg info";msg.textContent="Проверка...";
+  const bl=await CGB_TESTS.checkBlocked(TEST.id,st,dc);
+  if(bl.blocked){msg.className="form-msg error";msg.textContent="Прохождение заблокировано: "+bl.reason;return}
+  if(TEST.max_attempts>0){
+    const att=await CGB_TESTS.attemptsFor(TEST.id,st,dc);
+    if(att.count>=TEST.max_attempts){msg.className="form-msg error";msg.textContent="Исчерпан лимит попыток ("+att.count+"/"+TEST.max_attempts+"). Обратитесь к СС для сброса.";return}
+  }
+  msg.className="form-msg";msg.textContent="";
+  USER={fio,static_id:st,discord:dc};
+  ANSWERS={};
+  STARTED_AT=new Date().toISOString();
+  if(TEST.time_limit_minutes){DEADLINE=Date.now()+TEST.time_limit_minutes*60*1000}
+  renderQuestions();
+}
+
+let ACTIVE_QS=[];
+
+function renderQuestions(){
+  ACTIVE_QS=CGB_TESTS.pickQuestionsForRun(QS,TEST);
+  const graded=ACTIVE_QS.filter(q=>q.kind!=="prefilled");
+  const html=[`<div class="test-run">
+    <div class="test-run-head">
+      <div class="test-run-title">${esc(TEST.title)}</div>
+      <div class="test-run-user"><b>${esc(USER.fio)}</b> · <code>${esc(USER.static_id)}</code></div>
+      ${DEADLINE?`<div class="test-run-timer" id="tTimer">--:--</div>`:""}
+    </div>
+    <div class="test-run-progress"><div class="test-run-progress-fill" id="tProg" style="width:0%"></div></div>
+    <div class="test-run-qs">`];
+  let vidx=0;
+  ACTIVE_QS.forEach((q,i)=>{
+    if(q.kind==="prefilled"){
+      html.push(`<div class="test-q test-q-pre" data-qid="${q.id}">
+        <div class="test-q-num">📌 Предустановленное поле</div>
+        <div class="test-q-text">${esc(q.text||"—")}</div>
+        <div class="test-q-pre-val">${esc(q.prefilled_value||"")}</div>
+        <div class="te-hint" style="margin-top:6px">Это поле заполнено автоматически и будет отправлено с результатом.</div>
+      </div>`);
+      return;
+    }
+    vidx++;
+    if(q.kind==="order"){
+      const base=(q.correct&&q.correct.length?q.correct:q.options||[]).slice();
+      let items=base.slice();
+      for(let k=items.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[items[k],items[j]]=[items[j],items[k]]}
+      if(items.length>1&&items.every((v,i)=>v===base[i])) items.reverse();
+      html.push(`<div class="test-q" data-qid="${q.id}">
+        <div class="test-q-num">Вопрос ${vidx} из ${graded.length} <span class="tq-pts">${q.points||1} балл${(q.points||1)>1?"а":""}</span></div>
+        <div class="test-q-text">${esc(q.text).replace(/\n/g,"<br>")}</div>
+        ${(q.images||[]).length?`<div class="test-q-images">${q.images.map(u=>`<img src="${esc(u)}" alt="" onerror="this.style.display='none'">`).join("")}</div>`:""}
+        <div class="te-hint" style="margin:8px 0 4px">↕ Расставьте пункты в правильном порядке (кнопки ↑ / ↓)</div>
+        <div class="test-q-order" data-ord="${q.id}">
+          ${items.map(t=>`<div class="test-ord-item" data-val="${esc(t)}">
+            <span class="test-ord-num"></span>
+            <span class="test-ord-txt">${esc(t)}</span>
+            <span class="test-ord-btns"><button type="button" class="test-ord-btn" data-ord-up>↑</button><button type="button" class="test-ord-btn" data-ord-dn>↓</button></span>
+          </div>`).join("")}
+        </div>
+      </div>`);
+      return;
+    }
+    html.push(`<div class="test-q" data-qid="${q.id}">
+      <div class="test-q-num">Вопрос ${vidx} из ${graded.length} <span class="tq-pts">${q.points||1} балл${(q.points||1)>1?"а":""}</span></div>
+      <div class="test-q-text">${esc(q.text).replace(/\n/g,"<br>")}</div>
+      ${(q.images||[]).length?`<div class="test-q-images">${q.images.map(u=>`<img src="${esc(u)}" alt="" onerror="this.style.display='none'">`).join("")}</div>`:""}
+      <div class="test-q-opts">
+        ${(q.options||[]).map((o,oi)=>{const oim=(q.option_images||[])[oi];return `<label class="test-q-opt">
+          <input type="${q.kind==="multi"?"checkbox":"radio"}" name="q_${q.id}" value="${esc(o)}">
+          <span><span class="test-q-opt-txt">${esc(o)}</span>${oim?`<img class="test-q-opt-img" src="${esc(oim)}" alt="" onerror="this.style.display='none'">`:""}</span>
+        </label>`}).join("")}
+      </div>
+    </div>`);
+  });
+  html.push(`</div>
+    <div class="test-run-submit">
+      <div class="form-msg" id="tSubMsg"></div>
+      <button class="btn btn-gold" id="tSubmitBtn" style="padding:14px 32px;font-size:16px">✓ Завершить и отправить</button>
+    </div>
+  </div>`);
+  root.innerHTML=html.join("");
+  document.querySelectorAll(".test-q-opts input").forEach(inp=>inp.addEventListener("change",updateProgress));
+  document.querySelectorAll("[data-ord]").forEach(box=>{
+    renumberOrder(box);
+    box.querySelectorAll(".test-ord-btn").forEach(btn=>btn.addEventListener("click",()=>{
+      const item=btn.closest(".test-ord-item");
+      if(btn.hasAttribute("data-ord-up")&&item.previousElementSibling) item.parentNode.insertBefore(item,item.previousElementSibling);
+      if(btn.hasAttribute("data-ord-dn")&&item.nextElementSibling) item.parentNode.insertBefore(item.nextElementSibling,item);
+      renumberOrder(box);
+    }));
+  });
+  $("tSubmitBtn").addEventListener("click",submitTest);
+  updateProgress();
+  if(DEADLINE) startTimer();
+}
+
+function renumberOrder(box){
+  box.querySelectorAll(".test-ord-item").forEach((el,i)=>{const n=el.querySelector(".test-ord-num");if(n)n.textContent=(i+1)+"."});
+}
+
+function updateProgress(){
+  const graded=ACTIVE_QS.filter(q=>q.kind!=="prefilled");
+  let done=0;
+  for(const q of graded){
+    if(q.kind==="order"){done++;continue}
+    const inputs=document.querySelectorAll(`input[name="q_${q.id}"]:checked`);
+    if(inputs.length) done++;
+  }
+  const pct=graded.length?Math.round(done*100/graded.length):0;
+  $("tProg").style.width=pct+"%";
+}
+
+function startTimer(){
+  function tick(){
+    const left=Math.max(0,DEADLINE-Date.now());
+    const m=Math.floor(left/60000),s=Math.floor((left%60000)/1000);
+    const t=$("tTimer");if(!t) return;
+    t.textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+    if(left<=60000) t.classList.add("test-run-timer-warn");
+    if(left<=0){clearInterval(TIMER);submitTest(true)}
+  }
+  tick();TIMER=setInterval(tick,500);
+}
+
+async function submitTest(auto){
+  const msg=$("tSubMsg");
+  const gradedQs=ACTIVE_QS.filter(q=>q.kind!=="prefilled");
+  if(!auto){
+    let missed=0;
+    for(const q of gradedQs){
+      if(q.kind==="order") continue;
+      const inputs=document.querySelectorAll(`input[name="q_${q.id}"]:checked`);
+      if(!inputs.length) missed++;
+    }
+    if(missed>0&&!confirm("Не отвечено на "+missed+" вопросов. Всё равно завершить? Пропущенные засчитаются как неверные.")) return;
+  }
+  for(const q of ACTIVE_QS){
+    if(q.kind==="prefilled"){ANSWERS[q.id]=q.prefilled_value||"";continue}
+    if(q.kind==="order"){
+      const box=document.querySelector(`[data-ord="${q.id}"]`);
+      ANSWERS[q.id]=box?Array.from(box.querySelectorAll(".test-ord-item")).map(el=>el.dataset.val):[];
+      continue;
+    }
+    const inputs=document.querySelectorAll(`input[name="q_${q.id}"]:checked`);
+    if(q.kind==="single") ANSWERS[q.id]=inputs.length?inputs[0].value:null;
+    else ANSWERS[q.id]=Array.from(inputs).map(i=>i.value);
+  }
+  const graded=CGB_TESTS.grade(ACTIVE_QS,ANSWERS);
+  const passed=graded.percent>=(TEST.pass_score||70);
+  msg.className="form-msg info";msg.textContent="Отправка результата...";
+  $("tSubmitBtn").disabled=true;
+  const r=await CGB_TESTS.submitAttempt({
+    test_id:TEST.id,fio:USER.fio,static_id:USER.static_id,discord:USER.discord,
+    answers:ANSWERS,score:graded.score,max_score:graded.max_score,percent:graded.percent,
+    passed:passed,started_at:STARTED_AT
+  });
+  if(!r.ok){msg.className="form-msg error";msg.textContent=r.error;$("tSubmitBtn").disabled=false;return}
+  if(TEST.result_channel_id){
+    CGB_TESTS.requestResult(r.attempt.id,TEST.result_channel_id,USER.discord,false).catch(()=>{});
+  }
+  renderResult(graded,passed);
+}
+
+function renderResult(graded,passed){
+  if(TIMER){clearInterval(TIMER);TIMER=null}
+  const cls=passed?"test-result-ok":"test-result-fail";
+  root.innerHTML=`<div class="test-result ${cls}">
+    <div class="test-result-icon">${passed?"✅":"⛔"}</div>
+    <div class="test-result-title">${passed?"Тест сдан!":"Тест не сдан"}</div>
+    <div class="test-result-score">${graded.score} / ${graded.max_score} баллов · ${graded.percent}%</div>
+    <div class="test-result-thresh">Порог сдачи: ${TEST.pass_score}%</div>
+    <div class="test-result-info">Результат автоматически отправлен командиру в Discord.<br>Вы получите уведомление с пингом в течение нескольких секунд.</div>
+    <div class="test-result-acts">
+      <a class="btn btn-gold" href="tests.html">← К списку тестов</a>
+      <a class="btn btn-ghost" href="learn.html">К материалам</a>
+    </div>
+  </div>`;
+}
+
+boot();
+</script>
+
+</body>
+</html>

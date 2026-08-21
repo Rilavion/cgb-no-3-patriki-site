@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="logo.png" type="image/png">
+<link rel="apple-touch-icon" href="logo.png">
+<title>Состав — ЦГБ №3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=18">
+<style id="cgb-admin-guard">
+[data-admin]{display:none !important}
+body.cgb-is-admin .nav a[data-admin],body.cgb-is-admin .footer-col a[data-admin]{display:inline-flex !important}
+body.cgb-is-admin .footer-col a[data-admin]{display:block !important}
+</style>
+<script>
+(function(){
+  function apply(){
+    var s=window.CGB_AUTH&&window.CGB_AUTH.state;
+    if(!s||!s.ready) return;
+    document.body.classList.toggle("cgb-is-admin",!!s.user);
+  }
+  document.addEventListener("DOMContentLoaded",function(){
+    apply();
+    if(window.CGB_AUTH&&window.CGB_AUTH.onChange) window.CGB_AUTH.onChange(apply);
+    else{var t=setInterval(function(){if(window.CGB_AUTH){clearInterval(t);apply();window.CGB_AUTH.onChange(apply)}},80);setTimeout(function(){clearInterval(t)},4000);}
+  });
+})();
+</script>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+<div class="bg-noise"></div>
+<div class="page-transition-overlay" id="overlay"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-icon"><img src="logo.png" alt="ВС"></div>
+      <div class="brand-text">
+        <span class="brand-label">Министерство Здравоохранения</span>
+        <span class="brand-name">ЦГБ №3 · Центральная Городская</span>
+      </div>
+    </a>
+    <nav class="nav" id="mainNav">
+      <a href="index.html" data-page="index.html" data-transition>Главная</a>
+      <a href="info.html" data-page="info.html" data-transition>Информация</a>
+      <a href="services.html" data-page="services.html" data-transition>Услуги</a>
+      <a href="meds.html" data-page="meds.html" data-transition>Медикаменты</a>
+      <a href="ustav.html" data-page="ustav.html" data-transition>Устав</a>
+      <a href="learn.html" data-page="learn.html" data-transition data-loggedin>Учебные материалы</a>
+      <a href="tests.html" data-page="tests.html" data-transition data-loggedin>Тестирование</a>
+      <a href="composition.html" data-page="composition.html" data-transition>Состав</a>
+      <a href="docs.html" data-page="docs.html" data-transition data-perm="docs:view">Документы</a>
+      <a href="news.html" data-page="news.html" data-transition>Новости</a>
+      <a href="autopark.html" data-page="autopark.html" data-transition>Автопарк</a>
+      <a href="map.html" data-page="map.html" data-transition>Карта</a>
+      <a href="faq.html" data-page="faq.html" data-transition>FAQ</a>
+      <a href="complaints.html" data-page="complaints.html" data-transition>Жалобы</a>
+      <a href="supply.html" data-page="supply.html" data-transition data-perm="supply:view">Поставки</a>
+      <a href="apps.html" data-page="apps.html" data-transition data-perm="apps:view">Заявления</a>
+      <a href="vp.html" data-page="vp.html" data-transition data-perm="vp:view">Проверки АБ</a>
+      <a href="complaints-review.html" data-page="complaints-review.html" data-transition data-perm="complaints:review,complaints:view">Рассмотрение жалоб</a>
+      <a href="complaints-stats.html" data-page="complaints-stats.html" data-transition data-perm="complaints:review,complaints:view">Статистика жалоб</a>
+      <a href="leave.html" data-page="leave.html" data-transition data-loggedin>Отгул</a>
+      <a href="vacation-ic.html" data-page="vacation-ic.html" data-transition data-loggedin>Отпуск IC</a>
+      <a href="vacation-ooc.html" data-page="vacation-ooc.html" data-transition data-loggedin>Отпуск OOC</a>
+      <a href="dismissal.html" data-page="dismissal.html" data-transition data-loggedin>Увольнение</a>
+      <a href="promotion.html" data-page="promotion.html" data-transition data-loggedin>Повышение</a>
+      <a href="restoration.html" data-page="restoration.html" data-transition>Восстановление в ЦГБ №3</a>
+      <a href="appointment.html" data-page="appointment.html" data-transition>Запись к врачу</a>
+      <a href="requests-review.html" data-page="requests-review.html" data-transition data-perm="requests:review,requests:view">Рассмотрение заявок</a>
+      <a href="requests-stats.html" data-page="requests-stats.html" data-transition data-perm="requests:review,requests:view">Статистика заявок</a>
+      <a href="payroll.html" data-page="payroll.html" data-transition data-perm="payroll:view">Реестр премирования</a>
+      <a href="report.html" data-page="report.html" data-transition>Еженедельный отчёт</a>
+      <a href="report-settings.html" data-page="report-settings.html" data-transition data-perm="report:settings">Настройки отчётов</a>
+      <a href="vp-request.html" data-page="vp-request.html" data-transition data-perm="vp_request:submit">Запрос на наказание</a>
+      <a href="vp-request-settings.html" data-page="vp-request-settings.html" data-transition data-perm="vp_request:settings">Настройки запросов АБ</a>
+      <a href="lk.html" data-page="lk.html" data-transition>Личный кабинет</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-btn" data-open-search title="Поиск (Ctrl+K)">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+        <span>Поиск</span><span class="kbd">Ctrl K</span>
+      </button>
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Сменить тему">
+        <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24"><path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66l1.42-1.42M4.92 19.08l1.42-1.42m0-11.32L4.92 4.92m14.16 14.16l-1.42-1.42M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="login-btn" data-open-login>
+        <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/></svg>
+        <span>Войти</span>
+      </button>
+      <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="section" style="padding-top:60px">
+    <div class="container">
+      <div class="section-head reveal" style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px">
+        <div>
+          <h2>Личный состав ЦГБ №3</h2>
+          <p>Руководство, отделения и старший состав больницы.</p>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap" id="adminBar" class="admin-only">
+          <button class="btn btn-ghost btn-sm" id="ranksBtn">🗂 Категории</button>
+          <button class="btn btn-ghost btn-sm" id="editModeBtn">✎ Режим редактирования</button>
+          <button class="btn btn-gold btn-sm" id="exportPngBtn" style="display:none">📸 Скопировать иерархию (PNG)</button>
+        </div>
+      </div>
+
+      <div class="hier" id="hier"><div class="composition-loading">Загрузка состава больницы…</div></div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <h4>ЦГБ №3 · Центральная Городская</h4>
+        <p>Министерство Здравоохранения.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Разделы</h5>
+        <a href="services.html" data-page="services.html">Услуги и цены</a>
+        <a href="meds.html" data-page="meds.html">Медикаменты</a>
+        <a href="index.html" data-page="index.html">Главная</a>
+        <a href="ustav.html" data-page="ustav.html">Устав</a>
+        <a href="composition.html" data-page="composition.html">Состав</a>
+      </div>
+      <div class="footer-col">
+        <h5>Ресурсы</h5>
+        <a href="docs.html" data-page="docs.html" data-perm="docs:view">Документы</a>
+        <a href="news.html" data-page="news.html">Новости</a>
+        <a href="autopark.html" data-page="autopark.html">Автопарк</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> · Министерство Здравоохранения</span>
+      <span>ЦГБ №3 · Центральная Городская</span>
+    <span class="footer-note">🐞 Нашли баг? Обратитесь: <b>@rilavion</b></span></div>
+  </div>
+</footer>
+
+<div class="search-modal" id="searchModal">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+      <input class="search-input" placeholder="Поиск..." spellcheck="false">
+      <button class="search-close-kbd">Esc</button>
+    </div>
+    <div class="search-results"></div>
+  </div>
+</div>
+
+<div class="modal-back" id="loginModal">
+  <div class="modal">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Вход администратора</h3>
+    <div class="modal-sub">Доступ к управлению контентом</div>
+    <form>
+      <div class="form-group"><label>Email</label><input type="email" name="email" required></div>
+      <div class="form-group"><label>Пароль</label><input type="password" name="password" required></div>
+      <button class="btn btn-gold" style="width:100%" type="submit">Войти</button>
+      <div class="form-msg"></div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-back" id="personModal">
+  <div class="modal modal-lg">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3 id="pModalTitle">Редактировать</h3>
+    <form id="pForm">
+      <input type="hidden" name="ctx">
+      <div id="pFormFields"></div>
+      <div style="display:flex;gap:10px;justify-content:space-between;margin-top:8px">
+        <button type="button" class="btn btn-ghost btn-sm btn-danger" id="pDeleteBtn" style="display:none">Удалить</button>
+        <button class="btn btn-gold btn-sm" type="submit" style="margin-left:auto">Сохранить</button>
+      </div>
+      <div class="form-msg"></div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-back" id="subModal">
+  <div class="modal">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3 id="sModalTitle">Подразделение</h3>
+    <form id="sForm">
+      <input type="hidden" name="id">
+      <div class="form-group"><label>Полное название</label><input name="name" required></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px">
+        <div class="form-group"><label>Аббревиатура</label><input name="short" required placeholder="АБ"></div>
+        <div class="form-group"><label>Цвет</label><input name="color" type="color" value="#7a8a4a" style="height:44px;padding:4px"></div>
+        <div class="form-group"><label>Эмблема (эмодзи)</label><input name="icon" value="★" placeholder="🛡"></div>
+        <div class="form-group"><label>Колонок в сетке</label><input name="grid_cols" type="number" min="2" max="10" value="3"></div>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:space-between;margin-top:8px">
+        <button type="button" class="btn btn-ghost btn-sm btn-danger" id="sDeleteBtn" style="display:none">Удалить подразделение</button>
+        <button class="btn btn-gold btn-sm" type="submit" style="margin-left:auto">Сохранить</button>
+      </div>
+      <div class="form-msg"></div>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal-back" id="ranksModal">
+  <div class="modal modal-xl">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>🗂 Категории состава</h3>
+    <div class="modal-sub" id="ranksSub" style="max-width:760px;margin-left:auto;margin-right:auto;text-align:center">Порядок в списке = старшинство: верхняя категория — самая старшая. Категории общие для всех подразделений и командования.</div>
+    <div id="ranksList" style="display:flex;flex-direction:column;gap:8px;margin:14px auto;max-width:760px;width:100%"></div>
+    <div style="display:flex;gap:8px;margin:0 auto 6px;max-width:760px;width:100%">
+      <input id="rankNewLabel" class="msg-input" placeholder="Название новой категории (например: Зав. отделением)" style="flex:1">
+      <button class="btn btn-gold btn-sm" id="rankAddBtn" type="button">＋ Добавить</button>
+    </div>
+    <div class="form-msg" id="ranksMsg" style="max-width:760px;margin-left:auto;margin-right:auto;text-align:center"></div>
+  </div>
+</div>
+
+<div class="modal-back" id="exportModal">
+  <div class="modal modal-lg" style="max-width:1000px;width:96vw">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3 style="margin:0 0 8px">📸 Экспорт иерархии в PNG</h3>
+    <div class="modal-sub" style="margin-bottom:14px">Красивая обложка для публикации в Discord / соц.сети. Превью ниже — что вы видите, то и получите.</div>
+    <div class="exp-controls" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px;padding:12px;background:rgba(21,36,29,.45);border-radius:10px;border:1px solid rgba(34,211,238,.2)">
+      <label class="cr-notify" style="display:inline-flex"><input type="checkbox" id="expShowContacts" checked><span>Показывать контакты (📞 📡)</span></label>
+      <label class="cr-notify" style="display:inline-flex"><input type="checkbox" id="expShowPhotos" checked><span>Показывать фото</span></label>
+      <label class="cr-notify" style="display:inline-flex"><input type="checkbox" id="expOnlyCards"><span>🎴 Только карточки (без обложки/фона)</span></label>
+      <label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)">
+        Масштаб: <select id="expScale" class="msg-input" style="width:auto;padding:4px 8px">
+          <option value="1">1× (обычный)</option>
+          <option value="2">2× (Retina)</option>
+          <option value="3" selected>3× (максимум, лучшее качество)</option>
+        </select>
+      </label>
+    </div>
+    <div style="max-height:60vh;overflow:auto;border:1px solid rgba(34,211,238,.2);border-radius:12px;background:#05202b;padding:16px">
+      <div id="expPreviewWrap" style="display:flex;justify-content:center"><div id="expPreview"></div></div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap">
+      <button class="btn btn-ghost" id="expRefreshBtn">🔄 Обновить превью</button>
+      <button class="btn btn-ghost" id="expCopyBtn">📋 В буфер</button>
+      <button class="btn btn-gold" id="expDownloadBtn">💾 Скачать PNG</button>
+    </div>
+  </div>
+</div>
+
+<script src="html2canvas.min.js?v=4"></script>
+<script src="supabase-loader.js?v=18"></script>
+<script src="config.js?v=17"></script>
+<script src="main.js?v=17"></script>
+<script src="format-utils.js?v=17"></script>
+<script src="holiday-engine.js?v=17"></script>
+<script src="settings-panel.js?v=17"></script>
+<script src="sound-engine.js?v=17"></script>
+<script src="faq-engine.js?v=17"></script>
+<script src="search-engine.js?v=17"></script>
+<script src="ds-cache.js?v=17"></script>
+<script src="notify-engine.js?v=17"></script>
+<script src="notify-live.js?v=17"></script>
+<script src="auth.js?v=17"></script>
+<script src="roles-engine.js?v=17"></script>
+<script src="select-enhance.js?v=17"></script>
+<script src="image-compress.js?v=17"></script>
+<script src="composition-engine.js?v=19"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+
+const $=id=>document.getElementById(id);
+const hier=$("hier");
+let STATE=null;let editing=false;
+const toast=$("toast");
+function showToast(t,type){toast.textContent=t;toast.className="toast show "+(type||"");setTimeout(()=>toast.classList.remove("show"),1800)}
+
+function esc(s){return CGB_COMP.esc(s)}
+
+function photoUrl(u){
+  if(!u) return "";
+  const m=String(u).match(/\/([^/]+\.(?:webp|png|jpe?g|gif))(?:\?|$)/i);
+  return m?('/uploads/composition/'+m[1]):u;
+}
+function discordLink(text,id){return id?`<a href="discord://-/users/${encodeURIComponent(id)}" class="discord-link">📡 ${esc(text)}</a>`:`📡 ${esc(text)}`}
+function photoStyle(p){
+  if(!p) return "";
+  const z=Number(p.photo_zoom)||1;
+  const x=Number(p.photo_x!=null?p.photo_x:50);
+  const y=Number(p.photo_y!=null?p.photo_y:50);
+  const size=(100*z).toFixed(2);
+  const leftShift=((100-100*z)*(x/100)).toFixed(2);
+  const topShift=((100-100*z)*(y/100)).toFixed(2);
+  return `position:absolute;width:${size}%;height:${size}%;left:${leftShift}%;top:${topShift}%;object-fit:cover`;
+}
+function initials(name){
+  const parts=(name||"").trim().split(/\s+/);
+  return parts.slice(0,2).map(p=>p[0]||"").join("").toUpperCase()||"?";
+}
+function avatar(p,size,color){
+  const bg=color||"#3d5a49";
+  if(p&&p.photo) return `<div class="avatar" style="width:${size}px;height:${size}px"><img src="${esc(photoUrl(p.photo))}" alt=""></div>`;
+  return `<div class="avatar avatar-init" style="width:${size}px;height:${size}px;background:linear-gradient(145deg,${bg},${shade(bg,-20)})"><span>${esc(initials(p&&p.name||""))}</span></div>`;
+}
+function shade(hex,percent){
+  const h=hex.replace("#","");const n=parseInt(h,16);
+  let r=(n>>16)&255,g=(n>>8)&255,b=n&255;
+  const f=1+percent/100;r=Math.max(0,Math.min(255,r*f))|0;g=Math.max(0,Math.min(255,g*f))|0;b=Math.max(0,Math.min(255,b*f))|0;
+  return "#"+((r<<16)|(g<<8)|b).toString(16).padStart(6,"0");
+}
+
+function ranksOf(){return (STATE&&Array.isArray(STATE.ranks))?STATE.ranks:[]}
+function rankInfoOf(m){
+  const r=CGB_COMP.rankInfo(m&&m.rank,ranksOf());
+  if(r.found) return r;
+  const lbl=(m&&m.rank_label)||"";
+  return {key:(m&&m.rank)||"",label:lbl,short:lbl,tier:999,found:false};
+}
+
+function memberCardHtml(sub,m,origIdx,color){
+  const r=rankInfoOf(m);
+  const hasPhoto=!!(m&&m.photo);
+  const drag=editing?`draggable="true" data-drag-src="${sub.id}::${origIdx}"`:"";
+  return `<div class="hier-member ${editing?"is-draggable":""}" style="--m-color:${color}" ${drag}>
+    <div class="hier-member-photo ${hasPhoto?"":"no-photo"}">
+      ${hasPhoto?`<img src="${esc(photoUrl(m.photo))}" alt="" style="${photoStyle(m)}">`:`<span class="hier-officer-initials">${esc(initials(m.name||""))}</span>`}
+      ${r.label?`<div class="hier-member-rank-tag" style="background:${color}">${esc(r.label)}</div>`:""}
+    </div>
+    <div class="hier-member-body">
+      <div class="hier-member-name">${esc(m.name)}</div>
+      ${m.role?`<div class="hier-member-role">${esc(m.role)}</div>`:""}
+      <div class="hier-member-ids">
+        ${m.code?`<span class="hier-member-code" title="Статик / Код">📞 ${esc(m.code)}</span>`:""}
+        ${m.comm?`<span class="hier-member-comm" title="Спец. связь">📡 ${esc(m.comm)}</span>`:""}
+      </div>
+    </div>
+    ${editing?`<div class="hier-member-actions">
+      <button class="mini-icon-btn drag-handle" title="Перетащить">⋮⋮</button>
+      <button class="mini-icon-btn" data-edit-member="${sub.id}::${origIdx}" title="Редактировать">✎</button>
+      <button class="mini-icon-btn danger" data-del-member="${sub.id}::${origIdx}" title="Удалить">×</button>
+    </div>`:""}
+  </div>`;
+}
+
+function ensureGridPositions(sub){
+  const cols=Math.max(2,Math.min(10,parseInt(sub.grid_cols)||3));
+  const arr=sub.members||[];
+  const anyPlaced=arr.some(m=>typeof m.grid_row==="number"&&typeof m.grid_col==="number");
+  const occupied=new Set();
+  arr.forEach(m=>{
+    if(typeof m.grid_row==="number"&&typeof m.grid_col==="number"&&m.grid_col<cols){
+      occupied.add(m.grid_row+":"+m.grid_col);
+    } else if(typeof m.grid_col==="number"&&m.grid_col>=cols){
+      delete m.grid_row;delete m.grid_col;
+    }
+  });
+  if(!anyPlaced){
+    const sorted=arr.slice().sort((a,b)=>rankInfoOf(a).tier-rankInfoOf(b).tier);
+    let idx=0;
+    sorted.forEach(m=>{
+      m.grid_row=Math.floor(idx/cols);
+      m.grid_col=idx%cols;
+      occupied.add(m.grid_row+":"+m.grid_col);
+      idx++;
+    });
+  } else {
+    let maxRow=-1;
+    arr.forEach(m=>{if(typeof m.grid_row==="number"&&m.grid_row>maxRow) maxRow=m.grid_row});
+    let nextRow=maxRow+1,nextCol=0;
+    arr.forEach(m=>{
+      if(typeof m.grid_row!=="number"||typeof m.grid_col!=="number"){
+        while(occupied.has(nextRow+":"+nextCol)){
+          nextCol++;
+          if(nextCol>=cols){nextCol=0;nextRow++}
+        }
+        m.grid_row=nextRow;m.grid_col=nextCol;
+        occupied.add(nextRow+":"+nextCol);
+        nextCol++;
+        if(nextCol>=cols){nextCol=0;nextRow++}
+      }
+    });
+  }
+}
+
+function renderSub(sub){
+  const color=sub.color||"#7a8a4a";
+  const cols=Math.max(2,Math.min(10,parseInt(sub.grid_cols)||3));
+  ensureGridPositions(sub);
+  const arr=sub.members||[];
+  let maxRow=0;
+  arr.forEach(m=>{if(typeof m.grid_row==="number"&&m.grid_row>maxRow) maxRow=m.grid_row});
+  const rows=maxRow+1+(editing?1:0);
+  const map={};
+  arr.forEach((m,i)=>{map[m.grid_row+":"+m.grid_col]={m,i}});
+
+  let cells="";
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      const key=r+":"+c;
+      const cell=map[key];
+      const dropAttrs=editing?`data-drop-cell="${sub.id}::${r}::${c}"`:"";
+      if(cell){
+        cells+=`<div class="hier-grid-cell filled" ${dropAttrs}>${memberCardHtml(sub,cell.m,cell.i,color)}</div>`;
+      } else if(editing){
+        cells+=`<div class="hier-grid-cell empty" ${dropAttrs} data-empty-add="${sub.id}::${r}::${c}" title="Кликнуть — добавить бойца · Перетащить — сюда"><div class="hier-empty-slot"><span>+</span></div></div>`;
+      } else {
+        cells+=`<div class="hier-grid-cell hollow" aria-hidden="true"></div>`;
+      }
+    }
+  }
+
+  const editBtn=editing?`<button class="hier-edit-btn hier-sub-edit-btn" data-edit-sub="${sub.id}">⚙</button>`:"";
+  const addBtn=editing?`<button class="hier-officer hier-officer-add" data-add-member="${sub.id}">＋ Добавить в подразделение</button>`:"";
+  return `<section class="hier-sub-section" style="--sub-color:${color};--sub-color-2:${shade(color,-25)}">
+    <div class="hier-sub-head">
+      <div class="hier-sub-title">${esc(sub.name)}</div>
+      ${editBtn}
+    </div>
+    <div class="hier-grid" style="grid-template-columns:repeat(${cols},minmax(0,220px));justify-content:center" data-sub-id="${sub.id}">${cells}</div>
+    ${addBtn?`<div class="hier-add-wrap">${addBtn}</div>`:""}
+  </section>`;
+}
+
+function render(){
+  document.body.classList.toggle("admin-editing",editing);
+
+  const cmd=STATE.hq.cmd_brigade||{};
+  const cmdHasPhoto=!!(cmd&&cmd.photo);
+  const cmdFilled=!!cmd.name;
+  const cmdCard=`<div class="hier-cmd">
+    <div class="hier-cmd-inner">
+      <div class="hier-cmd-badge">Главный врач больницы</div>
+      <div class="hier-officer-photo hier-cmd-photo ${cmdHasPhoto?"":"no-photo"}">
+        ${cmdHasPhoto?`<img src="${esc(photoUrl(cmd.photo))}" alt="" style="${photoStyle(cmd)}">`:`<span class="hier-officer-initials">${cmdFilled?esc(initials(cmd.name)):"—"}</span>`}
+      </div>
+      <div class="hier-cmd-body">
+        <div class="hier-cmd-name">${cmdFilled?esc(cmd.name):`<span style="opacity:.5">Вакансия</span>`}</div>
+        ${cmd.tag?`<div class="hier-cmd-rank">${esc(cmd.tag)}</div>`:""}
+        <div class="hier-cmd-contacts">
+          ${cmd.code?`<span class="hier-officer-code">📞 ${esc(cmd.code)}</span>`:""}
+          ${cmd.comm?`<span class="hier-officer-comm">${discordLink(cmd.comm,cmd.discord_id)}</span>`:""}
+        </div>
+      </div>
+      ${editing?`<button class="hier-edit-btn" data-edit-hq="cmd_brigade">✎</button>`:""}
+    </div>
+  </div>`;
+
+  const staffMembers=(STATE.hq_slots||[]).filter(s=>s.key!=="cmd_brigade");
+  const staffHtml=`<div class="hier-staff">
+    <div class="hier-staff-title"><span class="hier-line"></span><span class="hier-staff-label">Администрация · Заместители</span><span class="hier-line"></span></div>
+    <div class="hier-staff-grid">
+      ${staffMembers.map(slot=>{
+        const p=STATE.hq[slot.key]||{};
+        const filled=!!p.name;
+        const hasPhoto=!!(p&&p.photo);
+        return `<div class="hier-officer ${filled?"":"hier-officer-empty"}" data-hq="${slot.key}">
+          <div class="hier-officer-photo ${hasPhoto?"":"no-photo"}">
+            ${hasPhoto?`<img src="${esc(photoUrl(p.photo))}" alt="" style="${photoStyle(p)}">`:`<span class="hier-officer-initials">${filled?esc(initials(p.name)):"—"}</span>`}
+            ${slot.badge?`<div class="hier-officer-role-tag">${esc(slot.badge)}</div>`:""}
+          </div>
+          <div class="hier-officer-body">
+            <div class="hier-officer-role">${esc(slot.label)}</div>
+            <div class="hier-officer-name">${filled?esc(p.name):`<span style="opacity:.4">— вакансия —</span>`}</div>
+            <div class="hier-officer-meta">
+              ${p.code?`<span class="hier-officer-code">📞 ${esc(p.code)}</span>`:""}
+              ${p.comm?`<span class="hier-officer-comm" title="Спец. связь">${discordLink(p.comm,p.discord_id)}</span>`:""}
+            </div>
+          </div>
+          ${editing?`<div class="hier-edit-group">
+            <button class="hier-edit-btn hier-edit-corner" data-edit-hq="${slot.key}" title="Изменить должность/данные">✎</button>
+            ${!slot.locked?`<button class="hier-edit-btn hier-edit-corner danger" data-del-hq="${slot.key}" title="Удалить должность">×</button>`:""}
+          </div>`:""}
+        </div>`;
+      }).join("")}
+      ${editing?`<button class="hier-officer hier-officer-add" id="addHqBtn">＋ Добавить должность в штаб</button>`:""}
+    </div>
+  </div>`;
+
+  const subsHtml=`<div class="hier-subs-title"><span class="hier-line"></span><span class="hier-staff-label">Подразделения · ${STATE.subs.length} шт.</span><span class="hier-line"></span></div>
+  <div class="hier-subs-list">
+    ${STATE.subs.map(sub=>renderSub(sub)).join("")}
+  </div>
+  ${editing?`<div style="margin-top:16px;width:100%;max-width:500px;margin-left:auto;margin-right:auto"><button class="hier-add-btn" id="addSubBtn" style="width:100%;padding:16px">+ Добавить подразделение</button></div>`:""}`;
+
+  hier.innerHTML=`${cmdCard}<div class="hier-connector"></div>${staffHtml}<div class="hier-connector"></div>${subsHtml}`;
+}
+
+async function boot(){
+  if(!window.CGB_COMP){setTimeout(boot,250);return}
+  try{STATE=await CGB_COMP.load();render()}
+  catch(e){console.warn("[composition] load failed",e);STATE=JSON.parse(localStorage.getItem("cgb-composition")||JSON.stringify(CGB_COMP.DEFAULT_STATE));render()}
+}
+
+$("editModeBtn").addEventListener("click",()=>{
+  editing=!editing;
+  $("editModeBtn").textContent=editing?"✓ Готово":"✎ Режим редактирования";
+  $("exportPngBtn").style.display=editing?"":"none";
+  render();
+});
+
+function ruDate(){
+  const d=new Date();
+  const mm=["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
+  return d.getDate()+" "+mm[d.getMonth()]+" "+d.getFullYear()+" г.";
+}
+
+function expBuildHtml(opts){
+  const showContacts=opts&&opts.showContacts!==false;
+  const showPhotos=opts&&opts.showPhotos!==false;
+
+  const src=document.getElementById("hier");
+  if(!src){return `<div style="padding:40px;color:#e77070">Ошибка: иерархия не найдена</div>`}
+
+  const clone=src.cloneNode(true);
+  clone.querySelectorAll(".hier-edit-btn,.hier-edit-group,.hier-edit-corner,.hier-sub-edit-btn,.hier-member-actions,.hier-officer-add,.hier-add-btn,.hier-add-wrap,#addHqBtn,#addSubBtn,[data-add-member]").forEach(el=>el.remove());
+  clone.querySelectorAll(".hier-grid-cell.empty").forEach(el=>{
+    el.classList.remove("empty");
+    el.classList.add("hollow");
+    el.innerHTML="";
+    el.removeAttribute("data-drop-cell");
+    el.removeAttribute("data-empty-add");
+    el.removeAttribute("title");
+  });
+  clone.querySelectorAll(".hier-member").forEach(el=>{el.removeAttribute("draggable");el.classList.remove("is-draggable","dragging")});
+  clone.querySelectorAll("canvas,svg").forEach(el=>{
+    const r=el.getBoundingClientRect();
+    if(!r.width||!r.height) el.remove();
+  });
+  if(!showContacts){
+    clone.querySelectorAll(".hier-officer-code,.hier-officer-comm,.hier-member-code,.hier-member-comm,.hier-cmd-contacts").forEach(el=>el.remove());
+  }
+  if(!showPhotos){
+    clone.querySelectorAll(".hier-officer-photo img,.hier-cmd-photo img,.hier-member-photo img").forEach(el=>{
+      const parent=el.parentElement;
+      const initEl=document.createElement("span");
+      initEl.className="hier-officer-initials";
+      initEl.textContent="—";
+      el.replaceWith(initEl);
+      if(parent) parent.classList.add("no-photo");
+    });
+  }
+
+  const totalPeople=1+(STATE.hq_slots||[]).filter(s=>s.key!=="cmd_brigade"&&STATE.hq[s.key]&&STATE.hq[s.key].name).length + (STATE.subs||[]).reduce((a,s)=>a+((s.members||[]).length),0);
+
+  if(opts&&opts.onlyCards){
+    const wrap=document.createElement("div");
+    wrap.id="expCanvas";
+    wrap.className="exp-canvas exp-canvas-transparent";
+    wrap.appendChild(clone);
+    return wrap.outerHTML;
+  }
+
+  const wrap=document.createElement("div");
+  wrap.id="expCanvas";
+  wrap.className="exp-canvas";
+  wrap.innerHTML=`
+    <div class="exp-cover">
+      <div class="exp-cover-emblem">
+        <img src="logo.png" crossorigin="anonymous" alt="">
+      </div>
+      <div class="exp-cover-text">
+        <div class="exp-cover-eyebrow">Министерство Здравоохранения</div>
+        <h1 class="exp-cover-title">ЦГБ №3</h1>
+        <div class="exp-cover-sub">ЦГБ №3 · Структура управления</div>
+        <div class="exp-cover-meta">
+          <span>📅 ${ruDate()}</span>
+          <span>👥 Личный состав: ${totalPeople}</span>
+          <span>🎖 Подразделений: ${(STATE.subs||[]).length}</span>
+        </div>
+      </div>
+    </div>
+    <div class="exp-hier-wrap"></div>
+    <div class="exp-footer">
+      <div class="exp-footer-motto">Забота · Профессионализм · Жизнь</div>
+      <div class="exp-footer-sub">Работаем 24/7 · ЦГБ №3 · Центральная Городская</div>
+    </div>`;
+  wrap.querySelector(".exp-hier-wrap").appendChild(clone);
+  return wrap.outerHTML;
+}
+
+function expRefresh(){
+  const opts={
+    showContacts:$("expShowContacts").checked,
+    showPhotos:$("expShowPhotos").checked,
+    onlyCards:$("expOnlyCards").checked
+  };
+  $("expPreview").innerHTML=expBuildHtml(opts);
+}
+
+function parseColorToRgba(str){
+  if(!str) return null;
+  str=String(str).trim();
+  const m1=str.match(/^#([0-9a-f]{3,8})$/i);
+  if(m1){
+    let h=m1[1];
+    if(h.length===3) h=h.split("").map(c=>c+c).join("");
+    if(h.length===4) h=h.split("").map(c=>c+c).join("");
+    const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);
+    const a=h.length===8?parseInt(h.slice(6,8),16)/255:1;
+    return {r,g,b,a};
+  }
+  const m2=str.match(/^rgba?\s*\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)(?:[\s,\/]+([\d.]+%?))?\s*\)$/i);
+  if(m2){
+    let a=1;
+    if(m2[4]!=null){ a=m2[4].endsWith("%")?parseFloat(m2[4])/100:parseFloat(m2[4]); }
+    return {r:parseFloat(m2[1])|0,g:parseFloat(m2[2])|0,b:parseFloat(m2[3])|0,a};
+  }
+  if(str==="transparent") return {r:0,g:0,b:0,a:0};
+  if(str==="currentcolor"||str==="inherit"||str==="initial"||str==="unset") return null;
+  const named={black:"#000",white:"#fff",red:"#f00",green:"#080",blue:"#00f",gold:"#22d3ee"};
+  if(named[str.toLowerCase()]) return parseColorToRgba(named[str.toLowerCase()]);
+  return null;
+}
+function rgbaStr(c){return "rgba("+c.r+","+c.g+","+c.b+","+(Math.round(c.a*1000)/1000)+")"}
+function mixColors(c1,c2,p){
+  return {
+    r:Math.round(c1.r*p+c2.r*(1-p)),
+    g:Math.round(c1.g*p+c2.g*(1-p)),
+    b:Math.round(c1.b*p+c2.b*(1-p)),
+    a:c1.a*p+c2.a*(1-p)
+  };
+}
+function replaceColorMix(cssStr,el){
+  if(!cssStr||typeof cssStr!=="string") return cssStr;
+  if(cssStr.indexOf("color-mix")===-1 && cssStr.indexOf("color(")===-1) return cssStr;
+  let out=cssStr;
+  let guard=0;
+  while(out.indexOf("color-mix(")!==-1 && guard<50){
+    guard++;
+    const start=out.indexOf("color-mix(");
+    let depth=0,end=-1;
+    for(let i=start;i<out.length;i++){
+      if(out[i]==="(") depth++;
+      else if(out[i]===")"){depth--;if(depth===0){end=i;break}}
+    }
+    if(end===-1) break;
+    const inner=out.slice(start+"color-mix(".length,end);
+    const parts=splitTopLevel(inner,",");
+    let fallback="rgba(128,128,128,.5)";
+    if(parts.length>=3){
+      const cAstr=parts[1].trim();
+      const cBstr=parts[2].trim();
+      const pctMatch=cAstr.match(/\s+(\d+(?:\.\d+)?)%\s*$/);
+      let p=0.5;
+      let cAclean=cAstr;
+      if(pctMatch){p=parseFloat(pctMatch[1])/100;cAclean=cAstr.slice(0,pctMatch.index).trim()}
+      const cA=resolveColor(cAclean,el);
+      const cB=resolveColor(cBstr,el);
+      if(cA&&cB){fallback=rgbaStr(mixColors(cA,cB,p))}
+      else if(cA){fallback=rgbaStr(cA)}
+      else if(cB){fallback=rgbaStr(cB)}
+    }
+    out=out.slice(0,start)+fallback+out.slice(end+1);
+  }
+  guard=0;
+  while(out.indexOf("color(")!==-1 && guard<50){
+    guard++;
+    const start=out.indexOf("color(");
+    let depth=0,end=-1;
+    for(let i=start;i<out.length;i++){
+      if(out[i]==="(") depth++;
+      else if(out[i]===")"){depth--;if(depth===0){end=i;break}}
+    }
+    if(end===-1) break;
+    out=out.slice(0,start)+"rgba(128,128,128,.6)"+out.slice(end+1);
+  }
+  return out;
+}
+function splitTopLevel(s,sep){
+  const out=[];let depth=0,buf="";
+  for(let i=0;i<s.length;i++){
+    const c=s[i];
+    if(c==="(") depth++;
+    else if(c===")") depth--;
+    if(c===sep&&depth===0){out.push(buf);buf="";continue}
+    buf+=c;
+  }
+  if(buf.length) out.push(buf);
+  return out;
+}
+function resolveColor(str,el){
+  str=str.trim();
+  const varMatch=str.match(/^var\(\s*(--[a-z0-9-]+)\s*(?:,\s*(.+))?\)$/i);
+  if(varMatch){
+    const name=varMatch[1];
+    const cs=el?getComputedStyle(el).getPropertyValue(name).trim():"";
+    if(cs) return resolveColor(cs,el);
+    if(varMatch[2]) return resolveColor(varMatch[2],el);
+    return null;
+  }
+  return parseColorToRgba(str);
+}
+function sanitizeColors(root){
+  const props=["color","background","background-color","background-image","border-color","border-top-color","border-right-color","border-bottom-color","border-left-color","box-shadow","text-shadow","outline-color","fill","stroke","filter"];
+  const all=[root].concat(Array.from(root.querySelectorAll("*")));
+  for(const el of all){
+    for(const p of props){
+      const cur=el.style&&el.style.getPropertyValue(p);
+      if(cur&&(cur.indexOf("color-mix")!==-1||cur.indexOf("color(")!==-1)){
+        el.style.setProperty(p,replaceColorMix(cur,el),el.style.getPropertyPriority(p));
+      }
+    }
+    try{
+      const cs=getComputedStyle(el);
+      for(const p of props){
+        const v=cs.getPropertyValue(p);
+        if(v&&(v.indexOf("color-mix")!==-1||v.indexOf("color(")!==-1)){
+          el.style.setProperty(p,replaceColorMix(v,el),"important");
+        }
+      }
+    }catch(e){}
+  }
+}
+
+function stripZeroSizeBackgrounds(root){
+  const all=[root].concat(Array.from(root.querySelectorAll("*")));
+  let removed=0;
+  for(const el of all){
+    if(!el.getBoundingClientRect) continue;
+    const r=el.getBoundingClientRect();
+    const cs=(function(){try{return getComputedStyle(el)}catch(e){return null}})();
+    if(!cs) continue;
+    const hasBgImg=cs.backgroundImage&&cs.backgroundImage!=="none";
+    const hidden=cs.display==="none"||cs.visibility==="hidden";
+    if(hidden){
+      el.style.setProperty("background-image","none","important");
+      el.style.setProperty("background","none","important");
+      continue;
+    }
+    if(hasBgImg && (r.width<1 || r.height<1)){
+      el.style.setProperty("background-image","none","important");
+      el.style.setProperty("background","none","important");
+      removed++;
+    }
+    if(cs.backgroundImage && (cs.backgroundImage.indexOf("gradient")!==-1)){
+      if(r.width<1||r.height<1){
+        el.style.setProperty("background-image","none","important");
+        removed++;
+      }
+    }
+  }
+  if(removed) console.log("[EXP] stripped zero-size bg from",removed,"els");
+}
+
+async function expRender(){
+  const scale=parseFloat($("expScale").value)||3;
+  const node=document.getElementById("expCanvas");
+  if(!node) return null;
+  // Сетка штаба — точно как на живой странице (px-треки + центрирование),
+  // чтобы PNG совпадал с тем, что видит пользователь. С minmax(0,1fr)
+  // последний ряд «прилипал» влево — треки растягивались на всю ширину.
+  let staffCols=4,staffTpl=null,staffGap="22px";
+  try{
+    const live=document.querySelector("#hier .hier-staff-grid");
+    if(live){
+      const cs=getComputedStyle(live);
+      const tpl=cs.gridTemplateColumns;
+      if(tpl&&tpl!=="none") staffTpl=tpl;
+      if(cs.gap&&cs.gap!=="normal") staffGap=cs.gap;
+      const n=(tpl||"").split(" ").filter(Boolean).length;
+      if(n>0) staffCols=n;
+    }
+  }catch(e){}
+  const staffColsCss=staffTpl||("repeat("+staffCols+",minmax(0,280px))");
+  node.querySelectorAll("canvas,svg,iframe").forEach(el=>{
+    const r=el.getBoundingClientRect();
+    if(!r.width||!r.height) el.remove();
+  });
+  sanitizeColors(node);
+  stripZeroSizeBackgrounds(node);
+  const transparent=node.classList.contains("exp-canvas-transparent");
+
+  const preShine=document.createElement("style");
+  preShine.id="__cgb_png_pre";
+  preShine.textContent=`
+    .hier-cmd-inner::after,.hier-cmd-inner::before,
+    .hier-cmd::after,.hier-cmd::before,
+    .hier-member::before,.hier-member::after,
+    .hier-officer::before,.hier-officer::after,
+    .auto-card::before,.auto-card::after,
+    .hier-sub-head::before,.hier-sub-head::after{
+      display:none !important;content:none !important;background:none !important;
+      -webkit-mask:none !important;mask:none !important;animation:none !important;
+      border:none !important;box-shadow:none !important;opacity:0 !important;
+      width:0 !important;height:0 !important;
+    }
+    .hier-cmd-inner,.hier-officer,.hier-member{
+      animation:none !important;
+    }
+    .hier-cmd-inner .hier-cmd-photo img,
+    .hier-officer .hier-officer-photo img,
+    .hier-member .hier-member-photo img{
+      filter:none !important;
+    }
+    .hier-cmd-badge,.hier-officer-role-tag,.hier-member-rank-tag,
+    .hier-cmd-contacts .hier-officer-code,.hier-cmd-contacts .hier-officer-comm,
+    .hier-member-code,.hier-member-comm,.hier-officer-code,.hier-officer-comm{
+      backdrop-filter:none !important;-webkit-backdrop-filter:none !important;
+    }
+  `;
+  document.head.appendChild(preShine);
+  await new Promise(r=>setTimeout(r,60));
+
+  let canvas=null;
+  try{
+    canvas=await html2canvas(node,{
+      backgroundColor:transparent?null:"#0b3542",
+      scale:scale,
+      useCORS:true,
+      allowTaint:true,
+      logging:false,
+      imageTimeout:15000,
+      onclone:function(doc){
+        const styleFix=doc.createElement("style");
+        styleFix.textContent=`
+          #expCanvas .hier-cmd-inner::after,#expCanvas .hier-cmd-inner::before,
+          #expCanvas .hier-cmd::after,#expCanvas .hier-cmd::before,
+          #expCanvas .hier-member::before,#expCanvas .hier-member::after,
+          #expCanvas .hier-officer::before,#expCanvas .hier-officer::after,
+          #expCanvas .auto-card::before,#expCanvas .auto-card::after,
+          #expCanvas .hier-sub-head::before,#expCanvas .hier-sub-head::after{
+            display:none !important;content:none !important;background:none !important;
+            -webkit-mask:none !important;mask:none !important;animation:none !important;
+            border:none !important;box-shadow:none !important;opacity:0 !important;
+            width:0 !important;height:0 !important;
+          }
+          #expCanvas .hier-cmd,#expCanvas .hier-cmd-inner{
+            box-shadow:0 8px 20px rgba(0,0,0,.4) !important;
+            border:2px solid #22d3ee !important;
+            transform:none !important;
+            background:linear-gradient(180deg,#1c2b23,#0f1a14) !important;
+            filter:none !important;
+          }
+          #expCanvas .hier-cmd-badge{
+            box-shadow:none !important;
+            border:1px solid rgba(255,255,255,.35) !important;
+          }
+          #expCanvas .hier-cmd-photo .hier-officer-role-tag,
+          #expCanvas .hier-officer-role-tag,
+          #expCanvas .hier-member-rank-tag{
+            box-shadow:none !important;
+            backdrop-filter:none !important;
+            -webkit-backdrop-filter:none !important;
+          }
+          #expCanvas .hier-cmd-body{
+            background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.75) 60%,rgba(0,0,0,.95) 100%) !important;
+          }
+          #expCanvas .hier-cmd-contacts .hier-officer-code,
+          #expCanvas .hier-cmd-contacts .hier-officer-comm,
+          #expCanvas .hier-member-code,#expCanvas .hier-member-comm{
+            backdrop-filter:none !important;
+            -webkit-backdrop-filter:none !important;
+          }
+          #expCanvas .hier-cmd-inner *,#expCanvas .hier-officer *,#expCanvas .hier-member *{
+            animation:none !important;transition:none !important;
+          }
+          #expCanvas .hier-cmd-photo,#expCanvas .hier-officer-photo,#expCanvas .hier-member-photo{
+            box-shadow:none !important;filter:none !important;
+          }
+          #expCanvas .hier-cmd-photo img,#expCanvas .hier-officer-photo img,#expCanvas .hier-member-photo img{
+            filter:none !important;
+          }
+          #expCanvas .hier-officer,#expCanvas .hier-member{
+            box-shadow:0 6px 16px rgba(0,0,0,.35) !important;
+            transform:none !important;
+            background:linear-gradient(180deg,#1c2b23,#0f1a14) !important;
+          }
+          #expCanvas .hier-staff-grid{
+            display:grid !important;
+            grid-template-columns:${staffColsCss} !important;
+            gap:${staffGap} !important;
+            width:100% !important;max-width:none !important;
+            justify-content:center !important;
+          }
+          #expCanvas .hier-staff{max-width:none !important;width:100% !important}
+          #expCanvas *{animation:none !important;transition:none !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important}
+          #expCanvas *:hover{transform:none !important;box-shadow:inherit !important}
+        `;
+        doc.head.appendChild(styleFix);
+        const cn=doc.getElementById("expCanvas");
+        if(cn){
+          cn.querySelectorAll("canvas,iframe").forEach(el=>el.remove());
+          cn.querySelectorAll("svg").forEach(el=>{
+            const r=el.getBoundingClientRect();
+            if(!r.width||!r.height) el.remove();
+          });
+          const cmdInners=cn.querySelectorAll(".hier-cmd-inner,.hier-officer,.hier-member");
+          cmdInners.forEach(el=>{
+            el.style.setProperty("box-shadow","0 8px 20px rgba(0,0,0,.4)","important");
+            el.style.setProperty("filter","none","important");
+            el.style.setProperty("transform","none","important");
+            el.style.setProperty("animation","none","important");
+          });
+          const badges=cn.querySelectorAll(".hier-cmd-badge,.hier-cmd-photo .hier-officer-role-tag,.hier-officer-role-tag,.hier-member-rank-tag");
+          badges.forEach(el=>{
+            el.style.setProperty("box-shadow","none","important");
+            el.style.setProperty("backdrop-filter","none","important");
+            el.style.setProperty("-webkit-backdrop-filter","none","important");
+          });
+          const contactChips=cn.querySelectorAll(".hier-officer-code,.hier-officer-comm,.hier-member-code,.hier-member-comm,.hier-cmd-contacts .hier-officer-code,.hier-cmd-contacts .hier-officer-comm");
+          contactChips.forEach(el=>{
+            el.style.setProperty("backdrop-filter","none","important");
+            el.style.setProperty("-webkit-backdrop-filter","none","important");
+          });
+          const photos=cn.querySelectorAll(".hier-cmd-photo img,.hier-officer-photo img,.hier-member-photo img");
+          photos.forEach(el=>el.style.setProperty("filter","none","important"));
+          const grids=cn.querySelectorAll(".hier-staff-grid");
+          grids.forEach(g=>{
+            g.style.setProperty("grid-template-columns",staffColsCss,"important");
+            g.style.setProperty("gap",staffGap,"important");
+            g.style.setProperty("justify-content","center","important");
+            g.style.setProperty("width","100%","important");
+          });
+          sanitizeColors(cn);
+          stripZeroSizeBackgrounds(cn);
+        }
+      },
+    ignoreElements:function(el){
+      if(el.tagName==="CANVAS"||el.tagName==="IFRAME") return true;
+      if(el.id==="bgCanvas") return true;
+      if(el.classList&&el.classList.contains("bg-noise")) return true;
+      if(el.tagName==="SVG"){
+        const r=el.getBoundingClientRect();
+        if(!r.width||!r.height) return true;
+      }
+      try{
+        const r=el.getBoundingClientRect();
+        if(r.width===0&&r.height===0){
+          const cs=getComputedStyle(el);
+          if(cs.backgroundImage&&cs.backgroundImage!=="none") return true;
+        }
+      }catch(e){}
+      return false;
+    }
+  });
+  }finally{
+    const preEl=document.getElementById("__cgb_png_pre");
+    if(preEl) preEl.remove();
+  }
+  return canvas;
+}
+
+$("exportPngBtn").addEventListener("click",()=>{
+  if(!STATE){showToast("Ещё грузится...","error");return}
+  expRefresh();
+  $("exportModal").classList.add("active");
+});
+$("expRefreshBtn").addEventListener("click",expRefresh);
+$("expShowContacts").addEventListener("change",expRefresh);
+$("expShowPhotos").addEventListener("change",expRefresh);
+$("expOnlyCards").addEventListener("change",expRefresh);
+
+$("expDownloadBtn").addEventListener("click",async()=>{
+  const btn=$("expDownloadBtn");
+  const orig=btn.textContent;
+  btn.disabled=true;btn.textContent="⏳ Рендер...";
+  try{
+    const canvas=await expRender();
+    if(!canvas){showToast("Ошибка рендера","error");return}
+    canvas.toBlob(blob=>{
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement("a");
+      a.href=url;a.download="ЦГБ3_Структура_"+new Date().toISOString().slice(0,10)+".png";
+      document.body.appendChild(a);a.click();document.body.removeChild(a);
+      setTimeout(()=>URL.revokeObjectURL(url),1000);
+      showToast("✓ PNG скачан","success");
+    },"image/png");
+  }catch(e){showToast("Ошибка: "+e.message,"error");console.warn(e)}
+  finally{btn.disabled=false;btn.textContent=orig}
+});
+
+$("expCopyBtn").addEventListener("click",async()=>{
+  const btn=$("expCopyBtn");
+  const orig=btn.textContent;
+  btn.disabled=true;btn.textContent="⏳ Рендер...";
+  try{
+    const canvas=await expRender();
+    if(!canvas) throw new Error("нет canvas");
+    canvas.toBlob(async blob=>{
+      try{
+        await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);
+        showToast("✓ Скопировано в буфер (Ctrl+V в Discord)","success");
+      }catch(err){
+        showToast("Буфер недоступен — используйте «Скачать»","error");
+        console.warn("clipboard err:",err);
+      }
+    },"image/png");
+  }catch(e){showToast("Ошибка: "+e.message,"error")}
+  finally{btn.disabled=false;btn.textContent=orig}
+});
+
+$("exportModal").querySelector(".modal-close").addEventListener("click",()=>$("exportModal").classList.remove("active"));
+$("exportModal").addEventListener("click",e=>{if(e.target===$("exportModal")) $("exportModal").classList.remove("active")});
+
+const pModal=$("personModal"),pForm=$("pForm"),pFields=$("pFormFields"),pDel=$("pDeleteBtn");
+const sModal=$("subModal"),sForm=$("sForm"),sDel=$("sDeleteBtn");
+pModal.addEventListener("click",e=>{if(e.target===pModal){pModal.classList.remove("active");window.__pendingCell=null}});
+pModal.querySelector(".modal-close").addEventListener("click",()=>{pModal.classList.remove("active");window.__pendingCell=null});
+sModal.addEventListener("click",e=>{if(e.target===sModal) sModal.classList.remove("active")});
+sModal.querySelector(".modal-close").addEventListener("click",()=>sModal.classList.remove("active"));
+
+function photoField(current,zoom,x,y){
+  const z=zoom||1, px=x!=null?x:50, py=y!=null?y:50;
+  const imgStyle=`transform:scale(${z});object-position:${px}% ${py}%`;
+  return `<div class="form-group"><label>Фото</label>
+    <div class="photo-controls">
+      <div class="photo-preview"><div class="photo-preview-inner">${current?`<img src="${esc(current)}" style="${imgStyle}">`:`<span>Нет фото</span>`}</div></div>
+      <div class="photo-actions">
+        <input type="url" name="photo" value="${esc(current)}" placeholder="https://... или Data URL">
+        <div style="display:flex;gap:6px">
+          <label class="btn btn-ghost btn-sm" style="flex:1;min-height:34px;cursor:pointer">📁 Файл<input type="file" name="photoFile" accept="image/*" hidden></label>
+          <button type="button" class="btn btn-ghost btn-sm" data-clear-photo style="min-height:34px;padding:0 10px">×</button>
+        </div>
+        <div class="photo-tune">
+          <label class="photo-tune-row"><span>🔍 Приближение</span><input type="range" name="photo_zoom" min="1" max="3" step="0.05" value="${z}"><span class="photo-tune-val" data-tune-val="zoom">${(+z).toFixed(2)}×</span></label>
+          <label class="photo-tune-row"><span>⇔ Гориз.</span><input type="range" name="photo_x" min="0" max="100" step="1" value="${px}"><span class="photo-tune-val" data-tune-val="x">${px}%</span></label>
+          <label class="photo-tune-row"><span>⇕ Верт.</span><input type="range" name="photo_y" min="0" max="100" step="1" value="${py}"><span class="photo-tune-val" data-tune-val="y">${py}%</span></label>
+          <button type="button" class="btn btn-ghost btn-sm" data-tune-reset style="width:100%;min-height:28px;font-size:11px">↺ Сбросить приближение</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function bindPhotoField(form){
+  const urlInput=form.querySelector('input[name="photo"]');
+  const fileInput=form.querySelector('input[name="photoFile"]');
+  const previewInner=form.querySelector(".photo-preview-inner");
+  const clear=form.querySelector('[data-clear-photo]');
+  const zoomIn=form.querySelector('input[name="photo_zoom"]');
+  const xIn=form.querySelector('input[name="photo_x"]');
+  const yIn=form.querySelector('input[name="photo_y"]');
+  const resetBtn=form.querySelector('[data-tune-reset]');
+  const fileLabel=fileInput.parentElement;
+  function imgStyle(){
+    const z=Number(zoomIn.value)||1;
+    const x=Number(xIn.value);
+    const y=Number(yIn.value);
+    const size=(100*z).toFixed(2);
+    const leftShift=((100-100*z)*(x/100)).toFixed(2);
+    const topShift=((100-100*z)*(y/100)).toFixed(2);
+    return `position:absolute;width:${size}%;height:${size}%;left:${leftShift}%;top:${topShift}%;object-fit:cover`;
+  }
+  function updateVals(){
+    form.querySelector('[data-tune-val="zoom"]').textContent=(+zoomIn.value).toFixed(2)+"×";
+    form.querySelector('[data-tune-val="x"]').textContent=xIn.value+"%";
+    form.querySelector('[data-tune-val="y"]').textContent=yIn.value+"%";
+  }
+  function sync(){
+    const v=urlInput.value.trim();
+    previewInner.innerHTML=v?`<img src="${esc(v)}" style="${imgStyle()}">`:`<span>Нет фото</span>`;
+    updateVals();
+  }
+  function applyStyle(){
+    const img=previewInner.querySelector("img");
+    if(img) img.style.cssText=imgStyle();
+    updateVals();
+  }
+  urlInput.addEventListener("input",sync);
+  [zoomIn,xIn,yIn].forEach(el=>el.addEventListener("input",applyStyle));
+  resetBtn.addEventListener("click",()=>{zoomIn.value=1;xIn.value=50;yIn.value=50;applyStyle()});
+  fileInput.addEventListener("change",async e=>{
+    const f=e.target.files[0];if(!f) return;
+    const oldTxt=fileLabel.innerHTML;
+    fileLabel.style.pointerEvents="none";fileLabel.style.opacity=".6";
+    fileLabel.innerHTML='⏳ Загрузка...';
+    try{
+      const r=new FileReader();
+      r.onload=ev=>{previewInner.innerHTML=`<img src="${ev.target.result}" style="${imgStyle()}">`};
+      r.readAsDataURL(f);
+      const up=await CGB_COMP.uploadPhoto(f);
+      if(!up.ok){alert("Ошибка загрузки фото: "+up.error);sync();return}
+      urlInput.value=up.url;
+      sync();
+    }catch(err){
+      alert("Ошибка: "+err.message);sync();
+    }finally{
+      fileLabel.innerHTML=oldTxt;fileLabel.style.pointerEvents="";fileLabel.style.opacity="";
+      fileInput.value="";
+    }
+  });
+  clear.addEventListener("click",()=>{urlInput.value="";fileInput.value="";sync()});
+}
+
+function openHqEdit(key,isNew){
+  const slot=isNew?{key:"",label:"",badge:"",tier:2}:(STATE.hq_slots||[]).find(s=>s.key===key);
+  if(!slot) return;
+  const p=isNew?{}:(STATE.hq[key]||{});
+  $("pModalTitle").textContent=isNew?"Новая должность в штабе":slot.label;
+  pForm.ctx.value=(isNew?"hqnew:":"hq:")+key;
+  const canEditMeta=isNew||!slot.locked;
+  pFields.innerHTML=`
+    ${canEditMeta?`
+    <div class="form-group"><label>Название должности</label><input name="label" value="${esc(slot.label||"")}" placeholder="Зам. по медицинской части" required></div>
+    <div class="form-group"><label>Категория должности (бейдж)</label><input name="badge" value="${esc(slot.badge||"")}" placeholder="Свободный текст, можно оставить пустым"></div>
+    `:`
+    <div class="form-group" style="opacity:.6;font-size:12px">Должность: <b>${esc(slot.label)}</b> (защищена от изменений)</div>
+    `}
+    <div class="form-group"><label>ФИО</label><input name="name" value="${esc(p.name||"")}" placeholder="Иван Иванов"></div>
+    <div class="form-group"><label>Статик / Код</label><input name="code" value="${esc(p.code||"")}" placeholder="123-456"></div>
+    <div class="form-group"><label>Спец. связь (Discord/иное)</label><input name="comm" value="${esc(p.comm||"")}" placeholder="@username или Telegram/etc"></div>
+    <div class="form-group"><label>Заметка</label><input name="tag" value="${esc(p.tag||"")}" placeholder="главврач"></div>
+    ${photoField(p.photo||"",p.photo_zoom,p.photo_x,p.photo_y)}
+  `;
+  bindPhotoField(pForm);
+  pDel.style.display=(!isNew&&p.name)?"":"none";
+  pForm.querySelector(".form-msg").className="form-msg";
+  pModal.classList.add("active");
+}
+
+function openMemberEdit(subId,memberIdx){
+  const sub=STATE.subs.find(s=>s.id===subId);if(!sub) return;
+  const m=memberIdx>=0?sub.members[memberIdx]:{rank:"",rank_label:"",name:"",code:"",role:"",photo:""};
+  const ranks=ranksOf();
+  const inList=ranks.some(r=>r.key===m.rank);
+  const legacyLabel=m.rank_label||m.rank||"";
+  const legacyOpt=(!inList&&legacyLabel)?`<option value="${esc(m.rank||"")}" selected>${esc(legacyLabel)} (нет в списке)</option>`:"";
+  $("pModalTitle").textContent=(memberIdx>=0?"Изменить":"Новый участник")+" · "+sub.name;
+  pForm.ctx.value=`member:${subId}:${memberIdx}`;
+  pFields.innerHTML=`
+    <div class="form-group"><label>Категория</label>
+      <select name="rank" class="form-select-custom">
+        <option value="">— без категории —</option>
+        ${legacyOpt}
+        ${ranks.map(r=>`<option value="${esc(r.key)}" ${(inList&&r.key===m.rank)?"selected":""}>${esc(r.label)}</option>`).join("")}
+      </select>
+      ${!ranks.length?`<div style="margin-top:6px;font-size:12px;color:var(--muted)">Список категорий пуст — добавьте их через кнопку «🗂 Категории» над иерархией.</div>`:""}
+    </div>
+    <div class="form-group"><label>ФИО</label><input name="name" value="${esc(m.name||"")}" required></div>
+    <div class="form-group"><label>Должность / роль</label><input name="role" value="${esc(m.role||"")}" placeholder="Зав. отделением"></div>
+    <div class="form-group"><label>Статик / Код</label><input name="code" value="${esc(m.code||"")}" placeholder="123-456"></div>
+    <div class="form-group"><label>Спец. связь (Discord/иное)</label><input name="comm" value="${esc(m.comm||"")}" placeholder="@username"></div>
+    ${photoField(m.photo||"",m.photo_zoom,m.photo_x,m.photo_y)}
+  `;
+  bindPhotoField(pForm);
+  pDel.style.display=memberIdx>=0?"":"none";
+  pForm.querySelector(".form-msg").className="form-msg";
+  pModal.classList.add("active");
+  const sel=pForm.querySelector('select[name="rank"]');if(window.CGB_SELECT) CGB_SELECT.enhance(sel);
+}
+
+pForm.addEventListener("submit",async e=>{
+  e.preventDefault();
+  const ctx=pForm.ctx.value.split(":");
+  const data={};pForm.querySelectorAll("input,select").forEach(el=>{
+    if(el.name&&el.name!=="ctx"&&el.type!=="file") data[el.name]=el.value.trim();
+  });
+  if(ctx[0]==="hq"){
+    const slot=(STATE.hq_slots||[]).find(s=>s.key===ctx[1]);
+    if(slot){
+      if(!slot.locked&&data.label) slot.label=data.label;
+      if(slot.key==="cmd_brigade") slot.badge="";   // бейдж у главврача не показываем и не храним
+      else if(data.badge) slot.badge=data.badge;
+    }
+    STATE.hq[ctx[1]]={name:data.name,code:data.code,comm:data.comm,tag:data.tag,photo:data.photo,photo_zoom:parseFloat(data.photo_zoom)||1,photo_x:parseFloat(data.photo_x)||50,photo_y:parseFloat(data.photo_y)||50};
+  }else if(ctx[0]==="hqnew"){
+    if(!data.label){pForm.querySelector(".form-msg").className="form-msg error";pForm.querySelector(".form-msg").textContent="Укажите название должности";return}
+    const newKey="hq_"+Math.random().toString(36).slice(2,8);
+    STATE.hq_slots.push({key:newKey,label:data.label,badge:data.badge||"",tier:2});
+    STATE.hq[newKey]={name:data.name,code:data.code,tag:data.tag,photo:data.photo,photo_zoom:parseFloat(data.photo_zoom)||1,photo_x:parseFloat(data.photo_x)||50,photo_y:parseFloat(data.photo_y)||50};
+  }else{
+    const sub=STATE.subs.find(s=>s.id===ctx[1]);if(!sub) return;
+    const idx=parseInt(ctx[2]);
+    const rankSel=pForm.querySelector('select[name="rank"]');
+    const selOpt=rankSel?rankSel.options[rankSel.selectedIndex]:null;
+    const selLabel=selOpt?String(selOpt.textContent||"").replace(/\s*\(нет в списке\)\s*$/,"").trim():"";
+    const m={rank:data.rank,rank_label:data.rank?selLabel:"",name:data.name,code:data.code,comm:data.comm,role:data.role,photo:data.photo,photo_zoom:parseFloat(data.photo_zoom)||1,photo_x:parseFloat(data.photo_x)||50,photo_y:parseFloat(data.photo_y)||50};
+    if(idx>=0){
+      const old=sub.members[idx];
+      if(old){if(typeof old.grid_row==="number") m.grid_row=old.grid_row;if(typeof old.grid_col==="number") m.grid_col=old.grid_col}
+      sub.members[idx]=m;
+    } else {
+      if(window.__pendingCell&&window.__pendingCell.sub===sub.id){
+        m.grid_row=window.__pendingCell.row;
+        m.grid_col=window.__pendingCell.col;
+        window.__pendingCell=null;
+      }
+      sub.members.push(m);
+    }
+  }
+  await CGB_COMP.save(STATE);
+  pModal.classList.remove("active");render();showToast("Сохранено","success");
+});
+
+pDel.addEventListener("click",async()=>{
+  if(!confirm("Очистить данные должности (оставить вакансией)?")) return;
+  const ctx=pForm.ctx.value.split(":");
+  if(ctx[0]==="hq"){STATE.hq[ctx[1]]={name:"",code:"",tag:"",photo:""}}
+  else if(ctx[0]!=="hqnew"){const sub=STATE.subs.find(s=>s.id===ctx[1]);if(sub) sub.members.splice(parseInt(ctx[2]),1)}
+  await CGB_COMP.save(STATE);
+  pModal.classList.remove("active");render();showToast("Очищено","success");
+});
+
+function openSubEdit(subId){
+  const sub=subId?STATE.subs.find(s=>s.id===subId):null;
+  $("sModalTitle").textContent=sub?"Настройки подразделения":"Новое подразделение";
+  sForm.reset();
+  sForm.id.value=sub?sub.id:"";
+  if(sub){sForm.name.value=sub.name;sForm.short.value=sub.short;sForm.color.value=sub.color||"#7a8a4a";sForm.icon.value=sub.icon||"★";sForm.grid_cols.value=sub.grid_cols||3}
+  else{sForm.color.value="#7a8a4a";sForm.icon.value="★";sForm.grid_cols.value=3}
+  sDel.style.display=sub?"":"none";
+  sModal.classList.add("active");
+}
+
+sForm.addEventListener("submit",async e=>{
+  e.preventDefault();
+  const id=sForm.id.value;
+  const gc=Math.max(2,Math.min(10,parseInt(sForm.grid_cols.value)||3));
+  const data={name:sForm.name.value.trim(),short:sForm.short.value.trim(),color:sForm.color.value,icon:sForm.icon.value.trim()||"★",grid_cols:gc};
+  if(id){const sub=STATE.subs.find(s=>s.id===id);if(sub) Object.assign(sub,data)}
+  else{STATE.subs.push(Object.assign({id:CGB_COMP.uid(),members:[]},data))}
+  await CGB_COMP.save(STATE);
+  sModal.classList.remove("active");render();showToast("Сохранено","success");
+});
+
+sDel.addEventListener("click",async()=>{
+  const id=sForm.id.value;if(!id) return;
+  if(!confirm("Удалить подразделение и всех его участников?")) return;
+  STATE.subs=STATE.subs.filter(s=>s.id!==id);
+  await CGB_COMP.save(STATE);
+  sModal.classList.remove("active");render();showToast("Удалено","success");
+});
+
+/* ---------- Кастомные категории (ранги) ---------- */
+const rModal=$("ranksModal"),rList=$("ranksList"),rMsg=$("ranksMsg"),rInput=$("rankNewLabel");
+function renderRanksList(){
+  const ranks=ranksOf();
+  if(!ranks.length){
+    rList.innerHTML=`<div style="padding:16px;border:1.5px dashed var(--line);border-radius:12px;color:var(--muted);font-size:13px;text-align:center">Категорий пока нет. Добавьте первую ниже — например: «Зав. отделением», «Ст. врач», «Врач», «Интерн»…</div>`;
+    return;
+  }
+  rList.innerHTML=ranks.map((r,i)=>`
+    <div style="display:flex;align-items:center;gap:6px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card-bg)">
+      <span style="color:var(--muted);font-size:11px;min-width:22px;text-align:center;font-weight:700">${i+1}</span>
+      <input class="msg-input" data-rank-rename="${esc(r.key)}" value="${esc(r.label)}" style="flex:1;min-height:34px">
+      <span style="display:flex;gap:4px;flex-shrink:0">
+        <button type="button" class="mini-icon-btn" data-rank-move="${i}:-1" title="Выше (старше)" ${i===0?"disabled":""}>↑</button>
+        <button type="button" class="mini-icon-btn" data-rank-move="${i}:1" title="Ниже (младше)" ${i===ranks.length-1?"disabled":""}>↓</button>
+        <button type="button" class="mini-icon-btn danger" data-rank-del="${esc(r.key)}" title="Удалить категорию">×</button>
+      </span>
+    </div>`).join("");
+}
+function saveRanks(msg){
+  rMsg.className="form-msg";rMsg.textContent="Сохранение...";
+  CGB_COMP.save(STATE).then(res=>{
+    rMsg.className="form-msg";rMsg.textContent=res&&res.remote===false?"Сохранено локально (нет связи с базой)":"";
+    render();renderRanksList();
+    if(msg) showToast(msg,"success");
+  }).catch(err=>{rMsg.className="form-msg error";rMsg.textContent="Ошибка сохранения: "+err.message});
+}
+$("ranksBtn").addEventListener("click",()=>{
+  if(!STATE){showToast("Ещё грузится...","error");return}
+  rMsg.className="form-msg";rMsg.textContent="";rInput.value="";renderRanksList();rModal.classList.add("active");
+});
+rModal.addEventListener("click",e=>{if(e.target===rModal) rModal.classList.remove("active")});
+rModal.querySelector(".modal-close").addEventListener("click",()=>rModal.classList.remove("active"));
+$("rankAddBtn").addEventListener("click",()=>{
+  const label=rInput.value.trim();
+  if(!label){rMsg.className="form-msg error";rMsg.textContent="Введите название категории";return}
+  if(!Array.isArray(STATE.ranks)) STATE.ranks=[];
+  STATE.ranks.push({key:CGB_COMP.rankUid(),label:label,short:label});
+  rInput.value="";rMsg.className="form-msg";rMsg.textContent="";
+  saveRanks("Категория добавлена");
+});
+rInput.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();$("rankAddBtn").click()}});
+rList.addEventListener("click",e=>{
+  const mv=e.target.closest("[data-rank-move]");
+  if(mv){
+    if(mv.disabled) return;
+    const parts=mv.dataset.rankMove.split(":");const i=parseInt(parts[0]),d=parseInt(parts[1]);
+    const j=i+d;
+    if(j<0||j>=STATE.ranks.length) return;
+    const t=STATE.ranks[i];STATE.ranks[i]=STATE.ranks[j];STATE.ranks[j]=t;
+    saveRanks("Порядок обновлён");return;
+  }
+  const del=e.target.closest("[data-rank-del]");
+  if(del){
+    const key=del.dataset.rankDel;
+    const rk=STATE.ranks.find(r=>r.key===key);if(!rk) return;
+    let used=0;(STATE.subs||[]).forEach(s=>(s.members||[]).forEach(m=>{if(m.rank===key) used++}));
+    if(!confirm(`Удалить категорию «${rk.label}»?${used?`\nОна назначена участникам: ${used} чел. — у них останется просто текстовая метка.`:""}`)) return;
+    STATE.ranks=STATE.ranks.filter(r=>r.key!==key);
+    (STATE.subs||[]).forEach(s=>(s.members||[]).forEach(m=>{if(m&&m.rank===key){m.rank_label=rk.label;m.rank=""}}));
+    saveRanks("Категория удалена");return;
+  }
+});
+rList.addEventListener("change",e=>{
+  const rn=e.target.closest("[data-rank-rename]");
+  if(!rn) return;
+  const rk=STATE.ranks.find(r=>r.key===rn.dataset.rankRename);if(!rk) return;
+  const v=rn.value.trim();
+  if(!v){rn.value=rk.label;return}
+  if(v===rk.label) return;
+  rk.label=v;rk.short=v;
+  saveRanks("Категория переименована");
+});
+
+hier.addEventListener("click",e=>{
+  const hqEdit=e.target.closest("[data-edit-hq]");if(hqEdit) return openHqEdit(hqEdit.dataset.editHq,false);
+  const hqDel=e.target.closest("[data-del-hq]");if(hqDel){
+    const slot=(STATE.hq_slots||[]).find(s=>s.key===hqDel.dataset.delHq);
+    if(!slot||slot.locked) return;
+    if(!confirm(`Удалить должность «${slot.label}» из штаба?`)) return;
+    STATE.hq_slots=STATE.hq_slots.filter(s=>s.key!==hqDel.dataset.delHq);
+    delete STATE.hq[hqDel.dataset.delHq];
+    CGB_COMP.save(STATE).then(()=>{render();showToast("Должность удалена","success")});
+    return;
+  }
+  if(e.target.closest("#addHqBtn")) return openHqEdit("",true);
+  const em=e.target.closest("[data-edit-member]");if(em){const [s,i]=em.dataset.editMember.split("::");return openMemberEdit(s,parseInt(i))}
+  const am=e.target.closest("[data-add-member]");if(am) return openMemberEdit(am.dataset.addMember,-1);
+  const dm=e.target.closest("[data-del-member]");if(dm){
+    if(!confirm("Удалить участника?")) return;
+    const [s,i]=dm.dataset.delMember.split("::");
+    const sub=STATE.subs.find(x=>x.id===s);if(sub) sub.members.splice(parseInt(i),1);
+    CGB_COMP.save(STATE).then(()=>{render();showToast("Удалено","success")});
+    return;
+  }
+  const es=e.target.closest("[data-edit-sub]");if(es) return openSubEdit(es.dataset.editSub);
+  const cg=e.target.closest("[data-compact-grid]");if(cg){
+    const sub=STATE.subs.find(x=>x.id===cg.dataset.compactGrid);
+    if(sub) compactGrid(sub);
+    return;
+  }
+  const es2=e.target.closest("[data-empty-add]");if(es2){
+    const [s,r,c]=es2.dataset.emptyAdd.split("::");
+    return openMemberEditAtCell(s,parseInt(r),parseInt(c));
+  }
+  if(e.target.id==="addSubBtn") return openSubEdit(null);
+});
+
+let __dragSrc=null;
+
+hier.addEventListener("dragstart",e=>{
+  const card=e.target.closest("[data-drag-src]");
+  if(!card){e.preventDefault();return}
+  __dragSrc=card.dataset.dragSrc;
+  try{e.dataTransfer.setData("text/plain",__dragSrc);e.dataTransfer.effectAllowed="move"}catch(_){}
+  card.classList.add("dragging");
+});
+hier.addEventListener("dragend",e=>{
+  const card=e.target.closest("[data-drag-src]");
+  if(card) card.classList.remove("dragging");
+  hier.querySelectorAll(".drop-hover").forEach(el=>el.classList.remove("drop-hover"));
+  __dragSrc=null;
+});
+hier.addEventListener("dragover",e=>{
+  const cell=e.target.closest("[data-drop-cell]");
+  if(!cell) return;
+  e.preventDefault();
+  try{e.dataTransfer.dropEffect="move"}catch(_){}
+});
+hier.addEventListener("dragenter",e=>{
+  const cell=e.target.closest("[data-drop-cell]");
+  if(!cell) return;
+  cell.classList.add("drop-hover");
+});
+hier.addEventListener("dragleave",e=>{
+  const cell=e.target.closest("[data-drop-cell]");
+  if(!cell) return;
+  if(cell.contains(e.relatedTarget)) return;
+  cell.classList.remove("drop-hover");
+});
+hier.addEventListener("drop",e=>{
+  const cell=e.target.closest("[data-drop-cell]");
+  if(!cell) return;
+  e.preventDefault();
+  cell.classList.remove("drop-hover");
+  let src=__dragSrc;
+  if(!src){try{src=e.dataTransfer.getData("text/plain")}catch(_){}}
+  if(!src) return;
+  const [srcSub,srcIdx]=src.split("::");
+  const [dstSub,dstRow,dstCol]=cell.dataset.dropCell.split("::");
+  if(srcSub!==dstSub){showToast("Перемещение между подразделениями пока нельзя","error");return}
+  const sub=STATE.subs.find(x=>x.id===srcSub);
+  if(!sub) return;
+  const srcMember=sub.members[parseInt(srcIdx)];
+  if(!srcMember) return;
+  const r=parseInt(dstRow),c=parseInt(dstCol);
+  const dstMember=(sub.members||[]).find(m=>m.grid_row===r&&m.grid_col===c);
+  if(dstMember===srcMember) return;
+  if(dstMember){
+    const tr=srcMember.grid_row,tc=srcMember.grid_col;
+    srcMember.grid_row=dstMember.grid_row;
+    srcMember.grid_col=dstMember.grid_col;
+    dstMember.grid_row=tr;
+    dstMember.grid_col=tc;
+  } else {
+    srcMember.grid_row=r;
+    srcMember.grid_col=c;
+  }
+  CGB_COMP.save(STATE).then(()=>render()).catch(err=>showToast("Ошибка: "+err.message,"error"));
+});
+
+function compactGrid(sub){
+  const cols=Math.max(2,Math.min(10,parseInt(sub.grid_cols)||3));
+  const rowsUsed=new Set();
+  (sub.members||[]).forEach(m=>{if(typeof m.grid_row==="number") rowsUsed.add(m.grid_row)});
+  const sortedRows=Array.from(rowsUsed).sort((a,b)=>a-b);
+  const rowMap={};
+  sortedRows.forEach((r,i)=>{rowMap[r]=i});
+  (sub.members||[]).forEach(m=>{
+    if(typeof m.grid_row==="number") m.grid_row=rowMap[m.grid_row];
+  });
+  CGB_COMP.save(STATE).then(()=>{render();showToast("Пустые строки убраны","success")}).catch(err=>showToast("Ошибка: "+err.message,"error"));
+}
+
+function openMemberEditAtCell(subId,row,col){
+  const sub=STATE.subs.find(x=>x.id===subId);if(!sub) return;
+  window.__pendingCell={sub:subId,row:row,col:col};
+  openMemberEdit(subId,-1);
+}
+
+function updateAdmin(){
+  const canEdit=window.CGB_ROLES&&window.CGB_ROLES.can("composition","edit");
+  $("adminBar").style.display=canEdit?"flex":"none";
+  if(!canEdit&&editing){editing=false;render()}
+}
+if(window.CGB_ROLES) window.CGB_ROLES.onChange(updateAdmin);
+if(window.CGB_AUTH) window.CGB_AUTH.onChange(updateAdmin);
+
+boot();
+</script>
+
+
+</body>
+</html>

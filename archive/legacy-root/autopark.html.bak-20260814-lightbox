@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="logo.png" type="image/png">
+<link rel="apple-touch-icon" href="logo.png">
+<title>Автопарк — ЦГБ №3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=17">
+<style id="cgb-admin-guard">
+[data-admin]{display:none !important}
+body.cgb-is-admin .nav a[data-admin],body.cgb-is-admin .footer-col a[data-admin]{display:inline-flex !important}
+body.cgb-is-admin .footer-col a[data-admin]{display:block !important}
+</style>
+<style>
+/* ===== Автопарк: фотогалерея =====
+   Карточка подстраивается под РЕАЛЬНЫЙ размер картинки (а не наоборот),
+   поэтому сетка — masonry на CSS-колонках: высота каждого элемента = высоте его фото. */
+.gal-grid{columns:3;column-gap:18px;margin-top:8px}
+.gal-grid .empty-state{column-span:all}
+.gal-item{
+  position:relative;border-radius:20px;overflow:hidden;cursor:pointer;
+  border:1px solid var(--line);
+  margin:0 0 18px;break-inside:avoid;
+  /* красивый анимированный задний фон за фото (фото без фона) */
+  background:
+    radial-gradient(120% 90% at 15% 10%,rgba(34,211,238,.20),rgba(34,211,238,0) 55%),
+    radial-gradient(110% 90% at 85% 90%,rgba(76,124,238,.16),rgba(76,124,238,0) 55%),
+    radial-gradient(90% 70% at 60% 40%,rgba(52,211,153,.10),rgba(52,211,153,0) 60%),
+    linear-gradient(165deg,#0b1f2e 0%,#071423 60%,#050e18 100%);
+  background-size:220% 220%,220% 220%,200% 200%,100% 100%;
+  animation:galAurora 16s ease-in-out infinite;
+  animation-delay:calc(var(--gi,0)*-2.4s);
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1),box-shadow .35s,border-color .35s;
+}
+@keyframes galAurora{
+  0%{background-position:0% 0%,100% 100%,50% 0%,0 0}
+  50%{background-position:100% 100%,0% 0%,30% 100%,0 0}
+  100%{background-position:0% 0%,100% 100%,50% 0%,0 0}
+}
+.gal-item::before{ /* мягкий световой блик, медленно проплывающий по карточке */
+  content:"";position:absolute;top:0;left:-70%;width:45%;height:100%;pointer-events:none;z-index:1;
+  background:linear-gradient(100deg,rgba(255,255,255,0) 0%,rgba(190,240,252,.09) 45%,rgba(255,255,255,0) 100%);
+  transform:skewX(-14deg);
+  animation:galShine 9s ease-in-out infinite;
+  animation-delay:calc(var(--gi,0)*-1.8s);
+}
+@keyframes galShine{0%{left:-70%}55%{left:130%}100%{left:130%}}
+[data-theme="light"] .gal-item{
+  background:
+    radial-gradient(120% 90% at 15% 10%,rgba(14,116,144,.14),rgba(14,116,144,0) 55%),
+    radial-gradient(110% 90% at 85% 90%,rgba(76,124,238,.10),rgba(76,124,238,0) 55%),
+    radial-gradient(90% 70% at 60% 40%,rgba(22,163,120,.08),rgba(22,163,120,0) 60%),
+    linear-gradient(165deg,#f0f8fc 0%,#e4eff6 60%,#dbe8f1 100%);
+  background-size:220% 220%,220% 220%,200% 200%,100% 100%;
+}
+.gal-item:hover{transform:translateY(-5px);border-color:var(--gold);box-shadow:0 18px 44px rgba(14,116,144,.22)}
+/* картинка задаёт размер элемента: без приближения и обрезки */
+.gal-item img{width:100%;height:auto;display:block;filter:drop-shadow(0 12px 18px rgba(0,0,0,.35))}
+.gal-del{
+  position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:10px;border:none;z-index:2;
+  display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;
+  background:rgba(8,20,28,.72);color:#fca5a5;backdrop-filter:blur(6px);
+  opacity:0;transform:translateY(-4px);transition:.25s;
+}
+.gal-item:hover .gal-del{opacity:1;transform:translateY(0)}
+.gal-del:hover{background:rgba(180,40,50,.85);color:#fff}
+.gal-zoom-hint{
+  position:absolute;left:10px;bottom:10px;padding:5px 11px;border-radius:999px;font-size:10.5px;font-weight:700;z-index:2;
+  letter-spacing:.08em;text-transform:uppercase;color:#eaf6fa;background:rgba(8,20,28,.66);backdrop-filter:blur(6px);
+  opacity:0;transition:.25s;pointer-events:none;
+}
+.gal-item:hover .gal-zoom-hint{opacity:.95}
+.gal-drop{
+  margin:0 0 22px;border:1.5px dashed var(--gold);border-radius:18px;padding:26px;text-align:center;
+  color:var(--muted);font-size:14px;background:var(--gold-s);transition:.25s;display:none;
+}
+.gal-drop.show{display:block}
+.gal-drop.over{background:rgba(34,211,238,.14);border-color:var(--gold-b);color:var(--text)}
+.gal-drop b{color:var(--gold-b)}
+.gal-note{margin-top:18px;font-size:12.5px;color:var(--muted)}
+
+/* лайтбокс */
+.gal-light{
+  position:fixed;inset:0;z-index:1500;display:flex;align-items:center;justify-content:center;
+  background:rgba(3,10,16,.93);backdrop-filter:blur(10px);
+  opacity:0;visibility:hidden;transition:.3s;
+}
+.gal-light.open{opacity:1;visibility:visible}
+.gal-light img{max-width:92vw;max-height:86vh;border-radius:16px;box-shadow:0 30px 90px rgba(0,0,0,.6);object-fit:contain}
+.gal-light-btn{
+  position:absolute;width:48px;height:48px;border-radius:14px;border:1px solid rgba(255,255,255,.16);
+  background:rgba(255,255,255,.06);color:#eaf6fa;font-size:20px;cursor:pointer;transition:.2s;
+  display:flex;align-items:center;justify-content:center;font-family:inherit;
+}
+.gal-light-btn:hover{background:rgba(34,211,238,.18);border-color:rgba(34,211,238,.4)}
+.gal-l-close{top:22px;right:22px}
+.gal-l-prev{left:22px;top:50%;transform:translateY(-50%)}
+.gal-l-next{right:22px;top:50%;transform:translateY(-50%)}
+.gal-l-count{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);color:#9fc3d2;font-size:13px;font-weight:600;letter-spacing:.1em}
+@media(max-width:1100px){.gal-grid{columns:2}}
+@media(max-width:640px){.gal-grid{columns:1}.gal-light-btn{width:40px;height:40px}}
+@media print{.gal-light,.site-set-btn,.site-set-panel{display:none !important}}
+</style>
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+<div class="bg-noise"></div>
+<div class="page-transition-overlay" id="overlay"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-icon"><img src="logo.png" alt="ЦГБ"></div>
+      <div class="brand-text">
+        <span class="brand-label">Министерство Здравоохранения</span>
+        <span class="brand-name">ЦГБ №3 · Центральная Городская</span>
+      </div>
+    </a>
+    <nav class="nav" id="mainNav">
+      <a href="index.html" data-page="index.html" data-transition>Главная</a>
+      <a href="info.html" data-page="info.html" data-transition>Информация</a>
+      <a href="services.html" data-page="services.html" data-transition>Услуги</a>
+      <a href="meds.html" data-page="meds.html" data-transition>Медикаменты</a>
+      <a href="ustav.html" data-page="ustav.html" data-transition>Устав</a>
+      <a href="learn.html" data-page="learn.html" data-transition data-loggedin>Учебные материалы</a>
+      <a href="tests.html" data-page="tests.html" data-transition data-loggedin>Тестирование</a>
+      <a href="composition.html" data-page="composition.html" data-transition>Состав</a>
+      <a href="docs.html" data-page="docs.html" data-transition data-perm="docs:view">Документы</a>
+      <a href="news.html" data-page="news.html" data-transition>Новости</a>
+      <a href="autopark.html" data-page="autopark.html" data-transition>Автопарк</a>
+      <a href="map.html" data-page="map.html" data-transition>Карта</a>
+      <a href="faq.html" data-page="faq.html" data-transition>FAQ</a>
+      <a href="complaints.html" data-page="complaints.html" data-transition>Жалобы</a>
+      <a href="supply.html" data-page="supply.html" data-transition data-perm="supply:view">Поставки</a>
+      <a href="apps.html" data-page="apps.html" data-transition data-perm="apps:view">Заявления</a>
+      <a href="vp.html" data-page="vp.html" data-transition data-perm="vp:view">Проверки АБ</a>
+      <a href="complaints-review.html" data-page="complaints-review.html" data-transition data-perm="complaints:review,complaints:view">Рассмотрение жалоб</a>
+      <a href="complaints-stats.html" data-page="complaints-stats.html" data-transition data-perm="complaints:review,complaints:view">Статистика жалоб</a>
+      <a href="leave.html" data-page="leave.html" data-transition data-loggedin>Отгул</a>
+      <a href="vacation-ic.html" data-page="vacation-ic.html" data-transition data-loggedin>Отпуск IC</a>
+      <a href="vacation-ooc.html" data-page="vacation-ooc.html" data-transition data-loggedin>Отпуск OOC</a>
+      <a href="dismissal.html" data-page="dismissal.html" data-transition data-loggedin>Увольнение</a>
+      <a href="promotion.html" data-page="promotion.html" data-transition data-loggedin>Повышение</a>
+      <a href="restoration.html" data-page="restoration.html" data-transition>Восстановление в ЦГБ №3</a>
+      <a href="appointment.html" data-page="appointment.html" data-transition>Запись к врачу</a>
+      <a href="requests-review.html" data-page="requests-review.html" data-transition data-perm="requests:review,requests:view">Рассмотрение заявок</a>
+      <a href="requests-stats.html" data-page="requests-stats.html" data-transition data-perm="requests:review,requests:view">Статистика заявок</a>
+      <a href="payroll.html" data-page="payroll.html" data-transition data-perm="payroll:view">Реестр премирования</a>
+      <a href="report.html" data-page="report.html" data-transition>Еженедельный отчёт</a>
+      <a href="report-settings.html" data-page="report-settings.html" data-transition data-perm="report:settings">Настройки отчётов</a>
+      <a href="vp-request.html" data-page="vp-request.html" data-transition data-perm="vp_request:submit">Запрос на наказание</a>
+      <a href="vp-request-settings.html" data-page="vp-request-settings.html" data-transition data-perm="vp_request:settings">Настройки запросов АБ</a>
+      <a href="lk.html" data-page="lk.html" data-transition>Личный кабинет</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-btn" data-open-search title="Поиск (Ctrl+K)">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+        <span>Поиск</span>
+        <span class="kbd">Ctrl K</span>
+      </button>
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Сменить тему">
+        <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24"><path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66l1.42-1.42M4.92 19.08l1.42-1.42m0-11.32L4.92 4.92m14.16 14.16l-1.42-1.42M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="login-btn" data-open-login>
+        <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/></svg>
+        <span>Войти</span>
+      </button>
+      <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="section" style="padding-top:60px">
+    <div class="container">
+      <div class="section-head reveal" style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px">
+        <div>
+          <span class="badge">Фотогалерея</span>
+          <h2>Автопарк ЦГБ №3</h2>
+          <p>Фотографии санитарного транспорта больницы. Нажмите на фото, чтобы открыть его в полном размере.</p>
+        </div>
+        <button class="btn btn-gold admin-only" id="addPhotoBtn" style="display:none">＋ Добавить фото</button>
+      </div>
+      <input id="galFile" type="file" accept="image/png,image/jpeg,image/webp" multiple hidden>
+      <div class="gal-drop admin-only" id="galDrop">📥 <b>Перетащите PNG/JPG сюда</b> или нажмите «＋ Добавить фото» — загрузка и сжатие произойдут автоматически<div class="gal-note" id="galNote"></div></div>
+      <div class="gal-grid" id="galGrid"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <h4>ЦГБ №3 · Центральная Городская</h4>
+        <p>Министерство Здравоохранения. Центральная Городская Больница №3.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Разделы</h5>
+        <a href="services.html" data-page="services.html">Услуги и цены</a>
+        <a href="meds.html" data-page="meds.html">Медикаменты</a>
+        <a href="index.html" data-page="index.html">Главная</a>
+        <a href="ustav.html" data-page="ustav.html">Устав</a>
+        <a href="composition.html" data-page="composition.html">Состав</a>
+        <a href="news.html" data-page="news.html">Новости</a>
+      </div>
+      <div class="footer-col">
+        <h5>Ресурсы</h5>
+        <a href="autopark.html" data-page="autopark.html">Автопарк</a>
+        <a href="map.html" data-page="map.html">Карта</a>
+        <a href="#" data-open-login>Личный кабинет</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> · Министерство Здравоохранения</span>
+      <span>ЦГБ №3 · Центральная Городская</span>
+    <span class="footer-note">🐞 Нашли баг? Обратитесь: <b>@rilavion</b></span></div>
+  </div>
+</footer>
+
+<div class="fab-stack" id="fabStack">
+  <button class="fab" id="fabPrint" title="Печать">
+    <svg viewBox="0 0 24 24"><path d="M19 8H5a3 3 0 0 0-3 3v6h4v4h12v-4h4v-6a3 3 0 0 0-3-3zm-3 11H8v-5h8zm3-7a1 1 0 1 1 1-1 1 1 0 0 1-1 1zM18 3H6v4h12z"/></svg>
+    <span class="fab-hint">Печать документа</span>
+  </button>
+  <button class="fab" id="fabUp" title="Наверх">
+    <svg viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8z"/></svg>
+    <span class="fab-hint">Наверх</span>
+  </button>
+</div>
+
+<div class="search-modal" id="searchModal">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+      <input class="search-input" placeholder="Поиск по разделам..." spellcheck="false">
+      <button class="search-close-kbd">Esc</button>
+    </div>
+    <div class="search-results"></div>
+  </div>
+</div>
+
+<div class="modal-back" id="loginModal">
+  <div class="modal">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Вход администратора</h3>
+    <div class="modal-sub">Доступ к управлению контентом</div>
+    <form>
+      <div class="form-group"><label>Email</label><input type="email" name="email" required></div>
+      <div class="form-group"><label>Пароль</label><input type="password" name="password" required></div>
+      <button class="btn btn-gold" style="width:100%" type="submit">Войти</button>
+      <div class="form-msg"></div>
+    </form>
+  </div>
+</div>
+
+<div class="gal-light" id="galLight">
+  <button class="gal-light-btn gal-l-close" id="galClose" title="Закрыть (Esc)">✕</button>
+  <button class="gal-light-btn gal-l-prev" id="galPrev" title="Назад">‹</button>
+  <img id="galLightImg" src="" alt="Фото автопарка">
+  <button class="gal-light-btn gal-l-next" id="galNext" title="Вперёд">›</button>
+  <div class="gal-l-count" id="galCount"></div>
+</div>
+
+<script src="supabase-loader.js?v=17"></script>
+<script src="config.js?v=17"></script>
+<script src="auth.js?v=17"></script>
+<script src="roles-engine.js?v=17"></script>
+<script src="main.js?v=19"></script>
+<script src="format-utils.js?v=17"></script>
+<script src="holiday-engine.js?v=17"></script>
+<script src="sound-engine.js?v=17"></script>
+<script src="settings-panel.js?v=17"></script>
+<script src="faq-engine.js?v=17"></script>
+<script src="search-engine.js?v=17"></script>
+<script src="ds-cache.js?v=17"></script>
+<script src="notify-engine.js?v=17"></script>
+<script src="notify-live.js?v=17"></script>
+<script src="image-compress.js?v=17"></script>
+<script src="autopark-engine.js?v=17"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+let PHOTOS=[];      // {id,image,path?}
+const LOCAL_AUTOPARK=["veh_1786565625608_fz2hlz.webp","veh_1786565621137_xaaiwn.webp","veh_1786565614653_gbe1em.webp","veh_1786565602970_1vz2vc.webp","veh_1786565565213_a3w2db.webp","veh_1786565559476_bjojwn.webp","veh_1786565547961_33tcmk.webp","veh_1786565543696_558xbl.webp","veh_1786565539046_gav4zf.webp","veh_1786565534055_2430tz.webp","veh_1786565528824_pminx3.webp","veh_1786565515054_1ytt4z.webp","veh_1786565509694_94jad2.webp","veh_1786565501041_x4f0j8.webp","veh_1786565494825_cuw1jq.webp"].map((name,i)=>({id:"local-"+i,image:"/images/autopark/"+name,path:name}));
+let lbIndex=0;
+const grid=$("galGrid"), addBtn=$("addPhotoBtn"), fileIn=$("galFile"), drop=$("galDrop"), note=$("galNote");
+const light=$("galLight"), lightImg=$("galLightImg"), count=$("galCount");
+
+function setNote(t){note.textContent=t||"";}
+
+function readLocal(){try{return JSON.parse(localStorage.getItem("cgb-autopark-gallery")||"[]")}catch(e){return []}}
+function writeLocal(l){try{localStorage.setItem("cgb-autopark-gallery",JSON.stringify(l))}catch(e){}}
+function photoUrl(u){const m=String(u||"").match(/\/([^/]+\.(?:webp|png|jpe?g|gif))(?:\?|$)/i);return m?('/images/autopark/'+m[1]):u}
+
+async function load(){
+  const s=window.CGB_AUTH&&window.CGB_AUTH.state;
+  if(s&&s.available&&s.client){
+    for(let attempt=1;attempt<=3;attempt++){
+      try{
+        const {data,error}=await s.client.from("vehicles").select("id,image,purpose,created_at").order("created_at",{ascending:false});
+        if(!error){
+          PHOTOS=(data||[]).filter(v=>v.image).map(v=>({id:v.id,image:v.image,path:v.purpose||null}));
+          if(PHOTOS.length){render();updateAdmin();return;}
+        }
+      }catch(e){console.warn(`[CGB_AUTOPARK] attempt ${attempt}/3`,e.message)}
+      if(attempt<3) await new Promise(r=>setTimeout(r,700*attempt));
+    }
+  }
+  try{const cfg=window.SUPABASE_CONFIG;const r=await fetch(cfg.url+"/rest/v1/vehicles?select=id,image,purpose,created_at&order=created_at.desc",{headers:{apikey:cfg.anonKey}});if(r.ok){const data=await r.json();PHOTOS=data.filter(v=>v.image).map(v=>({id:v.id,image:v.image,path:v.purpose||null}));render();updateAdmin();return}}catch(e){}
+  PHOTOS=readLocal();
+  if(!PHOTOS.length) PHOTOS=LOCAL_AUTOPARK;
+  render();updateAdmin();
+}
+
+function render(){
+  const can=window.CGB_ROLES&&window.CGB_ROLES.can&&window.CGB_ROLES.can("autopark","edit");
+  if(!PHOTOS.length){
+    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><h3>Фотографий пока нет</h3><p>${can?"Добавьте первое фото кнопкой выше.":"Галерея скоро будет наполнена."}</p></div>`;
+    return;
+  }
+  grid.innerHTML=PHOTOS.map((p,i)=>`
+    <div class="gal-item" data-i="${i}" style="--gi:${i%6}">
+      <img src="${esc(photoUrl(p.image))}" alt="Фото автопарка ЦГБ №3" loading="lazy">
+      <span class="gal-zoom-hint">⤢ Открыть</span>
+      ${can?`<button class="gal-del" data-del="${i}" title="Удалить фото">✕</button>`:""}
+    </div>`).join("");
+}
+
+function updateAdmin(){
+  const can=window.CGB_ROLES&&window.CGB_ROLES.can&&window.CGB_ROLES.can("autopark","edit");
+  document.querySelectorAll(".admin-only").forEach(el=>el.style.display=(el===drop)?(can?"block":"none"):(can?"":"none"));
+  drop.classList.toggle("show",!!can);
+}
+if(window.CGB_ROLES) window.CGB_ROLES.onChange(()=>{updateAdmin();render();});
+if(window.CGB_AUTH) window.CGB_AUTH.onChange(()=>load());
+
+/* ---------- добавление ---------- */
+addBtn.addEventListener("click",()=>fileIn.click());
+fileIn.addEventListener("change",async e=>{
+  const files=Array.from(e.target.files||[]);
+  fileIn.value="";
+  await addFiles(files);
+});
+
+["dragover","dragleave","drop"].forEach(ev=>document.addEventListener(ev,e=>{
+  if(!drop.classList.contains("show")) return;
+  e.preventDefault();
+  if(ev==="dragover") drop.classList.add("over");
+  else drop.classList.remove("over");
+  if(ev==="drop") addFiles(Array.from(e.dataTransfer.files||[]).filter(f=>/^image\//.test(f.type)));
+}));
+
+async function addFiles(files){
+  if(!files.length) return;
+  const s=window.CGB_AUTH&&window.CGB_AUTH.state;
+  let done=0;
+  setNote("Загрузка 0/"+files.length+" ...");
+  for(const f of files){
+    if(f.size>10*1024*1024){setNote("Пропущен файл >10 МБ: "+f.name);continue}
+    if(s&&s.available&&s.client){
+      const up=await CGB_AUTOPARK.uploadPhoto(f);
+      if(!up.ok){setNote("Ошибка загрузки "+f.name+": "+up.error);continue}
+      try{
+        const {error}=await s.client.from("vehicles").insert({title:"Фото",image:up.url,purpose:up.path||null});
+        if(error) throw error;
+      }catch(err){setNote("Фото загружено, но запись не сохранилась: "+err.message);continue}
+    }else{
+      // локальный режим — data URL
+      const url=await new Promise(res=>{const r=new FileReader();r.onload=ev=>res(ev.target.result);r.readAsDataURL(f)});
+      const l=readLocal();l.unshift({id:"loc"+Date.now(),image:url});writeLocal(l);
+    }
+    done++;setNote("Загрузка "+done+"/"+files.length+" ...");
+  }
+  setNote(done?("Готово: добавлено фото — "+done):"");
+  setTimeout(()=>setNote(""),4000);
+  load();
+}
+
+/* ---------- удаление ---------- */
+grid.addEventListener("click",async e=>{
+  const del=e.target.closest("[data-del]");
+  if(del){
+    e.stopPropagation();
+    const p=PHOTOS[+del.dataset.del];if(!p) return;
+    if(!confirm("Удалить это фото?")) return;
+    const s=window.CGB_AUTH&&window.CGB_AUTH.state;
+    if(s&&s.available&&s.client&&typeof p.id==="number"){
+      try{
+        const {error}=await s.client.from("vehicles").delete().eq("id",p.id);
+        if(error) throw error;
+        if(p.path){try{await s.client.storage.from("autopark-photos").remove([p.path])}catch(_){}}
+      }catch(err){alert("Ошибка удаления: "+err.message);return}
+    }else{
+      writeLocal(readLocal().filter(x=>String(x.id)!==String(p.id)));
+    }
+    load();return;
+  }
+  const item=e.target.closest(".gal-item");
+  if(item) openLight(+item.dataset.i);
+});
+
+/* ---------- лайтбокс ---------- */
+function openLight(i){
+  lbIndex=i;syncLight();light.classList.add("open");
+  document.body.style.overflow="hidden";
+}
+function closeLight(){light.classList.remove("open");document.body.style.overflow="";}
+function syncLight(){
+  const p=PHOTOS[lbIndex];if(!p) return;
+  lightImg.src=p.image;
+  count.textContent=(lbIndex+1)+" / "+PHOTOS.length;
+}
+function stepLight(d){
+  lbIndex=(lbIndex+d+PHOTOS.length)%PHOTOS.length;syncLight();
+}
+$("galClose").addEventListener("click",closeLight);
+$("galPrev").addEventListener("click",()=>stepLight(-1));
+$("galNext").addEventListener("click",()=>stepLight(1));
+light.addEventListener("click",e=>{if(e.target===light) closeLight()});
+document.addEventListener("keydown",e=>{
+  if(!light.classList.contains("open")) return;
+  if(e.key==="Escape") closeLight();
+  if(e.key==="ArrowLeft") stepLight(-1);
+  if(e.key==="ArrowRight") stepLight(1);
+});
+
+load();
+</script>
+</body>
+</html>
