@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Логотип Центральной городской больницы №3</title>
+  <desc id="desc">Бирюзовый медицинский знак с белым крестом и цифрой три</desc>
+  <defs>
+    <linearGradient id="shield" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#48a7b5"/>
+      <stop offset="1" stop-color="#176575"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#07151d" flood-opacity=".3"/>
+    </filter>
+  </defs>
+  <circle cx="256" cy="256" r="238" fill="#f4e1a6"/>
+  <circle cx="256" cy="256" r="218" fill="#102d38"/>
+  <path filter="url(#shadow)" fill="url(#shield)" d="M256 76c58 36 113 50 157 53v116c0 94-58 156-157 195C157 401 99 339 99 245V129c44-3 99-17 157-53Z"/>
+  <path fill="#fff" d="M220 154h72v67h67v72h-67v67h-72v-67h-67v-72h67z"/>
+  <circle cx="367" cy="369" r="58" fill="#f4e1a6" stroke="#102d38" stroke-width="12"/>
+  <text x="367" y="390" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="68" font-weight="800" fill="#176575">3</text>
+</svg>
