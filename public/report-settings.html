@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title>Настройки отчётов · ЦГБ №3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=26">
+<style>
+.rfe-tab{background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.25);color:#eaf6fa;padding:6px 14px;border-radius:6px;font-size:13px;cursor:pointer;margin-right:6px;font-family:Inter}
+.rfe-tab.active{background:var(--gold);color:#0b3542;font-weight:700;border-color:var(--gold)}
+.rfe-tab.add{background:transparent;color:var(--gold)}
+.rfe-field{background:rgba(15,25,20,.5);border:1px solid rgba(34,211,238,.2);border-radius:8px;padding:12px;margin-bottom:10px;display:grid;grid-template-columns:2fr 2fr 1fr 1fr auto auto auto;gap:8px;align-items:end}
+.rfe-field label{font:600 10px Inter;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);display:block;margin-bottom:2px}
+.rfe-field input,.rfe-field select{background:rgba(15,25,20,.7);border:1px solid rgba(34,211,238,.25);color:#eaf6fa;padding:6px 8px;border-radius:6px;font-size:13px;width:100%;box-sizing:border-box}
+.rfe-field .rfe-req{align-self:center;padding-top:16px}
+.rfe-btn{background:transparent;border:1px solid rgba(34,211,238,.3);color:#eaf6fa;padding:6px 10px;border-radius:6px;cursor:pointer;font-size:16px}
+.rfe-btn.del{color:#e97a7a;border-color:rgba(233,122,122,.35)}
+.rfe-btn:hover{background:rgba(34,211,238,.1)}
+</style>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+<div class="bg-noise"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ВС"></div>
+      <div class="brand-text">
+        <span class="brand-label">Настройки</span>
+        <span class="brand-name">Шаблоны отчётов</span>
+      </div>
+    </a>
+    <nav class="nav" id="mainNav">
+      <a href="index.html" data-page="index.html" data-transition>Главная</a>
+      <a href="info.html" data-page="info.html" data-transition>Информация</a>
+      <a href="services.html" data-page="services.html" data-transition>Услуги</a>
+      <a href="meds.html" data-page="meds.html" data-transition>Медикаменты</a>
+      <a href="ustav.html" data-page="ustav.html" data-transition>Устав</a>
+      <a href="learn.html" data-page="learn.html" data-transition data-loggedin>Учебные материалы</a>
+      <a href="tests.html" data-page="tests.html" data-transition data-loggedin>Тестирование</a>
+      <a href="composition.html" data-page="composition.html" data-transition>Состав</a>
+      <a href="docs.html" data-page="docs.html" data-transition data-perm="docs:view">Документы</a>
+      <a href="news.html" data-page="news.html" data-transition>Новости</a>
+      <a href="autopark.html" data-page="autopark.html" data-transition>Автопарк</a>
+      <a href="map.html" data-page="map.html" data-transition>Карта</a>
+      <a href="faq.html" data-page="faq.html" data-transition>FAQ</a>
+      <a href="complaints.html" data-page="complaints.html" data-transition>Жалобы</a>
+      <a href="supply.html" data-page="supply.html" data-transition data-perm="supply:view">Поставки</a>
+      <a href="apps.html" data-page="apps.html" data-transition data-perm="apps:view">Заявления</a>
+      <a href="vp.html" data-page="vp.html" data-transition data-perm="vp:view">Проверки АБ</a>
+      <a href="complaints-review.html" data-page="complaints-review.html" data-transition data-perm="complaints:review,complaints:view">Рассмотрение жалоб</a>
+      <a href="complaints-stats.html" data-page="complaints-stats.html" data-transition data-perm="complaints:review,complaints:view">Статистика жалоб</a>
+      <a href="leave.html" data-page="leave.html" data-transition data-loggedin>Отгул</a>
+      <a href="vacation-ic.html" data-page="vacation-ic.html" data-transition data-loggedin>Отпуск IC</a>
+      <a href="vacation-ooc.html" data-page="vacation-ooc.html" data-transition data-loggedin>Отпуск OOC</a>
+      <a href="dismissal.html" data-page="dismissal.html" data-transition data-loggedin>Увольнение</a>
+      <a href="promotion.html" data-page="promotion.html" data-transition data-loggedin>Повышение</a>
+      <a href="restoration.html" data-page="restoration.html" data-transition>Восстановление в ЦГБ №3</a>
+      <a href="appointment.html" data-page="appointment.html" data-transition>Запись к врачу</a>
+      <a href="requests-review.html" data-page="requests-review.html" data-transition data-perm="requests:review,requests:view">Рассмотрение заявок</a>
+      <a href="requests-stats.html" data-page="requests-stats.html" data-transition data-perm="requests:review,requests:view">Статистика заявок</a>
+      <a href="payroll.html" data-page="payroll.html" data-transition data-perm="payroll:view">Реестр премирования</a>
+      <a href="report.html" data-page="report.html" data-transition>Еженедельный отчёт</a>
+      <a href="report-settings.html" data-page="report-settings.html" data-transition data-perm="report:settings">Настройки отчётов</a>
+      <a href="vp-request.html" data-page="vp-request.html" data-transition data-perm="vp_request:submit">Запрос на наказание</a>
+      <a href="vp-request-settings.html" data-page="vp-request-settings.html" data-transition data-perm="vp_request:settings">Настройки запросов АБ</a>
+      <a href="lk.html" data-page="lk.html" data-transition>Личный кабинет</a>
+    </nav>
+    <div class="header-actions">
+      <a href="report.html" class="btn btn-ghost btn-sm">← К отчётам</a>
+      <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="stats-page">
+    <div class="stats-head">
+      <div>
+        <h1 class="stats-title">Настройки шаблонов отчётов</h1>
+        <div class="stats-sub">Формы, каналы Discord и пинг-роли — по одному шаблону на подразделение</div>
+      </div>
+    </div>
+    <div class="stats-copy-msg" id="rseMsg"></div>
+
+    <div id="rseGuard" style="display:none">
+      <div class="apps-guard-box"><div class="apps-guard-icon">⚠</div><h2>Доступ ограничен</h2><p>Раздел доступен только Администрации.</p></div>
+    </div>
+
+    <div id="rseRoot" style="display:none">
+      <div class="stats-filters">
+        <div id="rseTabs" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+      </div>
+
+      <div class="stats-body" id="rseBody">
+        <div class="stats-empty">Выбери шаблон или создай новый</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer"><div class="container"><div class="footer-bottom"><span>© <span id="year"></span> · ЦГБ №3 · Центральная Городская</span><span class="footer-note">🐞 Нашли баг? Обратитесь: <b>@rilavion</b></span></div></div></footer>
+
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=17"></script>
+<script src="assets/js/core/config.js?v=17"></script>
+<script src="assets/js/core/auth.js?v=17"></script>
+<script src="assets/js/core/roles-engine.js?v=17"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/utils/format-utils.js?v=17"></script>
+<script src="assets/js/ui/holiday-engine.js?v=17"></script>
+<script src="assets/js/ui/settings-panel.js?v=17"></script>
+<script src="assets/js/ui/sound-engine.js?v=17"></script>
+<script src="assets/js/ui/search-engine.js?v=17"></script>
+<script src="assets/js/utils/ds-cache.js?v=17"></script>
+<script src="assets/js/ui/notify-engine.js?v=19"></script>
+<script src="assets/js/ui/notify-live.js?v=17"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+const FIELD_TYPES=[
+  {v:"text",l:"Текст"},{v:"number",l:"Число"},{v:"date",l:"Дата"},
+  {v:"url",l:"Ссылка"},{v:"textarea",l:"Текст (многострочный)"},
+  {v:"select",l:"Выбор из списка"},{v:"checkbox",l:"Галочка (да/нет)"}
+];
+
+let FORMS=[], CHANNELS=[], ROLES=[], CUR=null;
+let BOOT_IN_FLIGHT=false,BOOT_READY_USER="",LOAD_REVISION=0;
+
+function say(t,cls){
+  const m=$("rseMsg"); m.textContent=t; m.className="stats-copy-msg "+(cls||"");
+  setTimeout(()=>{ if(m.textContent===t){ m.textContent=""; m.className="stats-copy-msg"; } }, cls==="err"?7000:3000);
+}
+
+async function boot(){
+  const roles=window.CGB_ROLES;
+  const ok=roles && (roles.isAdmin && roles.isAdmin()) || (roles && roles.can && roles.can("report","settings"));
+  if(!ok){ $("rseGuard").style.display="block"; $("rseRoot").style.display="none"; return; }
+  $("rseGuard").style.display="none"; $("rseRoot").style.display="block";
+  const userId=window.CGB_AUTH&&CGB_AUTH.state.user&&CGB_AUTH.state.user.id||"";
+  if(BOOT_IN_FLIGHT||BOOT_READY_USER===userId) return;
+  BOOT_IN_FLIGHT=true;
+  try{
+    await loadAll();
+    BOOT_READY_USER=userId;
+  }finally{BOOT_IN_FLIGHT=false}
+}
+
+async function loadAll(){
+  const revision=++LOAD_REVISION;
+  const c=await CGB_AUTH.requireClient(8000);
+  if(!c){say("Подключение к базе данных ещё не готово","err");return}
+  const [fr,cr,rr]=await Promise.all([
+    c.from("report_forms").select("*").order("sort_order").order("label"),
+    c.from("ds_channels").select("channel_id,name,parent_name").order("name"),
+    c.from("ds_guild_roles").select("role_id,name,position").order("position",{ascending:false})
+  ]);
+  if(revision!==LOAD_REVISION) return;
+  const failed=[fr,cr,rr].find(result=>result.error);
+  if(failed){ say("Ошибка загрузки данных: "+failed.error.message,"err"); return; }
+  FORMS=fr.data||[]; CHANNELS=cr.data||[]; ROLES=rr.data||[];
+  renderTabs();
+  if(FORMS.length && !CUR) selectForm(FORMS[0].id);
+}
+
+function renderTabs(){
+  const el=$("rseTabs");
+  const html=FORMS.map(f=>`<button class="rfe-tab ${CUR&&CUR.id===f.id?"active":""}" data-sel="${esc(f.id)}">${esc(f.icon||"📋")} ${esc(f.label)}</button>`).join("");
+  el.innerHTML=html+`<button class="rfe-tab add" id="rseAdd">＋ Новый шаблон</button>`;
+  el.querySelectorAll("[data-sel]").forEach(b=>b.addEventListener("click",()=>selectForm(b.dataset.sel)));
+  $("rseAdd").addEventListener("click",addForm);
+}
+
+async function addForm(){
+  const label=prompt("Название шаблона (например «Приёмное отделение»):");
+  if(!label||!label.trim()) return;
+  let id=label.trim().toLowerCase().replace(/[^a-z0-9а-я]+/gi,"_").replace(/^_+|_+$/g,"").slice(0,40);
+  if(!id) id="form_"+Date.now().toString(36);
+  let n=1; while(FORMS.some(f=>f.id===id)){ id=id+"_"+(n++); }
+  const c=window.CGB_AUTH.state.client;
+  const row={ id, label:label.trim(), icon:"📋", color:13478490, fields:[], sort_order:FORMS.length*10 };
+  const {error}=await c.from("report_forms").insert(row);
+  if(error){ say("Ошибка: "+error.message,"err"); return; }
+  await loadAll();
+  selectForm(id);
+}
+
+function selectForm(id){
+  CUR=FORMS.find(f=>f.id===id);
+  if(!CUR){ $("rseBody").innerHTML='<div class="stats-empty">Шаблон не найден</div>'; return; }
+  CUR.fields=Array.isArray(CUR.fields)?CUR.fields:[];
+  renderTabs();
+  renderEditor();
+}
+
+function chSelect(cur){
+  const byP=new Map();
+  for(const x of CHANNELS){ const k=x.parent_name||"Без категории"; if(!byP.has(k)) byP.set(k,[]); byP.get(k).push(x); }
+  let opts='<option value="">— не выбрано —</option>';
+  for(const [pn,list] of byP){
+    opts+='<optgroup label="'+esc(pn)+'">';
+    for(const c of list) opts+='<option value="'+c.channel_id+'" '+(c.channel_id===cur?"selected":"")+'>#'+esc(c.name)+'</option>';
+    opts+='</optgroup>';
+  }
+  return opts;
+}
+function roleSelect(cur){
+  return '<option value="">— не выбрано —</option>'+ROLES.filter(r=>r.name!=="@everyone").map(r=>'<option value="'+r.role_id+'" '+(r.role_id===cur?"selected":"")+'>@'+esc(r.name)+'</option>').join("");
+}
+
+function renderEditor(){
+  const f=CUR;
+  const html=`
+    <div class="cf-group">
+      <div class="cf-group-title">⚙ Основное</div>
+      <div class="cf-group-body">
+        <div class="msg-row">
+          <div class="form-group msg-flex-1"><label>Название</label><input class="msg-input" id="rseLbl" value="${esc(f.label||"")}"></div>
+          <div class="form-group" style="max-width:120px"><label>Иконка</label><input class="msg-input" id="rseIcon" value="${esc(f.icon||"📋")}" placeholder="📋"></div>
+          <div class="form-group" style="max-width:120px"><label>Цвет (hex)</label><input class="msg-input" id="rseColor" value="#${(f.color||13478490).toString(16).padStart(6,"0")}" placeholder="#22d3ee"></div>
+          <div class="form-group" style="max-width:100px"><label>Порядок</label><input type="number" class="msg-input" id="rseOrder" value="${f.sort_order||0}"></div>
+        </div>
+        <div class="msg-row">
+          <div class="form-group msg-flex-1"><label>Канал Discord для публикации</label><select id="rseCh" class="msg-input">${chSelect(f.channel_id||"")}</select></div>
+        </div>
+        <div class="msg-row">
+          <div class="form-group msg-flex-1"><label>Пинг-роль #1</label><select id="rseR1" class="msg-input">${roleSelect(f.ping_role_id||"")}</select></div>
+          <div class="form-group msg-flex-1"><label>Пинг-роль #2 (опц.)</label><select id="rseR2" class="msg-input">${roleSelect(f.ping_role_id_2||"")}</select></div>
+        </div>
+        <div class="msg-row" style="align-items:center;margin-top:8px">
+          <label style="cursor:pointer"><input type="checkbox" id="rseActive" ${f.active!==false?"checked":""} style="margin-right:6px">Активен (показывается в форме)</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="cf-group">
+      <div class="cf-group-title">📝 Поля отчёта</div>
+      <div class="cf-group-body">
+        <div class="msg-help" style="margin-bottom:10px">ФИО, статик и должность добавляются автоматически — их описывать не надо.</div>
+        <div id="rseFields"></div>
+        <div style="margin-top:10px"><button class="btn btn-ghost btn-sm" id="rseFAdd">＋ Добавить поле</button></div>
+      </div>
+    </div>
+
+    <div class="apps-cfg-actions">
+      <button class="btn btn-gold" id="rseSave">💾 Сохранить</button>
+      <button class="btn btn-ghost btn-sm" id="rseDel" style="color:#e97a7a">🗑 Удалить шаблон</button>
+    </div>
+  `;
+  $("rseBody").innerHTML=html;
+  renderFields();
+  $("rseFAdd").addEventListener("click",()=>{
+    CUR.fields.push({key:"field_"+Date.now().toString(36),label:"Новое поле",type:"text",required:false});
+    renderFields();
+  });
+  $("rseSave").addEventListener("click",saveForm);
+  $("rseDel").addEventListener("click",delForm);
+}
+
+function renderFields(){
+  const box=$("rseFields");
+  const html=CUR.fields.map((f,i)=>{
+    return `<div class="rfe-field" data-idx="${i}">
+      <div><label>Ключ (латиница)</label><input data-k="key" value="${esc(f.key||"")}"></div>
+      <div><label>Название поля</label><input data-k="label" value="${esc(f.label||"")}"></div>
+      <div><label>Тип</label><select data-k="type">${FIELD_TYPES.map(t=>`<option value="${t.v}" ${t.v===(f.type||"text")?"selected":""}>${esc(t.l)}</option>`).join("")}</select></div>
+      <div><label>Плейсхолдер / варианты</label><input data-k="placeholder" value="${esc(f.type==="select"?(Array.isArray(f.options)?f.options.join("|"):""):(f.placeholder||""))}" placeholder="${f.type==="select"?"опция1|опция2|опция3":"подсказка"}"></div>
+      <div class="rfe-req"><label style="cursor:pointer;font-size:11px"><input type="checkbox" data-k="required" ${f.required?"checked":""}> обяз.</label></div>
+      <button class="rfe-btn" data-move="-1" ${i===0?"disabled":""} title="Вверх">▲</button>
+      <button class="rfe-btn del" data-del="1" title="Удалить">✕</button>
+    </div>`;
+  }).join("");
+  box.innerHTML=html || '<div class="stats-empty" style="padding:20px">Полей пока нет — нажми «Добавить поле»</div>';
+  box.querySelectorAll(".rfe-field").forEach(row=>{
+    const idx=parseInt(row.dataset.idx);
+    row.querySelectorAll("[data-k]").forEach(inp=>{
+      inp.addEventListener("change",()=>{
+        const k=inp.dataset.k;
+        let v=inp.type==="checkbox"?inp.checked:inp.value;
+        if(k==="placeholder" && CUR.fields[idx].type==="select"){
+          CUR.fields[idx].options=String(v||"").split("|").map(x=>x.trim()).filter(Boolean);
+        }else{
+          CUR.fields[idx][k]=v;
+        }
+        if(k==="type") renderFields();
+      });
+    });
+    const btnMove=row.querySelector("[data-move]");
+    if(btnMove) btnMove.addEventListener("click",()=>{
+      if(idx===0) return;
+      const arr=CUR.fields; [arr[idx-1],arr[idx]]=[arr[idx],arr[idx-1]];
+      renderFields();
+    });
+    row.querySelector("[data-del]").addEventListener("click",()=>{
+      if(!confirm("Удалить поле «"+(CUR.fields[idx].label||CUR.fields[idx].key)+"»?")) return;
+      CUR.fields.splice(idx,1);
+      renderFields();
+    });
+  });
+}
+
+async function saveForm(){
+  const c=window.CGB_AUTH.state.client;
+  const u=window.CGB_AUTH.state.user;
+  const clean=CUR.fields.map(f=>{
+    const o={ key:(f.key||"").trim()||"f_"+Date.now().toString(36), label:(f.label||"").trim()||"Поле", type:f.type||"text", required:!!f.required };
+    if(f.placeholder) o.placeholder=f.placeholder;
+    if(f.help) o.help=f.help;
+    if(f.type==="textarea"&&f.rows) o.rows=parseInt(f.rows)||4;
+    if(f.type==="select"&&Array.isArray(f.options)) o.options=f.options;
+    return o;
+  });
+  const colorStr=$("rseColor").value.trim().replace(/^#/,"");
+  const color=parseInt(colorStr,16);
+  const patch={
+    id:CUR.id,
+    label:$("rseLbl").value.trim()||CUR.id,
+    icon:$("rseIcon").value.trim()||"📋",
+    color:isNaN(color)?13478490:color,
+    channel_id:$("rseCh").value||null,
+    ping_role_id:$("rseR1").value||null,
+    ping_role_id_2:$("rseR2").value||null,
+    fields:clean,
+    sort_order:parseInt($("rseOrder").value)||0,
+    active:$("rseActive").checked,
+    updated_at:new Date().toISOString(),
+    updated_by:u.id, updated_by_name:u.email
+  };
+  const {error}=await c.from("report_forms").upsert(patch,{onConflict:"id"});
+  if(error){ say("✗ "+error.message,"err"); return; }
+  say("✓ Сохранено","ok");
+  await loadAll();
+  selectForm(CUR.id);
+}
+
+async function delForm(){
+  if(!confirm("Удалить шаблон «"+CUR.label+"» безвозвратно?")) return;
+  const c=window.CGB_AUTH.state.client;
+  const {error}=await c.from("report_forms").delete().eq("id",CUR.id);
+  if(error){ say("✗ "+error.message,"err"); return; }
+  say("✓ Удалено","ok");
+  CUR=null;
+  await loadAll();
+  if(FORMS.length) selectForm(FORMS[0].id);
+  else $("rseBody").innerHTML='<div class="stats-empty">Все шаблоны удалены. Создай новый.</div>';
+}
+
+if(window.CGB_ROLES) CGB_ROLES.onChange(boot);
+setTimeout(boot,600);
+</script>
+
+</body>
+</html>

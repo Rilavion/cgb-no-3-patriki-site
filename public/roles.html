@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title>Роли и права</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=26">
+</head>
+<body>
+<canvas id="bgCanvas"></canvas><div class="bg-noise"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html"><div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ВС"></div>
+      <div class="brand-text"><span class="brand-label">Справочник</span><span class="brand-name">Роли и права</span></div>
+    </a>
+    <div class="header-actions" style="margin-left:auto">
+      <a href="lk.html" data-page="lk.html" class="btn btn-ghost btn-sm">← Личный кабинет</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="apps-head">
+    <div class="container">
+      <div class="apps-head-ribbon"><span class="apps-head-ribbon-line"></span><span class="apps-head-ribbon-emblem">◈</span><span class="apps-head-ribbon-name">Справочник · Роли и права</span><span class="apps-head-ribbon-emblem">◈</span><span class="apps-head-ribbon-line"></span></div>
+      <h1 class="apps-head-title">Роли и права</h1>
+      <div class="apps-head-subtitle">Фиксированный набор ролей с точной настройкой доступа на уровне БД</div>
+    </div>
+  </section>
+
+  <section class="apps-body">
+    <div class="container">
+      <div class="te-hint" style="margin-bottom:14px">Все роли <b>жёстко зашиты</b> в БД (RLS-политики). Добавить новую или изменить права можно только через SQL-миграцию. Назначить роль пользователю можно из <a href="lk.html" data-page="lk.html">Личного кабинета</a>.</div>
+      <div class="rl-list" id="rlList"><div class="apps-empty">Загрузка...</div></div>
+    </div>
+  </section>
+</main>
+
+<div class="modal-back" id="loginModal">
+  <div class="modal"><button class="modal-close" aria-label="Закрыть">✕</button><h3>Вход</h3>
+    <form><div class="form-group"><label>Email</label><input type="email" name="email" required></div><div class="form-group"><label>Пароль</label><input type="password" name="password" required></div><button class="btn btn-gold" style="width:100%" type="submit">Войти</button><div class="form-msg"></div></form></div>
+</div>
+
+<footer class="footer"><div class="container"><div class="footer-bottom"><span>© <span id="year"></span> · ЦГБ №3 · Центральная Городская</span><span class="footer-note">🐞 Нашли баг? Обратитесь: <b>@rilavion</b></span></div></div></footer>
+
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=17"></script>
+<script src="assets/js/core/config.js?v=17"></script>
+<script src="assets/js/core/auth.js?v=17"></script>
+<script src="assets/js/core/roles-engine.js?v=17"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/ui/search-engine.js?v=17"></script>
+<script src="assets/js/utils/format-utils.js?v=17"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+const SECTIONS=[
+  {key:"apps",label:"📥 Заявления",actions:["view","edit","delete"]},
+  {key:"complaints",label:"⚠ Жалобы",actions:["view","review","form_edit","settings"]},
+  {key:"registry",label:"📋 Реестр нарушений",actions:["view","add","edit","remove"]},
+  {key:"requests",label:"📮 Заявки",actions:["view","review","settings"]},
+  {key:"vp_request",label:"⚖ Запросы наказаний",actions:["submit","review","settings"]},
+  {key:"vp",label:"🛡 Проверки АБ",actions:["view","edit","delete","settings"]},
+  {key:"vp_archive",label:"📊 Архив проверок АБ",actions:["view","edit","delete","send","settings"]},
+  {key:"report",label:"🗓 Отчёты",actions:["view","submit","settings"]},
+  {key:"payroll",label:"💰 Реестр премирования",actions:["view","edit","settings"]},
+  {key:"tests",label:"📝 Тесты",actions:["view","edit","delete","create","stats","reset_attempts"]},
+  {key:"supply",label:"📦 Поставки",actions:["view","stats","admin","replace"]},
+  {key:"messages",label:"💬 Отправка сообщений",actions:["send"]},
+  {key:"docs",label:"📄 Документы",actions:["view"]},
+  {key:"lk",label:"🔒 Личный кабинет",actions:["users","roles","settings"]},
+  {key:"info",label:"ℹ Информация",actions:["edit"]},
+  {key:"ustav",label:"📜 Уставы",actions:["edit"]},
+  {key:"services",label:"💉 Услуги и цены",actions:["edit"]},
+  {key:"meds",label:"💊 Медикаменты",actions:["edit"]},
+  {key:"site",label:"⚙ Контент сайта",actions:["edit"]},
+  {key:"composition",label:"👥 Состав",actions:["view","edit"]},
+  {key:"autopark",label:"🚗 Автопарк",actions:["edit"]},
+  {key:"faq",label:"❓ FAQ",actions:["edit"]},
+  {key:"training",label:"🎯 Обучение (курсы)",actions:["edit"]},
+  {key:"learn",label:"🎓 Учебные материалы",actions:["view","edit"]},
+  {key:"news",label:"📰 Новости",actions:["view","create","edit","delete"]},
+];
+const ACTION_LABELS={view:"Просмотр",edit:"Редакт.",delete:"Удаление",settings:"Настройки",send:"Отправка",create:"Создание",stats:"Статистика",admin:"Админ",replace:"Замена",users:"Юзеры",roles:"Роли",review:"Рассмотр.",form_edit:"Форма",submit:"Подача",reset_attempts:"Сброс попыток",add:"Добавление",remove:"Снятие/удаление"};
+
+async function boot(){
+  const box=$("rlList");
+  const list=window.CGB_ROLES?await CGB_ROLES.listCustomRoles():[];
+  if(!list.length){box.innerHTML='<div class="apps-empty"><p>Не удалось загрузить роли. Возможно, требуется вход.</p></div>';return}
+  box.innerHTML=list.map(r=>{
+    const p=r.permissions||{};
+    let perms=[];
+    for(const s of SECTIONS){
+      const sp=p[s.key];if(!sp) continue;
+      const actions=Object.keys(sp).filter(k=>sp[k]);
+      if(actions.length) perms.push(`<span class="rl-perm-chip"><b>${esc(s.label)}:</b> ${actions.map(a=>ACTION_LABELS[a]||a).join(", ")}</span>`);
+    }
+    if(!perms.length) perms=[`<span class="vp-checker-empty">права не заданы</span>`];
+    return `<div class="rl-item">
+      <div class="rl-item-head">
+        <div class="rl-item-color" style="background:${esc(r.color||'#22d3ee')}"></div>
+        <div class="rl-item-title">${esc(r.name)} <span class="rl-sys-badge">системная</span></div>
+        <div class="rl-item-key"><code>${esc(r.key)}</code></div>
+        <div class="rl-item-base">RLS-база: <b>${esc(r.base_role)}</b></div>
+      </div>
+      ${r.description?`<div class="rl-item-desc">${esc(r.description)}</div>`:""}
+      <div class="rl-item-perms">${perms.join(" ")}</div>
+    </div>`;
+  }).join("");
+}
+
+if(window.CGB_ROLES) CGB_ROLES.onChange(boot);
+setTimeout(boot,600);
+</script>
+
+</body>
+</html>

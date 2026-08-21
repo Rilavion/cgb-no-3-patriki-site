@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title>Статистика поставок</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=26">
+<style id="cgb-admin-guard">[data-admin]{display:none !important}[data-staff]{display:none !important}body.cgb-is-admin [data-admin]{display:initial !important}body.cgb-is-staff [data-staff]{display:initial !important}</style>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas><div class="bg-noise"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html"><div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ВС"></div>
+      <div class="brand-text"><span class="brand-label">Статистика</span><span class="brand-name">Поставки</span></div>
+    </a>
+    <div class="header-actions" style="margin-left:auto">
+      <a href="supply.html" data-page="supply.html" class="btn btn-ghost btn-sm">← К форме</a>
+      <a href="supply-admin.html" data-page="supply-admin.html" class="btn btn-gold btn-sm" data-admin>⚙ Настройка</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="apps-head">
+    <div class="container">
+      <div class="apps-head-ribbon">
+        <span class="apps-head-ribbon-line"></span><span class="apps-head-ribbon-emblem">◈</span>
+        <span class="apps-head-ribbon-name">Статистика поставок</span>
+        <span class="apps-head-ribbon-emblem">◈</span><span class="apps-head-ribbon-line"></span>
+      </div>
+      <h1 class="apps-head-title">Статистика поставок</h1>
+    </div>
+  </section>
+
+  <section class="apps-body">
+    <div class="container">
+
+      <div id="ssGuard" style="display:none">
+        <div class="apps-guard-box"><div class="apps-guard-icon">⚠</div><h2>Доступ ограничен</h2>
+          <p>Статистика доступна только Старшему Составу и Администрации.</p>
+          <div style="margin-top:20px"><button class="btn btn-gold" data-open-login>Войти</button></div></div>
+      </div>
+
+      <div id="ssRoot" style="display:none">
+        <div class="ss-toolbar">
+          <div class="ss-toolbar-l">
+            <label>Период:
+              <select id="ssPeriod" class="vp-search" style="max-width:200px">
+                <option value="month" selected>Текущий месяц</option>
+                <option value="week">Последние 7 дней</option>
+                <option value="prev">Прошлый месяц</option>
+                <option value="quarter">Квартал</option>
+                <option value="year">Год</option>
+                <option value="all">Всё время</option>
+                <option value="custom">Свой период</option>
+              </select>
+            </label>
+            <input type="date" id="ssFrom" class="vp-search" style="max-width:160px;display:none">
+            <input type="date" id="ssTo" class="vp-search" style="max-width:160px;display:none">
+          </div>
+          <div class="ss-toolbar-r">
+            <span class="vp-map-hint" id="ssRescanStatus"></span>
+            <button class="btn btn-gold btn-sm" id="ssCopy">🖼 Скопировать статистику (PNG)</button>
+            <button class="btn btn-ghost btn-sm" id="ssRescan">↻ Пересканировать эмодзи</button>
+            <button class="btn btn-ghost btn-sm" id="ssClear" data-admin>🗑 Очистить период</button>
+          </div>
+        </div>
+
+        <div class="vp-stats-cards" id="ssCards"></div>
+
+        <div class="ss-pie-wrap">
+          <div class="ss-chart-card">
+            <div class="ss-chart-title">🥧 Итоги за период
+              <label class="ss-pie-toggle" style="float:right;font-size:11px;color:var(--muted);cursor:pointer;font-weight:400;text-transform:none;letter-spacing:0">
+                <input type="checkbox" id="ssPieDetail"> подробно (разбить «иные»)
+              </label>
+            </div>
+            <div class="ss-pie-container">
+              <div id="ssPie" class="ss-pie"></div>
+              <div id="ssPieLegend" class="ss-pie-legend"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ss-charts">
+          <div class="ss-chart-card">
+            <div class="ss-chart-title">📊 По статусам</div>
+            <div id="ssStatusChart"></div>
+          </div>
+          <div class="ss-chart-card">
+            <div class="ss-chart-title">🏢 Топ организаций</div>
+            <div id="ssOrgChart"></div>
+          </div>
+          <div class="ss-chart-card">
+            <div class="ss-chart-title">📦 Топ типов поставок</div>
+            <div id="ssKindChart"></div>
+          </div>
+        </div>
+
+        <div class="te-card" style="margin-top:16px">
+          <div class="te-card-title-row">
+            <div class="te-card-title">📋 Заявки за период</div>
+            <div style="flex:1"></div>
+            <select id="ssFilterStatus" class="vp-search" style="max-width:200px">
+              <option value="">Все</option>
+              <option value="ok">✅ Успешно</option>
+              <option value="fail">❌ Отказались</option>
+              <option value="offline">📵 Не вышли на связь</option>
+              <option value="undelivered">🚫 Не довезли</option>
+              <option value="dispute">⚠ Спорные</option>
+              <option value="replaced">🔄 Замена (спорная)</option>
+              <option value="none">➖ Без реакции</option>
+            </select>
+          </div>
+          <div class="ss-list" id="ssList"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="modal-back" id="ssDetail">
+  <div class="modal modal-xl">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3 id="ssdTitle">Заявка</h3>
+    <div class="modal-sub" id="ssdSub"></div>
+    <div id="ssdBody"></div>
+    <div class="form-group" style="margin-top:14px">
+      <label>Решение спорной заявки (комментарий)</label>
+      <textarea id="ssdResolution" class="msg-input msg-textarea msg-textarea-sm"></textarea>
+    </div>
+    <div class="form-msg" id="ssdMsg"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;padding-top:12px;border-top:1px solid var(--gold-b);margin-top:14px">
+      <button class="btn btn-ghost btn-sm" id="ssdReplace" style="display:none" title="Создать новую заявку с теми же данными">🔄 Заменить поставку</button>
+      <button class="btn btn-ghost btn-sm" id="ssdDelete" data-admin>🗑 Удалить из статистики</button>
+
+      <div style="flex:1"></div>
+      <a class="btn btn-ghost btn-sm" id="ssdOpen" target="_blank">Открыть в Discord ↗</a>
+      <button class="btn btn-gold btn-sm" id="ssdSaveRes">💾 Сохранить решение</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-back" id="ssReplaceModal">
+  <div class="modal modal-xl">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>🔄 Замена поставки</h3>
+    <div class="modal-sub">Отредактируйте данные (если нужно) и отправьте новую заявку в Discord. Старая пометится как «Заменено».</div>
+    <div id="ssReplaceBody"></div>
+    <div class="msg-row" style="margin-top:14px">
+      <div class="form-group msg-flex-1"><label>Итоговый статус для старой заявки</label>
+        <select id="ssReplTag" class="msg-input">
+          <option value="replaced">🔄 Замена (по умолчанию)</option>
+          <option value="ok">✅ Успешно</option>
+          <option value="undelivered">🚫 Не довезли</option>
+          <option value="fail">❌ Отказались</option>
+        </select>
+        <div class="te-hint">Какой статус проставить в статистику старой (заменённой) заявки</div>
+      </div>
+    </div>
+    <div class="form-msg" id="ssReplMsg"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px;padding-top:12px;border-top:1px solid var(--gold-b)">
+      <button class="btn btn-ghost btn-sm" id="ssReplCancel">Отмена</button>
+      <button class="btn btn-gold" id="ssReplConfirm">🔄 Создать замену и отправить</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-back" id="loginModal">
+  <div class="modal"><button class="modal-close" aria-label="Закрыть">✕</button><h3>Вход</h3>
+    <form><div class="form-group"><label>Email</label><input type="email" name="email" required></div><div class="form-group"><label>Пароль</label><input type="password" name="password" required></div><button class="btn btn-gold" style="width:100%" type="submit">Войти</button><div class="form-msg"></div></form></div>
+</div>
+
+<footer class="footer"><div class="container"><div class="footer-bottom"><span>© <span id="year"></span> · ЦГБ №3 · Центральная Городская</span><span class="footer-note">🐞 Нашли баг? Обратитесь: <b>@rilavion</b></span></div></div></footer>
+
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=17"></script>
+<script src="assets/js/core/config.js?v=17"></script>
+<script src="assets/js/core/auth.js?v=17"></script>
+<script src="assets/js/core/roles-engine.js?v=17"></script>
+<script src="assets/js/features/supply-engine.js?v=17"></script>
+<script src="assets/vendor/html2canvas.min.js?v=4"></script>
+<script src="assets/js/utils/stats-utils.js?v=17"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/ui/search-engine.js?v=17"></script>
+<script src="assets/js/utils/format-utils.js?v=17"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+let FORM=null,REQS=[],GUILD_ID=null;
+const STATUS_LABELS={ok:"Успешно",fail:"Отказались",offline:"Не вышли на связь",undelivered:"Не довезли",replaced:"Замена (спорная)",dispute:"Спорная",none:"Без реакции",deleted:"Удалено"};
+const STATUS_ICONS={ok:"✅",fail:"❌",offline:"📵",undelivered:"🚫",replaced:"🔄",dispute:"⚠",none:"➖",deleted:"🗑"};
+const STATUS_COLORS={ok:"#34d399",fail:"#e97a7a",offline:"#e9d29a",undelivered:"#e97a7a",replaced:"#a2d8ff",dispute:"#a5f3fc",none:"#999",deleted:"#666"};
+
+function ruDT(d){try{return new Date(d).toLocaleString("ru-RU",{timeZone:"Europe/Moscow",day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"})}catch(e){return String(d||"")}}
+function isoDate(d){const dt=new Date(d);return dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0")+"-"+String(dt.getDate()).padStart(2,"0")}
+
+function getPeriod(){
+  const p=$("ssPeriod").value;
+  const now=new Date();
+  let from=null,to=null;
+  if(p==="month"){from=new Date(now.getFullYear(),now.getMonth(),1);to=new Date(now.getFullYear(),now.getMonth()+1,0,23,59,59)}
+  else if(p==="week"){from=new Date(now);from.setDate(now.getDate()-7);to=now}
+  else if(p==="prev"){from=new Date(now.getFullYear(),now.getMonth()-1,1);to=new Date(now.getFullYear(),now.getMonth(),0,23,59,59)}
+  else if(p==="quarter"){from=new Date(now);from.setMonth(now.getMonth()-3);to=now}
+  else if(p==="year"){from=new Date(now);from.setFullYear(now.getFullYear()-1);to=now}
+  else if(p==="all"){from=null;to=null}
+  else if(p==="custom"){
+    from=$("ssFrom").value?new Date($("ssFrom").value):null;
+    to=$("ssTo").value?new Date($("ssTo").value+"T23:59:59"):null;
+  }
+  return {from,to};
+}
+
+async function apply(){
+  const canStats=!!(window.CGB_ROLES&&window.CGB_ROLES.can("supply","stats"));
+  if(!canStats){$("ssGuard").style.display="";$("ssRoot").style.display="none";return}
+  $("ssGuard").style.display="none";$("ssRoot").style.display="";
+  document.body.classList.toggle("cgb-is-admin",!!(window.CGB_ROLES&&window.CGB_ROLES.isAdmin()));
+  document.body.classList.toggle("cgb-is-staff",true);
+  await load();
+}
+
+async function load(){
+  FORM=await CGB_SUPPLY.fetchForm();
+  const {from,to}=getPeriod();
+  REQS=await CGB_SUPPLY.fetchRequests(from?from.toISOString():null,to?to.toISOString():null,1000);
+  render();
+}
+
+let LAST_COUNTS=null,LAST_STATS=null;
+
+function render(){
+  const total=REQS.length;
+  const counts={ok:0,fail:0,offline:0,undelivered:0,replaced:0,dispute:0,none:0};
+  const orgCount={},kindCount={};
+  for(const r of REQS){
+    const s=r.emoji_status||"none";
+    if(counts[s]!=null) counts[s]++;
+    const org=(r.values&&r.values.org)||"—";
+    orgCount[org]=(orgCount[org]||0)+1;
+    const kind=(r.values&&r.values.kind)||"—";
+    kindCount[kind]=(kindCount[kind]||0)+1;
+  }
+  LAST_COUNTS=counts;
+  const pctT=total?Math.round(counts.ok*100/total):0;
+  LAST_STATS={total,counts,orgCount,kindCount,pct:pctT};
+  const success=counts.ok;
+  const pct=total?Math.round(success*100/total):0;
+  $("ssCards").innerHTML=`
+    <div class="vp-stats-card"><div class="vp-stats-card-num">${total}</div><div class="vp-stats-card-lbl">всего заявок</div></div>
+    <div class="vp-stats-card vp-arc-stat-ok"><div class="vp-stats-card-num">${success}</div><div class="vp-stats-card-lbl">успешно (${pct}%)</div></div>
+    <div class="vp-stats-card vp-arc-stat-warn"><div class="vp-stats-card-num">${counts.dispute+counts.replaced}</div><div class="vp-stats-card-lbl">спорных</div></div>
+    <div class="vp-stats-card"><div class="vp-stats-card-num" style="color:#f0a5a5">${counts.fail+counts.offline+counts.undelivered}</div><div class="vp-stats-card-lbl">отказы/несостоявшиеся</div></div>
+    <div class="vp-stats-card"><div class="vp-stats-card-num" style="color:#999">${counts.none}</div><div class="vp-stats-card-lbl">без реакции</div></div>
+  `;
+  renderPie();
+  $("ssStatusChart").innerHTML=renderBars(counts,total,k=>STATUS_ICONS[k]+" "+STATUS_LABELS[k],k=>STATUS_COLORS[k]);
+  $("ssOrgChart").innerHTML=renderBars(orgCount,total,k=>k,()=>"#22d3ee",8);
+  $("ssKindChart").innerHTML=renderBars(kindCount,total,k=>k,()=>"#a2d8ff",8);
+  renderList();
+}
+
+function renderPie(){
+  const c=LAST_COUNTS;if(!c) return;
+  const detail=$("ssPieDetail").checked;
+  let segments;
+  if(!detail){
+    segments=[
+      {key:"ok",label:"Успешно",value:c.ok,color:"#34d399"},
+      {key:"undelivered",label:"Не довезли",value:c.undelivered,color:"#e97a7a"},
+      {key:"other",label:"Иные (отказы, спорные, без реакции)",value:c.fail+c.offline+c.replaced+c.dispute+c.none,color:"#e9d29a"}
+    ];
+  } else {
+    segments=[
+      {key:"ok",label:"Успешно",value:c.ok,color:"#34d399"},
+      {key:"undelivered",label:"Не довезли",value:c.undelivered,color:"#e97a7a"},
+      {key:"fail",label:"Отказались",value:c.fail,color:"#d97878"},
+      {key:"offline",label:"Не вышли на связь",value:c.offline,color:"#e9d29a"},
+      {key:"replaced",label:"Замена",value:c.replaced,color:"#a2d8ff"},
+      {key:"dispute",label:"Спорные",value:c.dispute,color:"#a5f3fc"},
+      {key:"none",label:"Без реакции",value:c.none,color:"#888"}
+    ];
+  }
+  const total=segments.reduce((s,x)=>s+x.value,0);
+  const box=$("ssPie");
+  const legendBox=$("ssPieLegend");
+  if(!total){
+    box.innerHTML=`<div class="ss-pie-empty">Нет данных за период</div>`;
+    legendBox.innerHTML="";
+    return;
+  }
+  const R=80,CX=100,CY=100;
+  let angle=-Math.PI/2;
+  const paths=[];
+  for(const s of segments){
+    if(!s.value) continue;
+    const frac=s.value/total;
+    const a2=angle+frac*Math.PI*2;
+    const x1=CX+R*Math.cos(angle),y1=CY+R*Math.sin(angle);
+    const x2=CX+R*Math.cos(a2),y2=CY+R*Math.sin(a2);
+    const large=frac>.5?1:0;
+    if(frac>=0.999){
+      paths.push(`<circle cx="${CX}" cy="${CY}" r="${R}" fill="${s.color}"/>`);
+    } else {
+      paths.push(`<path d="M${CX},${CY} L${x1},${y1} A${R},${R} 0 ${large},1 ${x2},${y2} Z" fill="${s.color}"/>`);
+    }
+    angle=a2;
+  }
+  box.innerHTML=`<svg viewBox="0 0 200 200" width="200" height="200">${paths.join("")}<circle cx="${CX}" cy="${CY}" r="45" fill="#07242e"/><text x="${CX}" y="${CY-4}" text-anchor="middle" fill="#a5f3fc" font-family="Cormorant Garamond" font-size="28" font-weight="700">${total}</text><text x="${CX}" y="${CY+14}" text-anchor="middle" fill="#8fa39a" font-size="10">всего</text></svg>`;
+  legendBox.innerHTML=segments.filter(s=>s.value>0).map(s=>{
+    const pct=Math.round(s.value*100/total);
+    return `<div class="ss-pie-item">
+      <span class="ss-pie-swatch" style="background:${s.color}"></span>
+      <span class="ss-pie-lbl">${esc(s.label)}</span>
+      <span class="ss-pie-val"><b>${s.value}</b> · ${pct}%</span>
+    </div>`;
+  }).join("");
+}
+$("ssPieDetail").addEventListener("change",renderPie);
+
+function renderBars(counts,total,labelFn,colorFn,limit){
+  const entries=Object.entries(counts).filter(([_,v])=>v>0).sort((a,b)=>b[1]-a[1]);
+  const top=limit?entries.slice(0,limit):entries;
+  if(!top.length) return `<div class="apps-empty" style="padding:20px"><p style="color:var(--muted)">Нет данных</p></div>`;
+  const max=Math.max(...top.map(e=>e[1]));
+  return top.map(([k,v])=>{
+    const pct=Math.round(v*100/max);
+    const color=colorFn(k);
+    return `<div class="ss-bar-row">
+      <div class="ss-bar-lbl">${esc(labelFn(k))}</div>
+      <div class="ss-bar"><div class="ss-bar-fill" style="width:${pct}%;background:${color}"></div></div>
+      <div class="ss-bar-val">${v}</div>
+    </div>`;
+  }).join("");
+}
+
+function renderList(){
+  const f=$("ssFilterStatus").value;
+  const list=REQS.filter(r=>!f||(r.emoji_status||"none")===f);
+  const box=$("ssList");
+  if(!list.length){box.innerHTML=`<div class="apps-empty"><p>Заявок нет</p></div>`;return}
+  box.innerHTML=list.map(r=>{
+    const s=r.emoji_status||"none";
+    const org=(r.values&&r.values.org)||"—";
+    const kind=(r.values&&r.values.kind)||"—";
+    return `<div class="ss-row" data-id="${r.id}">
+      <div class="ss-row-status" style="color:${STATUS_COLORS[s]}">${STATUS_ICONS[s]}</div>
+      <div class="ss-row-main">
+        <div class="ss-row-title">${esc(r.fio)} · <code>${esc(r.static_id)}</code> · <b>${esc(org)}</b> — ${esc(kind)}</div>
+        <div class="ss-row-sub">${ruDT(r.created_at)} ${r.dispute_resolution?"· ✎ решено":""} ${r.emoji_status_note?"· "+esc(r.emoji_status_note):""}</div>
+      </div>
+      <div class="ss-row-status-lbl">${STATUS_LABELS[s]||s}</div>
+    </div>`;
+  }).join("");
+  box.querySelectorAll(".ss-row").forEach(el=>el.addEventListener("click",()=>openDetail(el.dataset.id)));
+}
+$("ssFilterStatus").addEventListener("change",renderList);
+
+$("ssPeriod").addEventListener("change",()=>{
+  const p=$("ssPeriod").value;
+  $("ssFrom").style.display=p==="custom"?"":"none";
+  $("ssTo").style.display=p==="custom"?"":"none";
+  if(p==="custom"){
+    const now=new Date();
+    if(!$("ssFrom").value) $("ssFrom").value=isoDate(new Date(now.getFullYear(),now.getMonth(),1));
+    if(!$("ssTo").value) $("ssTo").value=isoDate(now);
+  }
+  load();
+});
+$("ssFrom").addEventListener("change",load);
+$("ssTo").addEventListener("change",load);
+
+$("ssRescan").addEventListener("click",async()=>{
+  const st=$("ssRescanStatus");
+  st.textContent="Запрос боту...";
+  const {from,to}=getPeriod();
+  const r=await CGB_SUPPLY.requestRescan(from?from.toISOString():null,to?to.toISOString():null);
+  if(!r.ok){st.textContent="Ошибка: "+r.error;return}
+  st.textContent="Сканирование...";
+  const res=await CGB_SUPPLY.pollRescan(r.id,60000);
+  if(!res.ok){st.textContent="Не удалось: "+(res.error||"")}
+  else st.textContent="✓ Обработано: "+res.scanned;
+  await load();
+  setTimeout(()=>{st.textContent=""},4000);
+});
+
+$("ssClear").addEventListener("click",async()=>{
+  if(!confirm("Удалить ВСЕ заявки за выбранный период? Действие необратимо.")) return;
+  const {from,to}=getPeriod();
+  const r=await CGB_SUPPLY.deleteAll(from?from.toISOString():null,to?to.toISOString():null);
+  if(!r.ok){alert(r.error);return}
+  await load();
+});
+
+/* ---- Копирование статистики как PNG-карточка (как на других статистиках) ---- */
+function buildStatsPngData(){
+  const st=LAST_STATS;if(!st) return null;
+  const c=st.counts;
+  const perSel=$("ssPeriod");
+  const perLabel=perSel.options[perSel.selectedIndex].textContent.trim();
+  const {from,to}=getPeriod();
+  const subtitle="ЦГБ №3 · "+perLabel+(from||to?" ("+(from?isoDate(from):"…")+(to?" — "+isoDate(to):"")+")":"");
+  const sections=[];
+  const pct=window.CGB_STATS?CGB_STATS.pct(c.ok,st.total):st.pct+"%";
+  sections.push({cards:[
+    ["Всего заявок",st.total,""],
+    ["✅ Успешно · "+pct,c.ok,"ok"],
+    ["⚠ Спорные+замены",c.dispute+c.replaced,"pend"],
+    ["Отказы/несост.",c.fail+c.offline+c.undelivered,"err"],
+    ["➖ Без реакции",c.none,"info"]
+  ]});
+  const statusRows=[
+    ["✅ Успешно",c.ok],["❌ Отказались",c.fail],["📵 Не вышли на связь",c.offline],
+    ["🚫 Не довезли",c.undelivered],["⚠ Спорные",c.dispute],["🔄 Замены",c.replaced],["➖ Без реакции",c.none]
+  ].filter(r=>r[1]>0).map(r=>[r[0],String(r[1])]);
+  if(statusRows.length) sections.push({title:"По статусам",rows:statusRows});
+  const orgs=Object.entries(st.orgCount).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  if(orgs.length) sections.push({title:"🏢 Топ организаций",bars:orgs});
+  const kinds=Object.entries(st.kindCount).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  if(kinds.length) sections.push({title:"📦 Топ типов поставок",bars:kinds});
+  return {title:"Статистика поставок",subtitle,sections};
+}
+$("ssCopy").addEventListener("click",async()=>{
+  const st=$("ssRescanStatus");
+  const data=buildStatsPngData();
+  if(!data){st.textContent="Нет данных для копирования";setTimeout(()=>{st.textContent=""},2500);return}
+  if(!window.CGB_STATS||!window.html2canvas){st.textContent="Модуль статистики не загружен — обнови страницу (Ctrl+Shift+R)";setTimeout(()=>{st.textContent=""},4000);return}
+  st.textContent="⏳ Готовим PNG…";
+  const fname="ЦГБ3_Поставки_"+new Date().toISOString().slice(0,10)+".png";
+  const r=await CGB_STATS.copyPNG(null,fname,2,data);
+  if(r.ok){
+    st.textContent="✓ PNG в буфере обмена (Ctrl+V в Discord)";
+  }else{
+    // буфер для картинок недоступен (HTTP/старьё) — скачиваем файлом
+    const d=await CGB_STATS.downloadPNG(null,fname,2,data);
+    st.textContent=d.ok?"✓ Буфер недоступен — PNG скачан":"✗ Ошибка: "+(r.error||d.error||"");
+  }
+  setTimeout(()=>{st.textContent=""},4500);
+});
+
+let CUR=null;
+function openDetail(id){
+  CUR=REQS.find(r=>r.id===id);if(!CUR) return;
+  const fields=(FORM&&FORM.fields)||[];
+  $("ssdTitle").textContent="Заявка · "+CUR.fio+" ("+CUR.static_id+")";
+  $("ssdSub").innerHTML=`Создано: ${ruDT(CUR.created_at)}${CUR.resolved_by_name?` · ✎ ${esc(CUR.resolved_by_name)} · ${ruDT(CUR.resolved_at)}`:""}`;
+  const s=CUR.emoji_status||"none";
+  const rows=[`<div class="ssd-status" style="background:${STATUS_COLORS[s]}22;border-color:${STATUS_COLORS[s]};color:${STATUS_COLORS[s]}"><b>${STATUS_ICONS[s]} ${STATUS_LABELS[s]||s}</b>${CUR.emoji_status_note?" · "+esc(CUR.emoji_status_note):""}</div>`];
+  rows.push(`<div class="ssd-field"><b>Discord:</b> ${esc(CUR.discord||"—")}</div>`);
+  for(const f of fields){
+    const v=(CUR.values||{})[f.key];
+    if(v==null||v==="") continue;
+    rows.push(`<div class="ssd-field"><b>${esc(f.label)}:</b> ${esc(String(v))}</div>`);
+  }
+  $("ssdBody").innerHTML=rows.join("");
+  $("ssdResolution").value=CUR.dispute_resolution||"";
+  if(CUR.channel_id&&CUR.message_id){
+    $("ssdOpen").style.display="";
+    $("ssdOpen").href="https://discord.com/channels/@me/"+CUR.channel_id+"/"+CUR.message_id;
+  } else $("ssdOpen").style.display="none";
+  $("ssdReplace").style.display=(s==="replaced")?"":"none";
+
+  $("ssdMsg").textContent="";
+  $("ssDetail").classList.add("active");
+}
+$("ssDetail").querySelector(".modal-close").addEventListener("click",()=>$("ssDetail").classList.remove("active"));
+$("ssDetail").addEventListener("click",e=>{if(e.target===$("ssDetail")) $("ssDetail").classList.remove("active")});
+$("ssdSaveRes").addEventListener("click",async()=>{
+  if(!CUR) return;
+  const r=await CGB_SUPPLY.updateRequest(CUR.id,{dispute_resolution:$("ssdResolution").value.trim()||null});
+  if(!r.ok){$("ssdMsg").className="form-msg error";$("ssdMsg").textContent=r.error;return}
+  $("ssdMsg").className="form-msg ok";$("ssdMsg").textContent="✓ Сохранено";
+  await load();
+});
+$("ssdDelete").addEventListener("click",async()=>{
+  if(!CUR) return;
+  if(!confirm("Удалить заявку из статистики?\nСообщение в Discord останется.")) return;
+  const r=await CGB_SUPPLY.deleteRequest(CUR.id);
+  if(!r.ok){alert(r.error);return}
+  $("ssDetail").classList.remove("active");
+  await load();
+});
+
+
+
+$("ssdReplace").addEventListener("click",()=>{
+  if(!CUR) return;
+  openReplaceModal();
+});
+
+function openReplaceModal(){
+  const fields=(FORM&&FORM.fields)||[];
+  const v=CUR.values||{};
+  const body=[];
+  body.push(`<div class="te-card"><div class="te-card-title">👤 Данные заявителя</div>
+    <div class="form-group"><label>ФИО</label><input type="text" id="reFio" class="msg-input" value="${esc(CUR.fio||"")}"></div>
+    <div class="msg-row">
+      <div class="form-group msg-flex-1"><label>Статик</label><input type="text" id="reStatic" class="msg-input" value="${esc(CUR.static_id||"")}" maxlength="7"></div>
+      <div class="form-group msg-flex-1"><label>Discord</label><input type="text" id="reDiscord" class="msg-input" value="${esc(CUR.discord||"")}"></div>
+    </div>
+  </div>`);
+  body.push(`<div class="te-card"><div class="te-card-title">📋 Данные поставки</div>`);
+  for(const f of fields){
+    const val=v[f.key];
+    body.push(renderReplaceField(f,val));
+  }
+  body.push(`</div>`);
+  $("ssReplaceBody").innerHTML=body.join("");
+  $("reStatic").addEventListener("input",e=>{
+    let vv=e.target.value.replace(/\D/g,"");
+    if(vv.length>3) vv=vv.slice(0,3)+"-"+vv.slice(3,6);
+    e.target.value=vv;
+  });
+  $("ssReplTag").value="replaced";
+  $("ssReplMsg").textContent="";
+  $("ssReplaceModal").classList.add("active");
+}
+
+function renderReplaceField(f,val){
+  const req=f.required?' <span class="sf-req">*</span>':' <span class="sf-opt">(необязательно)</span>';
+  const cur=val==null?"":String(val);
+  if(f.type==="textarea") return `<div class="form-group"><label>${esc(f.label)}${req}</label><textarea data-rk="${esc(f.key)}" class="msg-input msg-textarea msg-textarea-sm">${esc(cur)}</textarea></div>`;
+  if(f.type==="number") return `<div class="form-group"><label>${esc(f.label)}${req}</label><input type="number" data-rk="${esc(f.key)}" class="msg-input" value="${esc(cur)}"></div>`;
+  if(f.type==="date") return `<div class="form-group"><label>${esc(f.label)}${req}</label><input type="date" data-rk="${esc(f.key)}" class="msg-input" value="${esc(cur)}"></div>`;
+  if(f.type==="checkbox") return `<div class="form-group"><label class="doc-toggle-row"><input type="checkbox" data-rk="${esc(f.key)}" ${val?"checked":""}><span>${esc(f.label)}${req}</span></label></div>`;
+  if(f.type==="select"){
+    const opts=(f.options||[]).map(o=>`<option value="${esc(o)}" ${o===cur?"selected":""}>${esc(o)}</option>`).join("");
+    return `<div class="form-group"><label>${esc(f.label)}${req}</label><select data-rk="${esc(f.key)}" class="msg-input"><option value="">— выбери —</option>${opts}</select></div>`;
+  }
+  return `<div class="form-group"><label>${esc(f.label)}${req}</label><input type="text" data-rk="${esc(f.key)}" class="msg-input" value="${esc(cur)}"></div>`;
+}
+
+$("ssReplCancel").addEventListener("click",()=>$("ssReplaceModal").classList.remove("active"));
+$("ssReplaceModal").querySelector(".modal-close").addEventListener("click",()=>$("ssReplaceModal").classList.remove("active"));
+$("ssReplaceModal").addEventListener("click",e=>{if(e.target===$("ssReplaceModal")) $("ssReplaceModal").classList.remove("active")});
+
+$("ssReplConfirm").addEventListener("click",async()=>{
+  if(!CUR) return;
+  const msg=$("ssReplMsg");
+  const fio=$("reFio").value.trim();
+  const st=$("reStatic").value.trim();
+  const dc=$("reDiscord").value.trim();
+  if(!fio){msg.className="form-msg error";msg.textContent="Введите ФИО";return}
+  if(!CGB_SUPPLY.validStatic(st)){msg.className="form-msg error";msg.textContent="Статик 000-000";return}
+  const newValues={};
+  for(const f of ((FORM&&FORM.fields)||[])){
+    const el=document.querySelector(`[data-rk="${f.key}"]`);
+    if(!el) continue;
+    let v=el.type==="checkbox"?el.checked:el.value;
+    if(f.required&&(v===""||v==null||v===false)){msg.className="form-msg error";msg.textContent="Заполните: "+f.label;return}
+    newValues[f.key]=v;
+  }
+  msg.className="form-msg info";msg.textContent="Создание замены...";
+  const r=await CGB_SUPPLY.replaceRequest(CUR.id,newValues,fio,st,dc||null);
+  if(!r.ok){msg.className="form-msg error";msg.textContent=r.error;return}
+  const tag=$("ssReplTag").value;
+  if(tag&&tag!=="replaced"){
+    await CGB_SUPPLY.updateRequest(CUR.id,{emoji_status:tag,emoji_status_note:"вручную при замене"});
+  }
+  msg.className="form-msg ok";msg.textContent="✓ Создана замена #"+r.new_id;
+  await load();
+  setTimeout(()=>{$("ssReplaceModal").classList.remove("active");$("ssDetail").classList.remove("active")},1200);
+});
+
+if(window.CGB_ROLES) CGB_ROLES.onChange(apply);
+setTimeout(apply,600);
+</script>
+
+</body>
+</html>

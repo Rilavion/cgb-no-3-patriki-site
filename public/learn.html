@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title>ЦГБ №3 — Учебные материалы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=27">
+<style id="cgb-admin-guard">
+[data-admin]{display:none !important}
+[data-staff]{display:none !important}
+[data-loggedin]{display:none !important}
+body.cgb-is-admin .nav a[data-admin]{display:inline-flex !important}
+body.cgb-is-staff .nav a[data-staff]{display:inline-flex !important}
+body.cgb-is-logged .nav a[data-loggedin]{display:inline-flex !important}
+body.cgb-is-admin [data-admin]:not(.nav a){display:initial !important}
+body.cgb-is-staff [data-staff]:not(.nav a){display:initial !important}
+body.cgb-is-logged [data-loggedin]:not(.nav a){display:initial !important}
+</style>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+<div class="bg-noise"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ВС"></div>
+      <div class="brand-text">
+        <span class="brand-label">Министерство Здравоохранения</span>
+        <span class="brand-name">ЦГБ №3 · Центральная Городская</span>
+      </div>
+    </a>
+    <nav class="nav" id="mainNav">
+      <a href="index.html" data-page="index.html" data-transition>Главная</a>
+      <a href="info.html" data-page="info.html" data-transition>Информация</a>
+      <a href="services.html" data-page="services.html" data-transition>Услуги</a>
+      <a href="meds.html" data-page="meds.html" data-transition>Медикаменты</a>
+      <a href="ustav.html" data-page="ustav.html" data-transition>Устав</a>
+      <a href="learn.html" data-page="learn.html" data-transition data-loggedin>Учебные материалы</a>
+      <a href="tests.html" data-page="tests.html" data-transition data-loggedin>Тестирование</a>
+      <a href="composition.html" data-page="composition.html" data-transition>Состав</a>
+      <a href="docs.html" data-page="docs.html" data-transition data-perm="docs:view">Документы</a>
+      <a href="news.html" data-page="news.html" data-transition>Новости</a>
+      <a href="autopark.html" data-page="autopark.html" data-transition>Автопарк</a>
+      <a href="map.html" data-page="map.html" data-transition>Карта</a>
+      <a href="faq.html" data-page="faq.html" data-transition>FAQ</a>
+      <a href="complaints.html" data-page="complaints.html" data-transition>Жалобы</a>
+      <a href="supply.html" data-page="supply.html" data-transition data-perm="supply:view">Поставки</a>
+      <a href="apps.html" data-page="apps.html" data-transition data-perm="apps:view">Заявления</a>
+      <a href="vp.html" data-page="vp.html" data-transition data-perm="vp:view">Проверки АБ</a>
+      <a href="complaints-review.html" data-page="complaints-review.html" data-transition data-perm="complaints:review,complaints:view">Рассмотрение жалоб</a>
+      <a href="complaints-stats.html" data-page="complaints-stats.html" data-transition data-perm="complaints:review,complaints:view">Статистика жалоб</a>
+      <a href="leave.html" data-page="leave.html" data-transition data-loggedin>Отгул</a>
+      <a href="vacation-ic.html" data-page="vacation-ic.html" data-transition data-loggedin>Отпуск IC</a>
+      <a href="vacation-ooc.html" data-page="vacation-ooc.html" data-transition data-loggedin>Отпуск OOC</a>
+      <a href="dismissal.html" data-page="dismissal.html" data-transition data-loggedin>Увольнение</a>
+      <a href="promotion.html" data-page="promotion.html" data-transition data-loggedin>Повышение</a>
+      <a href="restoration.html" data-page="restoration.html" data-transition>Восстановление в ЦГБ №3</a>
+      <a href="appointment.html" data-page="appointment.html" data-transition>Запись к врачу</a>
+      <a href="requests-review.html" data-page="requests-review.html" data-transition data-perm="requests:review,requests:view">Рассмотрение заявок</a>
+      <a href="requests-stats.html" data-page="requests-stats.html" data-transition data-perm="requests:review,requests:view">Статистика заявок</a>
+      <a href="payroll.html" data-page="payroll.html" data-transition data-perm="payroll:view">Реестр премирования</a>
+      <a href="report.html" data-page="report.html" data-transition>Еженедельный отчёт</a>
+      <a href="report-settings.html" data-page="report-settings.html" data-transition data-perm="report:settings">Настройки отчётов</a>
+      <a href="vp-request.html" data-page="vp-request.html" data-transition data-perm="vp_request:submit">Запрос на наказание</a>
+      <a href="vp-request-settings.html" data-page="vp-request-settings.html" data-transition data-perm="vp_request:settings">Настройки запросов АБ</a>
+      <a href="lk.html" data-page="lk.html" data-transition>Личный кабинет</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-btn" data-open-search title="Поиск (Ctrl+K)">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+        <span>Поиск</span><span class="kbd">Ctrl K</span>
+      </button>
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Сменить тему">
+        <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24"><path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66l1.42-1.42M4.92 19.08l1.42-1.42m0-11.32L4.92 4.92m14.16 14.16l-1.42-1.42M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="login-btn" data-open-login>
+        <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/></svg>
+        <span>Войти</span>
+      </button>
+      <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="apps-head">
+    <div class="container">
+      <div class="apps-head-ribbon">
+        <span class="apps-head-ribbon-line"></span>
+        <span class="apps-head-ribbon-emblem">◈</span>
+        <span class="apps-head-ribbon-name">База знаний · Учебные материалы</span>
+        <span class="apps-head-ribbon-emblem">◈</span>
+        <span class="apps-head-ribbon-line"></span>
+      </div>
+      <h1 class="apps-head-title">Учебные материалы</h1>
+      <div class="apps-head-subtitle">Видео, презентации, документы для подготовки</div>
+    </div>
+  </section>
+
+  <section class="apps-body">
+    <div class="container">
+
+      <div class="learn-hero-tests">
+        <div class="learn-hero-tests-l">
+          <div class="learn-hero-tests-ttl">🎓 Проверить знания</div>
+          <div class="learn-hero-tests-sub">Пройдите тестирование по изученным материалам. Результаты автоматически отправляются командиру.</div>
+        </div>
+        <a href="tests.html" data-page="tests.html" class="btn btn-gold">Перейти к тестированию →</a>
+      </div>
+
+      <div class="learn-toolbar">
+        <div class="learn-toolbar-l">
+          <input type="search" class="vp-search" id="learnSearch" placeholder="Поиск по названию, описанию, категории...">
+          <select class="vp-search" id="learnFilter" style="max-width:220px">
+            <option value="">Все категории</option>
+          </select>
+          <select class="vp-search" id="learnKindFilter" style="max-width:180px">
+            <option value="">Все типы</option>
+            <option value="video">🎬 Видео</option>
+            <option value="presentation">📊 Презентации</option>
+            <option value="document">📄 Документы</option>
+            <option value="image">🖼 Изображения</option>
+            <option value="link">🔗 Ссылки</option>
+          </select>
+        </div>
+        <div class="learn-toolbar-r">
+          <button class="btn btn-gold btn-sm" id="learnAddBtn" data-perm="learn:edit">+ Добавить материал</button>
+        </div>
+      </div>
+
+      <div class="learn-grid" id="learnGrid">
+        <div class="apps-empty">Загрузка...</div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<div class="modal-back" id="learnEditModal">
+  <div class="modal modal-lg">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3 id="learnModalTitle">Новый материал</h3>
+    <div class="modal-sub">Ссылка на YouTube / Rutube / Google Drive / Яндекс.Диск / изображение — будет автоматически определён тип и предпросмотр.</div>
+    <div class="form-group"><label>Название *</label><input type="text" id="lmTitle" class="msg-input" required></div>
+    <div class="form-group"><label>Описание</label><textarea id="lmDesc" class="msg-input msg-textarea msg-textarea-sm" placeholder="Кратко о чём материал..."></textarea></div>
+    <div class="form-group"><label>Ссылка (URL) *</label><input type="url" id="lmUrl" class="msg-input" placeholder="https://..." required></div>
+    <div class="msg-row">
+      <div class="form-group msg-flex-1">
+        <label>Категория</label>
+        <input type="text" id="lmCategory" class="msg-input" list="lmCategoriesList" placeholder="Например: Основы, Фармакология, Хирургия...">
+        <datalist id="lmCategoriesList"></datalist>
+      </div>
+      <div class="form-group msg-flex-1">
+        <label>Тип (авто)</label>
+        <select id="lmKind" class="msg-input">
+          <option value="video">🎬 Видео</option>
+          <option value="presentation">📊 Презентация</option>
+          <option value="document">📄 Документ</option>
+          <option value="image">🖼 Изображение</option>
+          <option value="link">🔗 Ссылка</option>
+        </select>
+      </div>
+    </div>
+    <div class="msg-row">
+      <div class="form-group msg-flex-1">
+        <label>Сортировка (меньше = выше)</label>
+        <input type="number" id="lmSort" class="msg-input" value="100">
+      </div>
+      <div class="form-group msg-flex-1">
+        <label>URL обложки (опц.)</label>
+        <input type="url" id="lmCover" class="msg-input" placeholder="https://...">
+      </div>
+    </div>
+    <div class="form-msg" id="lmMsg"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px;padding-top:12px;border-top:1px solid var(--gold-b)">
+      <button class="btn btn-ghost btn-sm" id="lmDelete" style="display:none">🗑 Удалить</button>
+      <div style="flex:1"></div>
+      <button class="btn btn-ghost btn-sm" id="lmCancel">Отмена</button>
+      <button class="btn btn-gold btn-sm" id="lmSave">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-back" id="learnViewModal">
+  <div class="modal modal-xxl learn-view-modal">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3 id="lvTitle"></h3>
+    <div class="modal-sub" id="lvDesc"></div>
+    <div class="learn-view-body" id="lvBody"></div>
+    <div class="learn-view-actions"><a class="btn btn-ghost btn-sm" id="lvOpen" href="" target="_blank" rel="noopener">Открыть в новом окне ↗</a></div>
+  </div>
+</div>
+
+<div class="modal-back" id="loginModal">
+  <div class="modal">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Вход</h3>
+    <div class="modal-sub">Для доступа к панели администратора</div>
+    <form>
+      <div class="form-group"><label>Email</label><input type="email" name="email" required></div>
+      <div class="form-group"><label>Пароль</label><input type="password" name="password" required></div>
+      <button class="btn btn-gold" style="width:100%" type="submit">Войти</button>
+      <div class="form-msg"></div>
+    </form>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> · ЦГБ №3 · Центральная Городская</span>
+    <span class="footer-note">🐞 Нашли баг? Обратитесь: <b>@rilavion</b></span></div>
+  </div>
+</footer>
+
+<div class="fab-stack"><button class="fab" id="fabUp" title="Наверх"><svg viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8z"/></svg></button></div>
+
+<div class="search-modal" id="searchModal">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+      <input class="search-input" placeholder="Поиск..." spellcheck="false"><button class="search-close-kbd">Esc</button>
+    </div>
+    <div class="search-results"></div>
+  </div>
+</div>
+
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=18"></script>
+<script src="assets/js/core/config.js?v=18"></script>
+<script src="assets/js/core/auth.js?v=18"></script>
+<script src="assets/js/core/roles-engine.js?v=18"></script>
+<script src="assets/js/features/learn-engine.js?v=18"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/utils/format-utils.js?v=18"></script>
+<script src="assets/js/ui/holiday-engine.js?v=18"></script>
+<script src="assets/js/ui/settings-panel.js?v=18"></script>
+<script src="assets/js/features/faq-engine.js?v=18"></script>
+<script src="assets/js/ui/search-engine.js?v=18"></script>
+<script src="assets/js/utils/ds-cache.js?v=18"></script>
+<script src="assets/js/ui/notify-engine.js?v=19"></script>
+<script src="assets/js/ui/notify-live.js?v=18"></script>
+<script src="assets/js/ui/sound-engine.js?v=18"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+let ALL=[];let SEARCH="",CAT_FILTER="",KIND_FILTER="";
+const KIND_ICONS={video:"🎬",presentation:"📊",document:"📄",image:"🖼",link:"🔗"};
+const KIND_NAMES={video:"Видео",presentation:"Презентация",document:"Документ",image:"Изображение",link:"Ссылка"};
+
+function updateLoggedFlag(){
+  const s=window.CGB_AUTH&&window.CGB_AUTH.state;
+  document.body.classList.toggle("cgb-is-logged",!!(s&&s.user));
+}
+
+async function loadAll(){
+  ALL=await CGB_LEARN.fetchAll();
+  const cats=Array.from(new Set(ALL.map(m=>m.category).filter(Boolean))).sort();
+  $("learnFilter").innerHTML=`<option value="">Все категории</option>`+cats.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("");
+  $("lmCategoriesList").innerHTML=cats.map(c=>`<option value="${esc(c)}">`).join("");
+  renderGrid();
+}
+
+function match(m){
+  if(CAT_FILTER&&m.category!==CAT_FILTER) return false;
+  if(KIND_FILTER&&m.kind!==KIND_FILTER) return false;
+  if(!SEARCH) return true;
+  const q=SEARCH.toLowerCase();
+  return (m.title||"").toLowerCase().includes(q)||(m.description||"").toLowerCase().includes(q)||(m.category||"").toLowerCase().includes(q);
+}
+
+function renderGrid(){
+  const box=$("learnGrid");
+  const list=ALL.filter(match);
+  if(!list.length){box.innerHTML=`<div class="apps-empty"><h3>Ничего не найдено</h3><p>Попробуйте изменить фильтры или добавьте новый материал.</p></div>`;return}
+  const byCat=new Map();
+  for(const m of list){
+    const k=m.category||"Без категории";
+    if(!byCat.has(k)) byCat.set(k,[]);
+    byCat.get(k).push(m);
+  }
+  const parts=[];
+  for(const [cat,items] of byCat){
+    parts.push(`<div class="learn-cat">
+      <div class="learn-cat-title"><span class="learn-cat-dot"></span>${esc(cat)} <span class="learn-cat-count">${items.length}</span></div>
+      <div class="learn-cards">
+        ${items.map(m=>`<div class="learn-card" data-id="${m.id}">
+          <div class="learn-card-cover">
+            ${m.cover_url?`<img src="${esc(m.cover_url)}" alt="" onerror="this.style.display='none'">`:""}
+            <div class="learn-card-kind" title="${esc(KIND_NAMES[m.kind]||m.kind)}">${KIND_ICONS[m.kind]||"📎"}</div>
+          </div>
+          <div class="learn-card-body">
+            <div class="learn-card-title">${esc(m.title)}</div>
+            ${m.description?`<div class="learn-card-desc">${esc(m.description)}</div>`:""}
+            <div class="learn-card-meta">
+              <span>${KIND_NAMES[m.kind]||m.kind}</span>
+              ${m.created_by_name?`<span>· ${esc(m.created_by_name)}</span>`:""}
+            </div>
+          </div>
+          <div class="learn-card-acts">
+            <button class="btn btn-gold btn-sm" data-view="${m.id}">Открыть</button>
+            <button class="btn btn-ghost btn-sm" data-edit="${m.id}" data-perm="learn:edit" style="display:none">✎</button>
+          </div>
+        </div>`).join("")}
+      </div>
+    </div>`);
+  }
+  box.innerHTML=parts.join("");
+  box.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>openView(b.dataset.view)));
+  box.querySelectorAll("[data-edit]").forEach(b=>b.addEventListener("click",()=>openEdit(b.dataset.edit)));
+  applyAdminVisibility();
+}
+
+function applyAdminVisibility(){
+  updateLoggedFlag();
+  if(window.CGB_ROLES&&window.CGB_ROLES.applyPermGates) window.CGB_ROLES.applyPermGates();
+}
+
+$("learnSearch").addEventListener("input",()=>{SEARCH=$("learnSearch").value.trim();renderGrid()});
+$("learnFilter").addEventListener("change",()=>{CAT_FILTER=$("learnFilter").value;renderGrid()});
+$("learnKindFilter").addEventListener("change",()=>{KIND_FILTER=$("learnKindFilter").value;renderGrid()});
+
+function openView(id){
+  const m=ALL.find(x=>x.id===id);if(!m) return;
+  $("lvTitle").textContent=m.title;
+  $("lvDesc").textContent=m.description||"";
+  $("lvOpen").href=m.url;
+  const kind=m.kind||CGB_LEARN.detectKind(m.url);
+  const eu=CGB_LEARN.embedUrl(m.url,kind);
+  let html="";
+  if(kind==="image"){html=`<img class="lv-image" src="${esc(m.url)}" alt="">`}
+  else html=`<iframe class="lv-frame" src="${esc(eu)}" allowfullscreen loading="lazy" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>`;
+  $("lvBody").innerHTML=html;
+  $("learnViewModal").classList.add("active");
+}
+$("learnViewModal").querySelector(".modal-close").addEventListener("click",()=>$("learnViewModal").classList.remove("active"));
+$("learnViewModal").addEventListener("click",e=>{if(e.target===$("learnViewModal"))$("learnViewModal").classList.remove("active")});
+
+let EDIT_ID=null;
+function openEdit(id){
+  EDIT_ID=id||null;
+  const m=id?ALL.find(x=>x.id===id):{};
+  $("learnModalTitle").textContent=id?"Редактировать материал":"Новый материал";
+  $("lmTitle").value=m.title||"";
+  $("lmDesc").value=m.description||"";
+  $("lmUrl").value=m.url||"";
+  $("lmCategory").value=m.category||"";
+  $("lmKind").value=m.kind||"video";
+  $("lmSort").value=m.sort||100;
+  $("lmCover").value=m.cover_url||"";
+  $("lmMsg").textContent="";$("lmMsg").className="form-msg";
+  $("lmDelete").style.display=id?"":"none";
+  $("learnEditModal").classList.add("active");
+}
+$("learnAddBtn").addEventListener("click",()=>openEdit(null));
+$("lmCancel").addEventListener("click",()=>$("learnEditModal").classList.remove("active"));
+$("learnEditModal").querySelector(".modal-close").addEventListener("click",()=>$("learnEditModal").classList.remove("active"));
+$("lmUrl").addEventListener("input",()=>{
+  const k=CGB_LEARN.detectKind($("lmUrl").value);
+  if(k) $("lmKind").value=k;
+});
+$("lmSave").addEventListener("click",async()=>{
+  const msg=$("lmMsg");
+  const title=$("lmTitle").value.trim();
+  const url=$("lmUrl").value.trim();
+  if(!title||!url){msg.className="form-msg error";msg.textContent="Заполни название и ссылку";return}
+  msg.className="form-msg info";msg.textContent="Сохранение...";
+  const row={
+    title,description:$("lmDesc").value.trim()||null,url,
+    category:$("lmCategory").value.trim()||null,
+    kind:$("lmKind").value,sort:parseInt($("lmSort").value)||100,
+    cover_url:$("lmCover").value.trim()||null
+  };
+  if(EDIT_ID) row.id=EDIT_ID;
+  const r=await CGB_LEARN.save(row);
+  if(!r.ok){msg.className="form-msg error";msg.textContent=r.error;return}
+  msg.className="form-msg ok";msg.textContent="✓ Сохранено";
+  setTimeout(()=>{$("learnEditModal").classList.remove("active");loadAll()},600);
+});
+$("lmDelete").addEventListener("click",async()=>{
+  if(!EDIT_ID) return;
+  if(!confirm("Удалить материал?")) return;
+  const r=await CGB_LEARN.remove(EDIT_ID);
+  if(!r.ok){alert(r.error);return}
+  $("learnEditModal").classList.remove("active");loadAll();
+});
+
+if(window.CGB_ROLES) CGB_ROLES.onChange(applyAdminVisibility);
+if(window.CGB_AUTH) CGB_AUTH.onChange(updateLoggedFlag);
+setTimeout(()=>{loadAll();applyAdminVisibility()},600);
+</script>
+
+</body>
+</html>

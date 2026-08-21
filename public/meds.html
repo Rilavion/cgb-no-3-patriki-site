@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title>Справочник медикаментов · ЦГБ №3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=26">
+<style>
+.md-hero{padding:72px 0 8px;text-align:center;position:relative}
+.md-hero::before{content:"";position:absolute;left:50%;top:-40px;transform:translateX(-50%);width:min(720px,92vw);height:340px;pointer-events:none;background:radial-gradient(ellipse at 50% 30%,rgba(52,211,153,.14),transparent 65%);filter:blur(10px)}
+.md-hero::after{content:"℞";position:absolute;left:50%;top:118px;transform:translateX(-50%);font-size:120px;color:var(--gold);opacity:.05;pointer-events:none;font-family:"Cormorant Garamond",serif}
+.md-hero>*{position:relative}
+.md-overline{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:999px;background:var(--gold-s);border:1px solid var(--line);color:var(--gold-b);font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin-bottom:16px}
+.md-title{font-family:"Cormorant Garamond",serif;font-size:clamp(34px,5vw,54px);font-weight:700;color:var(--text);line-height:1.1}
+.md-title span{background:linear-gradient(120deg,var(--gold-b),#34d399 55%,var(--gold-b));-webkit-background-clip:text;background-clip:text;color:transparent}
+.md-desc{color:var(--muted);max-width:640px;margin:12px auto 0;font-size:15px;line-height:1.75}
+.md-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:560px;margin:26px auto 0}
+.md-stat{background:var(--card-bg);border:1px solid var(--line);border-radius:16px;padding:14px;text-align:center}
+.md-stat b{font-family:"Cormorant Garamond",serif;font-size:24px;color:var(--gold-b)}
+.md-stat div{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;margin-top:2px}
+
+.md-layout{display:grid;grid-template-columns:290px minmax(0,1fr);gap:22px;align-items:start;margin-top:34px}
+.md-zones-card{position:sticky;top:90px}
+.md-side-h{font-family:"Cormorant Garamond",serif;font-size:19px;color:var(--gold-b);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.md-zone{display:flex;align-items:center;gap:11px;padding:10px 13px;border-radius:13px;border:1px solid var(--line);background:var(--card-bg);cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);transition:.25s;margin-bottom:8px}
+.md-zone:hover,.md-zone.active{color:var(--text);transform:translateX(4px);border-color:var(--z,#0e7490)}
+.md-zone.active{background:var(--gold-s)}
+.md-zone-ic{width:34px;height:34px;min-width:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;background:var(--z,#0e7490)}
+.md-zone-n{margin-left:auto;padding:3px 9px;border-radius:99px;background:var(--gold-s);font-size:11px;font-weight:700;color:var(--gold-b);font-variant-numeric:tabular-nums}
+
+.md-searchbar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.md-forms{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}
+.md-fchip{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:999px;cursor:pointer;background:var(--card-bg);border:1px solid var(--line);color:var(--muted);font-size:12px;font-weight:700;font-family:inherit;transition:.25s}
+.md-fchip .em{font-style:normal;font-size:13.5px}
+.md-fchip small{opacity:.7;font-weight:600}
+.md-fchip:hover{border-color:var(--f);color:var(--text);transform:translateY(-2px)}
+.md-fchip.active{background:var(--f);color:#fff;border-color:transparent;box-shadow:0 8px 20px rgba(8,145,178,.28)}
+.md-search{flex:1;min-width:210px;position:relative}
+.md-search input{width:100%;padding:12px 16px 12px 42px;border-radius:14px;border:1px solid var(--line);background:var(--input-bg);color:var(--text);font-size:14px;font-family:inherit;outline:none}
+.md-search input:focus{border-color:var(--gold)}
+.md-search::before{content:"🔍";position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:14px;opacity:.6}
+.md-view{display:flex;gap:6px}
+.md-view button{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--card-bg);color:var(--muted);cursor:pointer;font-size:15px;transition:.25s}
+.md-view button.active{background:linear-gradient(135deg,#0e7490,#06b6d4);color:#fff;border-color:#06b6d4}
+
+.md-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.md-card{background:var(--card-bg);border:1px solid var(--line);border-radius:18px;padding:18px;position:relative;overflow:hidden;transition:transform .4s cubic-bezier(.34,1.56,.64,1),box-shadow .4s,border-color .4s}
+.md-card:hover{transform:translateY(-5px);border-color:var(--gold);box-shadow:0 18px 44px rgba(14,116,144,.18)}
+.md-card-h{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.md-ico{width:44px;height:44px;min-width:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff}
+.md-card h4{font-size:15px;color:var(--text);line-height:1.3}
+.md-card small{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;margin-top:3px}
+.md-tag{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:99px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:9px}
+.md-desc{font-size:12.5px;color:var(--muted);line-height:1.65;margin-bottom:12px}
+.md-meta{display:flex;flex-wrap:wrap;gap:7px}
+.md-meta span{display:inline-flex;gap:5px;align-items:center;padding:5px 10px;border-radius:9px;background:var(--footer-bg);border:1px solid var(--line);font-size:11.5px;font-weight:600;color:var(--muted)}
+.md-zones-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.md-ztag{padding:3px 9px;border-radius:8px;font-size:10.5px;font-weight:700}
+
+.md-table-wrap{border:1px solid var(--line);border-radius:18px;overflow:auto;background:var(--card-bg)}
+.md-table{width:100%;border-collapse:collapse;min-width:640px}
+.md-table th{padding:13px 16px;text-align:left;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);border-bottom:2px solid var(--line);font-weight:700}
+.md-table td{padding:12px 16px;border-bottom:1px solid var(--line);font-size:13px;color:var(--muted);vertical-align:middle}
+.md-table tr:last-child td{border-bottom:none}
+.md-table tbody tr{transition:background .2s}
+.md-table tbody tr:hover{background:var(--gold-s)}
+.md-tname{display:flex;align-items:center;gap:11px;font-weight:700;color:var(--text)}
+.md-tname .md-ico{width:34px;height:34px;min-width:34px;font-size:14px;border-radius:10px}
+
+/* редактор — специфика */
+.md-ed-meds-list{display:flex;flex-direction:column;gap:10px}
+.md-zpicks{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
+.md-zpick{padding:5px 10px;border-radius:9px;border:1px solid var(--line);background:var(--input-bg);font-size:11.5px;cursor:pointer;transition:.2s;color:var(--muted)}
+.md-zpick.on{color:#fff;border-color:transparent}
+.md-ed-filter{width:100%;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--input-bg);color:var(--text);font-size:12.5px;font-family:inherit;margin-bottom:10px}
+
+@media(max-width:1080px){.md-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){
+  .md-layout{grid-template-columns:1fr}
+  .md-zones-card{position:static;display:flex;flex-wrap:wrap;gap:8px}
+  .md-zone{margin-bottom:0}
+  .md-side-h{width:100%}
+}
+@media(max-width:640px){.md-grid{grid-template-columns:1fr}.md-stats{grid-template-columns:1fr 1fr 1fr;gap:8px}}
+</style>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+<div class="bg-noise"></div>
+<div class="page-transition-overlay" id="overlay"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ЦГБ"></div>
+      <div class="brand-text">
+        <span class="brand-label">Министерство Здравоохранения</span>
+        <span class="brand-name">ЦГБ №3 · Центральная Городская</span>
+      </div>
+    </a>
+    <nav class="nav" id="mainNav">
+      <a href="index.html" data-page="index.html" data-transition>Главная</a>
+      <a href="info.html" data-page="info.html" data-transition>Информация</a>
+      <a href="services.html" data-page="services.html" data-transition>Услуги</a>
+      <a href="meds.html" data-page="meds.html" data-transition>Медикаменты</a>
+      <a href="ustav.html" data-page="ustav.html" data-transition>Устав</a>
+      <a href="learn.html" data-page="learn.html" data-transition data-loggedin>Учебные материалы</a>
+      <a href="tests.html" data-page="tests.html" data-transition data-loggedin>Тестирование</a>
+      <a href="composition.html" data-page="composition.html" data-transition>Состав</a>
+      <a href="docs.html" data-page="docs.html" data-transition data-perm="docs:view">Документы</a>
+      <a href="news.html" data-page="news.html" data-transition>Новости</a>
+      <a href="autopark.html" data-page="autopark.html" data-transition>Автопарк</a>
+      <a href="map.html" data-page="map.html" data-transition>Карта</a>
+      <a href="faq.html" data-page="faq.html" data-transition>FAQ</a>
+      <a href="complaints.html" data-page="complaints.html" data-transition>Жалобы</a>
+      <a href="supply.html" data-page="supply.html" data-transition data-perm="supply:view">Поставки</a>
+      <a href="apps.html" data-page="apps.html" data-transition data-perm="apps:view">Заявления</a>
+      <a href="vp.html" data-page="vp.html" data-transition data-perm="vp:view">Проверки АБ</a>
+      <a href="complaints-review.html" data-page="complaints-review.html" data-transition data-perm="complaints:review,complaints:view">Рассмотрение жалоб</a>
+      <a href="complaints-stats.html" data-page="complaints-stats.html" data-transition data-perm="complaints:review,complaints:view">Статистика жалоб</a>
+      <a href="leave.html" data-page="leave.html" data-transition data-loggedin>Отгул</a>
+      <a href="vacation-ic.html" data-page="vacation-ic.html" data-transition data-loggedin>Отпуск IC</a>
+      <a href="vacation-ooc.html" data-page="vacation-ooc.html" data-transition data-loggedin>Отпуск OOC</a>
+      <a href="dismissal.html" data-page="dismissal.html" data-transition data-loggedin>Увольнение</a>
+      <a href="promotion.html" data-page="promotion.html" data-transition data-loggedin>Повышение</a>
+      <a href="restoration.html" data-page="restoration.html" data-transition>Восстановление в ЦГБ №3</a>
+      <a href="appointment.html" data-page="appointment.html" data-transition>Запись к врачу</a>
+      <a href="requests-review.html" data-page="requests-review.html" data-transition data-perm="requests:review,requests:view">Рассмотрение заявок</a>
+      <a href="requests-stats.html" data-page="requests-stats.html" data-transition data-perm="requests:review,requests:view">Статистика заявок</a>
+      <a href="payroll.html" data-page="payroll.html" data-transition data-perm="payroll:view">Реестр премирования</a>
+      <a href="report.html" data-page="report.html" data-transition>Еженедельный отчёт</a>
+      <a href="report-settings.html" data-page="report-settings.html" data-transition data-perm="report:settings">Настройки отчётов</a>
+      <a href="vp-request.html" data-page="vp-request.html" data-transition data-perm="vp_request:submit">Запрос на наказание</a>
+      <a href="vp-request-settings.html" data-page="vp-request-settings.html" data-transition data-perm="vp_request:settings">Настройки запросов АБ</a>
+      <a href="lk.html" data-page="lk.html" data-transition>Личный кабинет</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-btn" data-open-search title="Поиск (Ctrl+K)">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+        <span>Поиск</span>
+        <span class="kbd">Ctrl K</span>
+      </button>
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Сменить тему">
+        <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24"><path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66l1.42-1.42M4.92 19.08l1.42-1.42m0-11.32L4.92 4.92m14.16 14.16l-1.42-1.42M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="login-btn" data-open-login>
+        <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/></svg>
+        <span>Войти</span>
+      </button>
+      <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+    <section class="md-hero">
+      <div class="md-overline">💊 <span id="heroOverline">Фармацевтический справочник ЦГБ №3</span></div>
+      <h1 class="md-title" id="heroTitle">Справочник <span>медикаментов</span></h1>
+      <p class="md-desc" id="heroDesc"></p>
+      <div class="md-stats">
+        <div class="md-stat"><b id="statMeds">0</b><div>Препаратов</div></div>
+        <div class="md-stat"><b id="statZones">0</b><div>Зон тела</div></div>
+        <div class="md-stat"><b id="statForms">0</b><div>Форм выпуска</div></div>
+      </div>
+    </section>
+
+    <div class="md-layout">
+      <div class="md-zones-card">
+        <div class="md-side-h">🧍 Зоны тела</div>
+        <div id="mdZones"></div>
+      </div>
+      <div>
+        <div class="md-searchbar">
+          <div class="md-search"><input id="mdSearch" type="search" placeholder="Поиск по названию или описанию..." autocomplete="off"></div>
+          <div class="md-view">
+            <button id="viewGrid" class="active" title="Карточки">▦</button>
+            <button id="viewTable" title="Таблица">☰</button>
+          </div>
+          <button class="btn btn-ghost btn-sm admin-only" id="editPageBtn" style="display:none">✎ Редактировать</button>
+        </div>
+        <div class="md-forms" id="mdForms"></div>
+        <div id="mdResults"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <h4>ЦГБ №3 · Центральная Городская</h4>
+        <p>Справочник предназначен для сотрудников и пациентов ЦГБ №3. Перед применением проконсультируйтесь с врачом.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Разделы</h5>
+        <a href="services.html">Услуги и цены</a>
+        <a href="meds.html">Медикаменты</a>
+        <a href="info.html">Информация</a>
+      </div>
+      <div class="footer-col">
+        <h5>Помощь</h5>
+        <a href="faq.html">FAQ</a>
+        <a href="map.html">Карта</a>
+        <a href="complaints.html">Обратная связь</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> · ЦГБ №3 · Центральная Городская</span>
+      <span>Забота · Профессионализм · Жизнь</span>
+    <span class="footer-note">🐞 Нашли баг? Обратитесь: <b>@rilavion</b></span></div>
+  </div>
+</footer>
+
+<div class="fab-stack" id="fabStack">
+  <button class="fab" id="fabUp" title="Наверх">
+    <svg viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8z"/></svg>
+    <span class="fab-hint">Наверх</span>
+  </button>
+</div>
+
+<div class="search-modal" id="searchModal">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+      <input class="search-input" placeholder="Поиск по разделам..." spellcheck="false">
+      <button class="search-close-kbd">Esc</button>
+    </div>
+    <div class="search-results"></div>
+  </div>
+</div>
+
+<div class="modal-back" id="loginModal">
+  <div class="modal">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Вход в личный кабинет</h3>
+    <div class="modal-sub">Пациенты и сотрудники</div>
+    <form>
+      <div class="form-group"><label>Email</label><input type="email" name="email" required></div>
+      <div class="form-group"><label>Пароль</label><input type="password" name="password" required></div>
+      <button class="btn btn-gold" style="width:100%" type="submit">Войти</button>
+      <div class="form-msg"></div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-back" id="editModal">
+  <div class="modal modal-xl">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Редактор справочника</h3>
+    <div class="modal-sub">Шапка, зоны тела, формы выпуска и полный список препаратов.</div>
+    <div class="editor">
+      <div class="editor-side" id="edSide">
+        <h4>Настройки</h4>
+        <div class="chap-item" data-tab="hero">🏥 Шапка страницы</div>
+        <div class="chap-item" data-tab="zones">🧍 Зоны тела</div>
+        <div class="chap-item" data-tab="forms">💊 Формы выпуска</div>
+        <div class="chap-item" data-tab="meds">📋 Препараты</div>
+      </div>
+      <div class="editor-main" id="edMain"></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;justify-content:flex-end">
+      <button class="btn btn-ghost btn-sm" id="edCancel">Отмена</button>
+      <button class="btn btn-gold btn-sm" id="edSave">Сохранить</button>
+    </div>
+    <div class="form-msg" id="edMsg"></div>
+  </div>
+</div>
+
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=17"></script>
+<script src="assets/js/core/config.js?v=17"></script>
+<script src="assets/js/core/auth.js?v=17"></script>
+<script src="assets/js/core/roles-engine.js?v=17"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/ui/holiday-engine.js?v=17"></script>
+<script src="assets/js/ui/sound-engine.js?v=17"></script>
+<script src="assets/js/ui/search-engine.js?v=17"></script>
+<script src="assets/js/ui/notify-engine.js?v=19"></script>
+<script src="assets/js/ui/notify-live.js?v=17"></script>
+<script src="assets/js/features/site-data-engine.js?v=17"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+const $=id=>document.getElementById(id);
+const KEY="meds_page";
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+const DEFAULT={
+  hero:{overline:"Фармацевтический справочник ЦГБ №3",title:"Справочник",accent:"медикаментов",
+    desc:"Каталог таблеток, мазей, инъекций, капель и спреев для лечения различных видов боли и симптомов. Поиск, фильтрация по зонам тела и переключение между карточками и таблицей."},
+  zones:[
+    {id:"head",name:"Голова",icon:"🤕",color:"#7c3aed"},
+    {id:"throat",name:"Горло и шея",icon:"🗣",color:"#ec4899"},
+    {id:"chest",name:"Грудная клетка",icon:"🫁",color:"#3b82f6"},
+    {id:"back",name:"Спина и поясница",icon:"🦴",color:"#0891b2"},
+    {id:"stomach",name:"Живот и ЖКТ",icon:"🍽",color:"#f97316"},
+    {id:"joints",name:"Суставы",icon:"🦵",color:"#ef4444"},
+    {id:"muscles",name:"Мышцы",icon:"💪",color:"#10b981"},
+    {id:"skin",name:"Кожа и ожоги",icon:"🩹",color:"#f59e0b"},
+    {id:"eyes",name:"Глаза",icon:"👁",color:"#06b6d4"},
+    {id:"teeth",name:"Зубы",icon:"🦷",color:"#64748b"},
+    {id:"nerves",name:"Нервная система",icon:"🧠",color:"#8b5cf6"},
+    {id:"general",name:"Общее / жар",icon:"🌡",color:"#e11d48"}
+  ],
+  forms:[
+    {id:"tablet",label:"Таблетки",icon:"💊",color:"#3b82f6"},
+    {id:"ointment",label:"Мазь",icon:"🧴",color:"#f97316"},
+    {id:"injection",label:"Инъекция",icon:"💉",color:"#ef4444"},
+    {id:"syrup",label:"Сироп",icon:"🧪",color:"#7c3aed"},
+    {id:"drops",label:"Капли",icon:"💧",color:"#06b6d4"},
+    {id:"spray",label:"Спрей",icon:"🌫",color:"#ec4899"},
+    {id:"patch",label:"Пластырь",icon:"🩹",color:"#f59e0b"}
+  ],
+  meds:[
+    {name:"Ибупрофен",form:"tablet",zones:["head","joints","muscles","teeth","general"],desc:"Противовоспалительное и обезболивающее. Снимает головную, зубную, мышечную и суставную боль, снижает температуру.",dose:"200–400 мг",freq:"2–3 раза в день"},
+    {name:"Парацетамол",form:"tablet",zones:["head","general","teeth"],desc:"Жаропонижающее и анальгетик. Эффективен при головной и зубной боли, высокой температуре.",dose:"500 мг",freq:"До 4 раз в день"},
+    {name:"Анальгин (Метамизол)",form:"tablet",zones:["head","teeth","muscles","general"],desc:"Сильный анальгетик. Быстро снимает острую боль различной локализации.",dose:"500 мг",freq:"2–3 раза в день"},
+    {name:"Кеторолак (Кеторол)",form:"tablet",zones:["head","joints","muscles","teeth","back","chest"],desc:"Мощный ненаркотический анальгетик. Применяется при сильной и послеоперационной боли.",dose:"10 мг",freq:"До 4 раз в день"},
+    {name:"Кеторолак (инъ.)",form:"injection",zones:["joints","muscles","back","chest"],desc:"Инъекционная форма для экстренного обезболивания при тяжёлых травмах.",dose:"30 мг в/м",freq:"Однократно или по назначению"},
+    {name:"Диклофенак (таб.)",form:"tablet",zones:["joints","muscles","back"],desc:"НПВС для лечения воспаления суставов, болей в спине и мышечных спазмов.",dose:"50 мг",freq:"2–3 раза в день"},
+    {name:"Диклофенак (мазь)",form:"ointment",zones:["joints","muscles","back","skin"],desc:"Местное противовоспалительное средство. Наносится на кожу в области боли.",dose:"Полоска 3–5 см",freq:"3–4 раза в день"},
+    {name:"Нимесулид",form:"tablet",zones:["joints","teeth","muscles","back"],desc:"Селективный НПВС. Снимает воспаление и боль с минимальным влиянием на желудок.",dose:"100 мг",freq:"2 раза в день"},
+    {name:"Но-Шпа (Дротаверин)",form:"tablet",zones:["stomach","back"],desc:"Спазмолитик. Снимает спазмы гладкой мускулатуры ЖКТ и мочевыводящих путей.",dose:"40–80 мг",freq:"2–3 раза в день"},
+    {name:"Мезим Форте",form:"tablet",zones:["stomach"],desc:"Ферментный препарат. Улучшает пищеварение при тяжести и вздутии.",dose:"1–2 таблетки",freq:"С каждым приёмом пищи"},
+    {name:"Смекта",form:"syrup",zones:["stomach"],desc:"Адсорбент. Защищает слизистую ЖКТ, помогает при диарее и отравлениях.",dose:"1 пакетик",freq:"3 раза в день"},
+    {name:"Омепразол",form:"tablet",zones:["stomach"],desc:"Ингибитор протонной помпы. Снижает кислотность, лечит изжогу и гастрит.",dose:"20 мг",freq:"1 раз в день натощак"},
+    {name:"Пантенол (спрей)",form:"spray",zones:["skin"],desc:"Ранозаживляющий спрей. Ускоряет регенерацию при ожогах и ссадинах.",dose:"Распылить на рану",freq:"2–4 раза в день"},
+    {name:"Левомеколь",form:"ointment",zones:["skin"],desc:"Антибактериальная мазь. Используется для лечения гнойных ран и ожогов.",dose:"Тонкий слой",freq:"1–2 раза в день"},
+    {name:"Бепантен",form:"ointment",zones:["skin"],desc:"Заживляющая мазь на основе декспантенола. Применяется при ссадинах и раздражениях.",dose:"Тонкий слой",freq:"2–3 раза в день"},
+    {name:"Фастум гель",form:"ointment",zones:["joints","muscles","back"],desc:"Гель на основе кетопрофена. Снимает боль и воспаление в мышцах и суставах.",dose:"Полоска 5–10 см",freq:"2 раза в день"},
+    {name:"Вольтарен Эмульгель",form:"ointment",zones:["joints","muscles","back"],desc:"Гель с диклофенаком. Местное обезболивание при ушибах, растяжениях и артрите.",dose:"2–4 г геля",freq:"3–4 раза в день"},
+    {name:"Лидокаин (спрей)",form:"spray",zones:["throat","teeth","skin"],desc:"Местный анестетик. Обезболивает горло, слизистые и поверхность кожи.",dose:"1–3 распыления",freq:"По необходимости"},
+    {name:"Нафтизин",form:"drops",zones:["head"],desc:"Сосудосуживающие капли для носа. Снимают заложенность и отёк слизистой.",dose:"1–3 капли",freq:"2–3 раза в день"},
+    {name:"Ксилометазолин",form:"spray",zones:["head"],desc:"Спрей от заложенности носа. Действует до 10 часов.",dose:"1 впрыскивание",freq:"2–3 раза в день"},
+    {name:"Визин",form:"drops",zones:["eyes"],desc:"Капли для снятия покраснения и усталости глаз. Сосудосуживающее действие.",dose:"1–2 капли",freq:"2–3 раза в день"},
+    {name:"Тобрекс",form:"drops",zones:["eyes"],desc:"Антибактериальные глазные капли. Применяются при конъюнктивите и инфекциях.",dose:"1–2 капли",freq:"4–5 раз в день"},
+    {name:"Стрепсилс",form:"tablet",zones:["throat"],desc:"Таблетки для рассасывания. Антисептик при боли и воспалении в горле.",dose:"1 таблетка",freq:"Каждые 2–3 часа"},
+    {name:"Мирамистин (спрей)",form:"spray",zones:["throat","skin"],desc:"Антисептик широкого спектра. Орошение горла и обработка ран.",dose:"2–3 нажатия",freq:"3–4 раза в день"},
+    {name:"Ацикловир (мазь)",form:"ointment",zones:["skin"],desc:"Противовирусная мазь. Применяется при герпесе на коже и губах.",dose:"Тонкий слой",freq:"5 раз в день"},
+    {name:"Валидол",form:"tablet",zones:["chest","nerves"],desc:"Сублингвальные таблетки. Успокаивающее при стенокардии и невротических состояниях.",dose:"1 таблетка под язык",freq:"По необходимости"},
+    {name:"Нитроглицерин",form:"tablet",zones:["chest"],desc:"Экстренное средство при стенокардии. Расширяет сосуды сердца.",dose:"0.5 мг под язык",freq:"При приступе"},
+    {name:"Корвалол",form:"drops",zones:["chest","nerves"],desc:"Седативные капли. Снимают тревожность, сердцебиение и спазмы.",dose:"15–30 капель",freq:"2–3 раза в день"},
+    {name:"Глицин",form:"tablet",zones:["nerves","head"],desc:"Ноотропный препарат. Улучшает мозговую деятельность, снижает тревожность.",dose:"100 мг",freq:"2–3 раза в день"},
+    {name:"Мидокалм",form:"tablet",zones:["muscles","back","nerves"],desc:"Миорелаксант. Снимает мышечный тонус и спазмы при болях в спине.",dose:"50–150 мг",freq:"3 раза в день"},
+    {name:"Перцовый пластырь",form:"patch",zones:["back","muscles","joints"],desc:"Согревающий пластырь. Местное раздражающее и обезболивающее действие.",dose:"1 пластырь",freq:"На 1–2 дня"},
+    {name:"Терафлекс",form:"tablet",zones:["joints"],desc:"Хондропротектор. Восстанавливает хрящевую ткань суставов.",dose:"1 капсула",freq:"2–3 раза в день"},
+    {name:"Мукалтин",form:"tablet",zones:["chest","throat"],desc:"Отхаркивающий препарат. Разжижает мокроту и облегчает кашель.",dose:"1–2 таблетки",freq:"3–4 раза в день"},
+    {name:"Активированный уголь",form:"tablet",zones:["stomach"],desc:"Энтеросорбент. Выводит токсины при отравлениях и вздутии.",dose:"1 таб. на 10 кг массы",freq:"Однократно"},
+    {name:"Лоратадин",form:"tablet",zones:["head","skin","eyes"],desc:"Антигистаминный препарат. Снимает аллергические реакции, зуд, отёк.",dose:"10 мг",freq:"1 раз в день"},
+    {name:"Цитрамон",form:"tablet",zones:["head"],desc:"Комбинированный анальгетик (АСК + парацетамол + кофеин). Снимает головную боль.",dose:"1 таблетка",freq:"2–3 раза в день"},
+    {name:"Троксевазин (гель)",form:"ointment",zones:["joints","muscles","skin"],desc:"Ангиопротектор. Снимает отёки, синяки и тяжесть в конечностях.",dose:"Полоска 3–5 см",freq:"2 раза в день"},
+    {name:"Индометацин (мазь)",form:"ointment",zones:["joints","muscles","back"],desc:"Сильная противовоспалительная мазь. При артрите, бурсите, травмах.",dose:"Полоска 4–5 см",freq:"2–3 раза в день"},
+    {name:"Аспирин",form:"tablet",zones:["head","general","chest"],desc:"НПВС. Обезболивающее, жаропонижающее, антиагрегант.",dose:"500 мг",freq:"2–3 раза в день"},
+    {name:"Морфин (инъ.)",form:"injection",zones:["chest","back","muscles","joints"],desc:"Наркотический анальгетик. Только при тяжёлых травмах и под строгим контролем.",dose:"5–10 мг в/м",freq:"По назначению врача"}
+  ]
+};
+
+let DATA=null, curZone="all", curView="grid", query="", curForm="all";
+
+function zoneById(id){return (DATA.zones||[]).find(z=>z.id===id)}
+function formById(id){return (DATA.forms||[]).find(f=>f.id===id)}
+function filtered(){
+  let l=DATA.meds||[];
+  if(curZone!=="all") l=l.filter(m=>(m.zones||[]).indexOf(curZone)!==-1);
+  if(curForm!=="all") l=l.filter(m=>(m.form||"")===curForm);
+  if(query){const q=query.toLowerCase();l=l.filter(m=>(m.name+" "+(m.desc||"")).toLowerCase().includes(q))}
+  return l;
+}
+
+async function boot(){
+  DATA=await CGB_SITE_DATA.load(KEY,DEFAULT);
+  renderAll();
+  updateAdminUI();
+  if(window.CGB_ROLES) CGB_ROLES.onChange(updateAdminUI);
+  if(window.CGB_AUTH) CGB_AUTH.onChange(updateAdminUI);
+}
+function updateAdminUI(){
+  $("editPageBtn").style.display=CGB_SITE_DATA.canEdit("meds")?"":"none";
+}
+
+function renderAll(){
+  $("heroOverline").textContent=DATA.hero.overline||"";
+  $("heroTitle").innerHTML=esc(DATA.hero.title||"")+" <span>"+esc(DATA.hero.accent||"")+"</span>";
+  $("heroDesc").textContent=DATA.hero.desc||"";
+  $("statMeds").textContent=(DATA.meds||[]).length;
+  $("statZones").textContent=(DATA.zones||[]).length;
+  $("statForms").textContent=(DATA.forms||[]).length;
+  renderZones();
+  renderForms();
+  renderResults();
+}
+function renderForms(){
+  const box=$("mdForms");if(!box) return;
+  const meds=DATA.meds||[];
+  const cnt=f=>f==="all"?meds.length:meds.filter(m=>(m.form||"")===f).length;
+  const mk=(id,icon,label,color)=>`<button class="md-fchip ${curForm===id?"active":""}" data-form="${esc(id)}" style="--f:${esc(color||"#0e7490")}"><span class="em">${esc(icon)}</span>${esc(label)}<small>${cnt(id)}</small></button>`;
+  box.innerHTML=mk("all","🗂","Все формы","#0e7490")+(DATA.forms||[]).map(f=>mk(f.id,f.icon||"💊",f.label,f.color)).join("");
+  box.querySelectorAll("[data-form]").forEach(b=>b.addEventListener("click",()=>{curForm=b.dataset.form;renderForms();renderResults()}));
+}
+function countZone(zid){return zid==="all"?(DATA.meds||[]).length:(DATA.meds||[]).filter(m=>(m.zones||[]).indexOf(zid)!==-1).length}
+function renderZones(){
+  const box=$("mdZones");
+  let html=`<div class="md-zone ${curZone==="all"?"active":""}" data-zone="all" style="--z:#0e7490"><div class="md-zone-ic">🌍</div>Все зоны<span class="md-zone-n">${countZone("all")}</span></div>`;
+  html+=(DATA.zones||[]).map(z=>`<div class="md-zone ${curZone===z.id?"active":""}" data-zone="${esc(z.id)}" style="--z:${esc(z.color||"#0e7490")}"><div class="md-zone-ic">${esc(z.icon||"•")}</div>${esc(z.name)}<span class="md-zone-n">${countZone(z.id)}</span></div>`).join("");
+  box.innerHTML=html;
+  box.querySelectorAll(".md-zone").forEach(el=>el.addEventListener("click",()=>{curZone=el.dataset.zone;renderZones();renderResults()}));
+}
+function zoneTags(m){
+  return (m.zones||[]).map(zid=>{const z=zoneById(zid);if(!z)return"";
+    return `<span class="md-ztag" style="background:${z.color}18;border:1px solid ${z.color}30;color:${z.color}">${esc(z.icon||"")} ${esc(z.name)}</span>`;}).join("");
+}
+function cardHtml(m){
+  const f=formById(m.form)||{label:m.form||"—",icon:"💊",color:"#0e7490"};
+  const z0=zoneById((m.zones||[])[0])||{color:"#0e7490"};
+  return `<div class="md-card">
+    <div class="md-card-h">
+      <div class="md-ico" style="background:linear-gradient(135deg,${z0.color},${z0.color}cc)">${esc(f.icon)}</div>
+      <div><h4>${esc(m.name)}</h4><small style="color:${z0.color}">${esc(f.label)}</small></div>
+    </div>
+    <span class="md-tag" style="background:${f.color}14;border:1px solid ${f.color}28;color:${f.color}">${esc(f.icon)} ${esc(f.label)}</span>
+    <p class="md-desc">${esc(m.desc||"")}</p>
+    <div class="md-meta">
+      ${m.dose?`<span>℞ ${esc(m.dose)}</span>`:""}
+      ${m.freq?`<span>🕐 ${esc(m.freq)}</span>`:""}
+    </div>
+    <div class="md-zones-row">${zoneTags(m)}</div>
+  </div>`;
+}
+function rowHtml(m){
+  const f=formById(m.form)||{label:m.form||"—",icon:"💊",color:"#0e7490"};
+  const z0=zoneById((m.zones||[])[0])||{color:"#0e7490"};
+  return `<tr>
+    <td><div class="md-tname"><div class="md-ico" style="background:linear-gradient(135deg,${z0.color},${z0.color}cc)">${esc(f.icon)}</div>${esc(m.name)}</div></td>
+    <td><span class="md-tag" style="margin:0;background:${f.color}14;border:1px solid ${f.color}28;color:${f.color}">${esc(f.icon)} ${esc(f.label)}</span></td>
+    <td>${esc(m.dose||"")}</td><td>${esc(m.freq||"")}</td>
+    <td>${zoneTags(m)}</td>
+  </tr>`;
+}
+function renderResults(){
+  const l=filtered();
+  const box=$("mdResults");
+  if(!l.length){box.innerHTML=`<div class="empty-state">Ничего не найдено. Попробуйте изменить фильтр или запрос.</div>`;return}
+  if(curView==="grid"){
+    box.innerHTML=`<div class="md-grid">${l.map(cardHtml).join("")}</div>`;
+  }else{
+    box.innerHTML=`<div class="md-table-wrap"><table class="md-table"><thead><tr><th>Препарат</th><th>Форма</th><th>Дозировка</th><th>Приём</th><th>Зоны</th></tr></thead><tbody>${l.map(rowHtml).join("")}</tbody></table></div>`;
+  }
+}
+$("mdSearch").addEventListener("input",e=>{query=e.target.value;renderResults()});
+$("viewGrid").addEventListener("click",()=>{curView="grid";$("viewGrid").classList.add("active");$("viewTable").classList.remove("active");renderResults()});
+$("viewTable").addEventListener("click",()=>{curView="table";$("viewTable").classList.add("active");$("viewGrid").classList.remove("active");renderResults()});
+
+/* ================= РЕДАКТОР ================= */
+const editModal=$("editModal"), edSide=$("edSide"), edMain=$("edMain"), edMsg=$("edMsg");
+let ED=null, edTab="hero", edFilter="";
+function uid(){return "z"+Math.random().toString(36).slice(2,8)}
+$("editPageBtn").addEventListener("click",()=>{
+  ED=JSON.parse(JSON.stringify(DATA));
+  edTab="hero";edFilter="";
+  edMsg.className="form-msg";edMsg.textContent="";
+  renderEd();
+  editModal.classList.add("active");
+});
+$("edCancel").addEventListener("click",()=>editModal.classList.remove("active"));
+editModal.querySelector(".modal-close").addEventListener("click",()=>editModal.classList.remove("active"));
+editModal.addEventListener("click",e=>{if(e.target===editModal)editModal.classList.remove("active")});
+edSide.addEventListener("click",e=>{
+  const t=e.target.closest("[data-tab]");
+  if(t){edTab=t.dataset.tab;renderEd()}
+});
+function renderEd(){
+  edSide.querySelectorAll("[data-tab]").forEach(el=>el.classList.toggle("active",el.dataset.tab===edTab));
+  if(edTab==="hero") renderEdHero();
+  else if(edTab==="zones") renderEdDict("zones","зону");
+  else if(edTab==="forms") renderEdDict("forms","форму");
+  else renderEdMeds();
+}
+function bindIn(sel,fn){const el=edMain.querySelector(sel);if(el)el.addEventListener("input",()=>fn(el.value))}
+
+function renderEdHero(){
+  edMain.innerHTML=`
+    <div class="form-group"><label>Надзаголовок</label><input id="ehOv" value="${esc(ED.hero.overline||"")}"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="form-group"><label>Заголовок (первая часть)</label><input id="ehT" value="${esc(ED.hero.title||"")}"></div>
+      <div class="form-group"><label>Акцент (выделенная часть)</label><input id="ehA" value="${esc(ED.hero.accent||"")}"></div>
+    </div>
+    <div class="form-group"><label>Описание</label><textarea id="ehD" style="min-height:80px">${esc(ED.hero.desc||"")}</textarea></div>`;
+  bindIn("#ehOv",v=>ED.hero.overline=v);bindIn("#ehT",v=>ED.hero.title=v);bindIn("#ehA",v=>ED.hero.accent=v);bindIn("#ehD",v=>ED.hero.desc=v);
+}
+
+function renderEdDict(kind,word){
+  const list=ED[kind]=ED[kind]||[];
+  edMain.innerHTML=`
+    <h4 style="font-family:'Cormorant Garamond',serif;color:var(--gold-b);margin:0 0 10px">${kind==="zones"?"Зоны тела":"Формы выпуска"}</h4>
+    <div id="edList"></div>
+    <button class="editor-add-btn" id="edAdd">+ Добавить ${word}</button>
+    <div style="font-size:12px;color:var(--muted);margin-top:10px">Иконка — любой эмодзи. Цвет влияет на метки и левую колонку.</div>`;
+  const box=edMain.querySelector("#edList");
+  const draw=()=>{
+    box.innerHTML=list.map((z,i)=>`
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap">
+        <input style="width:56px;text-align:center;font-size:16px" value="${esc(z.icon||"")}" data-i="${i}" data-f="icon">
+        <input style="flex:1;min-width:130px" value="${esc(z.name||z.label||"")}" data-i="${i}" data-f="${kind==="zones"?"name":"label"}">
+        <input style="width:110px" value="${esc(z.id||"")}" data-i="${i}" data-f="id" placeholder="id">
+        <input type="color" class="sv-color" value="${esc(z.color||"#0e7490")}" data-i="${i}" data-f="color">
+        <button class="sv-ed-mini danger" data-i="${i}">✕</button>
+      </div>`).join("");
+    box.querySelectorAll("input").forEach(el=>el.addEventListener("input",()=>{
+      const it=list[+el.dataset.i];if(!it)return;
+      if(el.dataset.f) it[el.dataset.f]=el.value;
+    }));
+    box.querySelectorAll("button[data-i]").forEach(el=>el.addEventListener("click",()=>{
+      const it=list[+el.dataset.i];
+      const used=(ED.meds||[]).some(m=>kind==="zones"?(m.zones||[]).includes(it.id):m.form===it.id);
+      if(used&&!confirm("Этот элемент используется в препаратах. Удалить всё равно?")) return;
+      list.splice(+el.dataset.i,1);draw();
+    }));
+  };
+  draw();
+  edMain.querySelector("#edAdd").addEventListener("click",()=>{
+    const id=uid();
+    if(kind==="zones") list.push({id,name:"Новая зона",icon:"🩺",color:"#0e7490"});
+    else list.push({id,label:"Новая форма",icon:"💊",color:"#0e7490"});
+    draw();
+  });
+}
+
+function renderEdMeds(){
+  edMain.innerHTML=`
+    <input class="md-ed-filter" id="edFilter" placeholder="Фильтр по названию..." value="${esc(edFilter)}">
+    <div class="md-ed-meds-list" id="edList"></div>
+    <button class="editor-add-btn" id="edAdd" style="margin-top:10px">+ Добавить препарат</button>`;
+  const box=edMain.querySelector("#edList");
+  const formOpts=(sel)=>(ED.forms||[]).map(f=>`<option value="${esc(f.id)}" ${f.id===sel?"selected":""}>${esc(f.icon||"")} ${esc(f.label)}</option>`).join("");
+  const draw=()=>{
+    const q=(edFilter||"").toLowerCase();
+    const items=(ED.meds||[]).map((m,i)=>({m,i})).filter(x=>!q||x.m.name.toLowerCase().includes(q));
+    box.innerHTML=items.map(({m,i})=>`
+      <div class="sv-ed-item">
+        <div class="sv-ed-item-h"><b>${esc(m.name||"Без названия")}</b>
+          <button class="sv-ed-mini" data-up="${i}">↑</button>
+          <button class="sv-ed-mini" data-dn="${i}">↓</button>
+          <button class="sv-ed-mini danger" data-del="${i}">✕</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:8px">
+          <input value="${esc(m.name||"")}" data-n="${i}" placeholder="Название">
+          <select data-f="${i}">${formOpts(m.form)}</select>
+        </div>
+        <textarea data-d="${i}" placeholder="Описание" style="margin-top:8px">${esc(m.desc||"")}</textarea>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+          <input value="${esc(m.dose||"")}" data-ds="${i}" placeholder="Дозировка (200–400 мг)">
+          <input value="${esc(m.freq||"")}" data-fr="${i}" placeholder="Приём (2–3 раза в день)">
+        </div>
+        <div class="md-zpicks">${(ED.zones||[]).map(z=>{
+          const on=(m.zones||[]).includes(z.id);
+          return `<button class="md-zpick ${on?"on":""}" style="${on?`background:${z.color};`:""}" data-z="${z.id}" data-m="${i}">${esc(z.icon||"")} ${esc(z.name)}</button>`;
+        }).join("")}</div>
+      </div>`).join("")||`<div class="empty-state">По фильтру ничего нет.</div>`;
+    box.querySelectorAll("[data-n]").forEach(el=>el.addEventListener("input",()=>ED.meds[+el.dataset.n].name=el.value));
+    box.querySelectorAll("[data-f]").forEach(el=>el.addEventListener("change",()=>ED.meds[+el.dataset.f].form=el.value));
+    box.querySelectorAll("[data-d]").forEach(el=>el.addEventListener("input",()=>ED.meds[+el.dataset.d].desc=el.value));
+    box.querySelectorAll("[data-ds]").forEach(el=>el.addEventListener("input",()=>ED.meds[+el.dataset.ds].dose=el.value));
+    box.querySelectorAll("[data-fr]").forEach(el=>el.addEventListener("input",()=>ED.meds[+el.dataset.fr].freq=el.value));
+    box.querySelectorAll("[data-del]").forEach(el=>el.addEventListener("click",()=>{if(confirm("Удалить препарат?")){ED.meds.splice(+el.dataset.del,1);draw()}}));
+    box.querySelectorAll("[data-up]").forEach(el=>el.addEventListener("click",()=>{const i=+el.dataset.up;if(i>0){const[x]=ED.meds.splice(i,1);ED.meds.splice(i-1,0,x);draw()}}));
+    box.querySelectorAll("[data-dn]").forEach(el=>el.addEventListener("click",()=>{const i=+el.dataset.dn;if(i<ED.meds.length-1){const[x]=ED.meds.splice(i,1);ED.meds.splice(i+1,0,x);draw()}}));
+    box.querySelectorAll(".md-zpick").forEach(el=>el.addEventListener("click",()=>{
+      const m=ED.meds[+el.dataset.m];m.zones=m.zones||[];
+      const ix=m.zones.indexOf(el.dataset.z);
+      if(ix>=0) m.zones.splice(ix,1); else m.zones.push(el.dataset.z);
+      draw();
+    }));
+  };
+  draw();
+  edMain.querySelector("#edFilter").addEventListener("input",e=>{edFilter=e.target.value;draw()});
+  edMain.querySelector("#edAdd").addEventListener("click",()=>{
+    ED.meds=ED.meds||[];
+    ED.meds.push({name:"Новый препарат",form:(ED.forms[0]||{}).id||"tablet",zones:[],desc:"",dose:"",freq:""});
+    draw();
+  });
+}
+
+$("edSave").addEventListener("click",async()=>{
+  edMsg.className="form-msg info";edMsg.textContent="Сохранение...";
+  const r=await CGB_SITE_DATA.save(KEY,ED);
+  if(r.ok){
+    DATA=ED;renderAll();
+    edMsg.className="form-msg success";
+    edMsg.textContent=r.remote?"Сохранено в Supabase — видно всем":"Сохранено локально в этом браузере";
+    setTimeout(()=>editModal.classList.remove("active"),700);
+  }else{edMsg.className="form-msg error";edMsg.textContent="Ошибка: "+(r.error||"")}
+});
+
+boot();
+</script>
+</body>
+</html>

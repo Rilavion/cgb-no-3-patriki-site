@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title>Telegram-уведомления · ЦГБ №3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=26">
+</head>
+<body>
+<canvas id="bgCanvas"></canvas><div class="bg-noise"></div>
+
+<header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="index.html"><div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ЦГБ"></div><div class="brand-text"><span class="brand-label">Служебные настройки</span><span class="brand-name">Telegram-уведомления</span></div></a>
+  <div class="header-actions" style="margin-left:auto">
+    <a href="lk.html" class="btn btn-ghost btn-sm">← Личный кабинет</a>
+    <button class="btn btn-gold btn-sm" id="tgSaveTop" data-perm="telegram:settings" disabled>💾 Сохранить</button>
+  </div>
+</div></header>
+
+<main>
+  <section class="apps-head"><div class="container">
+    <div class="apps-head-ribbon"><span class="apps-head-ribbon-line"></span><span class="apps-head-ribbon-emblem">✈</span><span class="apps-head-ribbon-name">ЦГБ №3 · Служебные уведомления</span><span class="apps-head-ribbon-emblem">✈</span><span class="apps-head-ribbon-line"></span></div>
+    <h1 class="apps-head-title">Telegram-уведомления</h1>
+  </div></section>
+
+  <section class="apps-body"><div class="container tg-page">
+    <div id="tgGuard" style="display:none"><div class="apps-guard-box"><div class="apps-guard-icon">🔒</div><h2>Доступ ограничен</h2><p>Настройки Telegram доступны только администратору.</p><a href="index.html" class="btn btn-ghost">На главную</a></div></div>
+    <div id="tgSchema" class="tg-schema-warning" style="display:none">
+      <b>Сначала подключите таблицы Telegram в Supabase</b>
+      <span>Выполните целиком файл <code>SUPABASE-UPDATE-telegram.sql</code> в Supabase → SQL Editor, затем обновите страницу.</span>
+    </div>
+
+    <div id="tgRoot" style="display:none">
+      <div class="tg-status-grid">
+        <div class="tg-status-card"><span class="tg-status-icon">🤖</span><div><small>Telegram-бот</small><b id="tgBotName">Не запущен</b><span id="tgBotSeen">Нет соединения</span></div><i id="tgBotDot" class="tg-dot"></i></div>
+        <div class="tg-status-card"><span class="tg-status-icon">💬</span><div><small>Зарегистрировано тем</small><b id="tgTopicCount">0</b><span>Из частных групп Telegram</span></div></div>
+        <div class="tg-status-card"><span class="tg-status-icon">📨</span><div><small>Очередь</small><b id="tgQueueCount">0</b><span id="tgQueueSub">Нет ожидающих сообщений</span></div></div>
+      </div>
+
+      <div class="tg-master-card">
+        <div><small>Главный переключатель</small><h3>Отправка уведомлений</h3><p>При выключении новые события сохраняются в очереди, но не отправляются.</p></div>
+        <label class="tg-master-switch"><input type="checkbox" id="tgEnabled"><span></span><b id="tgEnabledLabel">Выключено</b></label>
+      </div>
+
+      <div class="tg-guide">
+        <div class="tg-guide-num">1</div><div><h3>Зарегистрируйте темы группы</h3><p>Добавьте бота администратором в частную группу. Затем отправьте команду <code>/register Название</code> внутри каждой нужной темы. Privacy Mode отключать не требуется.</p>
+          <div class="tg-command-list">
+            <code>/register Экзамены (Вердикты)</code><code>/register Повышения</code><code>/register Эл.Заявки / Восстановления</code>
+            <code>/register Увольнения</code><code>/register Отпуск IC/OOC</code><code>/register Отгулы</code>
+          </div>
+        </div><button class="btn btn-ghost btn-sm" id="tgRefresh">↻ Обновить</button>
+      </div>
+
+      <div class="tg-section-head"><div><small>Шаг 2</small><h2>Маршруты уведомлений</h2><p>Для каждого события выберите зарегистрированную тему.</p></div></div>
+      <div class="tg-route-grid" id="tgRoutes"></div>
+
+      <div class="tg-actions-bar"><span id="tgMsg"></span><button class="btn btn-gold" id="tgSave">💾 Сохранить и применить</button></div>
+
+      <div class="tg-lower-grid">
+        <section class="tg-panel"><div class="tg-panel-head"><div><small>Обнаружено ботом</small><h3>Группы и темы</h3></div><button class="tg-icon-btn" id="tgTopicsRefresh" title="Обновить">↻</button></div><div id="tgTopics" class="tg-topic-list"></div></section>
+        <section class="tg-panel"><div class="tg-panel-head"><div><small>Последние события</small><h3>История отправки</h3></div><button class="tg-icon-btn" id="tgHistoryRefresh" title="Обновить">↻</button></div><div id="tgHistory" class="tg-history"></div></section>
+      </div>
+    </div>
+  </div></section>
+</main>
+
+<footer class="footer"><div class="container"><div class="footer-bottom"><span>© <span id="year"></span> · ЦГБ №3</span><span class="footer-note">Токен Telegram хранится зашифрованным в Supabase Vault</span></div></div></footer>
+
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=18"></script>
+<script src="assets/js/core/config.js?v=18"></script>
+<script src="assets/js/core/auth.js?v=18"></script>
+<script src="assets/js/core/roles-engine.js?v=18"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/ui/search-engine.js?v=18"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ROUTES=[
+  {key:"exams",icon:"📊",label:"Экзамены · вердикты",desc:"Результат каждого завершённого экзамена"},
+  {key:"promotion",icon:"⭐",label:"Повышения",desc:"Новые заявки и решения по повышению"},
+  {key:"applications",icon:"📨",label:"Эл. заявления / восстановления",desc:"Электронные заявления и восстановления в одном месте"},
+  {key:"dismissal",icon:"⛔",label:"Увольнения",desc:"Новые заявления и итоговые решения"},
+  {key:"vacations",icon:"🏖",label:"Отпуск IC / OOC",desc:"Оба вида отпуска в одной теме"},
+  {key:"leave",icon:"🕒",label:"Отгулы",desc:"Заявки на отгул и их вердикты"}
+];
+const STATUS_LABELS={pending:"Ожидает",sending:"Отправляется",sent:"Отправлено",error:"Ошибка",waiting_config:"Нет маршрута",skipped:"Пропущено"};
+let CLIENT=null,SETTINGS={id:1,enabled:false,routes:{}},TOPICS=[],BOT_STATUS=null,HISTORY=[];
+
+function wait(ms){return new Promise(r=>setTimeout(r,ms))}
+async function waitAuth(){
+  for(let i=0;i<80;i++){
+    const st=window.CGB_AUTH&&window.CGB_AUTH.state;
+    if(st&&st.ready){if(st.user&&window.CGB_ROLES&&!window.CGB_ROLES.getMyRole()) await wait(350);return st}
+    await wait(100);
+  }
+  return window.CGB_AUTH&&window.CGB_AUTH.state;
+}
+function schemaMissing(error){return !!(error&&/telegram_(settings|topics|notifications|bot_status)|schema cache|relation/i.test(error.message||""))}
+function ago(value){
+  if(!value)return "никогда";const ms=new Date(value).getTime();if(!ms)return "никогда";const s=Math.max(0,Math.floor((Date.now()-ms)/1000));
+  if(s<60)return s+" сек назад";if(s<3600)return Math.floor(s/60)+" мин назад";if(s<86400)return Math.floor(s/3600)+" ч назад";return Math.floor(s/86400)+" дн назад";
+}
+function destValue(chat,thread){return String(chat)+"|"+String(thread||0)}
+function parseDest(value){const p=String(value||"").split("|");return p[0]?{chat_id:p[0],thread_id:Number(p[1]||0)}:null}
+function routeOptionText(topic){return (topic.chat_title||topic.chat_id)+" → "+(topic.topic_title||("Тема "+topic.thread_id))}
+
+async function boot(){
+  const st=await waitAuth();
+  if(!st||!st.user||!st.client||!window.CGB_ROLES||!window.CGB_ROLES.can("telegram","settings")){$("tgGuard").style.display="";return}
+  CLIENT=st.client;$('tgRoot').style.display="";$('tgSaveTop').disabled=false;
+  await loadAll();
+  setInterval(()=>{if(!document.hidden)loadRuntime()},15000);
+}
+
+async function loadAll(){
+  setMsg("Обновление данных…","info");
+  const [settings,topics,status,history]=await Promise.all([
+    CLIENT.from("telegram_settings").select("*").eq("id",1).maybeSingle(),
+    CLIENT.from("telegram_topics").select("*").order("chat_title").order("thread_id"),
+    CLIENT.from("telegram_bot_status").select("*").eq("id",1).maybeSingle(),
+    CLIENT.from("telegram_notifications").select("*").order("created_at",{ascending:false}).limit(30)
+  ]);
+  const firstError=[settings,topics,status,history].find(r=>r.error);
+  if(firstError){
+    if(schemaMissing(firstError.error)){$("tgSchema").style.display="";$('tgRoot').style.display="none";return}
+    setMsg("Ошибка загрузки: "+firstError.error.message,"err");return;
+  }
+  SETTINGS=settings.data||{id:1,enabled:false,routes:{}};TOPICS=topics.data||[];BOT_STATUS=status.data||null;HISTORY=history.data||[];
+  render();setMsg("","");
+}
+
+async function loadRuntime(){
+  if(!CLIENT)return;
+  const [topics,status,history]=await Promise.all([
+    CLIENT.from("telegram_topics").select("*").order("chat_title").order("thread_id"),
+    CLIENT.from("telegram_bot_status").select("*").eq("id",1).maybeSingle(),
+    CLIENT.from("telegram_notifications").select("*").order("created_at",{ascending:false}).limit(30)
+  ]);
+  if(!topics.error)TOPICS=topics.data||[];if(!status.error)BOT_STATUS=status.data||null;if(!history.error)HISTORY=history.data||[];renderRuntime();
+}
+
+function render(){
+  $("tgEnabled").checked=!!SETTINGS.enabled;updateEnabledLabel();renderRoutes();renderRuntime();
+}
+function renderRuntime(){renderStatus();renderTopics();renderHistory();}
+function renderStatus(){
+  const live=!!(BOT_STATUS&&BOT_STATUS.online&&BOT_STATUS.last_seen_at&&(Date.now()-new Date(BOT_STATUS.last_seen_at).getTime()<90000));
+  $("tgBotDot").classList.toggle("online",live);$("tgBotName").textContent=BOT_STATUS&&BOT_STATUS.bot_username?"@"+BOT_STATUS.bot_username:"Не запущен";
+  $("tgBotSeen").textContent=live?"На связи · "+ago(BOT_STATUS.last_seen_at):(BOT_STATUS?"Не в сети · "+ago(BOT_STATUS.last_seen_at):"Нет соединения");
+  $("tgTopicCount").textContent=TOPICS.length;
+  const pending=HISTORY.filter(x=>["pending","sending","error","waiting_config"].includes(x.status)).length;
+  $("tgQueueCount").textContent=pending;$("tgQueueSub").textContent=pending?"Требуют отправки или настройки":"Нет ожидающих сообщений";
+}
+function renderRoutes(){
+  const routes=SETTINGS.routes&&typeof SETTINGS.routes==="object"?SETTINGS.routes:{};
+  $("tgRoutes").innerHTML=ROUTES.map(route=>{
+    const cur=routes[route.key]||{};const val=cur.chat_id?destValue(cur.chat_id,cur.thread_id):"";
+    const options='<option value="">— тема не выбрана —</option>'+TOPICS.map(t=>'<option value="'+esc(destValue(t.chat_id,t.thread_id))+'" '+(destValue(t.chat_id,t.thread_id)===val?'selected':'')+'>'+esc(routeOptionText(t))+'</option>').join("");
+    return '<article class="tg-route-card" data-route="'+route.key+'"><span class="tg-route-icon">'+route.icon+'</span><div class="tg-route-main"><h3>'+esc(route.label)+'</h3><p>'+esc(route.desc)+'</p><select class="msg-input tg-route-select" data-route-select="'+route.key+'">'+options+'</select></div><button class="tg-test-btn" data-test-route="'+route.key+'" title="Отправить тест">Тест</button></article>';
+  }).join("");
+  document.querySelectorAll("[data-test-route]").forEach(b=>b.addEventListener("click",()=>testRoute(b.dataset.testRoute,b)));
+}
+function renderTopics(){
+  $("tgTopics").innerHTML=TOPICS.length?TOPICS.map(t=>'<div class="tg-topic"><span>💬</span><div><b>'+esc(t.topic_title||("Тема "+t.thread_id))+'</b><small>'+esc(t.chat_title||t.chat_id)+' · Chat '+esc(t.chat_id)+' · Topic '+esc(t.thread_id)+'</small></div><button data-topic-delete="'+esc(destValue(t.chat_id,t.thread_id))+'" title="Удалить регистрацию">×</button></div>').join(""):'<div class="tg-empty">Тем пока нет. Запустите бота и отправьте <code>/register Название</code> в нужных темах.</div>';
+  document.querySelectorAll("[data-topic-delete]").forEach(b=>b.addEventListener("click",()=>deleteTopic(b.dataset.topicDelete)));
+}
+function renderHistory(){
+  $("tgHistory").innerHTML=HISTORY.length?HISTORY.slice(0,18).map(row=>{
+    const route=ROUTES.find(r=>r.key===row.route_key);return '<div class="tg-history-row"><span class="tg-history-icon">'+(route?route.icon:'🔔')+'</span><div><b>'+esc(route?route.label:row.route_key)+'</b><small>'+esc(STATUS_LABELS[row.status]||row.status)+' · '+esc(ago(row.created_at))+(row.error_message?' · '+esc(row.error_message):'')+'</small></div><i class="tg-state '+esc(row.status)+'"></i></div>';
+  }).join(""):'<div class="tg-empty">Уведомлений ещё не было.</div>';
+}
+function updateEnabledLabel(){$("tgEnabledLabel").textContent=$("tgEnabled").checked?"Включено":"Выключено"}
+function collectRoutes(){
+  const out={};for(const route of ROUTES){const el=document.querySelector('[data-route-select="'+route.key+'"]');const dest=parseDest(el&&el.value);if(dest)out[route.key]={...dest,enabled:true,label:route.label}}
+  return out;
+}
+async function saveSettings(silent){
+  const enabled=$("tgEnabled").checked;const routes=collectRoutes();
+  if(enabled){const missing=ROUTES.filter(r=>!routes[r.key]);if(missing.length){setMsg("Выберите темы: "+missing.map(x=>x.label).join(", "),"err");return false}}
+  const now=new Date().toISOString();
+  if(enabled&&!SETTINGS.enabled){
+    await CLIENT.from("telegram_notifications").update({status:"skipped",error_message:"Создано до включения Telegram"}).in("status",["pending","error","waiting_config"]).lt("created_at",now);
+  }
+  const me=window.CGB_AUTH.state.user;const patch={id:1,enabled,routes,updated_at:now,updated_by:me.id,updated_by_name:me.email||null};
+  if(enabled&&!SETTINGS.enabled)patch.activated_at=now;
+  const {data,error}=await CLIENT.from("telegram_settings").upsert(patch,{onConflict:"id"}).select().single();
+  if(error){setMsg("Не удалось сохранить: "+error.message,"err");return false}
+  SETTINGS=data;if(!silent)setMsg("✓ Настройки сохранены","ok");render();return true;
+}
+async function testRoute(key,button){
+  if(!$("tgEnabled").checked){setMsg("Сначала включите отправку и сохраните настройки","err");return}
+  if(!parseDest((document.querySelector('[data-route-select="'+key+'"]')||{}).value)){setMsg("Для этого маршрута не выбрана тема","err");return}
+  button.disabled=true;const saved=await saveSettings(true);if(!saved){button.disabled=false;return}
+  const route=ROUTES.find(r=>r.key===key);const id=(crypto.randomUUID?crypto.randomUUID():Date.now()+"-"+Math.random());
+  const {error}=await CLIENT.from("telegram_notifications").insert({event_key:"manual:"+id,route_key:key,event_kind:"test",source_table:"manual",source_id:id,payload:{route_label:route.label}});
+  button.disabled=false;if(error){setMsg("Не удалось поставить тест в очередь: "+error.message,"err");return}
+  setMsg("Тест отправлен в очередь · обычно приходит за 5–10 секунд","ok");setTimeout(loadRuntime,5000);
+}
+async function deleteTopic(value){
+  const dest=parseDest(value);if(!dest||!confirm("Удалить эту тему из списка? Её можно зарегистрировать повторно командой /register."))return;
+  const {error}=await CLIENT.from("telegram_topics").delete().eq("chat_id",dest.chat_id).eq("thread_id",dest.thread_id);
+  if(error){setMsg("Не удалось удалить: "+error.message,"err");return}await loadRuntime();renderRoutes();
+}
+function setMsg(text,type){const m=$("tgMsg");m.textContent=text||"";m.className=type?"tg-msg "+type:"tg-msg"}
+
+$("tgEnabled").addEventListener("change",updateEnabledLabel);
+$("tgSave").addEventListener("click",()=>saveSettings(false));$("tgSaveTop").addEventListener("click",()=>saveSettings(false));
+$("tgRefresh").addEventListener("click",loadAll);$("tgTopicsRefresh").addEventListener("click",async()=>{await loadRuntime();renderRoutes()});$("tgHistoryRefresh").addEventListener("click",loadRuntime);
+document.addEventListener("DOMContentLoaded",boot);
+</script>
+</body>
+</html>

@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.svg" type="image/svg+xml">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title>Информация — ЦГБ №3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=26">
+<style id="cgb-admin-guard">
+[data-admin]{display:none !important}
+body.cgb-is-admin .nav a[data-admin]{display:inline-flex !important}
+body.cgb-is-admin [data-admin]:not(.nav a){display:initial !important}
+body.cgb-is-admin .info-admin-bar{display:flex !important}
+</style>
+<script>
+(function(){
+  function apply(){
+    var can=window.CGB_ROLES&&window.CGB_ROLES.can("info","edit");
+    document.body.classList.toggle("cgb-is-admin",!!can);
+    document.body.classList.toggle("is-admin",!!can);
+  }
+  document.addEventListener("DOMContentLoaded",function(){
+    apply();
+    if(window.CGB_ROLES&&window.CGB_ROLES.onChange) window.CGB_ROLES.onChange(apply);
+    if(window.CGB_AUTH&&window.CGB_AUTH.onChange) window.CGB_AUTH.onChange(apply);
+    var t=setInterval(function(){if(window.CGB_ROLES){clearInterval(t);apply();window.CGB_ROLES.onChange(apply)}},80);
+    setTimeout(function(){clearInterval(t)},4000);
+  });
+})();
+</script>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+<div class="bg-noise"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+        <a class="brand" href="index.html">
+      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ЦГБ"></div>
+      <div class="brand-text">
+        <span class="brand-label">Министерство Здравоохранения</span>
+        <span class="brand-name">ЦГБ №3 · Центральная Городская</span>
+      </div>
+    </a>
+        <nav class="nav" id="mainNav">
+      <a href="index.html" data-page="index.html" data-transition>Главная</a>
+      <a href="info.html" data-page="info.html" data-transition>Информация</a>
+      <a href="services.html" data-page="services.html" data-transition>Услуги</a>
+      <a href="meds.html" data-page="meds.html" data-transition>Медикаменты</a>
+      <a href="ustav.html" data-page="ustav.html" data-transition>Устав</a>
+      <a href="learn.html" data-page="learn.html" data-transition data-loggedin>Учебные материалы</a>
+      <a href="tests.html" data-page="tests.html" data-transition data-loggedin>Тестирование</a>
+      <a href="composition.html" data-page="composition.html" data-transition>Состав</a>
+      <a href="docs.html" data-page="docs.html" data-transition data-perm="docs:view">Документы</a>
+      <a href="news.html" data-page="news.html" data-transition>Новости</a>
+      <a href="autopark.html" data-page="autopark.html" data-transition>Автопарк</a>
+      <a href="map.html" data-page="map.html" data-transition>Карта</a>
+      <a href="faq.html" data-page="faq.html" data-transition>FAQ</a>
+      <a href="complaints.html" data-page="complaints.html" data-transition>Жалобы</a>
+      <a href="supply.html" data-page="supply.html" data-transition data-perm="supply:view">Поставки</a>
+      <a href="apps.html" data-page="apps.html" data-transition data-perm="apps:view">Заявления</a>
+      <a href="vp.html" data-page="vp.html" data-transition data-perm="vp:view">Проверки АБ</a>
+      <a href="complaints-review.html" data-page="complaints-review.html" data-transition data-perm="complaints:review,complaints:view">Рассмотрение жалоб</a>
+      <a href="complaints-stats.html" data-page="complaints-stats.html" data-transition data-perm="complaints:review,complaints:view">Статистика жалоб</a>
+      <a href="leave.html" data-page="leave.html" data-transition data-loggedin>Отгул</a>
+      <a href="vacation-ic.html" data-page="vacation-ic.html" data-transition data-loggedin>Отпуск IC</a>
+      <a href="vacation-ooc.html" data-page="vacation-ooc.html" data-transition data-loggedin>Отпуск OOC</a>
+      <a href="dismissal.html" data-page="dismissal.html" data-transition data-loggedin>Увольнение</a>
+      <a href="promotion.html" data-page="promotion.html" data-transition data-loggedin>Повышение</a>
+      <a href="restoration.html" data-page="restoration.html" data-transition>Восстановление в ЦГБ №3</a>
+      <a href="appointment.html" data-page="appointment.html" data-transition>Запись к врачу</a>
+      <a href="requests-review.html" data-page="requests-review.html" data-transition data-perm="requests:review,requests:view">Рассмотрение заявок</a>
+      <a href="requests-stats.html" data-page="requests-stats.html" data-transition data-perm="requests:review,requests:view">Статистика заявок</a>
+      <a href="payroll.html" data-page="payroll.html" data-transition data-perm="payroll:view">Реестр премирования</a>
+      <a href="report.html" data-page="report.html" data-transition>Еженедельный отчёт</a>
+      <a href="report-settings.html" data-page="report-settings.html" data-transition data-perm="report:settings">Настройки отчётов</a>
+      <a href="vp-request.html" data-page="vp-request.html" data-transition data-perm="vp_request:submit">Запрос на наказание</a>
+      <a href="vp-request-settings.html" data-page="vp-request-settings.html" data-transition data-perm="vp_request:settings">Настройки запросов АБ</a>
+      <a href="lk.html" data-page="lk.html" data-transition>Личный кабинет</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-btn" data-open-search title="Поиск (Ctrl+K)">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+        <span>Поиск</span><span class="kbd">Ctrl K</span>
+      </button>
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Сменить тему">
+        <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24"><path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66l1.42-1.42M4.92 19.08l1.42-1.42m0-11.32L4.92 4.92m14.16 14.16l-1.42-1.42M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="login-btn" data-open-login>
+        <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/></svg>
+        <span>Войти</span>
+      </button>
+      <button class="burger" id="burger" type="button" aria-label="Открыть меню" aria-controls="mainNav" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="info3-head">
+    <div class="container">
+      <div class="info3-ribbon">
+        <span class="info3-ribbon-line"></span>
+        <span class="info3-ribbon-emblem">★</span>
+        <span class="info3-ribbon-name">ЦГБ №3 · </span>
+        <span class="info3-ribbon-emblem">★</span>
+        <span class="info3-ribbon-line"></span>
+      </div>
+
+      <h1 class="info3-title" id="infoTitle">Центральная Городская Больница №3</h1>
+      <div class="info3-subtitle" id="infoSubtitle">Структура, направления и условия оказания помощи</div>
+
+      <div class="info3-intro-wrap">
+        <div class="info3-intro-mark">«</div>
+        <p class="info3-intro" id="infoIntro">Загрузка...</p>
+      </div>
+
+      <div class="info3-head-actions info-admin-bar" data-admin style="display:none">
+        <button class="btn btn-gold btn-sm" id="infoEditBtn">
+          <svg viewBox="0 0 24 24" width="14" height="14" style="vertical-align:-2px;margin-right:6px"><path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75z"/></svg>
+          Редактировать информацию
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="info2-body" id="sections-start">
+    <div class="container info2-layout">
+      <aside class="info2-side">
+        <div class="info2-side-title">
+          <span class="info2-side-title-bar"></span>
+          <span>Оглавление</span>
+        </div>
+        <nav class="info2-toc" id="infoToc"></nav>
+        <div class="info2-side-meta" id="infoMeta"></div>
+      </aside>
+
+      <div class="info2-main" id="infoSections">
+        <div class="info-loading">Загрузка данных...</div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="info2-footer-note" id="infoFooter"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <h4>Настройки сайта</h4>
+        <div class="footer-settings">
+          <div class="footer-settings-row">
+            <span class="footer-settings-label">Анимации</span>
+            <label class="fs-switch"><input type="checkbox" id="fsAnim" checked><span class="fs-switch-track"><span class="fs-switch-thumb"></span></span></label>
+          </div>
+          <div>
+            <div class="footer-settings-label" style="margin-bottom:8px">Фон</div>
+            <div class="fs-modes" id="fsModes">
+              <button class="fs-mode" data-bg="falling">Атмосфера</button>
+              <button class="fs-mode" data-bg="grid">Сеть</button>
+              <button class="fs-mode" data-bg="dots">Точки</button>
+              <button class="fs-mode" data-bg="waves">Волны</button>
+            </div>
+          </div>
+          <div class="footer-note">Настройки сохраняются в браузере</div>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Разделы</h5>
+        <a href="index.html">Главная</a>
+        <a href="info.html">О больнице</a>
+        <a href="services.html">Услуги и цены</a>
+        <a href="meds.html">Медикаменты</a>
+        <a href="news.html">Новости</a>
+      </div>
+      <div class="footer-col">
+        <h5>Пациентам</h5>
+        <a href="info.html#functions">Направления помощи</a>
+        <a href="info.html#forms">Виды помощи</a>
+        <a href="info.html#steps">Как записаться</a>
+        <a href="faq.html">Вопросы и ответы</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> · Центральная Городская Больница №3</span>
+      <span>Спасаем жизни каждый день</span>
+    </div>
+  </div>
+</footer>
+
+<div class="fab-stack" id="fabStack">
+  <button class="fab" id="fabUp" title="Наверх">
+    <svg viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8z"/></svg>
+  </button>
+</div>
+
+<div class="search-modal" id="searchModal">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+      <input class="search-input" placeholder="Поиск..." spellcheck="false">
+      <button class="search-close-kbd">Esc</button>
+    </div>
+    <div class="search-results"></div>
+  </div>
+</div>
+
+<div class="modal-back" id="loginModal">
+  <div class="modal">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Вход администратора</h3>
+    <div class="modal-sub">Доступ к управлению контентом</div>
+    <form>
+      <div class="form-group"><label>Email</label><input type="email" name="email" required></div>
+      <div class="form-group"><label>Пароль</label><input type="password" name="password" required></div>
+      <button class="btn btn-gold" style="width:100%" type="submit">Войти</button>
+      <div class="form-msg"></div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-back info-editor-back" id="infoEditModal">
+  <div class="modal info-editor-modal">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <div class="info-editor-head">
+      <div>
+        <h3 style="margin:0">Редактор информационной доски</h3>
+        <div class="modal-sub">Все изменения применяются к живой странице сразу. Сохранение отправляет в Supabase.</div>
+      </div>
+      <div class="info-editor-head-actions">
+        <button class="btn btn-ghost btn-sm" id="infoResetBtn" title="Загрузить стандартный шаблон">↺ Стандарт</button>
+        <button class="btn btn-ghost btn-sm" id="infoJsonBtn" title="Открыть JSON-редактор">{ } JSON</button>
+        <button class="btn btn-gold btn-sm" id="infoEditSave">💾 Сохранить</button>
+      </div>
+    </div>
+    <div class="info-editor-msg form-msg" id="infoEditMsg"></div>
+
+    <div class="info-editor-tabs">
+      <button class="info-editor-tab active" data-tab="header">Заголовок</button>
+      <button class="info-editor-tab" data-tab="sections">Разделы</button>
+      <button class="info-editor-tab" data-tab="footer">Итог</button>
+    </div>
+
+    <div class="info-editor-body">
+
+      <div class="info-editor-pane" data-pane="header">
+        <div class="ie-field">
+          <label>Заголовок</label>
+          <input class="ie-input" data-field="title" placeholder="Центральная Городская Больница №3">
+        </div>
+        <div class="ie-field">
+          <label>Подзаголовок</label>
+          <input class="ie-input" data-field="subtitle" placeholder="Структура, направления и условия оказания помощи">
+        </div>
+        <div class="ie-field">
+          <label>Вступительный абзац</label>
+          <textarea class="ie-input ie-textarea" data-field="intro" rows="5" placeholder="Опишите организацию одним-двумя абзацами..."></textarea>
+        </div>
+      </div>
+
+      <div class="info-editor-pane" data-pane="sections" hidden>
+        <div class="ie-secs-split">
+          <div class="ie-secs-list-wrap">
+            <div class="ie-secs-toolbar">
+              <span class="ie-secs-count" id="ieSecsCount">0 разделов</span>
+              <button class="btn btn-gold btn-sm" id="ieAddSec">+ Раздел</button>
+            </div>
+            <div class="ie-secs-list" id="ieSecsList"></div>
+          </div>
+          <div class="ie-sec-editor" id="ieSecEditor">
+            <div class="ie-sec-empty">← Выбери или создай раздел</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-editor-pane" data-pane="footer" hidden>
+        <div class="ie-field">
+          <label>Итоговая плашка (внизу страницы)</label>
+          <textarea class="ie-input ie-textarea" data-field="footer" rows="6" placeholder="Заключительный текст курсивом с золотой рамкой..."></textarea>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal-back" id="infoJsonModal">
+  <div class="modal modal-xl">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>JSON-режим</h3>
+    <div class="modal-sub">Продвинутый режим для копирования/вставки целого документа.</div>
+    <textarea id="infoJsonArea" style="width:100%;min-height:520px;font-family:'JetBrains Mono','Courier New',monospace;font-size:12.5px;padding:14px;border-radius:10px;background:var(--input-bg);border:1px solid var(--line);color:var(--text);line-height:1.55;resize:vertical" spellcheck="false"></textarea>
+    <div class="form-msg" id="infoJsonMsg"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap">
+      <button class="btn btn-ghost btn-sm" id="infoJsonCancel">Отмена</button>
+      <button class="btn btn-ghost btn-sm" id="infoJsonFormat">Форматировать</button>
+      <button class="btn btn-gold btn-sm" id="infoJsonApply">Применить в редактор</button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=17"></script>
+<script src="assets/js/core/config.js?v=17"></script>
+<script src="assets/js/core/auth.js?v=17"></script>
+<script src="assets/js/core/roles-engine.js?v=17"></script>
+<script src="assets/js/features/info-engine.js?v=17"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/ui/holiday-engine.js?v=17"></script>
+<script src="assets/js/ui/sound-engine.js?v=17"></script>
+<script src="assets/js/features/faq-engine.js?v=17"></script>
+<script src="assets/js/ui/search-engine.js?v=17"></script>
+<script src="assets/js/ui/notify-engine.js?v=19"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+const $=id=>document.getElementById(id);
+const esc=s=>window.CGB_INFO.esc(s);
+const uid=(p)=>p+"_"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+let DATA=null;
+let EDIT=null;
+let CURRENT_SEC=null;
+
+function slug(s){
+  return String(s||"").toLowerCase().replace(/[^а-яa-z0-9\-]+/g,"-").replace(/^-+|-+$/g,"").slice(0,40)||"section";
+}
+
+function renderView(){
+  if(!DATA) return;
+  $("infoTitle").textContent=DATA.title||"";
+  $("infoSubtitle").textContent=DATA.subtitle||"";
+  $("infoIntro").textContent=DATA.intro||"";
+
+  const sec=$("infoSections");
+  const toc=$("infoToc");
+  if(!DATA.sections||!DATA.sections.length){
+    sec.innerHTML=`<div class="info-loading">Разделы будут добавлены позже.</div>`;
+    toc.innerHTML="";
+    $("infoFooter").innerHTML="";
+    return;
+  }
+
+  toc.innerHTML=DATA.sections.map((s,i)=>{
+    const id=s.id||slug(s.title)||("sec"+i);
+    return `<a href="#${esc(id)}" class="info2-toc-item" data-toc="${esc(id)}">
+      <span class="info2-toc-num">${String(i+1).padStart(2,"0")}</span>
+      <span class="info2-toc-name">${esc(s.title||"Раздел")}</span>
+    </a>`;
+  }).join("");
+
+  sec.innerHTML=DATA.sections.map((s,i)=>{
+    const id=s.id||slug(s.title)||("sec"+i);
+    let inner="";
+    if(Array.isArray(s.items)&&s.items.length){
+      inner+=`<ul class="info2-list">${s.items.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`;
+    }
+    if(Array.isArray(s.cards)&&s.cards.length){
+      inner+=`<div class="info2-cards">${s.cards.map(c=>`
+        <div class="info2-card">
+          <div class="info2-card-mark">✦</div>
+          <div class="info2-card-heading">${esc(c.heading||"")}</div>
+          <p class="info2-card-text">${esc(c.text||"")}</p>
+        </div>`).join("")}</div>`;
+    }
+    if(Array.isArray(s.grid)&&s.grid.length){
+      inner+=`<div class="info2-grid">${s.grid.map(g=>`
+        <div class="info2-grid-item">
+          <div class="info2-grid-label">${esc(g.label||"")}</div>
+          <div class="info2-grid-text">${esc(g.text||"")}</div>
+        </div>`).join("")}</div>`;
+    }
+    if(Array.isArray(s.steps)&&s.steps.length){
+      inner+=`<ol class="info2-steps">${s.steps.map(st=>`
+        <li class="info2-step">
+          <div class="info2-step-num">${esc(st.n||"")}</div>
+          <div class="info2-step-body">
+            <div class="info2-step-title">${esc(st.title||"")}</div>
+            <div class="info2-step-text">${esc(st.text||"")}</div>
+          </div>
+        </li>`).join("")}</ol>`;
+    }
+    if(typeof s.text==="string"&&s.text.trim()){
+      inner+=`<div class="info2-text">${esc(s.text).replace(/\n/g,"<br>")}</div>`;
+    }
+    return `<article class="info2-section" id="${esc(id)}" style="--i:${i}">
+      <div class="info2-section-tag">
+        <span class="info2-section-tag-num">Раздел ${String(i+1).padStart(2,"0")}</span>
+        <span class="info2-section-tag-icon">${esc(s.icon||"◈")}</span>
+      </div>
+      <h2 class="info2-section-title">${esc(s.title||"")}</h2>
+      ${s.subtitle?`<div class="info2-section-subtitle">${esc(s.subtitle)}</div>`:""}
+      <div class="info2-section-body">${inner||'<div class="info2-empty">Содержимое пусто</div>'}</div>
+    </article>`;
+  }).join("");
+  $("infoFooter").innerHTML=DATA.footer?`<div class="info2-footer-inner">${esc(DATA.footer).replace(/\n/g,"<br>")}</div>`:"";
+
+  $("infoMeta").innerHTML=`<div class="info2-meta-row"><span>Разделов</span><b>${DATA.sections.length}</b></div>
+    <div class="info2-meta-row"><span>Обновлено</span><b>${new Date().toLocaleDateString("ru-RU",{timeZone:"Europe/Moscow"})}</b></div>`;
+
+  setupTocObserver();
+}
+
+let tocIO=null;
+function setupTocObserver(){
+  if(tocIO) tocIO.disconnect();
+  const links=document.querySelectorAll(".info2-toc-item");
+  if(!("IntersectionObserver" in window)||!links.length) return;
+  tocIO=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        links.forEach(l=>l.classList.toggle("active",l.dataset.toc===e.target.id));
+      }
+    });
+  },{rootMargin:"-40% 0px -55% 0px",threshold:0});
+  document.querySelectorAll(".info2-section").forEach(s=>tocIO.observe(s));
+}
+
+async function boot(){
+  DATA=await CGB_INFO.load();
+  renderView();
+  if(location.hash){
+    const anchor=decodeURIComponent(location.hash.slice(1));
+    setTimeout(()=>document.getElementById(anchor)?.scrollIntoView({behavior:"smooth",block:"start"}),50);
+  }
+}
+boot();
+if(window.CGB_AUTH) window.CGB_AUTH.onChange(()=>boot());
+
+// ===== Редактор =====
+const editModal=$("infoEditModal");
+function openEditor(){
+  EDIT=JSON.parse(JSON.stringify(DATA||CGB_INFO.DEFAULT_DATA));
+  editModal.classList.add("active");
+  switchTab("header");
+  fillHeader();
+  fillSecs();
+  fillFooter();
+  msg("");
+}
+function closeEditor(){editModal.classList.remove("active")}
+$("infoEditBtn").addEventListener("click",openEditor);
+editModal.querySelector(".modal-close").addEventListener("click",closeEditor);
+editModal.addEventListener("click",e=>{if(e.target===editModal) closeEditor()});
+
+function switchTab(name){
+  document.querySelectorAll(".info-editor-tab").forEach(t=>t.classList.toggle("active",t.dataset.tab===name));
+  document.querySelectorAll(".info-editor-pane").forEach(p=>p.hidden=p.dataset.pane!==name);
+}
+document.querySelectorAll(".info-editor-tab").forEach(t=>t.addEventListener("click",()=>switchTab(t.dataset.tab)));
+
+function msg(text,kind){
+  const el=$("infoEditMsg");
+  el.textContent=text||"";
+  el.className="info-editor-msg form-msg"+(kind?" "+kind:"");
+}
+
+function fillHeader(){
+  document.querySelectorAll("[data-field]").forEach(el=>{
+    if(EDIT[el.dataset.field]!=null) el.value=EDIT[el.dataset.field];
+    el.oninput=()=>{EDIT[el.dataset.field]=el.value;liveRender()};
+  });
+}
+function fillFooter(){}
+
+function fillSecs(){
+  const list=$("ieSecsList");
+  const secs=EDIT.sections||[];
+  $("ieSecsCount").textContent=secs.length+" "+(secs.length===1?"раздел":(secs.length>=2&&secs.length<=4?"раздела":"разделов"));
+  list.innerHTML=secs.map((s,i)=>`
+    <div class="ie-sec-item ${CURRENT_SEC===i?'active':''}" data-idx="${i}" draggable="true">
+      <span class="ie-sec-item-icon">${esc(s.icon||"◈")}</span>
+      <span class="ie-sec-item-name">${esc(s.title||"Без названия")}</span>
+      <button class="ie-sec-item-del" data-del="${i}" title="Удалить">🗑</button>
+    </div>`).join("")||`<div class="ie-sec-empty-msg">Пока нет разделов. Нажми «+ Раздел».</div>`;
+
+  list.querySelectorAll(".ie-sec-item").forEach(el=>{
+    el.addEventListener("click",e=>{
+      if(e.target.closest("[data-del]")) return;
+      CURRENT_SEC=+el.dataset.idx;fillSecs();renderSecEditor();
+    });
+    el.addEventListener("dragstart",e=>{e.dataTransfer.setData("text/idx",el.dataset.idx);el.classList.add("dragging")});
+    el.addEventListener("dragend",()=>el.classList.remove("dragging"));
+    el.addEventListener("dragover",e=>{e.preventDefault();el.classList.add("dragover")});
+    el.addEventListener("dragleave",()=>el.classList.remove("dragover"));
+    el.addEventListener("drop",e=>{
+      e.preventDefault();el.classList.remove("dragover");
+      const from=+e.dataTransfer.getData("text/idx");
+      const to=+el.dataset.idx;
+      if(from===to) return;
+      const arr=EDIT.sections;
+      const [it]=arr.splice(from,1);arr.splice(to,0,it);
+      if(CURRENT_SEC===from) CURRENT_SEC=to;
+      fillSecs();liveRender();
+    });
+  });
+  list.querySelectorAll("[data-del]").forEach(b=>{
+    b.addEventListener("click",e=>{
+      e.stopPropagation();
+      if(!confirm("Удалить раздел?")) return;
+      const i=+b.dataset.del;
+      EDIT.sections.splice(i,1);
+      if(CURRENT_SEC===i) CURRENT_SEC=null;
+      else if(CURRENT_SEC>i) CURRENT_SEC--;
+      fillSecs();renderSecEditor();liveRender();
+    });
+  });
+  renderSecEditor();
+}
+
+$("ieAddSec").addEventListener("click",()=>{
+  if(!EDIT.sections) EDIT.sections=[];
+  EDIT.sections.push({id:uid("s"),icon:"◈",title:"Новый раздел",subtitle:"",items:[]});
+  CURRENT_SEC=EDIT.sections.length-1;
+  fillSecs();liveRender();
+});
+
+const TYPES=[
+  {v:"items",l:"Список пунктов",desc:"Маркированный список"},
+  {v:"cards",l:"Карточки",desc:"Крупные карточки с заголовком+текст"},
+  {v:"grid",l:"Плитка «метка+текст»",desc:"Сетка терминов и определений"},
+  {v:"steps",l:"Шаги",desc:"Нумерованные этапы"},
+  {v:"text",l:"Свободный текст",desc:"Простой абзац"}
+];
+function detectType(s){
+  for(const t of TYPES){if(Array.isArray(s[t.v])&&s[t.v].length) return t.v}
+  if(typeof s.text==="string"&&s.text.trim()) return "text";
+  return "items";
+}
+function clearContent(s){["items","cards","grid","steps","text"].forEach(k=>delete s[k])}
+
+function renderSecEditor(){
+  const ed=$("ieSecEditor");
+  if(CURRENT_SEC==null||!EDIT.sections||!EDIT.sections[CURRENT_SEC]){
+    ed.innerHTML=`<div class="ie-sec-empty">← Выбери или создай раздел</div>`;return;
+  }
+  const s=EDIT.sections[CURRENT_SEC];
+  const type=detectType(s);
+  const typeOptions=TYPES.map(t=>`<option value="${t.v}" ${t.v===type?"selected":""}>${t.l} — ${t.desc}</option>`).join("");
+  ed.innerHTML=`
+    <div class="ie-sec-row2">
+      <div class="ie-field">
+        <label>Иконка</label>
+        <input class="ie-input ie-input-icon" id="ieSecIcon" value="${esc(s.icon||"◈")}" maxlength="3">
+      </div>
+      <div class="ie-field" style="flex:1">
+        <label>Название раздела</label>
+        <input class="ie-input" id="ieSecTitle" value="${esc(s.title||"")}">
+      </div>
+    </div>
+    <div class="ie-field">
+      <label>Подзаголовок (необязательно)</label>
+      <input class="ie-input" id="ieSecSub" value="${esc(s.subtitle||"")}">
+    </div>
+    <div class="ie-field">
+      <label>ID для якорной ссылки</label>
+      <input class="ie-input" id="ieSecId" value="${esc(s.id||slug(s.title))}" placeholder="latin-slug">
+    </div>
+    <div class="ie-field">
+      <label>Тип содержимого</label>
+      <select class="ie-input" id="ieSecType">${typeOptions}</select>
+    </div>
+    <div class="ie-content-area" id="ieContentArea"></div>`;
+
+  $("ieSecIcon").oninput=e=>{s.icon=e.target.value;fillSecs();liveRender()};
+  $("ieSecTitle").oninput=e=>{s.title=e.target.value;fillSecs();liveRender()};
+  $("ieSecSub").oninput=e=>{s.subtitle=e.target.value;liveRender()};
+  $("ieSecId").oninput=e=>{s.id=e.target.value;liveRender()};
+  $("ieSecType").onchange=e=>{
+    const newT=e.target.value;
+    clearContent(s);
+    if(newT==="items") s.items=[""];
+    else if(newT==="cards") s.cards=[{heading:"",text:""}];
+    else if(newT==="grid") s.grid=[{label:"",text:""}];
+    else if(newT==="steps") s.steps=[{n:"01",title:"",text:""}];
+    else if(newT==="text") s.text="";
+    renderSecEditor();liveRender();
+  };
+  renderContentEditor(s,type);
+}
+
+function renderContentEditor(s,type){
+  const box=$("ieContentArea");
+  if(type==="items"){
+    box.innerHTML=`<div class="ie-items-list" id="ieItems"></div>
+      <button class="btn btn-ghost btn-sm" id="ieItemsAdd" style="margin-top:6px">+ Пункт</button>`;
+    function draw(){
+      $("ieItems").innerHTML=(s.items||[]).map((it,i)=>`
+        <div class="ie-item-row">
+          <span class="ie-item-bullet">◈</span>
+          <input class="ie-input" data-i="${i}" value="${esc(it)}" placeholder="Текст пункта...">
+          <button class="ie-item-del" data-del-i="${i}" title="Удалить">✕</button>
+        </div>`).join("");
+      $("ieItems").querySelectorAll("[data-i]").forEach(inp=>{
+        inp.oninput=e=>{s.items[+inp.dataset.i]=e.target.value;liveRender()};
+      });
+      $("ieItems").querySelectorAll("[data-del-i]").forEach(b=>{
+        b.onclick=()=>{s.items.splice(+b.dataset.delI,1);draw();liveRender()};
+      });
+    }
+    draw();
+    $("ieItemsAdd").onclick=()=>{s.items=s.items||[];s.items.push("");draw();liveRender()};
+  }
+  else if(type==="cards"){
+    box.innerHTML=`<div class="ie-blocks" id="ieCards"></div>
+      <button class="btn btn-ghost btn-sm" id="ieCardsAdd" style="margin-top:6px">+ Карточка</button>`;
+    function draw(){
+      $("ieCards").innerHTML=(s.cards||[]).map((c,i)=>`
+        <div class="ie-block">
+          <button class="ie-block-del" data-del-c="${i}" title="Удалить">✕</button>
+          <div class="ie-field"><label>Заголовок</label><input class="ie-input" data-c-h="${i}" value="${esc(c.heading||"")}"></div>
+          <div class="ie-field"><label>Текст</label><textarea class="ie-input ie-textarea" data-c-t="${i}" rows="3">${esc(c.text||"")}</textarea></div>
+        </div>`).join("");
+      $("ieCards").querySelectorAll("[data-c-h]").forEach(el=>el.oninput=e=>{s.cards[+el.dataset.cH].heading=e.target.value;liveRender()});
+      $("ieCards").querySelectorAll("[data-c-t]").forEach(el=>el.oninput=e=>{s.cards[+el.dataset.cT].text=e.target.value;liveRender()});
+      $("ieCards").querySelectorAll("[data-del-c]").forEach(b=>b.onclick=()=>{s.cards.splice(+b.dataset.delC,1);draw();liveRender()});
+    }
+    draw();
+    $("ieCardsAdd").onclick=()=>{s.cards=s.cards||[];s.cards.push({heading:"",text:""});draw();liveRender()};
+  }
+  else if(type==="grid"){
+    box.innerHTML=`<div class="ie-blocks" id="ieGrid"></div>
+      <button class="btn btn-ghost btn-sm" id="ieGridAdd" style="margin-top:6px">+ Пункт</button>`;
+    function draw(){
+      $("ieGrid").innerHTML=(s.grid||[]).map((g,i)=>`
+        <div class="ie-block ie-block-inline">
+          <button class="ie-block-del" data-del-g="${i}" title="Удалить">✕</button>
+          <div class="ie-field"><label>Метка</label><input class="ie-input" data-g-l="${i}" value="${esc(g.label||"")}" placeholder="Например: Жильё"></div>
+          <div class="ie-field"><label>Текст</label><textarea class="ie-input ie-textarea" data-g-t="${i}" rows="2">${esc(g.text||"")}</textarea></div>
+        </div>`).join("");
+      $("ieGrid").querySelectorAll("[data-g-l]").forEach(el=>el.oninput=e=>{s.grid[+el.dataset.gL].label=e.target.value;liveRender()});
+      $("ieGrid").querySelectorAll("[data-g-t]").forEach(el=>el.oninput=e=>{s.grid[+el.dataset.gT].text=e.target.value;liveRender()});
+      $("ieGrid").querySelectorAll("[data-del-g]").forEach(b=>b.onclick=()=>{s.grid.splice(+b.dataset.delG,1);draw();liveRender()});
+    }
+    draw();
+    $("ieGridAdd").onclick=()=>{s.grid=s.grid||[];s.grid.push({label:"",text:""});draw();liveRender()};
+  }
+  else if(type==="steps"){
+    box.innerHTML=`<div class="ie-blocks" id="ieSteps"></div>
+      <button class="btn btn-ghost btn-sm" id="ieStepsAdd" style="margin-top:6px">+ Шаг</button>`;
+    function draw(){
+      $("ieSteps").innerHTML=(s.steps||[]).map((st,i)=>`
+        <div class="ie-block ie-block-step">
+          <button class="ie-block-del" data-del-s="${i}" title="Удалить">✕</button>
+          <div class="ie-step-cols">
+            <div class="ie-field" style="width:70px"><label>№</label><input class="ie-input" data-s-n="${i}" value="${esc(st.n||"")}"></div>
+            <div class="ie-field" style="flex:1"><label>Заголовок</label><input class="ie-input" data-s-h="${i}" value="${esc(st.title||"")}"></div>
+          </div>
+          <div class="ie-field"><label>Описание</label><textarea class="ie-input ie-textarea" data-s-t="${i}" rows="2">${esc(st.text||"")}</textarea></div>
+        </div>`).join("");
+      $("ieSteps").querySelectorAll("[data-s-n]").forEach(el=>el.oninput=e=>{s.steps[+el.dataset.sN].n=e.target.value;liveRender()});
+      $("ieSteps").querySelectorAll("[data-s-h]").forEach(el=>el.oninput=e=>{s.steps[+el.dataset.sH].title=e.target.value;liveRender()});
+      $("ieSteps").querySelectorAll("[data-s-t]").forEach(el=>el.oninput=e=>{s.steps[+el.dataset.sT].text=e.target.value;liveRender()});
+      $("ieSteps").querySelectorAll("[data-del-s]").forEach(b=>b.onclick=()=>{s.steps.splice(+b.dataset.delS,1);draw();liveRender()});
+    }
+    draw();
+    $("ieStepsAdd").onclick=()=>{s.steps=s.steps||[];s.steps.push({n:String(s.steps.length+1).padStart(2,"0"),title:"",text:""});draw();liveRender()};
+  }
+  else if(type==="text"){
+    box.innerHTML=`<div class="ie-field"><label>Текст</label><textarea class="ie-input ie-textarea" id="ieText" rows="8">${esc(s.text||"")}</textarea></div>`;
+    $("ieText").oninput=e=>{s.text=e.target.value;liveRender()};
+  }
+}
+
+function liveRender(){
+  DATA=JSON.parse(JSON.stringify(EDIT));
+  renderView();
+}
+
+// Reset
+$("infoResetBtn").addEventListener("click",()=>{
+  if(!confirm("Заменить содержимое редактора на стандартный шаблон? (Сохранение не выполняется до кнопки «Сохранить».)")) return;
+  EDIT=JSON.parse(JSON.stringify(CGB_INFO.DEFAULT_DATA));
+  fillHeader();fillSecs();fillFooter();liveRender();
+  msg("Загружен стандартный шаблон. Не забудь «Сохранить».","info");
+});
+
+// Save
+$("infoEditSave").addEventListener("click",async()=>{
+  msg("Сохранение...","info");
+  const result=await CGB_INFO.save(EDIT);
+  if(!result.ok){msg("Ошибка сохранения: "+(result.error||"неизвестная ошибка"),"error");return}
+  if(result.remote){msg("✓ Сохранено в Supabase","success");if(window.CGB_SOUND) CGB_SOUND.play("success")}
+  else{msg("✓ Сохранено локально","success")}
+  DATA=JSON.parse(JSON.stringify(EDIT));renderView();
+  setTimeout(closeEditor,700);
+});
+
+// JSON mode
+const jsonModal=$("infoJsonModal");
+$("infoJsonBtn").addEventListener("click",()=>{
+  $("infoJsonArea").value=JSON.stringify(EDIT,null,2);
+  $("infoJsonMsg").textContent="";
+  jsonModal.classList.add("active");
+});
+jsonModal.querySelector(".modal-close").addEventListener("click",()=>jsonModal.classList.remove("active"));
+$("infoJsonCancel").addEventListener("click",()=>jsonModal.classList.remove("active"));
+jsonModal.addEventListener("click",e=>{if(e.target===jsonModal) jsonModal.classList.remove("active")});
+$("infoJsonFormat").addEventListener("click",()=>{
+  try{$("infoJsonArea").value=JSON.stringify(JSON.parse($("infoJsonArea").value),null,2);$("infoJsonMsg").className="form-msg success";$("infoJsonMsg").textContent="✓ Форматировано"}
+  catch(e){$("infoJsonMsg").className="form-msg error";$("infoJsonMsg").textContent="Ошибка: "+e.message}
+});
+$("infoJsonApply").addEventListener("click",()=>{
+  try{
+    EDIT=JSON.parse($("infoJsonArea").value);
+    fillHeader();fillSecs();fillFooter();liveRender();
+    jsonModal.classList.remove("active");
+    msg("Загружено из JSON","info");
+  }catch(e){$("infoJsonMsg").className="form-msg error";$("infoJsonMsg").textContent="Ошибка: "+e.message}
+});
+
+// Particles
+(function infoParticles(){
+  const c=document.getElementById("infoParticles");if(!c) return;
+  if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const ctx=c.getContext("2d");
+  let parts=[];
+  function resize(){
+    const dpr=Math.min(window.devicePixelRatio||1,2);
+    c.width=c.clientWidth*dpr;c.height=c.clientHeight*dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    const w=c.clientWidth,h=c.clientHeight;
+    const N=Math.min(40,Math.max(15,Math.round(w*h/30000)));
+    parts=[];
+    for(let i=0;i<N;i++) parts.push(spawn(w,h,true));
+  }
+  function spawn(w,h,initial){
+    return {x:Math.random()*w,y:initial?Math.random()*h:h+10,vx:(Math.random()-.5)*.2,vy:-.1-Math.random()*.3,r:.5+Math.random()*1.6,a:.15+Math.random()*.4,phase:Math.random()*Math.PI*2,tw:.003+Math.random()*.009};
+  }
+  function loop(){
+    requestAnimationFrame(loop);
+    const w=c.clientWidth,h=c.clientHeight;
+    ctx.clearRect(0,0,w,h);
+    for(let i=parts.length-1;i>=0;i--){
+      const p=parts[i];p.phase+=p.tw;
+      p.x+=p.vx+Math.sin(p.phase)*.12;p.y+=p.vy;
+      const alpha=p.a*(0.6+Math.sin(p.phase*2)*0.4);
+      ctx.beginPath();ctx.fillStyle=`rgba(165,243,252,${alpha})`;
+      ctx.shadowBlur=6;ctx.shadowColor="rgba(34,211,238,0.5)";
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();
+      if(p.y<-20||p.x<-20||p.x>w+20){parts.splice(i,1);parts.push(spawn(w,h,false))}
+    }
+    ctx.shadowBlur=0;
+  }
+  resize();window.addEventListener("resize",resize);loop();
+})();
+</script>
+</body>
+</html>

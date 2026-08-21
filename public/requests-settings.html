@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title>Настройки форм заявок</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=26">
+</head>
+<body>
+<canvas id="bgCanvas"></canvas><div class="bg-noise"></div>
+<header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="index.html"><div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ВС"></div><div class="brand-text"><span class="brand-label">Настройки</span><span class="brand-name">Формы заявок</span></div></a>
+  <div class="header-actions" style="margin-left:auto">
+    <a href="requests-review.html" class="btn btn-ghost btn-sm">← К заявкам</a>
+    <button class="btn btn-gold btn-sm" id="rsSaveAll">💾 Сохранить всё</button>
+  </div>
+</div></header>
+
+<main><section class="apps-body"><div class="container" style="max-width:1100px">
+  <div id="rsGuard" style="display:none"><div class="apps-guard-box"><div class="apps-guard-icon">⚠</div><h2>Доступ ограничен</h2><p>Только для админов.</p></div></div>
+  <div id="rsRoot" style="display:none">
+    <h3>🔧 Общие параметры</h3>
+    <div class="cf-group"><div class="cf-group-body">
+      <div class="msg-row">
+        <div class="form-group msg-flex-1"><label>Мин. должность для отгула</label><input type="text" id="rsMinLeave" class="msg-input"></div>
+        <div class="form-group msg-flex-1"><label>Мин. должность для отпуска</label><input type="text" id="rsMinVac" class="msg-input"></div>
+      </div>
+      <div class="msg-row">
+        <div class="form-group msg-flex-1"><label>Макс. минут отгула</label><input type="number" id="rsMaxLeave" class="msg-input" value="60"></div>
+        <div class="form-group msg-flex-1"><label>Макс. дней отпуска</label><input type="number" id="rsMaxVac" class="msg-input" value="7"></div>
+      </div>
+      <div class="msg-row">
+        <div class="form-group msg-flex-1"><label>Распорядок с</label><input type="time" id="rsWStart" class="msg-input"></div>
+        <div class="form-group msg-flex-1"><label>Будни до</label><input type="time" id="rsWEnd" class="msg-input"></div>
+        <div class="form-group msg-flex-1"><label>Выходные до</label><input type="time" id="rsWkEnd" class="msg-input"></div>
+        <div class="form-group msg-flex-1"><label>Праздники до</label><input type="time" id="rsHEnd" class="msg-input"></div>
+      </div>
+      <div class="msg-row">
+        <div class="form-group msg-flex-1"><label>Обед с</label><input type="time" id="rsLS" class="msg-input"></div>
+        <div class="form-group msg-flex-1"><label>Обед до</label><input type="time" id="rsLE" class="msg-input"></div>
+        <div class="form-group msg-flex-1"><label>Поверка</label><input type="time" id="rsPov" class="msg-input"></div>
+        <div class="form-group msg-flex-1"><label>Окно поверки ±мин</label><input type="number" id="rsPovW" class="msg-input" value="30"></div>
+      </div>
+      <div class="form-group">
+        <label class="cr-notify" style="display:inline-flex">
+          <input type="checkbox" id="rsBlockViol"><span>⛔ Блокировать увольнение/повышение при активных нарушениях в реестре</span>
+        </label>
+      </div>
+      <div class="form-group">
+        <label class="cr-notify" style="display:inline-flex">
+          <input type="checkbox" id="rsNotifyVerdict"><span>📣 Отправлять сообщение в Discord при вынесении вердикта (одобрено / отказано)</span>
+        </label>
+        <div class="msg-help">Если выключено — вердикт сохранится в БД, но embed в канал бот не отправит и заявителя не пингнёт.</div>
+      </div>
+    </div></div>
+
+    <h3 style="margin-top:24px">📦 Поставки → баллы (для повышения)</h3>
+    <div class="cf-group"><div class="cf-group-body">
+      <div class="msg-help">Формат: одна пара «тип: балл» в строке. Пример: <code>РЛС: 2</code></div>
+      <div class="form-group"><textarea id="rsSupplyScore" class="msg-input" rows="6" style="resize:vertical;font-family:monospace" placeholder="РЛС: 2&#10;Боеприпасы: 1"></textarea></div>
+    </div></div>
+
+    <h3 style="margin-top:24px">📨 Каналы DS и пинги</h3>
+    <div id="rsForms"></div>
+
+    <h3 style="margin-top:24px">⭐ Конструктор формы «Повышение»</h3>
+    <div class="cf-group"><div class="cf-group-body">
+      <div class="msg-help">Задайте список должностей и настройте какие подтверждения появятся в форме. Отделы позволяют иметь <b>свою</b> форму для каждого подразделения + свой канал/пинги.</div>
+      <div class="form-group">
+        <label>Список должностей (одна в строке — порядок сверху вниз)</label>
+        <textarea id="rsPromoRanks" class="msg-input" rows="8" style="resize:vertical;font-family:monospace" placeholder="Интерн&#10;Фельдшер&#10;Лаборант"></textarea>
+      </div>
+      <div style="margin-top:16px">
+        <label style="font-weight:600;color:var(--gold);font-size:13px;letter-spacing:.05em">🏢 Отделы (для каждого — свой канал, пинг-роли и своя форма)</label>
+        <div id="rsPromoDepts"></div>
+      </div>
+      <div style="margin-top:16px">
+        <label style="font-weight:600;color:var(--gold);font-size:13px;letter-spacing:.05em">📋 Форма подтверждений (по должностям)</label>
+        <div id="rsPromoMatrix"></div>
+      </div>
+    </div></div>
+
+    <div class="form-msg" id="rsMsg" style="margin-top:14px"></div>
+  </div>
+</div></section></main>
+
+<div class="modal-back" id="loginModal"><div class="modal"><button class="modal-close" aria-label="Закрыть">✕</button><h3>Вход</h3>
+  <form><div class="form-group"><label>Email</label><input type="email" name="email" required></div><div class="form-group"><label>Пароль</label><input type="password" name="password" required></div><button class="btn btn-gold" style="width:100%" type="submit">Войти</button><div class="form-msg"></div></form></div></div>
+
+<footer class="footer"><div class="container"><div class="footer-bottom"><span>© <span id="year"></span> · ЦГБ №3 · Центральная Городская</span><span class="footer-note">🐞 Нашли баг? Обратитесь: <b>@rilavion</b></span></div></div></footer>
+
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=18"></script>
+<script src="assets/js/core/config.js?v=18"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/ui/search-engine.js?v=18"></script>
+<script src="assets/js/core/auth.js?v=18"></script>
+<script src="assets/js/core/roles-engine.js?v=18"></script>
+<script src="assets/js/features/requests-engine.js?v=18"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+const KINDS=["leave","vacation_ic","vacation_ooc","dismissal","promotion","restoration","appointment"];
+let SETTINGS=null, FORMS={}, CHANNELS=[], ROLES=[];
+let PROMO_RANKS=[], PROMO_FIELDS={};
+let PROMO_DEPTS=[], PROMO_DEPT_FIELDS={};
+let PROMO_ACTIVE_DEPT="";
+let BOOT_IN_FLIGHT=false, BOOT_READY_USER="";
+const FIELD_TYPES=[
+  {v:"text",l:"Текст"},{v:"textarea",l:"Многострочный текст"},{v:"url",l:"Ссылка"},
+  {v:"date",l:"Дата"},{v:"time",l:"Время"},{v:"select",l:"Выпадающий список"},{v:"checkbox",l:"Галочка"}
+];
+function slugKey(name){
+  return String(name||"").toLowerCase().replace(/[^\wа-я0-9]+/gi,"_").replace(/^_+|_+$/g,"").slice(0,40)||"dept_"+Date.now().toString(36);
+}
+
+async function boot(){
+  const authState=window.CGB_AUTH&&window.CGB_AUTH.state;
+  const userId=authState&&authState.user&&authState.user.id||"";
+  const can=window.CGB_ROLES&&window.CGB_ROLES.can("requests","settings");
+  if(!can){$("rsGuard").style.display="";$("rsRoot").style.display="none";return}
+  $("rsGuard").style.display="none";$("rsRoot").style.display="";
+
+  // Supabase обновляет сессию после возврата во вкладку, а roles-engine снова
+  // уведомляет подписчиков. Не перестраиваем редактор для того же пользователя:
+  // это сохраняет введённые, но ещё не отправленные настройки.
+  if(BOOT_IN_FLIGHT||BOOT_READY_USER===userId) return;
+  BOOT_IN_FLIGHT=true;
+
+  try{
+
+  const c=await CGB_AUTH.requireClient(8000);
+  if(!c) throw new Error("Подключение к базе данных ещё не готово");
+  const [settingsResult,channelsResult,rolesResult,formResults]=await Promise.all([
+    CGB_REQUESTS.getSettings(),
+    c.from("ds_channels").select("channel_id,name,parent_name").order("name"),
+    c.from("ds_guild_roles").select("role_id,name,position").order("position",{ascending:false}),
+    Promise.all(KINDS.map(k=>CGB_REQUESTS.getForm(k)))
+  ]);
+  if(channelsResult.error) throw channelsResult.error;
+  if(rolesResult.error) throw rolesResult.error;
+  SETTINGS=settingsResult||{};
+  CHANNELS=channelsResult.data||[];
+  ROLES=rolesResult.data||[];
+  FORMS={};
+  KINDS.forEach((k,index)=>{FORMS[k]=formResults[index]||{id:k}});
+
+  const pm=(FORMS.promotion&&FORMS.promotion.rank_matrix)||{};
+  console.log("[RS] promotion from DB:",FORMS.promotion,"rank_matrix:",pm);
+  PROMO_RANKS=(Array.isArray(pm.ranks)&&pm.ranks.length)?pm.ranks.slice():(CGB_REQUESTS.DEFAULT_RANKS||["Интерн","Фельдшер","Лаборант","Врач","Хирург","Заведующий отделением","Заместитель главного врача","Главный врач"]).slice();
+  PROMO_FIELDS=(pm.fields&&typeof pm.fields==="object")?JSON.parse(JSON.stringify(pm.fields)):{};
+  PROMO_DEPTS=Array.isArray(pm.departments)?JSON.parse(JSON.stringify(pm.departments)):[];
+  PROMO_DEPT_FIELDS=(pm.dept_fields&&typeof pm.dept_fields==="object")?JSON.parse(JSON.stringify(pm.dept_fields)):{};
+  PROMO_ACTIVE_DEPT="";
+
+  fillCommon();
+  renderForms();
+  renderPromoDepts();
+  renderPromoMatrix();
+  $("rsPromoRanks").value=PROMO_RANKS.join("\n");
+  $("rsPromoRanks").oninput=()=>{
+    PROMO_RANKS=$("rsPromoRanks").value.split("\n").map(s=>s.trim()).filter(Boolean);
+    renderPromoMatrix();
+  };
+  BOOT_READY_USER=userId;
+  }catch(err){
+    console.error("[RS] Ошибка загрузки настроек:",err);
+    const msg=$("rsMsg");
+    if(msg){msg.className="form-msg error";msg.textContent="Не удалось загрузить настройки: "+(err&&err.message||err)}
+  }finally{
+    BOOT_IN_FLIGHT=false;
+  }
+}
+
+function renderPromoDepts(){
+  const box=$("rsPromoDepts");
+  if(!box) return;
+  const tabsHtml=`
+    <div class="rs-dept-tabs">
+      <button type="button" class="rs-dept-tab ${PROMO_ACTIVE_DEPT===""?"active":""}" data-select-dept="">🌐 Общая форма (fallback)</button>
+      ${PROMO_DEPTS.map(d=>`<button type="button" class="rs-dept-tab ${PROMO_ACTIVE_DEPT===d.key?"active":""}" data-select-dept="${esc(d.key)}">${esc(d.name)}</button>`).join("")}
+      <button type="button" class="rs-dept-tab rs-dept-add" data-add-dept>＋ Отдел</button>
+    </div>`;
+  const cfgHtml=PROMO_DEPTS.map(d=>{
+    if(d.key!==PROMO_ACTIVE_DEPT) return "";
+    return `<div class="cf-group" data-dept-cfg="${esc(d.key)}" style="margin-top:12px">
+      <div class="cf-group-title">⚙ Настройки отдела «${esc(d.name)}»</div>
+      <div class="cf-group-body">
+        <div class="msg-row">
+          <div class="form-group msg-flex-1"><label>Название отдела</label><input class="msg-input" data-dept-inp="name" data-dept-k="${esc(d.key)}" value="${esc(d.name||"")}"></div>
+          <div class="form-group"><button type="button" class="btn btn-ghost btn-sm" data-del-dept="${esc(d.key)}" style="color:#e77070;margin-top:22px">✕ Удалить отдел</button></div>
+        </div>
+        <div class="msg-row">
+          <div class="form-group msg-flex-1"><label>Канал DS для заявки</label>${chSelect("rsDeptCh_"+d.key,d.channel_id||"")}</div>
+          <div class="form-group msg-flex-1"><label>Канал DS для вердикта</label>${chSelect("rsDeptVCh_"+d.key,d.verdict_channel_id||"")}</div>
+        </div>
+        <div class="msg-row">
+          <div class="form-group msg-flex-1"><label>Пинг-роль #1</label>${roleSelect("rsDeptR1_"+d.key,d.ping_role_id||"")}</div>
+          <div class="form-group msg-flex-1"><label>Пинг-роль #2 (опц.)</label>${roleSelect("rsDeptR2_"+d.key,d.ping_role_id_2||"")}</div>
+        </div>
+        <div class="msg-help">Если у отдела заданы каналы/пинги — они переопределят общие настройки повышения ниже. Если канал вердикта не задан — вердикт уйдёт в канал заявки.</div>
+      </div>
+    </div>`;
+  }).join("");
+  box.innerHTML=tabsHtml+cfgHtml;
+
+  box.querySelectorAll("[data-select-dept]").forEach(b=>b.addEventListener("click",()=>{
+    PROMO_ACTIVE_DEPT=b.getAttribute("data-select-dept");
+    renderPromoDepts();renderPromoMatrix();
+  }));
+  const addBtn=box.querySelector("[data-add-dept]");
+  if(addBtn) addBtn.addEventListener("click",()=>{
+    const name=prompt("Название нового отдела?");
+    if(!name||!name.trim()) return;
+    let key=slugKey(name.trim());
+    let i=1;while(PROMO_DEPTS.some(x=>x.key===key)){key=slugKey(name.trim())+"_"+(i++)}
+    PROMO_DEPTS.push({key,name:name.trim(),channel_id:null,verdict_channel_id:null,ping_role_id:null,ping_role_id_2:null});
+    PROMO_DEPT_FIELDS[key]={};
+    PROMO_ACTIVE_DEPT=key;
+    renderPromoDepts();renderPromoMatrix();
+  });
+  box.querySelectorAll("[data-del-dept]").forEach(b=>b.addEventListener("click",()=>{
+    const k=b.getAttribute("data-del-dept");
+    if(!confirm("Удалить отдел «"+(PROMO_DEPTS.find(x=>x.key===k)||{}).name+"» и все его настройки?")) return;
+    PROMO_DEPTS=PROMO_DEPTS.filter(x=>x.key!==k);
+    delete PROMO_DEPT_FIELDS[k];
+    if(PROMO_ACTIVE_DEPT===k) PROMO_ACTIVE_DEPT="";
+    renderPromoDepts();renderPromoMatrix();
+  }));
+  box.querySelectorAll("[data-dept-inp]").forEach(el=>el.addEventListener("input",()=>{
+    const k=el.getAttribute("data-dept-k");const prop=el.getAttribute("data-dept-inp");
+    const d=PROMO_DEPTS.find(x=>x.key===k);
+    if(d) d[prop]=el.value;
+  }));
+  const activeDept=PROMO_DEPTS.find(d=>d.key===PROMO_ACTIVE_DEPT);
+  if(activeDept){
+    [
+      ["rsDeptCh_","channel_id"],["rsDeptVCh_","verdict_channel_id"],
+      ["rsDeptR1_","ping_role_id"],["rsDeptR2_","ping_role_id_2"]
+    ].forEach(([prefix,prop])=>{
+      const el=$(prefix+activeDept.key);
+      if(el) el.addEventListener("change",()=>{activeDept[prop]=el.value||null});
+    });
+  }
+}
+
+function activeMap(){
+  if(PROMO_ACTIVE_DEPT){
+    if(!PROMO_DEPT_FIELDS[PROMO_ACTIVE_DEPT]) PROMO_DEPT_FIELDS[PROMO_ACTIVE_DEPT]={};
+    return PROMO_DEPT_FIELDS[PROMO_ACTIVE_DEPT];
+  }
+  return PROMO_FIELDS;
+}
+
+function renderPromoMatrix(){
+  const box=$("rsPromoMatrix");
+  if(!box) return;
+  if(!PROMO_RANKS.length){box.innerHTML=`<div class="msg-help">Добавьте хотя бы одну должность в список выше.</div>`;return}
+  const map=activeMap();
+  const deptName=PROMO_ACTIVE_DEPT?((PROMO_DEPTS.find(d=>d.key===PROMO_ACTIVE_DEPT)||{}).name||PROMO_ACTIVE_DEPT):"";
+  const header=PROMO_ACTIVE_DEPT
+    ?`<div class="msg-help" style="margin-bottom:8px">✎ Редактируется форма отдела: <b>${esc(deptName)}</b>. Если для должности оставите список пустым — будут показаны поля из «Общей формы».</div>`
+    :`<div class="msg-help" style="margin-bottom:8px">✎ Редактируется <b>общая</b> форма (fallback). Отделы без своей формы будут использовать её.</div>`;
+  box.innerHTML=header+PROMO_RANKS.map(r=>{
+    const arr=Array.isArray(map[r])?map[r]:[];
+    return `<div class="cf-group" style="margin-top:14px" data-rank="${esc(r)}">
+      <div class="cf-group-title">⭐ Повышение → <b>${esc(r)}</b>${PROMO_ACTIVE_DEPT?` · ${esc(deptName)}`:""} · подтверждения</div>
+      <div class="cf-group-body">
+        <div class="msg-help">Поля, которые появятся когда сотрудник выберет «Желаемая должность» = ${esc(r)}${PROMO_ACTIVE_DEPT?` и «Отдел» = «${esc(deptName)}»`:""}.</div>
+        <div class="rs-fields">${arr.map((f,i)=>fieldRowHtml(r,i,f)).join("")||`<div class="msg-help">Пока пусто${PROMO_ACTIVE_DEPT?" — будет использована общая форма.":""}</div>`}</div>
+        <div style="margin-top:10px"><button type="button" class="btn btn-ghost btn-sm" data-add-field="${esc(r)}">+ Добавить поле</button></div>
+      </div>
+    </div>`;
+  }).join("");
+  box.querySelectorAll("[data-add-field]").forEach(b=>b.addEventListener("click",()=>{
+    const r=b.getAttribute("data-add-field");
+    const m=activeMap();
+    if(!m[r]) m[r]=[];
+    m[r].push({key:"field_"+Date.now().toString(36),label:"Новое поле",type:"text",required:false,placeholder:"",options:[]});
+    renderPromoMatrix();
+  }));
+  box.querySelectorAll("[data-del-field]").forEach(b=>b.addEventListener("click",()=>{
+    const r=b.getAttribute("data-rank");const i=parseInt(b.getAttribute("data-del-field"));
+    const m=activeMap();m[r].splice(i,1);renderPromoMatrix();
+  }));
+  box.querySelectorAll("[data-up-field]").forEach(b=>b.addEventListener("click",()=>{
+    const r=b.getAttribute("data-rank");const i=parseInt(b.getAttribute("data-up-field"));
+    if(i<=0) return;
+    const a=activeMap()[r];[a[i-1],a[i]]=[a[i],a[i-1]];renderPromoMatrix();
+  }));
+  box.querySelectorAll("[data-dn-field]").forEach(b=>b.addEventListener("click",()=>{
+    const r=b.getAttribute("data-rank");const i=parseInt(b.getAttribute("data-dn-field"));
+    const a=activeMap()[r];if(i>=a.length-1) return;
+    [a[i+1],a[i]]=[a[i],a[i+1]];renderPromoMatrix();
+  }));
+  box.querySelectorAll("[data-inp]").forEach(el=>el.addEventListener("input",()=>{
+    const r=el.getAttribute("data-rank");const i=parseInt(el.getAttribute("data-idx"));const k=el.getAttribute("data-inp");
+    const m=activeMap();
+    if(!m[r]||!m[r][i]) return;
+    if(k==="required") m[r][i].required=el.checked;
+    else if(k==="options") m[r][i].options=el.value.split("\n").map(s=>s.trim()).filter(Boolean);
+    else m[r][i][k]=el.value;
+  }));
+  box.querySelectorAll("[data-inp='type']").forEach(el=>el.addEventListener("change",()=>renderPromoMatrix()));
+}
+
+function fieldRowHtml(rank,i,f){
+  const typeOpts=FIELD_TYPES.map(t=>`<option value="${t.v}" ${t.v===(f.type||"text")?"selected":""}>${esc(t.l)}</option>`).join("");
+  const showOpts=(f.type==="select");
+  return `<div class="cf-group" style="background:rgba(21,36,29,.35);margin:8px 0;padding:10px;border-radius:8px">
+    <div class="msg-row">
+      <div class="form-group msg-flex-1"><label>Название поля</label><input class="msg-input" data-rank="${esc(rank)}" data-idx="${i}" data-inp="label" value="${esc(f.label||"")}"></div>
+      <div class="form-group msg-flex-1"><label>Тип</label><select class="msg-input" data-rank="${esc(rank)}" data-idx="${i}" data-inp="type">${typeOpts}</select></div>
+      <div class="form-group msg-flex-1"><label>Ключ (в БД)</label><input class="msg-input" data-rank="${esc(rank)}" data-idx="${i}" data-inp="key" value="${esc(f.key||"")}"></div>
+    </div>
+    <div class="msg-row">
+      <div class="form-group msg-flex-1"><label>Плейсхолдер</label><input class="msg-input" data-rank="${esc(rank)}" data-idx="${i}" data-inp="placeholder" value="${esc(f.placeholder||"")}"></div>
+      <div class="form-group"><label class="cr-notify" style="display:inline-flex;margin-top:22px"><input type="checkbox" data-rank="${esc(rank)}" data-idx="${i}" data-inp="required" ${f.required?"checked":""}><span>Обязательное</span></label></div>
+    </div>
+    ${showOpts?`<div class="form-group"><label>Варианты (для выпадающего списка, по строке)</label><textarea class="msg-input" rows="3" data-rank="${esc(rank)}" data-idx="${i}" data-inp="options" style="font-family:monospace;resize:vertical">${esc((f.options||[]).join("\n"))}</textarea></div>`:""}
+    <div style="display:flex;gap:6px;justify-content:flex-end">
+      <button type="button" class="btn btn-ghost btn-sm" data-up-field="${i}" data-rank="${esc(rank)}">↑</button>
+      <button type="button" class="btn btn-ghost btn-sm" data-dn-field="${i}" data-rank="${esc(rank)}">↓</button>
+      <button type="button" class="btn btn-ghost btn-sm" data-del-field="${i}" data-rank="${esc(rank)}" style="color:#e77070">✕ Удалить</button>
+    </div>
+  </div>`;
+}
+
+function fillCommon(){
+  $("rsMinLeave").value=SETTINGS.min_rank_leave||"Ефрейтор";
+  $("rsMinVac").value=SETTINGS.min_rank_vacation||"Старший Сержант";
+  $("rsMaxLeave").value=SETTINGS.max_leave_minutes||60;
+  $("rsMaxVac").value=SETTINGS.max_vacation_days||7;
+  $("rsWStart").value=(SETTINGS.weekday_start||"09:00").slice(0,5);
+  $("rsWEnd").value=(SETTINGS.weekday_end||"22:00").slice(0,5);
+  $("rsWkEnd").value=(SETTINGS.weekend_end||"21:00").slice(0,5);
+  $("rsHEnd").value=(SETTINGS.holiday_end||"20:00").slice(0,5);
+  $("rsLS").value=(SETTINGS.lunch_start||"14:00").slice(0,5);
+  $("rsLE").value=(SETTINGS.lunch_end||"15:00").slice(0,5);
+  $("rsPov").value=(SETTINGS.poverka_time||"21:00").slice(0,5);
+  $("rsPovW").value=SETTINGS.poverka_window_min||30;
+  $("rsBlockViol").checked=SETTINGS.block_if_violations!==false;
+  $("rsNotifyVerdict").checked=SETTINGS.notify_verdict!==false;
+  const ss=SETTINGS.supply_score||{"РЛС":2,"Боеприпасы":1,"Медикаменты":1.5,"Продовольствие":1,"ГСМ":0.5};
+  $("rsSupplyScore").value=Object.entries(ss).map(([k,v])=>k+": "+v).join("\n");
+}
+
+function chSelect(id,cur){
+  const byParent=new Map();
+  for(const c of CHANNELS){const k=c.parent_name||"Без категории";if(!byParent.has(k)) byParent.set(k,[]);byParent.get(k).push(c)}
+  let opts=`<option value="">— не выбрано —</option>`;
+  for(const [pn,list] of byParent){
+    opts+=`<optgroup label="${esc(pn)}">`;
+    for(const c of list) opts+=`<option value="${c.channel_id}" ${c.channel_id===cur?"selected":""}>#${esc(c.name)}</option>`;
+    opts+=`</optgroup>`;
+  }
+  return `<select id="${id}" class="msg-input">${opts}</select>`;
+}
+function roleSelect(id,cur){
+  return `<select id="${id}" class="msg-input"><option value="">— не выбрано —</option>${ROLES.filter(r=>r.name!=="@everyone").map(r=>`<option value="${r.role_id}" ${r.role_id===cur?"selected":""}>@${esc(r.name)}</option>`).join("")}</select>`;
+}
+
+function renderForms(){
+  $("rsForms").innerHTML=KINDS.map(k=>{
+    const meta=CGB_REQUESTS.KIND_META[k];
+    const f=FORMS[k]||{};
+    return `<div class="cf-group" data-kind="${k}">
+      <div class="cf-group-title">${meta.icon} ${esc(meta.label)}</div>
+      <div class="cf-group-body">
+        <div class="msg-row">
+          <div class="form-group msg-flex-1"><label>Канал DS для заявки</label>${chSelect("rsCh_"+k,f.channel_id||"")}</div>
+          <div class="form-group msg-flex-1"><label>Канал DS для вердикта</label>${chSelect("rsVCh_"+k,f.verdict_channel_id||"")}</div>
+        </div>
+        <div class="msg-row">
+          <div class="form-group msg-flex-1"><label>Пинг-роль #1</label>${roleSelect("rsR1_"+k,f.ping_role_id||"")}</div>
+          <div class="form-group msg-flex-1"><label>Пинг-роль #2 (опц.)</label>${roleSelect("rsR2_"+k,f.ping_role_id_2||"")}</div>
+        </div>
+        <div class="msg-help">Если канал вердикта не задан — вердикт уйдёт в канал заявки.</div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+$("rsSaveAll").addEventListener("click",async()=>{
+  const msg=$("rsMsg");
+  const supplyScore={};
+  ($("rsSupplyScore").value||"").split("\n").forEach(line=>{
+    const m=line.match(/^\s*([^:]+):\s*(\d+(?:\.\d+)?)\s*$/);
+    if(m) supplyScore[m[1].trim()]=parseFloat(m[2]);
+  });
+  msg.className="form-msg info";msg.textContent="Сохранение...";
+  const set={
+    min_rank_leave:$("rsMinLeave").value.trim()||null,
+    min_rank_vacation:$("rsMinVac").value.trim()||null,
+    max_leave_minutes:parseInt($("rsMaxLeave").value)||60,
+    max_vacation_days:parseInt($("rsMaxVac").value)||7,
+    weekday_start:$("rsWStart").value||"09:00",
+    weekday_end:$("rsWEnd").value||"22:00",
+    weekend_end:$("rsWkEnd").value||"21:00",
+    holiday_end:$("rsHEnd").value||"20:00",
+    lunch_start:$("rsLS").value||"14:00",
+    lunch_end:$("rsLE").value||"15:00",
+    poverka_time:$("rsPov").value||"21:00",
+    poverka_window_min:parseInt($("rsPovW").value)||30,
+    block_if_violations:$("rsBlockViol").checked,
+    notify_verdict:$("rsNotifyVerdict").checked,
+    supply_score:supplyScore
+  };
+  const r1=await CGB_REQUESTS.saveSettings(set);
+  if(!r1.ok){msg.className="form-msg error";msg.textContent="Общие: "+r1.error;return}
+  for(const k of KINDS){
+    const patch={
+      id:k,
+      channel_id:document.getElementById("rsCh_"+k).value||null,
+      verdict_channel_id:document.getElementById("rsVCh_"+k)?document.getElementById("rsVCh_"+k).value||null:null,
+      ping_role_id:document.getElementById("rsR1_"+k).value||null,
+      ping_role_id_2:document.getElementById("rsR2_"+k).value||null
+    };
+    if(k==="promotion"){
+      function cleanMap(src){
+        const out={};
+        for(const r of PROMO_RANKS){
+          const arr=src[r]||[];
+          out[r]=arr.map((f,idx)=>{
+            const label=(f.label||"").trim()||("Поле "+(idx+1));
+            let key=(f.key||"").trim();
+            if(!key) key="field_"+(idx+1)+"_"+Date.now().toString(36);
+            return {
+              key:key,label:label,type:f.type||"text",required:!!f.required,
+              placeholder:f.placeholder||"",options:Array.isArray(f.options)?f.options:[],
+              group:"Подтверждения"
+            };
+          });
+        }
+        return out;
+      }
+      const cleanFields=cleanMap(PROMO_FIELDS);
+      const deptFieldsClean={};
+      for(const d of PROMO_DEPTS){
+        deptFieldsClean[d.key]=cleanMap(PROMO_DEPT_FIELDS[d.key]||{});
+      }
+      const deptsClean=PROMO_DEPTS.map(d=>({
+        key:d.key,
+        name:(d.name||"").trim()||d.key,
+        channel_id:document.getElementById("rsDeptCh_"+d.key)?document.getElementById("rsDeptCh_"+d.key).value||null:(d.channel_id||null),
+        verdict_channel_id:document.getElementById("rsDeptVCh_"+d.key)?document.getElementById("rsDeptVCh_"+d.key).value||null:(d.verdict_channel_id||null),
+        ping_role_id:document.getElementById("rsDeptR1_"+d.key)?document.getElementById("rsDeptR1_"+d.key).value||null:(d.ping_role_id||null),
+        ping_role_id_2:document.getElementById("rsDeptR2_"+d.key)?document.getElementById("rsDeptR2_"+d.key).value||null:(d.ping_role_id_2||null)
+      }));
+      patch.rank_matrix={
+        ranks:PROMO_RANKS.slice(),
+        fields:cleanFields,
+        departments:deptsClean,
+        dept_fields:deptFieldsClean
+      };
+      console.log("[RS] promotion patch:",JSON.parse(JSON.stringify(patch)));
+    }
+    const r=await CGB_REQUESTS.saveForm(patch);
+    if(!r.ok){msg.className="form-msg error";msg.textContent="Форма "+k+": "+r.error;return}
+  }
+  const check=await CGB_REQUESTS.getForm("promotion");
+  if(check&&check.rank_matrix&&check.rank_matrix.fields){
+    const cnt=Object.values(check.rank_matrix.fields).reduce((a,b)=>a+(Array.isArray(b)?b.length:0),0);
+    msg.className="form-msg success";
+    const deptCnt=(check.rank_matrix.departments||[]).length;
+    const deptFieldsCnt=Object.values(check.rank_matrix.dept_fields||{}).reduce((a,ranksMap)=>a+Object.values(ranksMap||{}).reduce((b,arr)=>b+(Array.isArray(arr)?arr.length:0),0),0);
+    msg.innerHTML="✓ Сохранено. В БД лежит: <b>"+((check.rank_matrix.ranks||[]).length)+"</b> званий, <b>"+cnt+"</b> общих полей, <b>"+deptCnt+"</b> отделов с <b>"+deptFieldsCnt+"</b> полями.";
+  }else{
+    msg.className="form-msg error";
+    msg.innerHTML="⚠ Сохранено, но rank_matrix не вернулся из БД. <br>Скорее всего не создана колонка. Выполните <code>sql/SUPABASE-REQUESTS-V113.sql</code> в Supabase.";
+  }
+});
+
+if(window.CGB_ROLES) CGB_ROLES.onChange(boot);
+setTimeout(boot,500);
+</script>
+
+</body>
+</html>

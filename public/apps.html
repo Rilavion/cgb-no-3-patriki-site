@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title> Электронные заявления</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=26">
+<style id="cgb-admin-guard">
+[data-admin]{display:none !important}
+[data-staff]{display:none !important}
+body.cgb-is-admin .nav a[data-admin]{display:inline-flex !important}
+body.cgb-is-staff .nav a[data-staff]{display:inline-flex !important}
+body.cgb-is-admin [data-admin]:not(.nav a){display:initial !important}
+body.cgb-is-staff [data-staff]:not(.nav a){display:initial !important}
+</style>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+<div class="bg-noise"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ВС"></div>
+      <div class="brand-text">
+        <span class="brand-label">Министерство Здравоохранения</span>
+        <span class="brand-name">ЦГБ №3 · Центральная Городская</span>
+      </div>
+    </a>
+    <nav class="nav" id="mainNav">
+      <a href="index.html" data-page="index.html" data-transition>Главная</a>
+      <a href="info.html" data-page="info.html" data-transition>Информация</a>
+      <a href="services.html" data-page="services.html" data-transition>Услуги</a>
+      <a href="meds.html" data-page="meds.html" data-transition>Медикаменты</a>
+      <a href="ustav.html" data-page="ustav.html" data-transition>Устав</a>
+      <a href="learn.html" data-page="learn.html" data-transition data-loggedin>Учебные материалы</a>
+      <a href="tests.html" data-page="tests.html" data-transition data-loggedin>Тестирование</a>
+      <a href="composition.html" data-page="composition.html" data-transition>Состав</a>
+      <a href="docs.html" data-page="docs.html" data-transition data-perm="docs:view">Документы</a>
+      <a href="news.html" data-page="news.html" data-transition>Новости</a>
+      <a href="autopark.html" data-page="autopark.html" data-transition>Автопарк</a>
+      <a href="map.html" data-page="map.html" data-transition>Карта</a>
+      <a href="faq.html" data-page="faq.html" data-transition>FAQ</a>
+      <a href="complaints.html" data-page="complaints.html" data-transition>Жалобы</a>
+      <a href="supply.html" data-page="supply.html" data-transition data-perm="supply:view">Поставки</a>
+      <a href="apps.html" data-page="apps.html" data-transition data-perm="apps:view">Заявления</a>
+      <a href="vp.html" data-page="vp.html" data-transition data-perm="vp:view">Проверки АБ</a>
+      <a href="complaints-review.html" data-page="complaints-review.html" data-transition data-perm="complaints:review,complaints:view">Рассмотрение жалоб</a>
+      <a href="complaints-stats.html" data-page="complaints-stats.html" data-transition data-perm="complaints:review,complaints:view">Статистика жалоб</a>
+      <a href="leave.html" data-page="leave.html" data-transition data-loggedin>Отгул</a>
+      <a href="vacation-ic.html" data-page="vacation-ic.html" data-transition data-loggedin>Отпуск IC</a>
+      <a href="vacation-ooc.html" data-page="vacation-ooc.html" data-transition data-loggedin>Отпуск OOC</a>
+      <a href="dismissal.html" data-page="dismissal.html" data-transition data-loggedin>Увольнение</a>
+      <a href="promotion.html" data-page="promotion.html" data-transition data-loggedin>Повышение</a>
+      <a href="restoration.html" data-page="restoration.html" data-transition>Восстановление в ЦГБ №3</a>
+      <a href="appointment.html" data-page="appointment.html" data-transition>Запись к врачу</a>
+      <a href="requests-review.html" data-page="requests-review.html" data-transition data-perm="requests:review,requests:view">Рассмотрение заявок</a>
+      <a href="requests-stats.html" data-page="requests-stats.html" data-transition data-perm="requests:review,requests:view">Статистика заявок</a>
+      <a href="payroll.html" data-page="payroll.html" data-transition data-perm="payroll:view">Реестр премирования</a>
+      <a href="report.html" data-page="report.html" data-transition>Еженедельный отчёт</a>
+      <a href="report-settings.html" data-page="report-settings.html" data-transition data-perm="report:settings">Настройки отчётов</a>
+      <a href="vp-request.html" data-page="vp-request.html" data-transition data-perm="vp_request:submit">Запрос на наказание</a>
+      <a href="vp-request-settings.html" data-page="vp-request-settings.html" data-transition data-perm="vp_request:settings">Настройки запросов АБ</a>
+      <a href="lk.html" data-page="lk.html" data-transition>Личный кабинет</a>
+    </nav>
+    <div class="header-actions">
+      <a href="apps-stats.html" data-page="apps-stats.html" class="btn btn-ghost btn-sm" data-perm="apps:view" style="display:none">📊 Статистика</a>
+      <button class="search-btn" data-open-search title="Поиск (Ctrl+K)">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+        <span>Поиск</span><span class="kbd">Ctrl K</span>
+      </button>
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Сменить тему">
+        <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24"><path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66l1.42-1.42M4.92 19.08l1.42-1.42m0-11.32L4.92 4.92m14.16 14.16l-1.42-1.42M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="login-btn" data-open-login>
+        <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/></svg>
+        <span>Войти</span>
+      </button>
+      <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="apps-head">
+    <div class="container">
+      <div class="apps-head-ribbon">
+        <span class="apps-head-ribbon-line"></span>
+        <span class="apps-head-ribbon-emblem">◈</span>
+        <span class="apps-head-ribbon-name">Служебное · Старший состав</span>
+        <span class="apps-head-ribbon-emblem">◈</span>
+        <span class="apps-head-ribbon-line"></span>
+      </div>
+      <h1 class="apps-head-title">Электронные заявления</h1>
+      <div class="apps-head-subtitle">Приём и обработка запросов с Discord-серверов</div>
+    </div>
+  </section>
+
+  <section class="apps-guard" id="appsGuard" style="display:none">
+    <div class="container apps-guard-box">
+      <div class="apps-guard-icon">⚠</div>
+      <h2>Доступ ограничен</h2>
+      <p>Раздел «Электронные заявления» доступен только Старшему Составу и Администрации.<br>Войдите под соответствующей учётной записью или обратитесь к администратору для назначения роли.</p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px">
+        <button class="btn btn-gold btn-sm" data-open-login>Войти</button>
+        <a class="btn btn-ghost btn-sm" href="index.html">На главную</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="apps-body" id="appsBody" style="display:none">
+    <div class="container">
+
+      <div class="apps-tabs">
+        <button class="apps-tab active" data-status="new">
+          <span class="apps-tab-icon">✦</span>
+          <span class="apps-tab-label">Новые</span>
+          <span class="apps-tab-count" id="cntNew">0</span>
+        </button>
+        <button class="apps-tab" data-status="approved">
+          <span class="apps-tab-icon">✓</span>
+          <span class="apps-tab-label">Одобренные</span>
+          <span class="apps-tab-count" id="cntApproved">0</span>
+        </button>
+        <button class="apps-tab" data-status="rejected">
+          <span class="apps-tab-icon">✕</span>
+          <span class="apps-tab-label">Отклонённые</span>
+          <span class="apps-tab-count" id="cntRejected">0</span>
+        </button>
+        <button class="apps-tab" data-status="archived">
+          <span class="apps-tab-icon">▣</span>
+          <span class="apps-tab-label">Архив</span>
+          <span class="apps-tab-count" id="cntArchived">0</span>
+        </button>
+
+        <div class="apps-tabs-actions">
+          <button class="btn btn-ghost btn-sm" id="appsRefresh" title="Обновить">↻</button>
+          <button class="btn btn-gold btn-sm" id="appsAddManual" title="Ручной ввод (для теста без бота)">+ Тест</button>
+        </div>
+      </div>
+
+      <div class="apps-list" id="appsList">
+        <div class="apps-empty">Загрузка...</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="brand-icon" style="width:44px;height:44px"><img src="assets/images/brand/logo.png" alt=""></div>
+        <p style="color:var(--muted);font-size:13px;margin-top:12px">Служебный раздел. Доступ ограничен.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Разделы</h5>
+        <a href="index.html" data-page="index.html">Главная</a>
+        <a href="info.html" data-page="info.html">Информация</a>
+        <a href="services.html" data-page="services.html">Услуги и цены</a>
+        <a href="meds.html" data-page="meds.html">Медикаменты</a>
+        <a href="ustav.html" data-page="ustav.html">Устав</a>
+        <a href="composition.html" data-page="composition.html">Состав</a>
+      </div>
+      <div class="footer-col">
+        <h5>Служебное</h5>
+        <a href="apps.html" data-page="apps.html">Заявления</a>
+        <a href="lk.html" data-page="lk.html">Личный кабинет</a>
+        <a href="docs.html" data-page="docs.html">Документы</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> · Министерство Здравоохранения</span>
+      <span>ЦГБ №3 · Центральная Городская</span>
+    <span class="footer-note">🐞 Нашли баг? Обратитесь: <b>@rilavion</b></span></div>
+  </div>
+</footer>
+
+<div class="fab-stack" id="fabStack">
+  <button class="fab" id="fabUp" title="Наверх">
+    <svg viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8z"/></svg>
+  </button>
+</div>
+
+<div class="search-modal" id="searchModal">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+      <input class="search-input" placeholder="Поиск..." spellcheck="false">
+      <button class="search-close-kbd">Esc</button>
+    </div>
+    <div class="search-results"></div>
+  </div>
+</div>
+
+<div class="modal-back" id="loginModal">
+  <div class="modal">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Вход в служебный раздел</h3>
+    <div class="modal-sub">Требуется роль СС или Администратора</div>
+    <form>
+      <div class="form-group"><label>Email</label><input type="email" name="email" required></div>
+      <div class="form-group"><label>Пароль</label><input type="password" name="password" required></div>
+      <button class="btn btn-gold" style="width:100%" type="submit">Войти</button>
+      <div class="form-msg"></div>
+    </form>
+  </div>
+</div>
+
+<!-- Модалка отклонения (причина) -->
+<div class="modal-back" id="rejectModal">
+  <div class="modal">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Отклонить заявление</h3>
+    <div class="modal-sub">Укажите причину — она попадёт в ответ Discord-бота.</div>
+    <div class="form-group">
+      <label>Причина отказа</label>
+      <textarea id="rejectReason" style="min-height:100px" placeholder="Например: недостаточно часов на сервере, отсутствуют скриншоты..."></textarea>
+    </div>
+    <div class="form-msg" id="rejectMsg"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap">
+      <button class="btn btn-ghost btn-sm" id="rejectCancel">Отмена</button>
+      <button class="btn btn-gold btn-sm" id="rejectConfirm">Отклонить</button>
+    </div>
+  </div>
+</div>
+
+<!-- Модалка ручного создания (тестирование парсера) -->
+<div class="modal-back" id="manualModal">
+  <div class="modal modal-lg">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Тестовое заявление</h3>
+    <div class="modal-sub">Вставь текст сообщения от Discord-бота — система распарсит и создаст запись.</div>
+    <div class="form-group">
+      <label>Сообщение от бота</label>
+      <textarea id="manualText" style="min-height:280px;font-family:'JetBrains Mono','Courier New',monospace;font-size:12px;line-height:1.5" placeholder="**Выберите тип:**&#10;Заявление на вступление в ...&#10;&#10;**Имя Фамилия (персонажа):**&#10;Иван Иванов&#10;..."></textarea>
+    </div>
+    <div class="form-group">
+      <label>Ссылка на сообщение (опционально)</label>
+      <input type="url" id="manualLink" placeholder="https://discord.com/channels/...">
+    </div>
+    <div class="form-msg" id="manualMsg"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap">
+      <button class="btn btn-ghost btn-sm" id="manualCancel">Отмена</button>
+      <button class="btn btn-gold btn-sm" id="manualCreate">Создать</button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=17"></script>
+<script src="assets/js/core/config.js?v=17"></script>
+<script src="assets/js/core/auth.js?v=17"></script>
+<script src="assets/js/core/roles-engine.js?v=17"></script>
+<script src="assets/js/features/apps-engine.js?v=17"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/utils/format-utils.js?v=17"></script>
+<script src="assets/js/ui/holiday-engine.js?v=17"></script>
+<script src="assets/js/ui/sound-engine.js?v=17"></script>
+<script src="assets/js/ui/settings-panel.js?v=17"></script>
+<script src="assets/js/features/faq-engine.js?v=17"></script>
+<script src="assets/js/ui/search-engine.js?v=17"></script>
+<script src="assets/js/utils/ds-cache.js?v=17"></script>
+<script src="assets/js/ui/notify-engine.js?v=19"></script>
+<script src="assets/js/ui/notify-live.js?v=17"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+const $=id=>document.getElementById(id);
+const esc=s=>CGB_APPS.esc(s);
+
+let currentStatus="new";
+let CURRENT_ROW=null;
+let LAST_RENDER_HASH="";
+let LAST_ROWS=[];
+let RENDER_LOCK=false;
+let OPEN_IDS=new Set();
+
+function switchTab(status){
+  if(currentStatus===status) return;
+  currentStatus=status;
+  LAST_RENDER_HASH="";
+  document.querySelectorAll(".apps-tab").forEach(t=>t.classList.toggle("active",t.dataset.status===status));
+  renderList(true);
+}
+document.querySelectorAll(".apps-tab").forEach(t=>t.addEventListener("click",()=>switchTab(t.dataset.status)));
+
+async function refreshCounts(){
+  const c=await CGB_APPS.counts();
+  $("cntNew").textContent=c.new;
+  $("cntApproved").textContent=c.approved;
+  $("cntRejected").textContent=c.rejected;
+  $("cntArchived").textContent=c.archived;
+}
+
+function rowsHash(rows,status){
+  let h=status+":"+rows.length+":";
+  for(const r of rows) h+=r.id+"|"+(r.updated_at||r.created_at||"")+"|"+r.status+";";
+  return h;
+}
+
+async function renderList(force){
+  if(RENDER_LOCK) return;
+  RENDER_LOCK=true;
+  try{
+    const box=$("appsList");
+    const isEmpty=!box.querySelector(".apps-card");
+    if(force||isEmpty) box.innerHTML=`<div class="apps-empty">Загрузка...</div>`;
+    const rows=await CGB_APPS.fetchByStatus(currentStatus,200);
+    refreshCounts();
+    LAST_ROWS=rows;
+    const hash=rowsHash(rows,currentStatus);
+    if(!force&&hash===LAST_RENDER_HASH){
+      return;
+    }
+    LAST_RENDER_HASH=hash;
+    if(!rows.length){
+      box.innerHTML=`<div class="apps-empty">
+        <div class="apps-empty-icon">${currentStatus==="new"?"✦":currentStatus==="approved"?"✓":currentStatus==="rejected"?"✕":"▣"}</div>
+        <h3>Пусто</h3>
+        <p>${currentStatus==="new"?"Новых заявлений нет":currentStatus==="archived"?"Архив пуст":"Записей в этой категории нет"}</p>
+      </div>`;
+      return;
+    }
+    box.innerHTML=rows.map((r,i)=>renderCard(r,i)).join("");
+    box.querySelectorAll(".apps-card").forEach(el=>{
+      const cardId=el.dataset.id;
+      if(OPEN_IDS.has(cardId)) el.classList.add("open");
+      el.querySelectorAll("[data-act]").forEach(btn=>{
+        btn.addEventListener("click",e=>{
+          e.stopPropagation();
+          const id=btn.closest(".apps-card").dataset.id;
+          const row=rows.find(x=>x.id===id);
+          handleAction(row,btn.dataset.act);
+        });
+      });
+      el.querySelector(".apps-card-head").addEventListener("click",()=>{
+        el.classList.toggle("open");
+        if(el.classList.contains("open")) OPEN_IDS.add(cardId);
+        else OPEN_IDS.delete(cardId);
+      });
+      el.querySelectorAll("[data-toggle-frame]").forEach(btn=>{
+        btn.addEventListener("click",e=>{
+          e.stopPropagation();
+          const uid=btn.dataset.toggleFrame;
+          const f=document.getElementById("frame-"+uid);
+          if(!f) return;
+          const shown=!f.hasAttribute("hidden");
+          if(shown){f.setAttribute("hidden","");btn.querySelector("[data-toggle-label]").textContent="Развернуть превью"}
+          else{f.removeAttribute("hidden");btn.querySelector("[data-toggle-label]").textContent="Свернуть превью"}
+        });
+      });
+    });
+  } finally {
+    RENDER_LOCK=false;
+  }
+}
+
+function extractUrls(text){
+  const out=[];const re=/(https?:\/\/[^\s<>"'`]+)/gi;let m;
+  while((m=re.exec(text))!==null) out.push(m[1].replace(/[.,;:!?)]+$/,""));
+  return out;
+}
+function looksLikeMediaField(key){
+  return /скриншот|ссылк|фото|imgur|yapx|url|http/i.test(key||"");
+}
+function renderField(k,v,rowId){
+  const key=esc(k);
+  const val=String(v||"");
+  const urls=extractUrls(val);
+  const isMedia=looksLikeMediaField(k)&&urls.length>0;
+  const textHtml=esc(val).replace(/\n/g,"<br>").replace(/(https?:\/\/[^\s<]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>');
+  if(!isMedia){
+    return `<div class="apps-field"><div class="apps-field-key">${key}</div><div class="apps-field-val">${textHtml}</div></div>`;
+  }
+  // Медиа-поле: iframe с превью + кнопки
+  const url=urls[0];
+  const uid=rowId+"-"+Math.random().toString(36).slice(2,7);
+  return `<div class="apps-field apps-field-media">
+    <div class="apps-field-key">${key}</div>
+    <div class="apps-field-val">
+      <div class="apps-media-controls">
+        <a class="apps-media-btn apps-media-btn-open" href="${esc(url)}" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3zM5 5h5v2H5v12h12v-5h2v5c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2z"/></svg>
+          Открыть в новом окне
+        </a>
+        <button class="apps-media-btn apps-media-btn-toggle" data-toggle-frame="${uid}">
+          <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M4 4h6v2H6v4H4V4zm10 0h6v6h-2V6h-4V4zM4 14h2v4h4v2H4v-6zm14 0h2v6h-6v-2h4v-4z"/></svg>
+          <span data-toggle-label>Развернуть превью</span>
+        </button>
+        <span class="apps-media-url">${esc(url)}</span>
+      </div>
+      <div class="apps-media-frame" id="frame-${uid}" hidden>
+        <iframe src="${esc(url)}" loading="lazy" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" allow="fullscreen"></iframe>
+        <div class="apps-media-frame-note">Если превью пустое — сайт запрещает встраивание. Откройте в новом окне ↗</div>
+      </div>
+      ${urls.length>1?`<div class="apps-media-more">Дополнительные ссылки: ${urls.slice(1).map(u=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(u)}</a>`).join(", ")}</div>`:""}
+    </div>
+  </div>`;
+}
+
+function renderCard(r,i){
+  const fields=r.fields||{};
+  const keys=Object.keys(fields);
+  const previewField=fields["По какой причине"]||fields[keys.find(k=>/причин/i.test(k))]||fields[keys[0]]||"";
+  const preview=String(previewField||"").slice(0,180);
+  const status=r.status;
+  const statusLabel={"new":"Новое","approved":"Одобрено","rejected":"Отклонено","archived":"Архив"}[status]||status;
+  const badgeClass={"new":"apps-b-new","approved":"apps-b-ok","rejected":"apps-b-no","archived":"apps-b-arc"}[status]||"";
+  const respondedInfo=r.responded_by_name?`<div class="apps-card-responded">
+    <span class="apps-card-responded-lbl">Решил:</span>
+    <span class="apps-card-responded-name">${esc(r.responded_by_name)}</span>
+    <span class="apps-card-responded-time">${CGB_APPS.niceDate(r.responded_at)}</span>
+  </div>`:"";
+  const rejectInfo=(status==="rejected"&&r.reject_reason)?`<div class="apps-card-reject"><b>Причина отказа:</b> ${esc(r.reject_reason)}</div>`:"";
+  const actions=(status==="new"?`
+    <button class="apps-btn apps-btn-ok" data-act="approve" title="Одобрить">✓ Одобрить</button>
+    <button class="apps-btn apps-btn-no" data-act="reject" title="Отклонить">✕ Отклонить</button>
+    <button class="apps-btn apps-btn-arc" data-act="archive" title="В архив">▣ В архив</button>
+  `:`
+    <button class="apps-btn apps-btn-arc" data-act="archive" title="В архив">▣ В архив</button>
+    ${status!=="new"?`<button class="apps-btn apps-btn-back" data-act="restore" title="Вернуть в новые">↺ Вернуть</button>`:""}
+  `);
+  const link=r.message_link?`<a class="apps-card-link" href="${esc(r.message_link)}" target="_blank" rel="noopener" title="Открыть в Discord">↗</a>`:"";
+  return `<article class="apps-card" data-id="${r.id}">
+    <div class="apps-card-head">
+      <div class="apps-card-idx">#${String(i+1).padStart(3,"0")}</div>
+      <div class="apps-card-main">
+        <div class="apps-card-type">${esc(r.app_type||"Заявление")}${link}</div>
+        <h3 class="apps-card-name">${esc(r.submitter_name||"— имя не указано —")}${r.submitter_discord?`<span class="apps-card-dc">${esc(r.submitter_discord)}</span>`:""}</h3>
+        <div class="apps-card-preview">${esc(preview)}${preview.length>=180?"…":""}</div>
+      </div>
+      <div class="apps-card-side">
+        <div class="apps-card-badge ${badgeClass}">${statusLabel}</div>
+        <div class="apps-card-date">${CGB_APPS.niceDate(r.created_at)}</div>
+        <div class="apps-card-expand">▾</div>
+      </div>
+    </div>
+    <div class="apps-card-body">
+      <div class="apps-fields">
+        ${keys.map(k=>renderField(k,fields[k],r.id)).join("")}
+      </div>
+      ${rejectInfo}
+      ${respondedInfo}
+      <div class="apps-card-actions">
+        ${actions}
+      </div>
+    </div>
+  </article>`;
+}
+
+async function handleAction(row,act){
+  if(!row) return;
+  if(act==="approve"){
+    if(!confirm("Одобрить заявление от «"+(row.submitter_name||"без имени")+"»?")) return;
+    const r=await CGB_APPS.updateStatus(row.id,"approved");
+    if(!r.ok){alert("Ошибка: "+r.error);return}
+    LAST_RENDER_HASH="";renderList(true);
+  }
+  else if(act==="reject"){
+    CURRENT_ROW=row;
+    $("rejectReason").value="";
+    $("rejectMsg").textContent="";$("rejectMsg").className="form-msg";
+    $("rejectModal").classList.add("active");
+  }
+  else if(act==="archive"){
+    if(!confirm("Переместить в архив?")) return;
+    const r=await CGB_APPS.updateStatus(row.id,"archived");
+    if(!r.ok){alert("Ошибка: "+r.error);return}
+    LAST_RENDER_HASH="";renderList(true);
+  }
+  else if(act==="restore"){
+    if(!confirm("Вернуть заявление в статус «Новое»?")) return;
+    const r=await CGB_APPS.updateStatus(row.id,"new");
+    if(!r.ok){alert("Ошибка: "+r.error);return}
+    LAST_RENDER_HASH="";renderList(true);
+  }
+}
+
+// ===== Reject modal =====
+$("rejectCancel").addEventListener("click",()=>$("rejectModal").classList.remove("active"));
+$("rejectModal").querySelector(".modal-close").addEventListener("click",()=>$("rejectModal").classList.remove("active"));
+$("rejectModal").addEventListener("click",e=>{if(e.target===$("rejectModal")) $("rejectModal").classList.remove("active")});
+$("rejectConfirm").addEventListener("click",async()=>{
+  const reason=$("rejectReason").value.trim();
+  if(!reason){$("rejectMsg").className="form-msg error";$("rejectMsg").textContent="Укажи причину";return}
+  if(!CURRENT_ROW) return;
+  $("rejectMsg").className="form-msg info";$("rejectMsg").textContent="Отправка...";
+  const r=await CGB_APPS.updateStatus(CURRENT_ROW.id,"rejected",reason);
+  if(!r.ok){$("rejectMsg").className="form-msg error";$("rejectMsg").textContent=r.error;return}
+  $("rejectModal").classList.remove("active");
+  LAST_RENDER_HASH="";renderList(true);
+});
+
+// ===== Manual add (для теста без бота) =====
+$("appsAddManual").addEventListener("click",()=>{
+  $("manualText").value=`\`\`\`
+**Выберите тип:**
+Заявление на вступление в Областную Медицинскую Службу
+
+**Имя Фамилия (персонажа):**
+Илья Фельдшеров
+
+**Возраст: (Ваш)**
+21
+
+**Возраст: (Персонажа)**
+25
+
+**Номер вашего Нового паспорта (персонажа) :**
+745-263
+
+**По какой причине желаете вступить в ОМС?**
+Желаю спасать жизни граждан города Москвы
+
+**Работали ли вы в ОМС ранее?**
+Да, работал
+
+**Ссылка на скриншоты - паспорт, водительское удостоверение, мед. книжка (Imgur/Yapx):**
+https://fotora.ru/uploaded/?ID=HASKK01082026153545
+
+**Часы, отыгранные на сервере:**
+619 часов
+
+**Ваш среднесуточный онлайн**
+2-4 часов
+
+**Дискорд для связи с вами: (пример @user)**
+@soldatik_44
+\`\`\``;
+  $("manualLink").value="";
+  $("manualMsg").textContent="";$("manualMsg").className="form-msg";
+  $("manualModal").classList.add("active");
+});
+$("manualCancel").addEventListener("click",()=>$("manualModal").classList.remove("active"));
+$("manualModal").querySelector(".modal-close").addEventListener("click",()=>$("manualModal").classList.remove("active"));
+$("manualModal").addEventListener("click",e=>{if(e.target===$("manualModal")) $("manualModal").classList.remove("active")});
+$("manualCreate").addEventListener("click",async()=>{
+  const text=$("manualText").value.trim();
+  if(!text){$("manualMsg").className="form-msg error";$("manualMsg").textContent="Пусто";return}
+  const parsed=CGB_APPS.parseDiscordMessage(text);
+  parsed.message_link=$("manualLink").value.trim()||null;
+  parsed.source="manual";
+  $("manualMsg").className="form-msg info";$("manualMsg").textContent="Создание...";
+  const r=await CGB_APPS.createManual(parsed);
+  if(!r.ok){$("manualMsg").className="form-msg error";$("manualMsg").textContent=r.error;return}
+  $("manualModal").classList.remove("active");
+  switchTab("new");
+});
+
+$("appsRefresh").addEventListener("click",()=>{LAST_RENDER_HASH="";renderList(true)});
+
+let LAST_GUARD_STATE=null;
+function applyGuard(){
+  const canApps=!!(window.CGB_ROLES&&window.CGB_ROLES.can("apps","view"));
+  const uid=(window.CGB_AUTH&&window.CGB_AUTH.state&&window.CGB_AUTH.state.user&&window.CGB_AUTH.state.user.id)||null;
+  const key=canApps+":"+uid;
+  $("appsBody").style.display=canApps?"":"none";
+  $("appsGuard").style.display=canApps?"none":"";
+  if(!canApps){LAST_GUARD_STATE=key;return}
+  if(LAST_GUARD_STATE===key) return;
+  LAST_GUARD_STATE=key;
+  renderList(true);
+}
+if(window.CGB_ROLES){
+  CGB_ROLES.onChange(()=>applyGuard());
+}
+setTimeout(applyGuard,600);
+setTimeout(applyGuard,1500);
+
+let SOFT_REFRESH_TIMER=null;
+function softRefresh(){
+  if(SOFT_REFRESH_TIMER) clearTimeout(SOFT_REFRESH_TIMER);
+  SOFT_REFRESH_TIMER=setTimeout(()=>{
+    if(document.visibilityState==="visible"&&window.CGB_ROLES&&window.CGB_ROLES.can("apps","view")){
+      renderList(false);
+    }
+  },400);
+}
+document.addEventListener("visibilitychange",()=>{
+  if(document.visibilityState==="visible") softRefresh();
+});
+window.addEventListener("focus",softRefresh);
+setInterval(()=>{if(!document.hidden) softRefresh()},120000);
+
+async function tryOpenFromHash(){
+  const h=location.hash||"";
+  const m=h.match(/^#app-(.+)$/);
+  if(!m) return;
+  const id=m[1];
+  const deadline=Date.now()+15000;
+  while(Date.now()<deadline){
+    const card=document.querySelector('.apps-card[data-id="'+id+'"]');
+    if(card){
+      card.scrollIntoView({behavior:"smooth",block:"center"});
+      card.style.transition="box-shadow .6s ease";
+      card.style.boxShadow="0 0 0 3px var(--gold), 0 0 40px rgba(34,211,238,.5)";
+      setTimeout(()=>{card.style.boxShadow=""},3000);
+      history.replaceState(null,"",location.pathname);
+      return;
+    }
+    await new Promise(r=>setTimeout(r,300));
+  }
+  console.warn("[APPS] не удалось найти карточку #app-"+id);
+}
+setTimeout(tryOpenFromHash,600);
+</script>
+
+</body>
+</html>

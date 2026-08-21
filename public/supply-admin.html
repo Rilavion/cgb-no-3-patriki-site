@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title>Настройка формы поставок</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=26">
+<style id="cgb-admin-guard">[data-admin]{display:none !important}body.cgb-is-admin [data-admin]{display:initial !important}</style>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas><div class="bg-noise"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html"><div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ВС"></div>
+      <div class="brand-text"><span class="brand-label">Настройка</span><span class="brand-name">Форма поставок</span></div>
+    </a>
+    <div class="header-actions" style="margin-left:auto">
+      <a href="supply.html" data-page="supply.html" class="btn btn-ghost btn-sm">← К форме</a>
+      <a href="supply-stats.html" data-page="supply-stats.html" class="btn btn-ghost btn-sm">📊 Статистика</a>
+      <button class="btn btn-gold btn-sm" id="sfSaveTop">💾 Сохранить</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="te-page">
+    <div id="sfGuard" style="display:none">
+      <div class="apps-guard-box" style="max-width:520px;margin:60px auto;text-align:center;padding:40px">
+        <div class="apps-guard-icon">⚠</div><h2>Доступ ограничен</h2>
+        <p>Настройка формы доступна только Администратору.</p>
+        <div style="margin-top:20px"><button class="btn btn-gold" data-open-login>Войти</button></div>
+      </div>
+    </div>
+
+    <div id="sfRoot" style="display:none">
+      <div class="te-header">
+        <div class="te-header-l">
+          <input type="text" id="fTitle" placeholder="Название формы..." class="te-title-input">
+        </div>
+      </div>
+
+      <div class="te-tabs">
+        <button class="te-tab active" data-fs-tab="fields"><span class="te-tab-num">1</span> Поля</button>
+        <button class="te-tab" data-fs-tab="channel"><span class="te-tab-num">2</span> Канал и пинг</button>
+        <button class="te-tab" data-fs-tab="emoji"><span class="te-tab-num">3</span> Эмодзи статусов</button>
+      </div>
+
+      <div class="te-tab-body" data-tab="fields">
+        <div class="te-card">
+          <div class="te-card-title">📋 Поля формы</div>
+          <div class="form-group"><label>Вступительный текст (показывается пользователю)</label>
+            <textarea id="fIntro" class="msg-input msg-textarea msg-textarea-sm"></textarea></div>
+
+          <div class="te-add-panel">
+            <button class="btn btn-gold btn-sm" data-add-field="text">📝 Строка</button>
+            <button class="btn btn-gold btn-sm" data-add-field="textarea">📄 Многострочный</button>
+            <button class="btn btn-gold btn-sm" data-add-field="number">🔢 Число</button>
+            <button class="btn btn-gold btn-sm" data-add-field="select">📋 Выпадающий список</button>
+            <button class="btn btn-gold btn-sm" data-add-field="checkbox">☑ Чекбокс</button>
+            <button class="btn btn-gold btn-sm" data-add-field="date">📅 Дата</button>
+          </div>
+
+          <div class="sf-fields-list" id="sfFieldsList"></div>
+        </div>
+      </div>
+
+      <div class="te-tab-body" data-tab="channel" style="display:none">
+        <div class="te-card">
+          <div class="te-card-title">📤 Куда бот отправляет запросы</div>
+          <div class="form-group"><label>Канал Discord *</label><select id="fChannel" class="msg-input"></select><div class="te-hint">Без канала запросы не будут отправляться</div></div>
+          <div class="form-group"><label>Роль для пинга (опц.)</label><select id="fPingRole" class="msg-input"><option value="">— не пинговать роль —</option></select><div class="te-hint">Если пусто — попытается пинговать заявителя по его Discord-нику</div></div>
+        </div>
+      </div>
+
+      <div class="te-tab-body" data-tab="emoji" style="display:none">
+        <div class="te-card">
+          <div class="te-card-title">🏷 Эмодзи статусов</div>
+          <div class="te-hint" style="margin-bottom:14px">Бот автоматически ставит эти эмодзи как реакции на своё сообщение. СС кликают на нужный → статистика обновляется. Можно использовать любые Unicode-эмодзи.</div>
+          <div class="msg-row">
+            <div class="form-group msg-flex-1"><label>✓ Успешно</label><input type="text" id="emOk" class="msg-input" value="✅" maxlength="4"></div>
+            <div class="form-group msg-flex-1"><label>✗ Не успешно</label><input type="text" id="emFail" class="msg-input" value="❌" maxlength="4"></div>
+            <div class="form-group msg-flex-1"><label>📵 Не вышли на связь</label><input type="text" id="emOffline" class="msg-input" value="📵" maxlength="4"></div>
+          </div>
+          <div class="msg-row">
+            <div class="form-group msg-flex-1"><label>🚫 Не довезли</label><input type="text" id="emUndel" class="msg-input" value="🚫" maxlength="4"></div>
+            <div class="form-group msg-flex-1"><label>🔄 Замена / Перезагрузка</label><input type="text" id="emReplace" class="msg-input" value="🔄" maxlength="4"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="te-actions-bottom">
+        <a href="supply.html" data-page="supply.html" class="btn btn-ghost btn-sm">Отмена</a>
+        <div style="flex:1"></div>
+        <button class="btn btn-gold" id="sfSaveBottom">💾 Сохранить всё</button>
+      </div>
+    </div>
+
+    <div class="te-toast" id="sfToast"></div>
+  </section>
+</main>
+
+<div class="modal-back" id="loginModal">
+  <div class="modal"><button class="modal-close" aria-label="Закрыть">✕</button><h3>Вход</h3>
+    <form><div class="form-group"><label>Email</label><input type="email" name="email" required></div><div class="form-group"><label>Пароль</label><input type="password" name="password" required></div><button class="btn btn-gold" style="width:100%" type="submit">Войти</button><div class="form-msg"></div></form></div>
+</div>
+
+<footer class="footer"><div class="container"><div class="footer-bottom"><span>© <span id="year"></span> · ЦГБ №3 · Центральная Городская</span><span class="footer-note">🐞 Нашли баг? Обратитесь: <b>@rilavion</b></span></div></div></footer>
+
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=17"></script>
+<script src="assets/js/core/config.js?v=17"></script>
+<script src="assets/js/core/auth.js?v=17"></script>
+<script src="assets/js/core/roles-engine.js?v=17"></script>
+<script src="assets/js/features/supply-engine.js?v=17"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/ui/search-engine.js?v=17"></script>
+<script src="assets/js/utils/format-utils.js?v=17"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+let FORM=null,FIELDS=[],CHANNELS=[],ROLES=[];
+
+function toast(t,type){const el=$("sfToast");el.textContent=t;el.className="te-toast te-toast-show"+(type?" te-toast-"+type:"");setTimeout(()=>el.classList.remove("te-toast-show"),2200)}
+
+async function boot(){
+  const isAdmin=window.CGB_ROLES&&window.CGB_ROLES.isAdmin();
+  if(!isAdmin){$("sfGuard").style.display="";$("sfRoot").style.display="none";return}
+  $("sfGuard").style.display="none";
+  $("sfRoot").style.display="";
+  document.body.classList.add("cgb-is-admin");
+  [FORM,CHANNELS,ROLES]=await Promise.all([CGB_SUPPLY.fetchForm(),CGB_SUPPLY.fetchDsChannels(),CGB_SUPPLY.fetchDsRoles()]);
+  if(!FORM) FORM={title:"Запрос на поставку",fields:[]};
+  FIELDS=Array.isArray(FORM.fields)?FORM.fields:[];
+  $("fTitle").value=FORM.title||"";
+  $("fIntro").value=FORM.intro||"";
+  renderChannels();renderRoles();renderFields();
+  const em=FORM.status_emoji||{};
+  $("emOk").value=em.ok||"✅";
+  $("emFail").value=em.fail||"❌";
+  $("emOffline").value=em.offline||"📵";
+  $("emUndel").value=em.undelivered||"🚫";
+  $("emReplace").value=em.replaced||"🔄";
+}
+
+function renderChannels(){
+  const sel=$("fChannel");
+  const cur=FORM.channel_id;
+  if(!CHANNELS.length){sel.innerHTML=`<option value="">— бот не синхронизировал каналы —</option>`;return}
+  const byParent=new Map();
+  for(const c of CHANNELS){const k=c.parent_name||"Без категории";if(!byParent.has(k)) byParent.set(k,[]);byParent.get(k).push(c)}
+  const parts=[`<option value="">— не выбрано —</option>`];
+  for(const [pn,list] of byParent){
+    parts.push(`<optgroup label="${esc(pn)}">`);
+    for(const c of list) parts.push(`<option value="${c.channel_id}" ${c.channel_id===cur?"selected":""}>#${esc(c.name)}</option>`);
+    parts.push(`</optgroup>`);
+  }
+  sel.innerHTML=parts.join("");
+}
+function renderRoles(){
+  const sel=$("fPingRole");const cur=FORM.ping_role_id;
+  sel.innerHTML=`<option value="">— не пинговать роль —</option>`+ROLES.map(r=>`<option value="${r.role_id}" ${r.role_id===cur?"selected":""}>${esc(r.name)}</option>`).join("");
+}
+
+function renderFields(){
+  const box=$("sfFieldsList");
+  if(!FIELDS.length){box.innerHTML=`<div class="apps-empty" style="padding:30px"><p>Полей нет. Добавьте кнопкой выше.</p></div>`;return}
+  box.innerHTML=FIELDS.map((f,i)=>renderFieldEditor(f,i)).join("");
+  bindFieldEditors();
+}
+
+const TYPE_ICONS={text:"📝",textarea:"📄",number:"🔢",select:"📋",checkbox:"☑",date:"📅"};
+
+function renderFieldEditor(f,i){
+  return `<div class="sf-field-item" data-fi="${i}">
+    <div class="sf-field-head">
+      <div class="sf-field-icon">${TYPE_ICONS[f.type]||"❓"}</div>
+      <input type="text" class="msg-input" data-ff="label" value="${esc(f.label||"")}" placeholder="Название поля" style="flex:1;min-width:200px">
+      <input type="text" class="msg-input" data-ff="key" value="${esc(f.key||"")}" placeholder="key (латиницей)" style="width:150px">
+      <label class="doc-toggle-row" style="margin:0;font-size:12px"><input type="checkbox" data-ff="required" ${f.required?"checked":""}><span>Обяз.</span></label>
+      <button class="te-q-btn" data-mv="up" title="Выше">↑</button>
+      <button class="te-q-btn" data-mv="dn" title="Ниже">↓</button>
+      <button class="te-q-btn te-q-btn-del" data-del title="Удалить">🗑</button>
+    </div>
+    ${f.type!=="checkbox"?`<div class="form-group" style="margin-top:8px"><input type="text" class="msg-input" data-ff="placeholder" value="${esc(f.placeholder||"")}" placeholder="Подсказка (placeholder)"></div>`:""}
+    ${f.type==="select"?`<div class="form-group"><label>Варианты (по одному на строку)</label><textarea class="msg-input msg-textarea msg-textarea-sm" data-ff="options" placeholder="Вариант 1&#10;Вариант 2&#10;...">${esc((f.options||[]).join("\n"))}</textarea></div>`:""}
+  </div>`;
+}
+
+function bindFieldEditors(){
+  document.querySelectorAll(".sf-field-item").forEach(el=>{
+    const i=parseInt(el.dataset.fi);
+    el.querySelectorAll("[data-ff]").forEach(inp=>{
+      const k=inp.dataset.ff;
+      const ev=inp.type==="checkbox"?"change":"input";
+      inp.addEventListener(ev,()=>{
+        if(k==="options") FIELDS[i][k]=inp.value.split(/\n/).map(s=>s.trim()).filter(Boolean);
+        else if(k==="required") FIELDS[i][k]=inp.checked;
+        else FIELDS[i][k]=inp.value;
+      });
+    });
+    el.querySelector("[data-del]").addEventListener("click",()=>{
+      if(!confirm("Удалить поле?")) return;
+      FIELDS.splice(i,1);renderFields();
+    });
+    el.querySelector('[data-mv="up"]').addEventListener("click",()=>{
+      if(i<=0) return;[FIELDS[i-1],FIELDS[i]]=[FIELDS[i],FIELDS[i-1]];renderFields();
+    });
+    el.querySelector('[data-mv="dn"]').addEventListener("click",()=>{
+      if(i>=FIELDS.length-1) return;[FIELDS[i+1],FIELDS[i]]=[FIELDS[i],FIELDS[i+1]];renderFields();
+    });
+  });
+}
+
+document.querySelectorAll("[data-add-field]").forEach(b=>b.addEventListener("click",()=>{
+  const t=b.dataset.addField;
+  const key="f"+(FIELDS.length+1);
+  const f={key,label:"Новое поле",type:t,required:false};
+  if(t==="select") f.options=["Вариант 1","Вариант 2"];
+  FIELDS.push(f);renderFields();
+}));
+
+document.querySelectorAll("[data-fs-tab]").forEach(t=>t.addEventListener("click",()=>{
+  document.querySelectorAll("[data-fs-tab]").forEach(x=>x.classList.toggle("active",x===t));
+  document.querySelectorAll(".te-tab-body").forEach(b=>b.style.display=b.dataset.tab===t.dataset.fsTab?"":"none");
+}));
+
+async function saveAll(){
+  const chSel=$("fChannel");
+  const chName=chSel.options[chSel.selectedIndex]?chSel.options[chSel.selectedIndex].textContent.replace(/^#/,""):null;
+  const roleSel=$("fPingRole");
+  const roleName=roleSel.options[roleSel.selectedIndex]?roleSel.options[roleSel.selectedIndex].textContent:null;
+  const r=await CGB_SUPPLY.saveForm({
+    title:$("fTitle").value.trim()||"Запрос на поставку",
+    intro:$("fIntro").value.trim()||null,
+    channel_id:chSel.value||null,
+    channel_name:chSel.value?chName:null,
+    ping_role_id:roleSel.value||null,
+    ping_role_name:roleSel.value?roleName:null,
+    fields:FIELDS,
+    status_emoji:{
+      ok:$("emOk").value.trim()||"✅",
+      fail:$("emFail").value.trim()||"❌",
+      offline:$("emOffline").value.trim()||"📵",
+      undelivered:$("emUndel").value.trim()||"🚫",
+      replaced:$("emReplace").value.trim()||"🔄"
+    }
+  });
+  if(!r.ok){toast("Ошибка: "+r.error,"err");return}
+  toast("✓ Сохранено","ok");
+}
+$("sfSaveTop").addEventListener("click",saveAll);
+$("sfSaveBottom").addEventListener("click",saveAll);
+
+if(window.CGB_ROLES) CGB_ROLES.onChange(boot);
+setTimeout(boot,600);
+</script>
+
+</body>
+</html>

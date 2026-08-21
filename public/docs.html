@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title>Документы — ЦГБ №3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=PT+Serif:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=26">
+<link rel="stylesheet" href="assets/css/docs-editor.css?v=3">
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+<div class="bg-noise"></div>
+<div class="page-transition-overlay" id="overlay"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-icon">ВС</div>
+      <div class="brand-text">
+        <span class="brand-label">Министерство Здравоохранения</span>
+        <span class="brand-name">ЦГБ №3 · Центральная Городская</span>
+      </div>
+    </a>
+    <nav class="nav" id="mainNav">
+      <a href="index.html" data-page="index.html" data-transition>Главная</a>
+      <a href="info.html" data-page="info.html" data-transition>Информация</a>
+      <a href="services.html" data-page="services.html" data-transition>Услуги</a>
+      <a href="meds.html" data-page="meds.html" data-transition>Медикаменты</a>
+      <a href="ustav.html" data-page="ustav.html" data-transition>Устав</a>
+      <a href="learn.html" data-page="learn.html" data-transition data-loggedin>Учебные материалы</a>
+      <a href="tests.html" data-page="tests.html" data-transition data-loggedin>Тестирование</a>
+      <a href="composition.html" data-page="composition.html" data-transition>Состав</a>
+      <a href="docs.html" data-page="docs.html" data-transition data-perm="docs:view">Документы</a>
+      <a href="news.html" data-page="news.html" data-transition>Новости</a>
+      <a href="autopark.html" data-page="autopark.html" data-transition>Автопарк</a>
+      <a href="map.html" data-page="map.html" data-transition>Карта</a>
+      <a href="faq.html" data-page="faq.html" data-transition>FAQ</a>
+      <a href="complaints.html" data-page="complaints.html" data-transition>Жалобы</a>
+      <a href="supply.html" data-page="supply.html" data-transition data-perm="supply:view">Поставки</a>
+      <a href="apps.html" data-page="apps.html" data-transition data-perm="apps:view">Заявления</a>
+      <a href="vp.html" data-page="vp.html" data-transition data-perm="vp:view">Проверки АБ</a>
+      <a href="complaints-review.html" data-page="complaints-review.html" data-transition data-perm="complaints:review,complaints:view">Рассмотрение жалоб</a>
+      <a href="complaints-stats.html" data-page="complaints-stats.html" data-transition data-perm="complaints:review,complaints:view">Статистика жалоб</a>
+      <a href="leave.html" data-page="leave.html" data-transition data-loggedin>Отгул</a>
+      <a href="vacation-ic.html" data-page="vacation-ic.html" data-transition data-loggedin>Отпуск IC</a>
+      <a href="vacation-ooc.html" data-page="vacation-ooc.html" data-transition data-loggedin>Отпуск OOC</a>
+      <a href="dismissal.html" data-page="dismissal.html" data-transition data-loggedin>Увольнение</a>
+      <a href="promotion.html" data-page="promotion.html" data-transition data-loggedin>Повышение</a>
+      <a href="restoration.html" data-page="restoration.html" data-transition>Восстановление в ЦГБ №3</a>
+      <a href="appointment.html" data-page="appointment.html" data-transition>Запись к врачу</a>
+      <a href="requests-review.html" data-page="requests-review.html" data-transition data-perm="requests:review,requests:view">Рассмотрение заявок</a>
+      <a href="requests-stats.html" data-page="requests-stats.html" data-transition data-perm="requests:review,requests:view">Статистика заявок</a>
+      <a href="payroll.html" data-page="payroll.html" data-transition data-perm="payroll:view">Реестр премирования</a>
+      <a href="report.html" data-page="report.html" data-transition>Еженедельный отчёт</a>
+      <a href="report-settings.html" data-page="report-settings.html" data-transition data-perm="report:settings">Настройки отчётов</a>
+      <a href="vp-request.html" data-page="vp-request.html" data-transition data-perm="vp_request:submit">Запрос на наказание</a>
+      <a href="vp-request-settings.html" data-page="vp-request-settings.html" data-transition data-perm="vp_request:settings">Настройки запросов АБ</a>
+      <a href="lk.html" data-page="lk.html" data-transition>Личный кабинет</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-btn" data-open-search title="Поиск (Ctrl+K)">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+        <span>Поиск</span><span class="kbd">Ctrl K</span>
+      </button>
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Сменить тему">
+        <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24"><path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66l1.42-1.42M4.92 19.08l1.42-1.42m0-11.32L4.92 4.92m14.16 14.16l-1.42-1.42M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="login-btn" data-open-login>
+        <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/></svg>
+        <span>Войти</span>
+      </button>
+      <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="section" style="padding-top:60px">
+    <div class="container" id="mainWrap" style="display:none">
+      <div class="section-head docs2-head reveal">
+        <span class="badge">Служебные документы</span>
+        <h2>Подготовка документов</h2>
+        <p>Выберите нужную форму, измените текст и сразу получите готовые страницы. Черновик сохраняется только в этом браузере — база данных сайта не используется.</p>
+      </div>
+
+      <div class="docs-tabs" id="docsTabs"></div>
+
+      <div class="docs2-toolbar">
+        <div class="docs2-status"><span class="docs2-status-dot"></span><span id="docs2StatusText">Автосохранение включено</span></div>
+        <div class="docs2-actions">
+          <button type="button" class="docs2-action primary" id="docs2CopyAll">📋 Копировать PNG</button>
+          <button type="button" class="docs2-action" id="docs2Download">⬇ Скачать PNG</button>
+          <button type="button" class="docs2-action" id="docs2Print">🖨 Печать / PDF</button>
+          <button type="button" class="docs2-action" id="docs2Reset">↺ Сбросить</button>
+        </div>
+      </div>
+
+      <div class="docs2-layout">
+        <aside class="docs2-editor">
+          <div class="docs2-editor-head">
+            <h3 id="docs2EditorTitle">Поля документа</h3>
+            <p id="docs2EditorDescription"></p>
+          </div>
+          <form class="docs2-form" id="docs2Form"></form>
+        </aside>
+        <div class="docs2-preview-panel">
+          <div class="docs2-preview-head">
+            <strong>Предпросмотр документа</strong>
+            <div class="docs2-zoom"><button type="button" id="docs2ZoomOut">−</button><span id="docs2ZoomText">78%</span><button type="button" id="docs2ZoomIn">+</button></div>
+          </div>
+          <div class="docs2-preview-scroll">
+            <div class="docs2-page-tools" id="docs2PageActions"></div>
+            <div class="docs2-preview-inner" id="docsPreview"></div>
+          </div>
+        </div>
+
+        <div class="doc-float" id="docFloatFields" data-panel="fields" style="left:20px;top:180px">
+          <div class="doc-float-head" data-drag>
+            <span class="doc-float-title">📝 <span id="docPanelTitle">Поля документа</span></span>
+            <div class="doc-float-actions">
+              <button class="doc-float-btn" data-collapse title="Свернуть">–</button>
+              <button class="doc-float-btn" data-close title="Скрыть">✕</button>
+            </div>
+          </div>
+          <div class="doc-float-body">
+            <form id="docForm"></form>
+          </div>
+        </div>
+
+        <div class="doc-float" id="docFloatStyle" data-panel="style" style="right:20px;top:180px">
+          <div class="doc-float-head" data-drag>
+            <span class="doc-float-title">🎨 Оформление</span>
+            <div class="doc-float-actions">
+              <button class="doc-float-btn" data-collapse title="Свернуть">–</button>
+              <button class="doc-float-btn" data-close title="Скрыть">✕</button>
+            </div>
+          </div>
+          <div class="doc-float-body">
+            <div class="doc-emblem-scale">
+              <div class="doc-emblem-scale-label"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Масштаб эмблемы</div>
+              <div class="doc-emblem-scale-btns" id="emblemScaleBtns">
+                <button class="doc-emblem-scale-btn" data-scale="1">1×</button>
+                <button class="doc-emblem-scale-btn" data-scale="2">2×</button>
+                <button class="doc-emblem-scale-btn" data-scale="3">3×</button>
+              </div>
+            </div>
+
+            <div class="doc-font-panel">
+              <div class="doc-font-head">
+                <span class="doc-font-panel-title">Размеры шрифтов (px)</span>
+                <button class="doc-font-reset" id="fontResetBtn" title="Сбросить к стандарту">↺</button>
+              </div>
+              <div class="doc-font-rows" id="fontRows"></div>
+            </div>
+
+            <h4 style="margin-top:16px">Печать (изображение)</h4>
+            <div class="seal-controls">
+              <input type="url" id="sealUrlInput" placeholder="https://... (URL картинки печати)">
+              <div style="display:flex;gap:6px">
+                <button class="btn btn-ghost btn-sm" id="sealLoadBtn" type="button" style="flex:1;min-height:36px">🖼 Из URL</button>
+                <label class="btn btn-ghost btn-sm" style="flex:1;min-height:36px;cursor:pointer">
+                  📁 Файл<input type="file" id="sealFileInput" accept="image/*" hidden>
+                </label>
+                <button class="btn btn-ghost btn-sm" id="sealClearBtn" type="button" style="min-height:36px;padding:0 10px">×</button>
+              </div>
+              <div id="sealPreview" style="display:none"><img id="sealPreviewImg" src=""></div>
+            </div>
+
+            <h4 style="margin-top:14px">Подпись (изображение)</h4>
+            <div class="seal-controls">
+              <input type="url" id="sigUrlInput" placeholder="https://... (URL картинки подписи)">
+              <div style="display:flex;gap:6px">
+                <button class="btn btn-ghost btn-sm" id="sigLoadBtn" type="button" style="flex:1;min-height:36px">🖼 Из URL</button>
+                <label class="btn btn-ghost btn-sm" style="flex:1;min-height:36px;cursor:pointer">
+                  📁 Файл<input type="file" id="sigFileInput" accept="image/*" hidden>
+                </label>
+                <button class="btn btn-ghost btn-sm" id="sigClearBtn" type="button" style="min-height:36px;padding:0 10px">×</button>
+              </div>
+              <div id="sigPreview" style="display:none"><img id="sigPreviewImg" src=""></div>
+            </div>
+
+            <div class="doc-actions">
+              <div id="perPageCopy"></div>
+              <button class="btn btn-gold btn-sm" id="copyAllBtn">📋 Скопировать всё как PNG</button>
+              <button class="btn btn-ghost btn-sm" id="downloadBtn">💾 Скачать (все страницы)</button>
+              <button class="btn btn-ghost btn-sm" id="printBtn">🖨 Печать / PDF</button>
+              <button class="btn btn-ghost btn-sm" id="resetBtn">↺ Сбросить поля</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" id="loginPrompt" style="display:none">
+      <div class="empty-state" style="text-align:center">
+        <svg viewBox="0 0 24 24"><path d="M12 17a2 2 0 0 0 2-2 2 2 0 0 0-2-2 2 2 0 0 0-2 2 2 2 0 0 0 2 2m6-9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2h1V6a5 5 0 0 1 5-5 5 5 0 0 1 5 5v2h1M12 2.9A3.1 3.1 0 0 0 8.9 6V8h6.2V6A3.1 3.1 0 0 0 12 2.9z"/></svg>
+        <h3>Доступ ограничен</h3>
+        <p>Раздел «Документы» доступен только авторизованным администраторам.</p>
+        <button class="btn btn-gold" style="margin-top:16px" data-open-login>Войти</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <h4>ЦГБ №3 · Центральная Городская</h4>
+        <p>Министерство Здравоохранения.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Разделы</h5>
+        <a href="services.html" data-page="services.html">Услуги и цены</a>
+        <a href="meds.html" data-page="meds.html">Медикаменты</a>
+        <a href="index.html" data-page="index.html">Главная</a>
+        <a href="ustav.html" data-page="ustav.html">Устав</a>
+        <a href="composition.html" data-page="composition.html">Состав</a>
+      </div>
+      <div class="footer-col">
+        <h5>Ресурсы</h5>
+        <a href="news.html" data-page="news.html">Новости</a>
+        <a href="autopark.html" data-page="autopark.html">Автопарк</a>
+        <a href="map.html" data-page="map.html">Карта</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> · Министерство Здравоохранения</span>
+      <span>ЦГБ №3 · Центральная Городская</span>
+    <span class="footer-note">🐞 Нашли баг? Обратитесь: <b>@rilavion</b></span></div>
+  </div>
+</footer>
+
+<div class="search-modal" id="searchModal">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+      <input class="search-input" placeholder="Поиск..." spellcheck="false">
+      <button class="search-close-kbd">Esc</button>
+    </div>
+    <div class="search-results"></div>
+  </div>
+</div>
+
+<div class="modal-back" id="loginModal">
+  <div class="modal">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Вход администратора</h3>
+    <div class="modal-sub">Доступ к управлению контентом</div>
+    <form>
+      <div class="form-group"><label>Email</label><input type="email" name="email" required></div>
+      <div class="form-group"><label>Пароль</label><input type="password" name="password" required></div>
+      <button class="btn btn-gold" style="width:100%" type="submit">Войти</button>
+      <div class="form-msg"></div>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=18"></script>
+<script src="assets/vendor/html2canvas.min.js?v=4"></script>
+<script src="assets/js/core/config.js?v=18"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/ui/search-engine.js?v=18"></script>
+<script src="assets/js/core/auth.js?v=18"></script>
+<script src="assets/js/core/roles-engine.js?v=18"></script>
+<script src="assets/js/features/docs-templates.js?v=2"></script>
+<script type="text/plain" id="legacyDocsScript">
+document.getElementById("year").textContent=new Date().getFullYear();
+
+const $=id=>document.getElementById(id);
+const mainWrap=$("mainWrap");
+const loginPrompt=$("loginPrompt");
+const tabs=$("docsTabs");
+const preview=$("docsPreview");
+const form=$("docForm");
+const toast=$("toast");
+const perPageCopy=$("perPageCopy");
+
+let currentTemplate="prikaz";
+let values={};
+
+const TICONS={
+  prikaz:'<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8m-6-6l6 6m-8 5h4m-4 4h4"/></svg>',
+  prikaz_kadr:'<svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>',
+  letter:'<svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2m0 4l-8 5-8-5V6l8 5 8-5z"/></svg>',
+  ukaz:'<svg viewBox="0 0 24 24"><path d="M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/></svg>'
+};
+
+function renderTabs(){
+  tabs.innerHTML=Object.keys(CGB_DOC_TEMPLATES.TEMPLATES).map(id=>{
+    const t=CGB_DOC_TEMPLATES.TEMPLATES[id];
+    return `<button class="doc-tab ${id===currentTemplate?'active':''}" data-tpl="${id}">
+      <span class="doc-tab-icon">${TICONS[id]||""}</span>${t.name}
+    </button>`;
+  }).join("");
+}
+tabs.addEventListener("click",e=>{
+  const b=e.target.closest("[data-tpl]");if(!b) return;
+  currentTemplate=b.dataset.tpl;
+  values=loadValues()||CGB_DOC_TEMPLATES.defaults(currentTemplate);
+  renderTabs();renderForm();renderDoc();syncSealUI();renderFontRows();
+});
+
+function loadValues(){
+  try{const raw=localStorage.getItem("cgb-doc-"+currentTemplate);return raw?JSON.parse(raw):null}catch(e){return null}
+}
+function saveValues(){
+  try{localStorage.setItem("cgb-doc-"+currentTemplate,JSON.stringify(values))}catch(e){}
+}
+
+function renderForm(){
+  const t=CGB_DOC_TEMPLATES.TEMPLATES[currentTemplate];
+  $("docPanelTitle").textContent=t.name+" — поля";
+  const hidden=new Set(["seal_url","sig_url","sig2_url","seal2_url"]);
+  const controls=t.fields.filter(f=>f.type==="toggle"||f.type==="select");
+  const mainFields=t.fields.filter(f=>f.type!=="toggle"&&f.type!=="select"&&!hidden.has(f.key));
+  const html=[];
+  html.push(mainFields.map(f=>{
+    const v=CGB_DOC_TEMPLATES.esc(values[f.key]==null?"":values[f.key]);
+    if(f.type==="textarea"){
+      return `<div class="form-group"><label>${f.label}</label><textarea name="${f.key}" rows="3">${v}</textarea></div>`;
+    }
+    return `<div class="form-group"><label>${f.label}</label><input name="${f.key}" value="${v}"></div>`;
+  }).join(""));
+  if(controls.length){
+    html.push(`<div class="doc-toggles-block"><div class="doc-toggles-title">Отображение подписей и печатей</div>`);
+    html.push(controls.map(f=>{
+      const curRaw=values[f.key]==null?f.default:values[f.key];
+      if(f.type==="toggle"){
+        const on=String(curRaw)==="1";
+        return `<label class="doc-toggle-row"><input type="checkbox" name="${f.key}" ${on?"checked":""}><span>${f.label}</span></label>`;
+      }
+      if(f.type==="select"){
+        const opts=(f.options||[]).map(o=>`<option value="${o.value}" ${String(curRaw)===o.value?"selected":""}>${o.label}</option>`).join("");
+        return `<div class="doc-toggle-row doc-toggle-select"><label>${f.label}</label><select name="${f.key}">${opts}</select></div>`;
+      }
+      return "";
+    }).join(""));
+    html.push(`</div>`);
+  }
+  form.innerHTML=html.join("");
+  form.querySelectorAll("input,textarea,select").forEach(el=>{
+    const evt=(el.tagName==="SELECT"||el.type==="checkbox")?"change":"input";
+    el.addEventListener(evt,()=>{
+      if(el.type==="checkbox") values[el.name]=el.checked?"1":"0";
+      else values[el.name]=el.value;
+      saveValues();renderDoc();
+    });
+  });
+}
+
+function renderDoc(){
+  preview.innerHTML=CGB_DOC_TEMPLATES.render(currentTemplate,values);
+  const pages=preview.querySelectorAll(".doc-page");
+  if(pages.length>1){
+    perPageCopy.innerHTML=`<div class="doc-per-page-label">Скопировать страницу отдельно:</div>
+      <div class="doc-per-page-buttons">
+        ${Array.from(pages).map((_,i)=>`<button class="btn btn-ghost btn-sm doc-page-btn" data-page="${i}">📄 Стр. ${i+1}</button>`).join("")}
+      </div>`;
+  }else{perPageCopy.innerHTML=""}
+}
+
+perPageCopy.addEventListener("click",async e=>{
+  const b=e.target.closest("[data-page]");if(!b) return;
+  const idx=parseInt(b.dataset.page);
+  const pages=preview.querySelectorAll(".doc-page");
+  if(!pages[idx]) return;
+  await copyCanvasToClipboard(pages[idx],b);
+});
+
+function showToast(text,type){
+  toast.textContent=text;toast.className="toast show "+(type||"");
+  setTimeout(()=>toast.classList.remove("show"),2400);
+}
+
+async function urlToDataURL(url){
+  if(!url||url.startsWith("data:")) return url;
+  try{
+    const res=await fetch(url,{mode:"cors"});
+    if(!res.ok) throw new Error("HTTP "+res.status);
+    const blob=await res.blob();
+    return await new Promise(r=>{const fr=new FileReader();fr.onload=e=>r(e.target.result);fr.readAsDataURL(blob)});
+  }catch(e){
+    try{
+      const proxied="https://images.weserv.nl/?url="+encodeURIComponent(url.replace(/^https?:\/\//,""));
+      const res=await fetch(proxied);
+      if(!res.ok) throw new Error("proxy HTTP "+res.status);
+      const blob=await res.blob();
+      return await new Promise(r=>{const fr=new FileReader();fr.onload=e=>r(e.target.result);fr.readAsDataURL(blob)});
+    }catch(e2){console.warn("Не удалось загрузить",url,e2.message);return null}
+  }
+}
+
+async function preloadImages(node){
+  const imgs=Array.from(node.querySelectorAll("img"));
+  await Promise.all(imgs.map(async img=>{
+    const src=img.getAttribute("src");
+    if(src&&!src.startsWith("data:")){
+      const data=await urlToDataURL(src);
+      if(data) img.setAttribute("src",data);
+    }
+    await new Promise(r=>{if(img.complete&&img.naturalWidth) r();else{img.onload=img.onerror=r}});
+    const cs=getComputedStyle(img);
+    let w=parseFloat(cs.width),h=parseFloat(cs.height);
+    if(img.naturalWidth&&img.naturalHeight){
+      const ratio=img.naturalWidth/img.naturalHeight;
+      if(w&&!h) h=w/ratio;
+      else if(h&&!w) w=h*ratio;
+      else if(w&&h){
+        const cssRatio=w/h;
+        if(Math.abs(cssRatio-ratio)>0.02) h=w/ratio;
+      }
+    }
+    if(w&&h){
+      img.setAttribute("width",Math.round(w));
+      img.setAttribute("height",Math.round(h));
+      img.style.width=Math.round(w)+"px";
+      img.style.height=Math.round(h)+"px";
+      img.style.maxWidth="none";img.style.maxHeight="none";
+      img.style.minWidth="0";img.style.minHeight="0";
+    }
+  }));
+}
+
+async function renderCanvas(node){
+  if(!window.html2canvas) throw new Error("html2canvas не загружен");
+  const holder=document.createElement("div");
+  holder.style.cssText="position:fixed;left:-99999px;top:0;pointer-events:none;opacity:1;background:#fff";
+  const clone=node.cloneNode(true);
+  holder.appendChild(clone);
+  document.body.appendChild(holder);
+  try{
+    await preloadImages(clone);
+    return await html2canvas(clone,{backgroundColor:"#ffffff",scale:2,useCORS:true,logging:false,allowTaint:true,imageTimeout:0});
+  }finally{
+    holder.remove();
+  }
+}
+
+async function copyCanvasToClipboard(node,btn){
+  const old=btn?btn.textContent:"";
+  if(btn){btn.textContent="Копирование...";btn.disabled=true}
+  try{
+    const canvas=await renderCanvas(node);
+    canvas.toBlob(async blob=>{
+      try{
+        if(!navigator.clipboard||!window.ClipboardItem) throw new Error("Буфер обмена недоступен — используйте «Скачать»");
+        await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);
+        showToast("Скопировано в буфер","success");
+      }catch(e){showToast(e.message||"Ошибка копирования","error")}
+      finally{if(btn){btn.textContent=old;btn.disabled=false}}
+    },"image/png");
+  }catch(e){showToast(e.message||"Ошибка","error");if(btn){btn.textContent=old;btn.disabled=false}}
+}
+
+async function captureAll(){
+  const pages=preview.querySelectorAll(".doc-page");
+  if(!pages.length) return null;
+  if(pages.length===1) return await renderCanvas(pages[0]);
+  const canvases=[];
+  for(const p of pages) canvases.push(await renderCanvas(p));
+  const w=Math.max(...canvases.map(c=>c.width));
+  const gap=40;
+  const h=canvases.reduce((s,c)=>s+c.height,0)+gap*(canvases.length-1);
+  const out=document.createElement("canvas");out.width=w;out.height=h;
+  const ctx=out.getContext("2d");ctx.fillStyle="#f5f2ea";ctx.fillRect(0,0,w,h);
+  let y=0;canvases.forEach(c=>{ctx.drawImage(c,0,y);y+=c.height+gap});
+  return out;
+}
+
+$("copyAllBtn").addEventListener("click",async()=>{
+  const pages=preview.querySelectorAll(".doc-page");
+  if(pages.length===1) return copyCanvasToClipboard(pages[0],$("copyAllBtn"));
+  const btn=$("copyAllBtn");const old=btn.textContent;btn.textContent="Копирование...";btn.disabled=true;
+  try{
+    const canvas=await captureAll();if(!canvas) throw new Error("Нет документа");
+    canvas.toBlob(async blob=>{
+      try{
+        if(!navigator.clipboard||!window.ClipboardItem) throw new Error("Буфер обмена недоступен");
+        await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);
+        showToast("Все страницы скопированы","success");
+      }catch(e){showToast(e.message||"Ошибка","error")}
+      finally{btn.textContent=old;btn.disabled=false}
+    },"image/png");
+  }catch(e){showToast(e.message||"Ошибка","error");btn.textContent=old;btn.disabled=false}
+});
+
+$("downloadBtn").addEventListener("click",async()=>{
+  const btn=$("downloadBtn");const old=btn.textContent;btn.textContent="Генерация...";btn.disabled=true;
+  try{
+    const pages=preview.querySelectorAll(".doc-page");
+    if(!pages.length) throw new Error("Нет документа");
+    const t=CGB_DOC_TEMPLATES.TEMPLATES[currentTemplate].name;
+    const num=(values.number||"").replace(/[^\d]/g,"")||Date.now();
+    if(pages.length===1){
+      const canvas=await renderCanvas(pages[0]);
+      const a=document.createElement("a");a.download=`${t}_${num}.png`;a.href=canvas.toDataURL("image/png");a.click();
+    }else{
+      for(let i=0;i<pages.length;i++){
+        const canvas=await renderCanvas(pages[i]);
+        const a=document.createElement("a");a.download=`${t}_${num}_стр${i+1}.png`;a.href=canvas.toDataURL("image/png");a.click();
+        await new Promise(r=>setTimeout(r,300));
+      }
+    }
+    showToast("Сохранено","success");
+  }catch(e){showToast(e.message||"Ошибка","error")}
+  finally{btn.textContent=old;btn.disabled=false}
+});
+
+$("printBtn").addEventListener("click",()=>{
+  const w=window.open("","","width=900,height=1200");
+  const styles=Array.from(document.querySelectorAll('link[rel="stylesheet"]')).map(l=>`<link rel="stylesheet" href="${l.href}">`).join("");
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${CGB_DOC_TEMPLATES.TEMPLATES[currentTemplate].name}</title>${styles}
+    <style>body{background:#fff;padding:0;margin:0}.a4{box-shadow:none !important;margin:0 auto;page-break-after:always}.a4:last-child{page-break-after:auto}@page{size:A4;margin:0}</style>
+    </head><body>${preview.innerHTML}</body></html>`);
+  w.document.close();
+  setTimeout(()=>{w.focus();w.print()},600);
+});
+
+$("resetBtn").addEventListener("click",()=>{
+  if(!confirm("Сбросить все поля к значениям по умолчанию?")) return;
+  values=CGB_DOC_TEMPLATES.defaults(currentTemplate);
+  saveValues();renderForm();renderDoc();syncSealUI();
+});
+
+function syncSealUI(){
+  const url=values.seal_url||"";
+  $("sealUrlInput").value=url;
+  const pv=$("sealPreview"),img=$("sealPreviewImg");
+  if(url){img.src=url;pv.style.display=""}else{pv.style.display="none"}
+  const surl=values.sig_url||"";
+  $("sigUrlInput").value=surl;
+  const spv=$("sigPreview"),simg=$("sigPreviewImg");
+  if(surl){simg.src=surl;spv.style.display=""}else{spv.style.display="none"}
+}
+$("sealLoadBtn").addEventListener("click",()=>{
+  const url=$("sealUrlInput").value.trim();
+  values.seal_url=url;saveValues();syncSealUI();renderDoc();
+  if(url) showToast("Печать загружена","success");
+});
+$("sealUrlInput").addEventListener("change",()=>$("sealLoadBtn").click());
+$("sealClearBtn").addEventListener("click",()=>{
+  values.seal_url="";saveValues();syncSealUI();renderDoc();showToast("Печать удалена","success");
+});
+$("sealFileInput").addEventListener("change",e=>{
+  const f=e.target.files[0];if(!f) return;
+  const r=new FileReader();
+  r.onload=ev=>{values.seal_url=ev.target.result;saveValues();syncSealUI();renderDoc();showToast("Печать загружена","success")};
+  r.readAsDataURL(f);
+});
+$("sigLoadBtn").addEventListener("click",()=>{
+  const url=$("sigUrlInput").value.trim();
+  values.sig_url=url;saveValues();syncSealUI();renderDoc();
+  if(url) showToast("Подпись загружена","success");
+});
+$("sigUrlInput").addEventListener("change",()=>$("sigLoadBtn").click());
+$("sigClearBtn").addEventListener("click",()=>{
+  values.sig_url="";saveValues();syncSealUI();renderDoc();showToast("Подпись удалена","success");
+});
+$("sigFileInput").addEventListener("change",e=>{
+  const f=e.target.files[0];if(!f) return;
+  const r=new FileReader();
+  r.onload=ev=>{values.sig_url=ev.target.result;saveValues();syncSealUI();renderDoc();showToast("Подпись загружена","success")};
+  r.readAsDataURL(f);
+});
+
+function updateAdmin(){
+  const canDocs=!!(window.CGB_ROLES&&window.CGB_ROLES.can("docs","view"));
+  mainWrap.style.display=canDocs?"":"none";
+  loginPrompt.style.display=canDocs?"none":"";
+}
+if(window.CGB_ROLES) window.CGB_ROLES.onChange(updateAdmin);
+if(window.CGB_AUTH) window.CGB_AUTH.onChange(updateAdmin);
+
+function getEmblemScale(){
+  try{return parseInt(localStorage.getItem("cgb-doc-emblem-scale-"+currentTemplate)||"1")||1}catch(e){return 1}
+}
+function setEmblemScale(n){
+  try{localStorage.setItem("cgb-doc-emblem-scale-"+currentTemplate,String(n))}catch(e){}
+  applyEmblemScale();
+}
+function applyEmblemScale(){
+  const n=getEmblemScale();
+  preview.querySelectorAll(".a4").forEach(el=>el.style.setProperty("--doc-emblem-scale",n));
+  document.querySelectorAll("#emblemScaleBtns [data-scale]").forEach(b=>b.classList.toggle("active",+b.dataset.scale===n));
+}
+document.getElementById("emblemScaleBtns").addEventListener("click",e=>{
+  const b=e.target.closest("[data-scale]");if(!b) return;
+  setEmblemScale(+b.dataset.scale);
+});
+const FONT_VARS=[
+  {key:"ministry",label:"Шапка (Мин. обороны)",cssVar:"--doc-ministry-size",def:14,min:8,max:32},
+  {key:"title",label:"ПРИКАЗ / УКАЗ",cssVar:"--doc-title-size",def:20,min:12,max:48},
+  {key:"subtitle",label:"Подзаголовок (О…)",cssVar:"--doc-subtitle-size",def:15,min:10,max:32},
+  {key:"reqs",label:"Дата · Город · Номер",cssVar:"--doc-reqs-size",def:14,min:10,max:24},
+  {key:"body",label:"Основной текст",cssVar:"--doc-body-size",def:14,min:10,max:24},
+  {key:"word",label:"ПРИКАЗЫВАЮ",cssVar:"--doc-word-size",def:15,min:10,max:28},
+  {key:"sign",label:"Подпись",cssVar:"--doc-sign-size",def:14,min:10,max:22}
+];
+function getFontSizes(){
+  try{const raw=localStorage.getItem("cgb-doc-fonts-"+currentTemplate);const parsed=raw?JSON.parse(raw):{};const o={};FONT_VARS.forEach(f=>o[f.key]=+parsed[f.key]||f.def);return o}
+  catch(e){const o={};FONT_VARS.forEach(f=>o[f.key]=f.def);return o}
+}
+function setFontSize(key,val){
+  const sizes=getFontSizes();sizes[key]=+val||FONT_VARS.find(f=>f.key===key).def;
+  try{localStorage.setItem("cgb-doc-fonts-"+currentTemplate,JSON.stringify(sizes))}catch(e){}
+  applyFontSizes();
+}
+function resetFontSizes(){
+  try{localStorage.removeItem("cgb-doc-fonts-"+currentTemplate)}catch(e){}
+  renderFontRows();applyFontSizes();
+}
+function applyFontSizes(){
+  const sizes=getFontSizes();
+  preview.querySelectorAll(".a4").forEach(el=>{
+    FONT_VARS.forEach(f=>el.style.setProperty(f.cssVar,sizes[f.key]+"px"));
+  });
+}
+function renderFontRows(){
+  const sizes=getFontSizes();
+  const wrap=document.getElementById("fontRows");
+  wrap.innerHTML=FONT_VARS.map(f=>`<div class="doc-font-row">
+    <label class="doc-font-label" title="${f.label}">${f.label}</label>
+    <div class="doc-font-input">
+      <input type="range" data-font="${f.key}" min="${f.min}" max="${f.max}" value="${sizes[f.key]}" step="1">
+      <input type="number" data-fontnum="${f.key}" min="${f.min}" max="${f.max}" value="${sizes[f.key]}">
+      <span class="doc-font-unit">px</span>
+    </div>
+  </div>`).join("");
+  wrap.querySelectorAll("[data-font]").forEach(el=>{
+    el.addEventListener("input",()=>{
+      setFontSize(el.dataset.font,el.value);
+      const num=wrap.querySelector(`[data-fontnum="${el.dataset.font}"]`);
+      if(num) num.value=el.value;
+    });
+  });
+  wrap.querySelectorAll("[data-fontnum]").forEach(el=>{
+    el.addEventListener("input",()=>{
+      setFontSize(el.dataset.fontnum,el.value);
+      const rng=wrap.querySelector(`[data-font="${el.dataset.fontnum}"]`);
+      if(rng) rng.value=el.value;
+    });
+  });
+}
+document.getElementById("fontResetBtn").addEventListener("click",resetFontSizes);
+
+const _origRenderDoc=renderDoc;
+renderDoc=function(){_origRenderDoc();applyEmblemScale();applyFontSizes()};
+
+const _origTabsClick=tabs.onclick;
+tabs.addEventListener("click",e=>{const b=e.target.closest("[data-tpl]");if(b) setTimeout(renderFontRows,0)});
+
+(function initFloatingPanels(){
+  const panels=document.querySelectorAll(".doc-float");
+  const stateKey="cgb-doc-panels-v1";
+  const state=(()=>{try{return JSON.parse(localStorage.getItem(stateKey)||"{}")}catch(e){return {}}})();
+  function save(){try{localStorage.setItem(stateKey,JSON.stringify(state))}catch(e){}}
+  let zTop=100;
+
+  panels.forEach(panel=>{
+    const id=panel.dataset.panel;
+    const st=state[id]||{};
+    if(st.hidden) panel.style.display="none";
+    if(st.collapsed) panel.classList.add("collapsed");
+    if(st.x!=null){panel.style.left=st.x+"px";panel.style.right="auto"}
+    if(st.y!=null){panel.style.top=st.y+"px"}
+    if(st.w) panel.style.width=st.w+"px";
+    if(st.h) panel.style.height=st.h+"px";
+
+    const head=panel.querySelector("[data-drag]");
+    let dragging=false,offX=0,offY=0;
+    head.addEventListener("mousedown",e=>{
+      if(e.target.closest(".doc-float-btn")) return;
+      dragging=true;
+      const r=panel.getBoundingClientRect();
+      panel.style.left=r.left+"px";panel.style.right="auto";panel.style.top=r.top+"px";
+      offX=e.clientX-r.left;offY=e.clientY-r.top;
+      panel.style.zIndex=(++zTop);
+      document.body.style.userSelect="none";
+      e.preventDefault();
+    });
+    head.addEventListener("touchstart",e=>{
+      if(e.target.closest(".doc-float-btn")) return;
+      dragging=true;
+      const t=e.touches[0];
+      const r=panel.getBoundingClientRect();
+      panel.style.left=r.left+"px";panel.style.right="auto";panel.style.top=r.top+"px";
+      offX=t.clientX-r.left;offY=t.clientY-r.top;
+      panel.style.zIndex=(++zTop);
+    },{passive:true});
+    function move(cx,cy){
+      const w=panel.offsetWidth,h=panel.offsetHeight;
+      let x=cx-offX,y=cy-offY;
+      x=Math.max(4,Math.min(window.innerWidth-w-4,x));
+      y=Math.max(60,Math.min(window.innerHeight-40,y));
+      panel.style.left=x+"px";panel.style.top=y+"px";
+    }
+    document.addEventListener("mousemove",e=>{if(dragging) move(e.clientX,e.clientY)});
+    document.addEventListener("touchmove",e=>{if(dragging){const t=e.touches[0];move(t.clientX,t.clientY)}},{passive:true});
+    function stopDrag(){
+      if(!dragging) return;
+      dragging=false;document.body.style.userSelect="";
+      const r=panel.getBoundingClientRect();
+      state[id]=state[id]||{};state[id].x=Math.round(r.left);state[id].y=Math.round(r.top);save();
+    }
+    document.addEventListener("mouseup",stopDrag);
+    document.addEventListener("touchend",stopDrag);
+    panel.addEventListener("mousedown",()=>{panel.style.zIndex=(++zTop)});
+
+    panel.querySelector("[data-collapse]").addEventListener("click",()=>{
+      panel.classList.toggle("collapsed");
+      state[id]=state[id]||{};state[id].collapsed=panel.classList.contains("collapsed");save();
+    });
+    panel.querySelector("[data-close]").addEventListener("click",()=>{
+      panel.style.display="none";
+      state[id]=state[id]||{};state[id].hidden=true;save();
+    });
+
+    const ro=new ResizeObserver(()=>{
+      state[id]=state[id]||{};
+      state[id].w=Math.round(panel.offsetWidth);
+      state[id].h=Math.round(panel.offsetHeight);
+      save();
+    });
+    ro.observe(panel);
+  });
+
+  document.querySelectorAll("[data-toggle-panel]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const id=btn.dataset.togglePanel;
+      const panel=document.querySelector(`.doc-float[data-panel="${id}"]`);
+      if(!panel) return;
+      const hidden=panel.style.display==="none";
+      panel.style.display=hidden?"flex":"none";
+      panel.classList.remove("collapsed");
+      state[id]=state[id]||{};state[id].hidden=!hidden;state[id].collapsed=false;save();
+      if(hidden){panel.style.zIndex=(++zTop)}
+    });
+  });
+})();
+
+values=loadValues()||CGB_DOC_TEMPLATES.defaults(currentTemplate);
+renderTabs();renderForm();renderDoc();syncSealUI();renderFontRows();
+</script>
+<script src="assets/js/features/docs-editor.js?v=2"></script>
+
+</body>
+</html>

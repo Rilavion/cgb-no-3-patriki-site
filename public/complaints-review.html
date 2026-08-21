@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title>ЦГБ №3 — Рассмотрение жалоб</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=26">
+<style id="cgb-admin-guard">
+[data-admin]{display:none !important}
+[data-staff]{display:none !important}
+body.cgb-is-admin .nav a[data-admin]{display:inline-flex !important}
+body.cgb-is-staff .nav a[data-staff]{display:inline-flex !important}
+body.cgb-is-admin [data-admin]:not(.nav a){display:initial !important}
+body.cgb-is-staff [data-staff]:not(.nav a){display:initial !important}
+</style>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+<div class="bg-noise"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ВС"></div>
+      <div class="brand-text">
+        <span class="brand-label">Администрация</span>
+        <span class="brand-name">Рассмотрение жалоб</span>
+      </div>
+    </a>
+    <nav class="nav" id="mainNav">
+      <a href="index.html" data-page="index.html" data-transition>Главная</a>
+      <a href="info.html" data-page="info.html" data-transition>Информация</a>
+      <a href="services.html" data-page="services.html" data-transition>Услуги</a>
+      <a href="meds.html" data-page="meds.html" data-transition>Медикаменты</a>
+      <a href="ustav.html" data-page="ustav.html" data-transition>Устав</a>
+      <a href="learn.html" data-page="learn.html" data-transition data-loggedin>Учебные материалы</a>
+      <a href="tests.html" data-page="tests.html" data-transition data-loggedin>Тестирование</a>
+      <a href="composition.html" data-page="composition.html" data-transition>Состав</a>
+      <a href="docs.html" data-page="docs.html" data-transition data-perm="docs:view">Документы</a>
+      <a href="news.html" data-page="news.html" data-transition>Новости</a>
+      <a href="autopark.html" data-page="autopark.html" data-transition>Автопарк</a>
+      <a href="map.html" data-page="map.html" data-transition>Карта</a>
+      <a href="faq.html" data-page="faq.html" data-transition>FAQ</a>
+      <a href="complaints.html" data-page="complaints.html" data-transition>Жалобы</a>
+      <a href="supply.html" data-page="supply.html" data-transition data-perm="supply:view">Поставки</a>
+      <a href="apps.html" data-page="apps.html" data-transition data-perm="apps:view">Заявления</a>
+      <a href="vp.html" data-page="vp.html" data-transition data-perm="vp:view">Проверки АБ</a>
+      <a href="complaints-review.html" data-page="complaints-review.html" data-transition data-perm="complaints:review,complaints:view">Рассмотрение жалоб</a>
+      <a href="complaints-stats.html" data-page="complaints-stats.html" data-transition data-perm="complaints:review,complaints:view">Статистика жалоб</a>
+      <a href="leave.html" data-page="leave.html" data-transition data-loggedin>Отгул</a>
+      <a href="vacation-ic.html" data-page="vacation-ic.html" data-transition data-loggedin>Отпуск IC</a>
+      <a href="vacation-ooc.html" data-page="vacation-ooc.html" data-transition data-loggedin>Отпуск OOC</a>
+      <a href="dismissal.html" data-page="dismissal.html" data-transition data-loggedin>Увольнение</a>
+      <a href="promotion.html" data-page="promotion.html" data-transition data-loggedin>Повышение</a>
+      <a href="restoration.html" data-page="restoration.html" data-transition>Восстановление в ЦГБ №3</a>
+      <a href="appointment.html" data-page="appointment.html" data-transition>Запись к врачу</a>
+      <a href="requests-review.html" data-page="requests-review.html" data-transition data-perm="requests:review,requests:view">Рассмотрение заявок</a>
+      <a href="requests-stats.html" data-page="requests-stats.html" data-transition data-perm="requests:review,requests:view">Статистика заявок</a>
+      <a href="payroll.html" data-page="payroll.html" data-transition data-perm="payroll:view">Реестр премирования</a>
+      <a href="report.html" data-page="report.html" data-transition>Еженедельный отчёт</a>
+      <a href="report-settings.html" data-page="report-settings.html" data-transition data-perm="report:settings">Настройки отчётов</a>
+      <a href="vp-request.html" data-page="vp-request.html" data-transition data-perm="vp_request:submit">Запрос на наказание</a>
+      <a href="vp-request-settings.html" data-page="vp-request-settings.html" data-transition data-perm="vp_request:settings">Настройки запросов АБ</a>
+      <a href="lk.html" data-page="lk.html" data-transition>Личный кабинет</a>
+    </nav>
+    <div class="header-actions">
+      <a href="complaints-form.html" data-page="complaints-form.html" class="btn btn-ghost btn-sm" data-perm="complaints:form_edit" style="display:none">✎ Форма</a>
+      <a href="complaints-settings.html" data-page="complaints-settings.html" class="btn btn-gold btn-sm" data-perm="complaints:settings" style="display:none">⚙ Настройки</a>
+      <button class="search-btn" data-open-search title="Поиск (Ctrl+K)">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+        <span>Поиск</span>
+      </button>
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Сменить тему">
+        <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24"><path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66l1.42-1.42M4.92 19.08l1.42-1.42m0-11.32L4.92 4.92m14.16 14.16l-1.42-1.42M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="login-btn" data-open-login>
+        <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/></svg>
+        <span>Войти</span>
+      </button>
+      <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="apps-head">
+    <div class="container">
+      <div class="apps-head-ribbon">
+        <span class="apps-head-ribbon-line"></span>
+        <span class="apps-head-ribbon-emblem">◈</span>
+        <span class="apps-head-ribbon-name">Администрация ЦГБ №3 · Рассмотрение жалоб</span>
+        <span class="apps-head-ribbon-emblem">◈</span>
+        <span class="apps-head-ribbon-line"></span>
+      </div>
+      <h1 class="apps-head-title">Рассмотрение жалоб и Реестр нарушений</h1>
+    </div>
+  </section>
+
+  <section class="apps-body">
+    <div class="container">
+      <div id="crGuard" style="display:none"><div class="apps-guard-box"><div class="apps-guard-icon">⚠</div><h2>Доступ ограничен</h2><p>Раздел доступен только сотрудникам АБ и Администратору.</p></div></div>
+      <div id="crRoot" style="display:none">
+        <div class="vp-arc-tabs" style="margin-bottom:14px">
+          <button class="vp-arc-tab active" data-tab="pending">📥 Ожидают вердикта <span class="cr-count" id="crCntPending">0</span></button>
+          <button class="vp-arc-tab" data-tab="vpreq">⚖ Запросы от АБ <span class="cr-count" id="crCntVpReq">0</span></button>
+          <button class="vp-arc-tab" data-tab="decided">✓ Рассмотренные <span class="cr-count" id="crCntDecided">0</span></button>
+          <button class="vp-arc-tab" data-tab="registry">📋 Реестр нарушений <span class="cr-count" id="crCntActive">0</span></button>
+        </div>
+
+        <div class="cr-tab-body" id="crTabPending">
+          <div class="apps-empty" id="crPendEmpty" style="display:none"><h3>Нет ожидающих жалоб</h3><p>Все жалобы рассмотрены.</p></div>
+          <div id="crPendList" class="cr-list"></div>
+        </div>
+
+        <div class="cr-tab-body" id="crTabVpreq" style="display:none">
+          <div class="apps-empty" id="crVpReqEmpty" style="display:none"><h3>Нет запросов от АБ</h3><p>Запросы на выдачу наказания появятся здесь.</p></div>
+          <div id="crVpReqList" class="cr-list"></div>
+        </div>
+
+        <div class="cr-tab-body" id="crTabDecided" style="display:none">
+          <div class="apps-empty" id="crDecEmpty" style="display:none"><h3>История рассмотрения пуста</h3></div>
+          <div id="crDecList" class="cr-list"></div>
+        </div>
+
+        <div class="cr-tab-body" id="crTabRegistry" style="display:none">
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:center">
+            <button class="btn btn-gold btn-sm" id="crAddViolBtn" data-perm="registry:add">＋ Добавить нарушителя</button>
+            <label style="display:flex;gap:6px;align-items:center;font-size:13px;color:var(--muted)"><input type="checkbox" id="crShowRemoved"> Показывать снятые</label>
+            <input type="text" id="crRegSearch" class="msg-input" placeholder="🔍 Поиск по ФИО/статику" style="flex:1;min-width:200px;max-width:400px">
+          </div>
+          <div class="apps-empty" id="crRegEmpty" style="display:none"><h3>Реестр пуст</h3><p>Нарушений пока не зафиксировано.</p></div>
+          <div id="crRegList" class="cr-reg-list"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="modal-back" id="crDetailModal">
+  <div class="modal modal-xl">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <div id="crDetailBody"></div>
+  </div>
+</div>
+
+<div class="modal-back" id="crEditModal">
+  <div class="modal modal-xl">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Редактирование жалобы</h3>
+    <div class="modal-sub">Все изменения сохраняются в истории</div>
+    <div class="cf-group" style="margin-top:14px">
+      <div class="cf-group-title">📬 Данные заявителя</div>
+      <div class="cf-group-body">
+        <div class="msg-row">
+          <div class="form-group msg-flex-2"><label>ФИО заявителя</label><input type="text" id="crEditFio" class="msg-input"></div>
+          <div class="form-group msg-flex-1"><label>Статик</label><input type="text" id="crEditStatic" class="msg-input" data-static-input></div>
+        </div>
+        <div class="form-group"><label>Discord (@тег или ID)</label><input type="text" id="crEditDiscord" class="msg-input"></div>
+      </div>
+    </div>
+    <div class="cf-group">
+      <div class="cf-group-title">🎯 Данные нарушителя</div>
+      <div class="cf-group-body">
+        <div class="msg-row">
+          <div class="form-group msg-flex-2"><label>ФИО нарушителя</label><input type="text" id="crEditTFio" class="msg-input"></div>
+          <div class="form-group msg-flex-1"><label>Статик нарушителя</label><input type="text" id="crEditTStatic" class="msg-input" data-static-input></div>
+        </div>
+        <div class="form-group"><label>Discord ID нарушителя (для пинга)</label><input type="text" id="crEditTDid" class="msg-input"></div>
+      </div>
+    </div>
+    <div class="cf-group">
+      <div class="cf-group-title">📝 Обстоятельства</div>
+      <div class="cf-group-body">
+        <div id="crEditDyn"></div>
+        <div class="form-group"><label>Ссылка на доказательство</label><input type="text" id="crEditEvidence" class="msg-input"></div>
+      </div>
+    </div>
+    <div class="form-msg" id="crEditMsg"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;padding-top:12px;border-top:1px solid var(--gold-b);margin-top:14px">
+      <button class="btn btn-ghost btn-sm" id="crEditCancel">Отмена</button>
+      <button class="btn btn-gold btn-sm" id="crEditSave">💾 Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-back" id="crVerdictModal">
+  <div class="modal modal-lg">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3 id="crVerdTitle">Вынести вердикт</h3>
+    <div class="modal-sub" id="crVerdSub"></div>
+    <div class="form-group">
+      <label>Тип решения *</label>
+      <div class="cr-verd-grid" id="crVerdOpts"></div>
+    </div>
+    <div class="form-group" id="crVerdConfWrap" style="display:none">
+      <label>Срок заключения *</label>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input type="number" id="crVerdConfHours" class="msg-input" min="0" value="1" style="max-width:100px" placeholder="ч">
+        <span style="color:var(--muted)">ч</span>
+        <input type="number" id="crVerdConfMinutes" class="msg-input" min="0" max="59" value="0" style="max-width:100px" placeholder="м">
+        <span style="color:var(--muted)">мин</span>
+      </div>
+    </div>
+    <div class="form-group" id="crVerdCommentWrap">
+      <label id="crVerdCommentLabel">Комментарий</label>
+      <textarea class="msg-input" id="crVerdComment" rows="3" placeholder="Обоснование решения..." style="resize:vertical;font-family:inherit"></textarea>
+    </div>
+    <div class="form-msg" id="crVerdMsg"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;padding-top:12px;border-top:1px solid var(--gold-b);margin-top:14px">
+      <button class="btn btn-ghost btn-sm" id="crVerdCancel">Отмена</button>
+      <button class="btn btn-gold btn-sm" id="crVerdSave">Вынести вердикт</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-back" id="crVpReqModal">
+  <div class="modal modal-xl">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <div id="crVpReqBody"></div>
+  </div>
+</div>
+
+<div class="modal-back" id="crVpEditModal">
+  <div class="modal modal-xl">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <div id="crVpEditBody"></div>
+  </div>
+</div>
+
+<div class="modal-back" id="crAddViolModal">
+  <div class="modal modal-xl">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Добавить нарушителя в реестр</h3>
+    <div class="modal-sub">Внесение нарушения АБ напрямую (без жалобы от гражданского)</div>
+
+    <div class="cf-group" style="margin-top:14px">
+      <div class="cf-group-title">🎯 Данные нарушителя (кому выдаётся)</div>
+      <div class="cf-group-body">
+        <div class="msg-row">
+          <div class="form-group msg-flex-2" style="position:relative">
+            <label>ФИО нарушителя *</label>
+            <input type="text" id="crAddFio" class="msg-input" placeholder="Начните вводить ФИО..." autocomplete="off">
+            <div id="crAddDropdown" class="cr-dropdown" style="display:none"></div>
+          </div>
+          <div class="form-group msg-flex-1"><label>Статик нарушителя *</label><input type="text" id="crAddStatic" class="msg-input" placeholder="123-456"></div>
+        </div>
+        <div class="form-group"><label>Должность / отдел нарушителя</label><input type="text" id="crAddPos" class="msg-input" placeholder="Интерн · Приёмное отделение"></div>
+        <div class="form-group"><label>Discord ID нарушителя (для пинга)</label><input type="text" id="crAddDid" class="msg-input" placeholder="Автоматически подставится если выбран из списка"></div>
+      </div>
+    </div>
+
+    <div class="cf-group">
+      <div class="cf-group-title">👮 Данные выдающего АБ (кто вносит)</div>
+      <div class="cf-group-body">
+        <div class="msg-row">
+          <div class="form-group msg-flex-2"><label>Ваше отображаемое имя</label><input type="text" id="crAddIssuerName" class="msg-input" placeholder="Автоматически из профиля"></div>
+          <div class="form-group msg-flex-1"><label>Ваш Discord ID (для пинга)</label><input type="text" id="crAddIssuerDid" class="msg-input" placeholder="Опционально"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cf-group">
+      <div class="cf-group-title">⚖ Наказание</div>
+      <div class="cf-group-body">
+        <div class="form-group"><label>Тип наказания *</label>
+          <div class="cr-verd-grid" id="crAddKindOpts"></div>
+        </div>
+        <div class="form-group" id="crAddConfWrap" style="display:none">
+          <label>Срок заключения *</label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input type="number" id="crAddConfHours" class="msg-input" min="0" value="1" style="max-width:100px">
+            <span style="color:var(--muted)">ч</span>
+            <input type="number" id="crAddConfMinutes" class="msg-input" min="0" max="59" value="0" style="max-width:100px">
+            <span style="color:var(--muted)">мин</span>
+          </div>
+        </div>
+        <div class="form-group"><label>Причина / формулировка *</label><textarea class="msg-input" id="crAddReason" rows="3" placeholder="За что выдано" style="resize:vertical;font-family:inherit"></textarea></div>
+        <div class="form-group"><label>Ссылка на доказательство</label><input type="text" id="crAddEvidence" class="msg-input" placeholder="https://..."></div>
+      </div>
+    </div>
+
+    <div class="form-msg" id="crAddMsg"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;padding-top:12px;border-top:1px solid var(--gold-b);margin-top:14px">
+      <button class="btn btn-ghost btn-sm" id="crAddCancel">Отмена</button>
+      <button class="btn btn-gold btn-sm" id="crAddSave">Добавить в реестр</button>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal-back" id="loginModal">
+  <div class="modal"><button class="modal-close" aria-label="Закрыть">✕</button><h3>Вход</h3>
+    <form><div class="form-group"><label>Email</label><input type="email" name="email" required></div><div class="form-group"><label>Пароль</label><input type="password" name="password" required></div><button class="btn btn-gold" style="width:100%" type="submit">Войти</button><div class="form-msg"></div></form></div>
+</div>
+
+<footer class="footer"><div class="container"><div class="footer-bottom"><span>© <span id="year"></span> · ЦГБ №3 · Центральная Городская</span><span class="footer-note">🐞 Нашли баг? Обратитесь: <b>@rilavion</b></span></div></div></footer>
+
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=17"></script>
+<script src="assets/js/core/config.js?v=17"></script>
+<script src="assets/js/utils/ds-autocomplete.js?v=17"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/ui/holiday-engine.js?v=17"></script>
+<script src="assets/js/ui/settings-panel.js?v=17"></script>
+<script src="assets/js/ui/sound-engine.js?v=17"></script>
+<script src="assets/js/core/auth.js?v=17"></script>
+<script src="assets/js/core/roles-engine.js?v=17"></script>
+<script src="assets/js/ui/search-engine.js?v=17"></script>
+<script src="assets/js/utils/ds-cache.js?v=17"></script>
+<script src="assets/js/ui/notify-engine.js?v=19"></script>
+<script src="assets/js/ui/notify-live.js?v=17"></script>
+<script src="assets/js/utils/format-utils.js?v=17"></script>
+<script src="assets/js/features/complaints-engine.js?v=17"></script>
+<script src="assets/js/features/registry-engine.js?v=17"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ruDT=iso=>{if(!iso) return "—";const d=new Date(iso);return d.toLocaleString("ru-RU",{timeZone:"Europe/Moscow",day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"})};
+const ruDate=iso=>{if(!iso) return "—";const d=new Date(iso);return d.toLocaleDateString("ru-RU",{timeZone:"Europe/Moscow",day:"2-digit",month:"2-digit",year:"numeric"})};
+function confLen(minutes){
+  const totalMin=Math.round(minutes||0);
+  if(totalMin<=0) return "";
+  const d=Math.floor(totalMin/1440);
+  const h=Math.floor((totalMin%1440)/60);
+  const m=totalMin%60;
+  const parts=[];
+  if(d) parts.push(d+" д");
+  if(h) parts.push(h+" ч");
+  if(m) parts.push(m+" мин");
+  return parts.join(" ")||"0 мин";
+}
+function confMinutesOf(x){
+  if(x.confinement_minutes!=null) return x.confinement_minutes;
+  if(x.confinement_hours!=null) return Math.round(x.confinement_hours*60);
+  return 0;
+}
+
+const VERDICTS=[
+  {key:"refuse",label:"Отказать",color:"#7a8a4a",icon:"✕",req_comment:true,notify:false},
+  {key:"warn",label:"Предупреждение",color:"#e6b800",icon:"⚠",req_comment:false,notify:true},
+  {key:"reproach",label:"Выговор",color:"#e67e22",icon:"‼",req_comment:false,notify:true},
+  {key:"talk",label:"Беседа с АБ",color:"#38bdf8",icon:"💬",req_comment:false,notify:true},
+  {key:"uval",label:"Отстранение",color:"#e74c3c",icon:"⛔",req_comment:false,notify:true}
+];
+// Виды, которые можно выбрать при редактировании запроса на наказание.
+// «confinement» (дисц. заключение) тут нет — вид убран из обращения,
+// но старые записи с ним в списках отображаются корректно.
+const EDITABLE_KINDS=["warn","reproach","talk","uval"];
+
+const FIELD_LABELS={
+  submitter_fio:"ФИО заявителя",
+  submitter_static:"Статик заявителя",
+  submitter_discord:"Discord заявителя",
+  submitter_position:"Должность заявителя",
+  target_fio:"ФИО нарушителя",
+  target_static:"Статик нарушителя",
+  target_position:"Должность нарушителя",
+  incident_date:"Дата и время инцидента",
+  article:"Нарушенная статья",
+  description:"Суть нарушения",
+  norms:"Нарушенные нормы (ВУ ЦГБ №3, УК, ПК и иные)",
+  evidence_url:"Ссылка на доказательство"
+};
+function labelOf(key){return FIELD_LABELS[key]||key}
+
+let TAB="pending", ALL_COMP=[], ALL_REG=[], ALL_VPREQ=[], CUR_COMP=null, CUR_VPREQ=null, CUR_ADD_KIND=null, CUR_VERDICT=null;
+
+async function boot(){
+  const canView=window.CGB_ROLES&&(window.CGB_ROLES.can("complaints","view")||window.CGB_ROLES.can("complaints","review"));
+  if(!canView){$("crGuard").style.display="";$("crRoot").style.display="none";return}
+  $("crGuard").style.display="none";$("crRoot").style.display="";
+  await loadAll();
+  loadDsMembers();
+}
+
+async function loadAll(){
+  try{
+    ALL_COMP=await CGB_COMPLAINTS.fetchAll();
+    ALL_REG=await CGB_REGISTRY.fetchAll();
+    const c=window.CGB_AUTH.state.client;
+    const {data:vpq}=await c.from("violations_registry").select("*").eq("status","pending").order("created_at",{ascending:false});
+    ALL_VPREQ=vpq||[];
+  }catch(e){console.warn("loadAll:",e.message)}
+  const pend=ALL_COMP.filter(x=>x.status==="pending");
+  const dec=ALL_COMP.filter(x=>x.status==="decided");
+  const activeReg=ALL_REG.filter(x=>x.status!=="removed"&&!x.removed_at&&x.status!=="pending");
+  $("crCntPending").textContent=pend.length;
+  $("crCntDecided").textContent=dec.length;
+  $("crCntActive").textContent=activeReg.length;
+  $("crCntVpReq").textContent=ALL_VPREQ.length;
+  renderTab();
+}
+
+let DS_LIST=[];
+async function loadDsMembers(){
+  const c=window.CGB_AUTH.state.client;
+  if(!c) return;
+  try{
+    const {data,error}=await c.from("ds_members").select("parsed_fio,parsed_static,parsed_dept,discord_id,raw_nick,display_name").eq("active",true).limit(2000);
+    if(error){console.warn("[cr] loadDs err:",error.message);return}
+    if(!data) return;
+    const seen=new Set();
+    DS_LIST=data.filter(m=>{
+      const fio=(m.parsed_fio||m.display_name||m.raw_nick||"").trim();
+      if(!fio) return false;
+      const key=fio+"|"+(m.parsed_static||"");
+      if(seen.has(key)) return false;
+      seen.add(key);return true;
+    }).map(m=>({
+      fio:(m.parsed_fio||m.display_name||m.raw_nick||"").trim(),
+      static:m.parsed_static||"",
+      did:m.discord_id||"",
+      position:m.parsed_dept||""
+    }));
+    console.log("[cr] DS_LIST loaded:",DS_LIST.length);
+  }catch(e){}
+}
+
+document.querySelectorAll("[data-tab]").forEach(b=>b.addEventListener("click",()=>{
+  TAB=b.dataset.tab;
+  document.querySelectorAll("[data-tab]").forEach(x=>x.classList.toggle("active",x.dataset.tab===TAB));
+  document.querySelectorAll(".cr-tab-body").forEach(x=>x.style.display="none");
+  $("crTab"+TAB.charAt(0).toUpperCase()+TAB.slice(1)).style.display="";
+  renderTab();
+}));
+
+function renderTab(){
+  if(TAB==="pending") renderComplaintsList(ALL_COMP.filter(x=>x.status==="pending"),$("crPendList"),$("crPendEmpty"));
+  else if(TAB==="decided") renderComplaintsList(ALL_COMP.filter(x=>x.status==="decided"),$("crDecList"),$("crDecEmpty"));
+  else if(TAB==="registry") renderRegistry();
+  else if(TAB==="vpreq") renderVpRequests();
+}
+
+const KIND_L={warn:"Предупреждение",reproach:"Выговор",talk:"Беседа с АБ",confinement:"Дисц. заключение",uval:"Отстранение"};
+const KIND_I={warn:"⚠",reproach:"‼",talk:"💬",confinement:"🔒",uval:"⛔"};
+
+function renderVpRequests(){
+  const box=$("crVpReqList"), empty=$("crVpReqEmpty");
+  if(!ALL_VPREQ.length){empty.style.display="";box.innerHTML="";return}
+  empty.style.display="none";
+  box.innerHTML=ALL_VPREQ.map(v=>{
+    const ic=KIND_I[v.kind]||"•", lbl=KIND_L[v.kind]||v.kind;
+    const conf=v.kind==="confinement"&&v.confinement_minutes?` · ${v.confinement_minutes} мин`:"";
+    return `<div class="cr-item" data-vpq="${v.id}">
+      <div class="cr-item-head">
+        <span class="cr-verd-badge cr-pending">⏳ Ожидает</span>
+        <span class="cr-item-title">${ic} ${esc(lbl)}${esc(conf)}</span>
+        <span class="cr-item-date">${ruDT(v.requested_at||v.created_at)}</span>
+      </div>
+      <div class="cr-item-sub">Запросил: <b>${esc(v.requested_by_name||"—")}</b>${v.requested_by_static?" · <code>"+esc(v.requested_by_static)+"</code>":""}${v.requested_by_position?" · "+esc(v.requested_by_position):""}</div>
+      <div class="cr-item-target">🎯 <b>${esc(v.target_fio||"—")}</b> ${v.target_static?`<span class="cr-static">${esc(v.target_static)}</span>`:""}</div>
+      <div class="cr-item-desc">${esc(String(v.reason||"").slice(0,300))}</div>
+    </div>`;
+  }).join("");
+  box.querySelectorAll("[data-vpq]").forEach(el=>el.addEventListener("click",()=>openVpReqModal(el.dataset.vpq)));
+}
+
+function openVpReqModal(id){
+  CUR_VPREQ=ALL_VPREQ.find(x=>String(x.id)===String(id));
+  if(!CUR_VPREQ) return;
+  const v=CUR_VPREQ;
+  const canReview=window.CGB_ROLES&&(window.CGB_ROLES.can("vp_request","review")||window.CGB_ROLES.isAdmin());
+  const canEdit=canReview;
+  const ic=KIND_I[v.kind]||"•", lbl=KIND_L[v.kind]||v.kind;
+  const extra=v.request_extra||{};
+  $("crVpReqBody").innerHTML=`
+    <h3>${ic} Запрос: ${esc(lbl)}</h3>
+    <div class="modal-sub">Подан: ${ruDT(v.requested_at||v.created_at)}</div>
+    <div class="cr-tb-box" style="margin-top:14px">
+      <div class="cr-tb-title">🎯 Нарушитель</div>
+      <div class="cr-tb-body"><b>${esc(v.target_fio||"—")}</b>${v.target_static?" · <code>"+esc(v.target_static)+"</code>":""}${v.target_position?" · "+esc(v.target_position):""}</div>
+    </div>
+    <div class="cr-tb-box" style="margin-top:10px">
+      <div class="cr-tb-title">👮 Запросил</div>
+      <div class="cr-tb-body"><b>${esc(v.requested_by_name||"—")}</b>${v.requested_by_static?" · <code>"+esc(v.requested_by_static)+"</code>":""}${v.requested_by_position?" · "+esc(v.requested_by_position):""}</div>
+    </div>
+    <div class="cr-tb-box" style="margin-top:10px">
+      <div class="cr-tb-title">📝 Описание</div>
+      <div class="cr-tb-body">${esc(v.reason||"—").replace(/\n/g,"<br>")}</div>
+    </div>
+    ${v.kind==="confinement"&&v.confinement_minutes?`<div class="cr-tb-box" style="margin-top:10px"><div class="cr-tb-title">⏱ Срок</div><div class="cr-tb-body">${v.confinement_minutes} мин</div></div>`:""}
+    ${extra.article?`<div class="cr-tb-box" style="margin-top:10px"><div class="cr-tb-title">📖 Статья</div><div class="cr-tb-body">${esc(extra.article)}</div></div>`:""}
+    ${extra.norms?`<div class="cr-tb-box" style="margin-top:10px"><div class="cr-tb-title">📜 Нарушенные нормы</div><div class="cr-tb-body">${esc(extra.norms).replace(/\n/g,"<br>")}</div></div>`:""}
+    ${v.evidence_url?`<div class="cr-tb-box" style="margin-top:10px"><div class="cr-tb-title">🔗 Доказательства</div><div class="cr-tb-body"><a href="${esc(v.evidence_url)}" target="_blank" style="color:var(--gold)">Открыть →</a></div></div>`:""}
+    <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+      ${canEdit?`<button class="btn btn-ghost btn-sm" id="crVpqEditBtn">✎ Редактировать</button>`:""}
+      ${canReview?`<button class="btn btn-gold btn-sm" id="crVpqApprove">✅ Одобрить (выдать наказание)</button>`:""}
+      ${canReview?`<button class="btn btn-ghost btn-sm" id="crVpqRefuse" style="color:#e97a7a">❌ Отказать</button>`:""}
+    </div>
+  `;
+  document.getElementById("crVpReqModal").classList.add("active");
+  const eb=document.getElementById("crVpqEditBtn"); if(eb) eb.addEventListener("click",()=>openVpEdit(v));
+  const ab=document.getElementById("crVpqApprove"); if(ab) ab.addEventListener("click",()=>reviewVpq(true));
+  const rb=document.getElementById("crVpqRefuse"); if(rb) rb.addEventListener("click",()=>reviewVpq(false));
+}
+
+async function reviewVpq(approve){
+  const v=CUR_VPREQ; if(!v) return;
+  const comment=prompt(approve?"Комментарий (опц.):":"Причина отказа:");
+  if(!approve && (!comment||!comment.trim())){ alert("Причина отказа обязательна"); return; }
+  const c=window.CGB_AUTH.state.client;
+  const u=window.CGB_AUTH.state.user;
+  const nm=(localStorage.getItem("cgb-my-display-name")||u.email);
+  try{
+    if(approve){
+      const settings=await CGB_REGISTRY.fetchSettings?CGB_REGISTRY.fetchSettings():null;
+      let expiresAt=null;
+      try{
+        const {data:st}=await c.from("violations_settings").select("*").eq("id",1).maybeSingle();
+        if(st){
+          const days={warn:st.expire_warn_days,reproach:st.expire_reproach_days,talk:st.expire_talk_days}[v.kind];
+          if(days) expiresAt=new Date(Date.now()+days*86400000).toISOString();
+          if(v.kind==="confinement"&&v.confinement_minutes) expiresAt=new Date(Date.now()+v.confinement_minutes*60000).toISOString();
+        }
+      }catch(e){}
+      const {data:upd,error}=await c.from("violations_registry").update({
+        status:"active", reviewed_by_uid:u.id, reviewed_by_name:nm, reviewed_at:new Date().toISOString(),
+        reviewer_comment:comment||null, expires_at:expiresAt, issued_by_name:v.requested_by_name
+      }).eq("id",v.id).select("id");
+      if(error) throw error;
+      if(!upd||!upd.length) throw new Error("База не применила изменения (0 строк). Перезапусти SUPABASE-FIX.sql и повтори.");
+      await c.from("violations_history").insert({violation_id:v.id, action:"approve", changed_by_uid:u.id, changed_by_name:nm, comment:comment||null, after_data:{status:"active"}});
+    } else {
+      const {data:upd,error}=await c.from("violations_registry").update({
+        status:"refused", reviewed_by_uid:u.id, reviewed_by_name:nm, reviewed_at:new Date().toISOString(),
+        reviewer_comment:comment, removed_at:new Date().toISOString(), removed_by_name:nm, removed_reason:"Отказ по запросу: "+comment
+      }).eq("id",v.id).select("id");
+      if(error) throw error;
+      if(!upd||!upd.length) throw new Error("База не применила изменения (0 строк). Перезапусти SUPABASE-FIX.sql и повтори.");
+      await c.from("violations_history").insert({violation_id:v.id, action:"refuse", changed_by_uid:u.id, changed_by_name:nm, comment:comment, after_data:{status:"refused"}});
+    }
+    document.getElementById("crVpReqModal").classList.remove("active");
+    await loadAll();
+  }catch(e){ alert("Ошибка: "+e.message); }
+}
+
+function openVpEdit(v){
+  // «confinement» из выбора убран; если у старой записи он был — показываем его как «замороженный» вариант, чтобы не потерять значение
+  const kindOpts=EDITABLE_KINDS.includes(v.kind)?EDITABLE_KINDS:[v.kind,...EDITABLE_KINDS];
+  const extra=v.request_extra||{};
+  const html=`<h3>✎ Редактирование запроса</h3>
+    <div class="form-group"><label>ФИО нарушителя</label><input class="msg-input" id="veTFio" value="${esc(v.target_fio||"")}"></div>
+    <div class="form-group"><label>Статик нарушителя</label><input class="msg-input" id="veTStatic" value="${esc(v.target_static||"")}"></div>
+    <div class="form-group"><label>Должность нарушителя</label><input class="msg-input" id="veTPos" value="${esc(v.target_position||"")}"></div>
+    <div class="form-group"><label>Вид наказания</label><select class="msg-input" id="veKind">${kindOpts.map(k=>`<option value="${k}" ${k===v.kind?"selected":""}>${KIND_I[k]||"•"} ${esc(KIND_L[k]||k)}</option>`).join("")}</select></div>
+    <div class="form-group"><label>Срок (мин, для Дисц.закл.)</label><input type="number" class="msg-input" id="veConf" value="${v.confinement_minutes||0}"></div>
+    <div class="form-group"><label>Обстоятельства / Суть нарушения</label><textarea class="msg-input" id="veReason" rows="4">${esc(v.reason||"")}</textarea></div>
+    <div class="form-group"><label>Нарушенные нормы (ВУ ЦГБ №3, УК, ПК и иные)</label><textarea class="msg-input" id="veNorms" rows="3">${esc(extra.norms||"")}</textarea></div>
+    <div class="form-group"><label>Ссылка на доказательства</label><input class="msg-input" id="veEv" value="${esc(v.evidence_url||"")}"></div>
+    <div class="form-group"><label>Комментарий к правке (лог)</label><input class="msg-input" id="veLog" placeholder="Что и почему поменяли"></div>
+    <div style="display:flex;gap:10px;margin-top:12px"><button class="btn btn-gold" id="veSave">💾 Сохранить</button><button class="btn btn-ghost btn-sm" id="veCancel">Отмена</button></div>`;
+  $("crVpEditBody").innerHTML=html;
+  document.getElementById("crVpReqModal").classList.remove("active");
+  document.getElementById("crVpEditModal").classList.add("active");
+  const veKind=document.getElementById("veKind");
+  const veConfGrp=document.getElementById("veConf").closest(".form-group");
+  const updVeConf=()=>{veConfGrp.style.display=(veKind.value==="confinement")?"":"none"};
+  veKind.addEventListener("change",updVeConf); updVeConf();
+  document.getElementById("veCancel").addEventListener("click",()=>document.getElementById("crVpEditModal").classList.remove("active"));
+  document.getElementById("veSave").addEventListener("click",async()=>{
+    const c=window.CGB_AUTH.state.client;
+    const u=window.CGB_AUTH.state.user;
+    const nm=(localStorage.getItem("cgb-my-display-name")||u.email);
+    const before={target_fio:v.target_fio,target_static:v.target_static,kind:v.kind,reason:v.reason,evidence_url:v.evidence_url,confinement_minutes:v.confinement_minutes,target_position:v.target_position,norms:extra.norms||null};
+    const afterExtra=Object.assign({},extra,{norms:document.getElementById("veNorms").value.trim()||null});
+    const after={
+      target_fio:document.getElementById("veTFio").value.trim(),
+      target_static:document.getElementById("veTStatic").value.trim(),
+      target_position:document.getElementById("veTPos").value.trim()||null,
+      kind:veKind.value,
+      confinement_minutes:veKind.value==="confinement"?(parseInt(document.getElementById("veConf").value)||null):null,
+      reason:document.getElementById("veReason").value.trim(),
+      evidence_url:document.getElementById("veEv").value.trim()||null,
+      request_extra:afterExtra
+    };
+    const {data:upd,error}=await c.from("violations_registry").update(after).eq("id",v.id).select("id");
+    if(error){alert("Ошибка: "+error.message);return}
+    if(!upd||!upd.length){alert("Правка не применилась (база вернула 0 строк).\nСкорее всего, у роли нет прав на изменение таблицы — перезапусти SUPABASE-FIX.sql в Supabase и повтори.");return}
+    const {error:hErr}=await c.from("violations_history").insert({violation_id:v.id, action:"edit", changed_by_uid:u.id, changed_by_name:nm, comment:document.getElementById("veLog").value.trim()||null, before_data:before, after_data:after});
+    if(hErr){alert("Правка сохранена, но запись в истории не создалась: "+hErr.message+"\n(перезапусти SUPABASE-FIX.sql — таблица history там гарантированно создаётся)")}
+    document.getElementById("crVpEditModal").classList.remove("active");
+    await loadAll();
+  });
+}
+
+function renderComplaintsList(list,box,emptyEl){
+  if(!list.length){emptyEl.style.display="";box.innerHTML="";return}
+  emptyEl.style.display="none";
+  box.innerHTML=list.map(c=>{
+    const v=VERDICTS.find(x=>x.key===c.verdict);
+    const badge=c.status==="decided"&&v?`<span class="cr-verd-badge" style="background:${v.color}22;border:1px solid ${v.color};color:${v.color}">${v.icon} ${esc(v.label)}</span>`:`<span class="cr-verd-badge cr-pending">⏳ Ожидает</span>`;
+    return `<div class="cr-item" data-id="${c.id}">
+      <div class="cr-item-head">
+        <div class="cr-item-code"><code>${esc(c.code)}</code></div>
+        <div class="cr-item-target">👤 <b>${esc(c.target_fio||"—")}</b> ${c.target_static?`<span class="cr-static">${esc(c.target_static)}</span>`:""}</div>
+        <div class="cr-item-date">${ruDT(c.created_at)}</div>
+        <div style="flex:1"></div>
+        ${badge}
+      </div>
+      <div class="cr-item-sub">Заявитель: <b>${esc(c.submitter_fio||"—")}</b>${c.submitter_static?` (${esc(c.submitter_static)})`:""}</div>
+    </div>`;
+  }).join("");
+  box.querySelectorAll(".cr-item").forEach(el=>el.addEventListener("click",()=>openDetail(el.dataset.id)));
+}
+
+async function openDetail(id){
+  CUR_COMP=await CGB_COMPLAINTS.fetchOne(id);
+  if(!CUR_COMP) return;
+  const c=CUR_COMP;
+  const v=VERDICTS.find(x=>x.key===c.verdict);
+  const skipKeys=new Set(["submitter_fio","submitter_static","submitter_discord","target_fio","target_static","evidence_url"]);
+  const valuesRows=Object.entries(c.values||{}).filter(([k,v])=>v&&!skipKeys.has(k)).map(([k,val])=>{
+    return `<div class="cr-kv"><div class="cr-k">${esc(labelOf(k))}</div><div class="cr-v">${esc(val)}</div></div>`;
+  }).join("");
+  const evLink=c.evidence_url?`<a href="${esc(c.evidence_url)}" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">🔗 Открыть доказательство</a>`:"";
+  const canReview=window.CGB_ROLES&&window.CGB_ROLES.can("complaints","review");
+  const canDelete=window.CGB_ROLES&&window.CGB_ROLES.can("complaints","delete");
+  const verdictBlock=c.status==="decided"?`
+    <div class="cr-verdict-doc">
+      <div class="cr-vd-head">
+        <div class="cr-vd-title">${v?v.icon:""} ВЕРДИКТ · ${v?esc(v.label).toUpperCase():esc(c.verdict||"")}</div>
+        <div class="cr-vd-code">Жалоба № <code>${esc(c.code)}</code></div>
+      </div>
+      <div class="cr-vd-body">
+        <div class="cr-vd-row"><span class="cr-vd-lbl">Вынес:</span> <b>${esc(c.verdict_by_name||"—")}</b></div>
+        <div class="cr-vd-row"><span class="cr-vd-lbl">Дата решения:</span> ${ruDT(c.verdict_at)}</div>
+        ${c.verdict_comment?`<div class="cr-vd-comment"><span class="cr-vd-lbl">Комментарий:</span><br>${esc(c.verdict_comment).replace(/\n/g,"<br>")}</div>`:""}
+      </div>
+    </div>`:"";
+  $("crDetailBody").innerHTML=`
+    <div class="cr-det-head">
+      <div>
+        <h3 style="margin:0 0 4px">Жалоба <code style="color:var(--gold-b)">${esc(c.code)}</code></h3>
+        <div class="modal-sub">Подана: ${ruDT(c.created_at)}</div>
+      </div>
+    </div>
+    <div class="cr-target-box">
+      <div class="cr-tb-title">🎯 Нарушитель</div>
+      <div class="cr-tb-body"><b>${esc(c.target_fio||"—")}</b>${c.target_static?` · <span class="cr-static">${esc(c.target_static)}</span>`:""}</div>
+    </div>
+    <div class="cr-target-box cr-tb-blue">
+      <div class="cr-tb-title">📬 Заявитель</div>
+      <div class="cr-tb-body"><b>${esc(c.submitter_fio||"—")}</b>${c.submitter_static?` · ${esc(c.submitter_static)}`:""}${c.submitter_discord?` · Discord: ${esc(c.submitter_discord)}`:""}</div>
+    </div>
+    <div class="cr-fields">${valuesRows}</div>
+    ${evLink?`<div style="margin:12px 0">${evLink}</div>`:""}
+    ${verdictBlock}
+    <div id="crHistBlock" style="margin-top:14px"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;padding-top:14px;border-top:1px solid var(--gold-b);margin-top:14px;flex-wrap:wrap">
+      ${canDelete?`<button class="btn btn-ghost btn-sm" id="crDetDel">🗑 Удалить</button>`:""}
+      ${canReview?`<button class="btn btn-ghost btn-sm" id="crDetEdit">✎ Редактировать</button>`:""}
+      ${canReview?`<button class="btn btn-ghost btn-sm" id="crDetHist">📜 История</button>`:""}
+      <div style="flex:1"></div>
+      ${c.status==="pending"&&canReview?`<button class="btn btn-gold btn-sm" id="crDetVerdict">⚖ Вынести вердикт</button>`:""}
+      ${c.status==="decided"&&canReview?`<button class="btn btn-ghost btn-sm" id="crDetVerdict">✎ Изменить вердикт</button>`:""}
+    </div>
+  `;
+  $("crDetailModal").classList.add("active");
+  const dv=$("crDetVerdict");if(dv) dv.addEventListener("click",()=>openVerdict(c));
+  const de=$("crDetEdit");if(de) de.addEventListener("click",()=>openEditComplaint(c));
+  const dh=$("crDetHist");if(dh) dh.addEventListener("click",()=>toggleHistory(c.id));
+  const dd=$("crDetDel");if(dd) dd.addEventListener("click",async()=>{
+    if(!confirm("Удалить жалобу "+c.code+" безвозвратно?")) return;
+    const r=await CGB_COMPLAINTS.remove(c.id);
+    if(!r.ok){alert(r.error);return}
+    $("crDetailModal").classList.remove("active");
+    await loadAll();
+  });
+}
+
+const VERDICT_LABELS={
+  refuse:"Отклонено",warn:"Предупреждение",reproach:"Выговор",talk:"Беседа с АБ",
+  confinement:"Дисциплинарное заключение",uval:"Отстранение",
+  pending:"На рассмотрении",decided:"Решено",approved:"Одобрено",rejected:"Отказано",withdrawn:"Отозвано",
+  new:"Новая",archived:"В архиве"
+};
+function translateVal(k,v){
+  if(v==null||v==="") return "—";
+  const s=String(v);
+  if(k==="verdict"||k==="status"||k==="kind") return VERDICT_LABELS[s]||s;
+  if(s==="true") return "Да";
+  if(s==="false") return "Нет";
+  return s;
+}
+
+async function toggleHistory(id){
+  const box=$("crHistBlock");
+  if(box.dataset.open==="1"){box.innerHTML="";box.dataset.open="0";return}
+  box.innerHTML='<div style="padding:10px;color:var(--muted)">Загрузка истории...</div>';
+  const items=await CGB_COMPLAINTS.getHistory(id);
+  if(!items.length){box.innerHTML='<div class="cr-hist"><div class="cr-hist-title">📜 История изменений</div><div style="padding:10px;color:var(--muted)">Изменений не было</div></div>';box.dataset.open="1";return}
+  box.innerHTML='<div class="cr-hist"><div class="cr-hist-title">📜 История изменений ('+items.length+')</div>'+items.map(h=>{
+    const isVerdict=h.action==="verdict_change";
+    const changes=h.changes||{};
+    const rows=[];
+    for(const [k,v] of Object.entries(changes)){
+      if(k==="values"){
+        for(const [vk,vv] of Object.entries(v)){
+          rows.push(`<div class="cr-hist-ch"><span class="cr-hist-k">${esc(labelOf(vk))}</span>: <span class="cr-hist-from">${esc(translateVal(vk,vv.from))}</span> → <span class="cr-hist-to">${esc(translateVal(vk,vv.to))}</span></div>`);
+        }
+      } else {
+        rows.push(`<div class="cr-hist-ch"><span class="cr-hist-k">${esc(labelOf(k))}</span>: <span class="cr-hist-from">${esc(translateVal(k,v.from))}</span> → <span class="cr-hist-to">${esc(translateVal(k,v.to))}</span></div>`);
+      }
+    }
+    return `<div class="cr-hist-item">
+      <div class="cr-hist-head">${isVerdict?"⚖ Изменение вердикта":"✎ Правка полей"} · <b>${esc(h.changed_by_name||"—")}</b> · ${ruDT(h.created_at)}</div>
+      <div class="cr-hist-body">${rows.join("")||"<div style=\"color:var(--muted)\">(без изменений)</div>"}</div>
+    </div>`;
+  }).join("")+'</div>';
+  box.dataset.open="1";
+}
+
+let EDIT_COMP=null;
+function openEditComplaint(c){
+  EDIT_COMP=c;
+  $("crEditFio").value=c.submitter_fio||"";
+  $("crEditStatic").value=c.submitter_static||"";
+  $("crEditDiscord").value=c.submitter_discord||"";
+  $("crEditTFio").value=c.target_fio||"";
+  $("crEditTStatic").value=c.target_static||"";
+  $("crEditTDid").value=c.target_discord_id||"";
+  $("crEditEvidence").value=c.evidence_url||"";
+  const dyn=$("crEditDyn");
+  const skipKeys=new Set(["submitter_fio","submitter_static","submitter_discord","target_fio","target_static","evidence_url"]);
+  const values=c.values||{};
+  const keys=Object.keys(values).filter(k=>!skipKeys.has(k));
+  dyn.innerHTML=keys.map(k=>{
+    const v=values[k]||"";
+    const isLong=v.length>60;
+    return `<div class="form-group"><label>${esc(labelOf(k))}</label>${isLong?`<textarea class="msg-input" data-vk="${esc(k)}" rows="3" style="resize:vertical;font-family:inherit">${esc(v)}</textarea>`:`<input class="msg-input" type="text" data-vk="${esc(k)}" value="${esc(v)}">`}</div>`;
+  }).join("");
+  $("crEditMsg").textContent="";
+  $("crEditModal").classList.add("active");
+  if(window.CGB_FMT) window.CGB_FMT.autoAttachAll($("crEditModal"));
+}
+
+function openVerdict(c){
+  CUR_VERDICT=null;
+  $("crVerdTitle").textContent="Вердикт по жалобе "+c.code;
+  $("crVerdSub").textContent="Нарушитель: "+(c.target_fio||"—")+(c.target_static?" · "+c.target_static:"");
+  $("crVerdOpts").innerHTML=VERDICTS.map(v=>`<button type="button" class="cr-verd-btn" data-v="${v.key}" style="--vc:${v.color}">${v.icon} ${esc(v.label)}</button>`).join("");
+  $("crVerdComment").value="";
+  $("crVerdCommentLabel").textContent="Комментарий";
+  $("crVerdMsg").textContent="";
+  $("crVerdConfWrap").style.display="none";
+  $("crVerdConfHours").value=1;$("crVerdConfMinutes").value=0;
+  $("crVerdOpts").querySelectorAll("[data-v]").forEach(b=>b.addEventListener("click",()=>{
+    CUR_VERDICT=b.dataset.v;
+    $("crVerdOpts").querySelectorAll("[data-v]").forEach(x=>x.classList.toggle("active",x.dataset.v===CUR_VERDICT));
+    const v=VERDICTS.find(x=>x.key===CUR_VERDICT);
+    $("crVerdCommentLabel").innerHTML="Комментарий"+(v.req_comment?` <span style="color:#e77070">*</span>`:` <span style="color:#8a8a8a;font-size:12px">(необязательно)</span>`);
+    $("crVerdConfWrap").style.display=v.confinement?"":"none";
+  }));
+  $("crVerdictModal").classList.add("active");
+}
+
+$("crVerdCancel").addEventListener("click",()=>$("crVerdictModal").classList.remove("active"));
+$("crVerdictModal").querySelector(".modal-close").addEventListener("click",()=>$("crVerdictModal").classList.remove("active"));
+$("crVerdictModal").addEventListener("click",e=>{if(e.target===$("crVerdictModal")) $("crVerdictModal").classList.remove("active")});
+
+$("crVerdSave").addEventListener("click",async()=>{
+  const msg=$("crVerdMsg");
+  if(!CUR_VERDICT){msg.className="form-msg error";msg.textContent="Выберите тип решения";return}
+  const v=VERDICTS.find(x=>x.key===CUR_VERDICT);
+  const comment=$("crVerdComment").value.trim();
+  if(v.req_comment&&!comment){msg.className="form-msg error";msg.textContent="Для этого вердикта комментарий обязателен";return}
+  const displayName=(function(){try{return localStorage.getItem("cgb-my-display-name")||""}catch(e){return""}})();
+  msg.className="form-msg info";msg.textContent="Сохранение вердикта...";
+  const isChange=CUR_COMP.status==="decided";
+  const r=isChange
+    ? await CGB_COMPLAINTS.changeVerdict(CUR_COMP.id,CUR_VERDICT,comment,displayName)
+    : await CGB_COMPLAINTS.decide(CUR_COMP.id,CUR_VERDICT,comment,displayName);
+  if(!r.ok){msg.className="form-msg error";msg.textContent=r.error;return}
+  if(v.notify){
+    let confMinutes=null;
+    if(v.confinement){
+      const h=parseInt($("crVerdConfHours").value)||0;
+      const mn=parseInt($("crVerdConfMinutes").value)||0;
+      confMinutes=h*60+mn;
+      if(!confMinutes||confMinutes<=0){msg.className="form-msg error";msg.textContent="Укажите срок заключения (часы+минуты)";return}
+    }
+    const rr=await CGB_REGISTRY.add({
+      target_fio:CUR_COMP.target_fio,
+      target_static:CUR_COMP.target_static,
+      target_discord_id:CUR_COMP.target_discord_id,
+      kind:CUR_VERDICT,
+      reason:comment||("Жалоба "+CUR_COMP.code),
+      evidence_url:CUR_COMP.evidence_url,
+      issued_by_name:displayName,
+      confinement_minutes:confMinutes
+    },"notify",CUR_COMP.id);
+    if(!rr.ok){msg.className="form-msg error";msg.textContent="Вердикт сохранён, но не удалось создать запись в реестре: "+rr.error;return}
+  }
+  msg.className="form-msg success";msg.textContent="✓ Вердикт вынесен";
+  setTimeout(async()=>{
+    $("crVerdictModal").classList.remove("active");
+    $("crDetailModal").classList.remove("active");
+    await loadAll();
+  },900);
+});
+
+function renderRegistry(){
+  const showRem=$("crShowRemoved").checked;
+  const q=$("crRegSearch").value.trim().toLowerCase();
+  let list=ALL_REG.slice().filter(x=>x.status!=="pending"&&x.status!=="refused");
+  if(!showRem) list=list.filter(x=>!x.removed_at);
+  if(q) list=list.filter(x=>(x.target_fio||"").toLowerCase().includes(q)||(x.target_static||"").toLowerCase().includes(q));
+  const box=$("crRegList");
+  if(!list.length){$("crRegEmpty").style.display="";box.innerHTML="";return}
+  $("crRegEmpty").style.display="none";
+  const groups=CGB_REGISTRY.groupByPerson(list);
+  box.innerHTML=groups.map(g=>{
+    const activeItems=g.items.filter(x=>!x.removed_at);
+    const warns=activeItems.filter(x=>x.kind==="warn").length;
+    const reps=activeItems.filter(x=>x.kind==="reproach").length;
+    const talks=activeItems.filter(x=>x.kind==="talk").length;
+    const uvals=activeItems.filter(x=>x.kind==="uval").length;
+    const badges=[];
+    if(warns) badges.push(`<span class="cr-kbadge" style="background:#e6b80022;color:#e6b800;border:1px solid #e6b800">⚠ ${warns}</span>`);
+    if(reps) badges.push(`<span class="cr-kbadge" style="background:#e67e2222;color:#e67e22;border:1px solid #e67e22">‼ ${reps}</span>`);
+    if(talks) badges.push(`<span class="cr-kbadge" style="background:#38bdf822;color:#38bdf8;border:1px solid #38bdf8">💬 ${talks}</span>`);
+    if(uvals) badges.push(`<span class="cr-kbadge" style="background:#e74c3c22;color:#e74c3c;border:1px solid #e74c3c">⛔ ${uvals}</span>`);
+    if(!badges.length) badges.push('<span class="cr-kbadge cr-clean">✓ Чист</span>');
+    return `<div class="cr-reg-group">
+      <div class="cr-reg-head">
+        <div class="cr-reg-name">👤 ${esc(g.fio)}${g.static?` <span class="cr-static">${esc(g.static)}</span>`:""}</div>
+        <div class="cr-reg-badges">${badges.join(" ")}</div>
+      </div>
+      <div class="cr-reg-items">
+        ${g.items.map(itemHtml).join("")}
+      </div>
+    </div>`;
+  }).join("");
+  box.querySelectorAll("[data-rem]").forEach(b=>b.addEventListener("click",async(e)=>{
+    e.stopPropagation();
+    const reason=prompt("Причина снятия нарушения:");
+    if(reason===null) return;
+    const r=await CGB_REGISTRY.removeViolation(b.dataset.rem,reason||"Снято вручную");
+    if(!r.ok){alert(r.error);return}
+    await loadAll();
+  }));
+  box.querySelectorAll("[data-del]").forEach(b=>b.addEventListener("click",async(e)=>{
+    e.stopPropagation();
+    if(!confirm("Полностью удалить запись из реестра? Отменить нельзя.")) return;
+    const r=await CGB_REGISTRY.hardDelete(b.dataset.del);
+    if(!r.ok){alert(r.error);return}
+    await loadAll();
+  }));
+}
+
+function itemHtml(x){
+  const lbl=CGB_REGISTRY.KIND_LABELS[x.kind]||x.kind;
+  const col=CGB_REGISTRY.KIND_COLORS[x.kind]||"#888";
+  const ic=CGB_REGISTRY.KIND_ICONS[x.kind]||"•";
+  const removed=!!x.removed_at;
+  const canEdit=window.CGB_ROLES&&window.CGB_ROLES.can("registry","edit");
+  const canRemove=window.CGB_ROLES&&window.CGB_ROLES.can("registry","remove");
+  const confMin=confMinutesOf(x);
+  const confPart=x.kind==="confinement"&&confMin>0?` <span class="cr-conf-len">${confLen(confMin)}</span>`:"";
+  const expShow=x.expires_at&&!removed?(x.kind==="confinement"?ruDT(x.expires_at):ruDate(x.expires_at)):"";
+  return `<div class="cr-reg-item ${removed?'cr-reg-removed':''}">
+    <div class="cr-reg-item-head">
+      <span class="cr-kbadge" style="background:${col}22;color:${col};border:1px solid ${col}">${ic} ${esc(lbl)}${confPart}</span>
+      <span class="cr-reg-date">${ruDT(x.created_at)}</span>
+      ${expShow?`<span class="cr-reg-exp">до ${expShow}</span>`:""}
+      <span style="flex:1"></span>
+
+    </div>
+    <div class="cr-reg-item-body">
+      <div class="cr-reg-reason">${esc(x.reason)}</div>
+      ${x.evidence_url?`<a href="${esc(x.evidence_url)}" target="_blank" rel="noopener" class="cr-reg-ev">🔗 доказательство</a>`:""}
+      <div class="cr-reg-issued">Выдал: <b>${esc(x.issued_by_name||"—")}</b></div>
+      ${removed?`<div class="cr-reg-remd">✕ Снято ${ruDT(x.removed_at)} · ${esc(x.removed_by_name||"—")}${x.removed_reason?`: <i>${esc(x.removed_reason)}</i>`:""}</div>`:""}
+    </div>
+    ${!removed&&canEdit?`<div class="cr-reg-item-actions"><button class="btn btn-ghost btn-sm" data-rem="${x.id}">↺ Снять</button>${canRemove?`<button class="btn btn-ghost btn-sm" data-del="${x.id}">🗑</button>`:""}</div>`:canRemove?`<div class="cr-reg-item-actions"><button class="btn btn-ghost btn-sm" data-del="${x.id}">🗑</button></div>`:""}
+  </div>`;
+}
+
+$("crShowRemoved").addEventListener("change",renderRegistry);
+$("crRegSearch").addEventListener("input",renderRegistry);
+
+$("crAddViolBtn").addEventListener("click",()=>{
+  CUR_ADD_KIND=null;
+  $("crAddFio").value="";$("crAddStatic").value="";$("crAddPos").value="";$("crAddDid").value="";
+  $("crAddReason").value="";$("crAddEvidence").value="";
+  const dn=(function(){try{return localStorage.getItem("cgb-my-display-name")||""}catch(e){return""}})();
+  $("crAddIssuerName").value=dn;
+  $("crAddIssuerDid").value="";
+  $("crAddConfHours").value=1;$("crAddConfMinutes").value=0;
+  $("crAddConfWrap").style.display="none";
+  $("crAddKindOpts").innerHTML=VERDICTS.filter(v=>v.notify).map(v=>`<button type="button" class="cr-verd-btn" data-ak="${v.key}" style="--vc:${v.color}">${v.icon} ${esc(v.label)}</button>`).join("");
+  $("crAddKindOpts").querySelectorAll("[data-ak]").forEach(b=>b.addEventListener("click",()=>{
+    CUR_ADD_KIND=b.dataset.ak;
+    $("crAddKindOpts").querySelectorAll("[data-ak]").forEach(x=>x.classList.toggle("active",x.dataset.ak===CUR_ADD_KIND));
+    const v=VERDICTS.find(x=>x.key===CUR_ADD_KIND);
+    $("crAddConfWrap").style.display=v&&v.confinement?"":"none";
+  }));
+  $("crAddMsg").textContent="";
+  $("crAddViolModal").classList.add("active");
+});
+
+function renderDsDropdown(query){
+  const box=$("crAddDropdown");
+  const q=(query||"").trim().toLowerCase();
+  if(!q){box.style.display="none";return}
+  const digits=q.replace(/\D/g,"");
+  const matches=DS_LIST.filter(m=>{
+    const fioLow=(m.fio||"").toLowerCase();
+    const statNorm=(m.static||"").replace(/\D/g,"");
+    return fioLow.includes(q) || (digits && statNorm.includes(digits));
+  }).slice(0,10);
+  if(!matches.length){
+    box.innerHTML='<div class="cr-dd-empty">Ничего не найдено</div>';
+    box.style.display="";return;
+  }
+  box.innerHTML=matches.map(m=>{
+    const posPart=m.position?`<span class="cr-dd-pos">${esc(m.position)}</span>`:"";
+    const statPart=m.static?`<span class="cr-dd-stat">${esc(m.static)}</span>`:"";
+    return `<div class="cr-dd-item" data-fio="${esc(m.fio)}" data-static="${esc(m.static)}" data-did="${esc(m.did)}" data-pos="${esc(m.position)}">
+      <div class="cr-dd-fio">${esc(m.fio)}</div>
+      <div class="cr-dd-meta">${statPart}${posPart}</div>
+    </div>`;
+  }).join("");
+  box.style.display="";
+  box.querySelectorAll(".cr-dd-item").forEach(el=>el.addEventListener("mousedown",e=>{
+    e.preventDefault();
+    $("crAddFio").value=el.dataset.fio;
+    if(el.dataset.static) $("crAddStatic").value=window.CGB_FMT?window.CGB_FMT.formatStatic(el.dataset.static):el.dataset.static;
+    if(el.dataset.did) $("crAddDid").value=el.dataset.did;
+    if(el.dataset.pos&&!$("crAddPos").value) $("crAddPos").value=el.dataset.pos;
+    box.style.display="none";
+  }));
+}
+$("crAddFio").addEventListener("input",e=>renderDsDropdown(e.target.value));
+$("crAddFio").addEventListener("focus",e=>{if(e.target.value.trim()) renderDsDropdown(e.target.value)});
+$("crAddFio").addEventListener("blur",()=>setTimeout(()=>$("crAddDropdown").style.display="none",180));
+$("crAddFio").addEventListener("keydown",e=>{if(e.key==="Escape") $("crAddDropdown").style.display="none"});
+
+$("crAddCancel").addEventListener("click",()=>$("crAddViolModal").classList.remove("active"));
+$("crAddViolModal").querySelector(".modal-close").addEventListener("click",()=>$("crAddViolModal").classList.remove("active"));
+$("crAddViolModal").addEventListener("click",e=>{if(e.target===$("crAddViolModal")) $("crAddViolModal").classList.remove("active")});
+
+$("crAddSave").addEventListener("click",async()=>{
+  const msg=$("crAddMsg");
+  const fio=$("crAddFio").value.trim();
+  const stat=$("crAddStatic").value.trim();
+  const pos=$("crAddPos").value.trim();
+  const did=$("crAddDid").value.trim();
+  const issuerName=$("crAddIssuerName").value.trim();
+  const issuerDid=$("crAddIssuerDid").value.trim();
+  const reason=$("crAddReason").value.trim();
+  const ev=$("crAddEvidence").value.trim();
+  if(!fio||!stat){msg.className="form-msg error";msg.textContent="ФИО и статик нарушителя обязательны";return}
+  if(!CUR_ADD_KIND){msg.className="form-msg error";msg.textContent="Выберите тип наказания";return}
+  if(!reason){msg.className="form-msg error";msg.textContent="Укажите причину";return}
+  let confMinutes=null;
+  const kindDef=VERDICTS.find(v=>v.key===CUR_ADD_KIND);
+  if(kindDef&&kindDef.confinement){
+    const h=parseInt($("crAddConfHours").value)||0;
+    const mn=parseInt($("crAddConfMinutes").value)||0;
+    confMinutes=h*60+mn;
+    if(!confMinutes||confMinutes<=0){msg.className="form-msg error";msg.textContent="Укажите срок заключения (часы+минуты)";return}
+  }
+  msg.className="form-msg info";msg.textContent="Сохранение...";
+  const r=await CGB_REGISTRY.add({
+    target_fio:fio,target_static:stat,target_position:pos,target_discord_id:did||null,
+    kind:CUR_ADD_KIND,reason,evidence_url:ev,
+    issued_by_name:issuerName||null,
+    issued_by_discord_id:issuerDid||null,
+    confinement_minutes:confMinutes
+  },"notify",null);
+  if(!r.ok){msg.className="form-msg error";msg.textContent=r.error;return}
+  msg.className="form-msg success";msg.textContent="✓ Добавлено в реестр";
+  setTimeout(async()=>{$("crAddViolModal").classList.remove("active");await loadAll()},700);
+});
+
+$("crDetailModal").querySelector(".modal-close").addEventListener("click",()=>$("crDetailModal").classList.remove("active"));
+$("crDetailModal").addEventListener("click",e=>{if(e.target===$("crDetailModal")) $("crDetailModal").classList.remove("active")});
+
+$("crEditCancel").addEventListener("click",()=>$("crEditModal").classList.remove("active"));
+$("crEditModal").querySelector(".modal-close").addEventListener("click",()=>$("crEditModal").classList.remove("active"));
+$("crEditModal").addEventListener("click",e=>{if(e.target===$("crEditModal")) $("crEditModal").classList.remove("active")});
+
+$("crEditSave").addEventListener("click",async()=>{
+  if(!EDIT_COMP) return;
+  const msg=$("crEditMsg");
+  const values={};
+  $("crEditDyn").querySelectorAll("[data-vk]").forEach(el=>{values[el.dataset.vk]=el.value.trim()});
+  const changes={
+    submitter_fio:$("crEditFio").value.trim(),
+    submitter_static:$("crEditStatic").value.trim(),
+    submitter_discord:$("crEditDiscord").value.trim(),
+    target_fio:$("crEditTFio").value.trim(),
+    target_static:$("crEditTStatic").value.trim(),
+    target_discord_id:$("crEditTDid").value.trim(),
+    evidence_url:$("crEditEvidence").value.trim(),
+    values
+  };
+  const dn=(function(){try{return localStorage.getItem("cgb-my-display-name")||""}catch(e){return""}})();
+  msg.className="form-msg info";msg.textContent="Сохранение...";
+  const r=await CGB_COMPLAINTS.editComplaint(EDIT_COMP.id,changes,dn);
+  if(!r.ok){msg.className="form-msg error";msg.textContent=r.error;return}
+  msg.className="form-msg success";msg.textContent=r.noop?"Без изменений":"✓ Сохранено";
+  setTimeout(async()=>{
+    $("crEditModal").classList.remove("active");
+    await loadAll();
+    openDetail(EDIT_COMP.id);
+  },700);
+});
+
+["crVpReqModal","crVpEditModal"].forEach(id=>{
+  const m=document.getElementById(id); if(!m) return;
+  const close=m.querySelector(".modal-close");
+  if(close) close.addEventListener("click",()=>m.classList.remove("active"));
+  m.addEventListener("click",e=>{ if(e.target===m) m.classList.remove("active"); });
+});
+
+if(window.CGB_ROLES) CGB_ROLES.onChange(boot);
+setTimeout(boot,700);
+
+async function tryOpenFromHash(){
+  const h=location.hash||"";
+  const m=h.match(/^#c-(.+)$/);
+  if(!m) return;
+  const id=m[1];
+  const deadline=Date.now()+15000;
+  while(Date.now()<deadline){
+    const s=window.CGB_AUTH&&window.CGB_AUTH.state;
+    if(s&&s.ready&&s.client&&typeof openDetail==="function"&&window.CGB_COMPLAINTS){
+      const row=await CGB_COMPLAINTS.fetchOne(id);
+      if(row){
+        await openDetail(id);
+        history.replaceState(null,"",location.pathname);
+        return;
+      }
+    }
+    await new Promise(r=>setTimeout(r,300));
+  }
+  console.warn("[COMPLAINTS-REVIEW] не удалось открыть #c-"+id+" за 15 сек");
+}
+setTimeout(tryOpenFromHash,600);
+
+setTimeout(()=>{
+  const c=window.CGB_AUTH&&window.CGB_AUTH.state&&window.CGB_AUTH.state.client;
+  if(c){
+    try{c.channel("cr-live").on("postgres_changes",{event:"*",schema:"public",table:"complaints"},loadAll).on("postgres_changes",{event:"*",schema:"public",table:"violations_registry"},loadAll).subscribe()}catch(e){}
+  }
+},1500);
+</script>
+
+</body>
+</html>

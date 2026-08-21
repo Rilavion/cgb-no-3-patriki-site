@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title>Настройки жалоб и реестра</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=26">
+</head>
+<body>
+<canvas id="bgCanvas"></canvas><div class="bg-noise"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ВС"></div>
+      <div class="brand-text">
+        <span class="brand-label">Администрация</span>
+        <span class="brand-name">Настройки</span>
+      </div>
+    </a>
+    <nav class="nav" id="mainNav">
+      <a href="index.html" data-page="index.html" data-transition>Главная</a>
+      <a href="info.html" data-page="info.html" data-transition>Информация</a>
+      <a href="services.html" data-page="services.html" data-transition>Услуги</a>
+      <a href="meds.html" data-page="meds.html" data-transition>Медикаменты</a>
+      <a href="ustav.html" data-page="ustav.html" data-transition>Устав</a>
+      <a href="learn.html" data-page="learn.html" data-transition data-loggedin>Учебные материалы</a>
+      <a href="tests.html" data-page="tests.html" data-transition data-loggedin>Тестирование</a>
+      <a href="composition.html" data-page="composition.html" data-transition>Состав</a>
+      <a href="docs.html" data-page="docs.html" data-transition data-perm="docs:view">Документы</a>
+      <a href="news.html" data-page="news.html" data-transition>Новости</a>
+      <a href="autopark.html" data-page="autopark.html" data-transition>Автопарк</a>
+      <a href="map.html" data-page="map.html" data-transition>Карта</a>
+      <a href="faq.html" data-page="faq.html" data-transition>FAQ</a>
+      <a href="complaints.html" data-page="complaints.html" data-transition>Жалобы</a>
+      <a href="supply.html" data-page="supply.html" data-transition data-perm="supply:view">Поставки</a>
+      <a href="apps.html" data-page="apps.html" data-transition data-perm="apps:view">Заявления</a>
+      <a href="vp.html" data-page="vp.html" data-transition data-perm="vp:view">Проверки АБ</a>
+      <a href="complaints-review.html" data-page="complaints-review.html" data-transition data-perm="complaints:review,complaints:view">Рассмотрение жалоб</a>
+      <a href="complaints-stats.html" data-page="complaints-stats.html" data-transition data-perm="complaints:review,complaints:view">Статистика жалоб</a>
+      <a href="leave.html" data-page="leave.html" data-transition data-loggedin>Отгул</a>
+      <a href="vacation-ic.html" data-page="vacation-ic.html" data-transition data-loggedin>Отпуск IC</a>
+      <a href="vacation-ooc.html" data-page="vacation-ooc.html" data-transition data-loggedin>Отпуск OOC</a>
+      <a href="dismissal.html" data-page="dismissal.html" data-transition data-loggedin>Увольнение</a>
+      <a href="promotion.html" data-page="promotion.html" data-transition data-loggedin>Повышение</a>
+      <a href="restoration.html" data-page="restoration.html" data-transition>Восстановление в ЦГБ №3</a>
+      <a href="appointment.html" data-page="appointment.html" data-transition>Запись к врачу</a>
+      <a href="requests-review.html" data-page="requests-review.html" data-transition data-perm="requests:review,requests:view">Рассмотрение заявок</a>
+      <a href="requests-stats.html" data-page="requests-stats.html" data-transition data-perm="requests:review,requests:view">Статистика заявок</a>
+      <a href="payroll.html" data-page="payroll.html" data-transition data-perm="payroll:view">Реестр премирования</a>
+      <a href="report.html" data-page="report.html" data-transition>Еженедельный отчёт</a>
+      <a href="report-settings.html" data-page="report-settings.html" data-transition data-perm="report:settings">Настройки отчётов</a>
+      <a href="vp-request.html" data-page="vp-request.html" data-transition data-perm="vp_request:submit">Запрос на наказание</a>
+      <a href="vp-request-settings.html" data-page="vp-request-settings.html" data-transition data-perm="vp_request:settings">Настройки запросов АБ</a>
+      <a href="lk.html" data-page="lk.html" data-transition>Личный кабинет</a>
+    </nav>
+    <div class="header-actions">
+      <a href="complaints.html" data-page="complaints.html" class="btn btn-ghost btn-sm">← Форма</a>
+      <a href="complaints-review.html" data-page="complaints-review.html" class="btn btn-ghost btn-sm">📋 Рассмотрение</a>
+      <a href="complaints-form.html" data-page="complaints-form.html" class="btn btn-ghost btn-sm">✎ Форма</a>
+      <button class="btn btn-gold btn-sm" id="csSaveBtn">💾 Сохранить</button>
+      <button class="search-btn" data-open-search title="Поиск"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg><span>Поиск</span></button>
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Сменить тему"><svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="sun" viewBox="0 0 24 24"><path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66l1.42-1.42M4.92 19.08l1.42-1.42m0-11.32L4.92 4.92m14.16 14.16l-1.42-1.42M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+      <button class="login-btn" data-open-login><svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/></svg><span>Войти</span></button>
+      <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="apps-body">
+    <div class="container" style="max-width:820px">
+      <div id="csGuard" style="display:none"><div class="apps-guard-box"><div class="apps-guard-icon">⚠</div><h2>Доступ ограничен</h2><p>Только для администраторов.</p></div></div>
+      <div id="csRoot" style="display:none">
+        <h3>Каналы Discord</h3>
+        <div class="form-group">
+          <label>📨 Канал «Новые жалобы» (куда бот пишет при поступлении жалобы)</label>
+          <select id="csCh1" class="msg-input"></select>
+          <span class="msg-help">Если не выбран — жалобы всё равно сохраняются на сайте</span>
+        </div>
+        <div class="form-group">
+          <label>⚖ Канал «Вердикты по жалобам» (решения АБ по конкретным жалобам)</label>
+          <select id="csChV" class="msg-input"></select>
+          <span class="msg-help">Сюда приходят «Отказать», «Предупреждение по жалобе Ж-...» и т.д.</span>
+        </div>
+        <div class="form-group">
+          <label>📋 Канал «Приказы АБ» (прямые нарушения без жалобы)</label>
+          <select id="csCh2" class="msg-input"></select>
+          <span class="msg-help">Сюда приходят нарушения, внесённые через «Добавить нарушителя»</span>
+        </div>
+        <div class="form-group">
+          <label>🔒 Канал «Дисциплинарные заключения»</label>
+          <select id="csChConf" class="msg-input"></select>
+          <span class="msg-help">Отдельный канал для заключений (по жалобе и напрямую). Если пусто — уходит в «Вердикты»/«Приказы»</span>
+        </div>
+        <div class="form-group">
+          <label>✓ Канал «Снятие нарушений» (авто-истечения и ручные снятия)</label>
+          <select id="csCh3" class="msg-input"></select>
+          <span class="msg-help">Хочешь всё в один канал — выбирай одинаковые</span>
+        </div>
+
+        <h3 style="margin-top:24px">Пинг-роль</h3>
+        <div class="form-group">
+          <label>Роль АБ для пинга при событиях жалоб</label>
+          <select id="csPingRole" class="msg-input"></select>
+          <span class="msg-help">Пингуется при: новая жалоба, вердикт, новое нарушение, снятие. Если пусто — только @user'ы. Список синхронизируется ботом раз в 30 мин.</span>
+        </div>
+
+        <h3 style="margin-top:24px">Сроки действия нарушений</h3>
+        <div class="msg-row">
+          <div class="form-group msg-flex-1"><label>⚠ Предупреждение (дней)</label><input type="number" id="csExpW" class="msg-input" min="1" value="14"></div>
+          <div class="form-group msg-flex-1"><label>‼ Выговор (дней)</label><input type="number" id="csExpR" class="msg-input" min="1" value="30"></div>
+          <div class="form-group msg-flex-1"><label>💬 Беседа (дней)</label><input type="number" id="csExpT" class="msg-input" min="1" value="7"></div>
+          <div class="form-group msg-flex-1"><label>🔒 Заключение по умолч. (минут)</label><input type="number" id="csExpC" class="msg-input" min="1" value="1440"></div>
+        </div>
+        <div class="msg-help">Отстранение не истекает автоматически. Дисциплинарное заключение — срок задаётся при выдаче (используется дефолт, если не указан). Автопроверка каждый час.</div>
+
+        <h3 style="margin-top:24px">Автоматическая конвертация</h3>
+        <div class="form-group">
+          <label>Сколько активных предупреждений конвертируется в 1 выговор</label>
+          <input type="number" id="csThr" class="msg-input" min="2" value="3">
+          <span class="msg-help">Когда у сотрудника накапливается N активных ⚠ — они автоматически снимаются и создаётся ‼ выговор с оповещением в DS</span>
+        </div>
+
+        <div class="form-msg" id="csMsg" style="margin-top:14px"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="modal-back" id="loginModal">
+  <div class="modal"><button class="modal-close" aria-label="Закрыть">✕</button><h3>Вход</h3>
+    <form><div class="form-group"><label>Email</label><input type="email" name="email" required></div><div class="form-group"><label>Пароль</label><input type="password" name="password" required></div><button class="btn btn-gold" style="width:100%" type="submit">Войти</button><div class="form-msg"></div></form></div>
+</div>
+
+<footer class="footer"><div class="container"><div class="footer-bottom"><span>© <span id="year"></span> · ЦГБ №3 · Центральная Городская</span><span class="footer-note">🐞 Нашли баг? Обратитесь: <b>@rilavion</b></span></div></div></footer>
+
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=17"></script>
+<script src="assets/js/core/config.js?v=17"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/utils/format-utils.js?v=17"></script>
+<script src="assets/js/core/auth.js?v=17"></script>
+<script src="assets/js/utils/ds-cache.js?v=17"></script>
+<script src="assets/js/ui/notify-engine.js?v=19"></script>
+<script src="assets/js/ui/notify-live.js?v=17"></script>
+<script src="assets/js/ui/search-engine.js?v=17"></script>
+<script src="assets/js/ui/sound-engine.js?v=17"></script>
+<script src="assets/js/ui/settings-panel.js?v=17"></script>
+<script src="assets/js/ui/holiday-engine.js?v=17"></script>
+<script src="assets/js/core/roles-engine.js?v=17"></script>
+<script src="assets/js/features/registry-engine.js?v=17"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+let SETTINGS=null;
+let BOOT_IN_FLIGHT=false,BOOT_READY_USER="";
+
+async function boot(){
+  const canSet=window.CGB_ROLES&&window.CGB_ROLES.can("complaints","settings");
+  if(!canSet){$("csGuard").style.display="";$("csRoot").style.display="none";return}
+  $("csGuard").style.display="none";$("csRoot").style.display="";
+  const userId=window.CGB_AUTH&&CGB_AUTH.state.user&&CGB_AUTH.state.user.id||"";
+  if(BOOT_IN_FLIGHT||BOOT_READY_USER===userId) return;
+  BOOT_IN_FLIGHT=true;
+  try{
+    const c=await CGB_AUTH.requireClient(8000);
+    if(!c) throw new Error("Подключение к базе данных ещё не готово");
+    const [settings,channelsResult,rolesResult]=await Promise.all([
+      CGB_REGISTRY.fetchSettings(),
+      c.from("ds_channels").select("channel_id,name,parent_name").order("name",{ascending:true}),
+      c.from("ds_guild_roles").select("role_id,name,color,position").order("position",{ascending:false})
+    ]);
+    if(channelsResult.error) throw channelsResult.error;
+    if(rolesResult.error) throw rolesResult.error;
+    SETTINGS=settings||{id:1,expire_warn_days:14,expire_reproach_days:30,expire_talk_days:7,expire_confinement_hours:24,warn_to_reproach_threshold:3};
+    renderChannels(channelsResult.data||[]);
+    renderRoles(rolesResult.data||[]);
+    $("csExpW").value=SETTINGS.expire_warn_days||14;
+    $("csExpR").value=SETTINGS.expire_reproach_days||30;
+    $("csExpT").value=SETTINGS.expire_talk_days||7;
+    $("csExpC").value=SETTINGS.expire_confinement_minutes||((SETTINGS.expire_confinement_hours||24)*60);
+    $("csThr").value=SETTINGS.warn_to_reproach_threshold||3;
+    BOOT_READY_USER=userId;
+  }catch(error){
+    const msg=$("csMsg");
+    msg.className="form-msg error";
+    msg.textContent="Не удалось загрузить настройки: "+(error&&error.message||error);
+  }finally{BOOT_IN_FLIGHT=false}
+}
+
+function renderRoles(roles){
+  const sel=$("csPingRole");
+  if(!roles.length){
+    sel.innerHTML=`<option value="">— бот ещё не синхронизировал роли —</option>`;
+    return;
+  }
+  const cur=SETTINGS.ping_role_id||"";
+  sel.innerHTML=[`<option value="">— не выбрано —</option>`].concat(roles.map(r=>`<option value="${r.role_id}" ${r.role_id===cur?"selected":""}>@${(r.name||"").replace(/</g,"&lt;")}</option>`)).join("");
+}
+
+function renderChannels(channels){
+  const byParent=new Map();
+  for(const ch of channels){const k=ch.parent_name||"Без категории";if(!byParent.has(k)) byParent.set(k,[]);byParent.get(k).push(ch)}
+  function buildSelect(sel,current){
+    if(!channels.length){sel.innerHTML=`<option value="">— бот ещё не синхронизировал каналы —</option>`;return}
+    const parts=[`<option value="">— не выбрано —</option>`];
+    for(const [pn,list] of byParent){
+      parts.push(`<optgroup label="${esc(pn)}">`);
+      for(const ch of list) parts.push(`<option value="${ch.channel_id}" ${ch.channel_id===current?"selected":""}>#${esc(ch.name)}</option>`);
+      parts.push(`</optgroup>`);
+    }
+    sel.innerHTML=parts.join("");
+  }
+  buildSelect($("csCh1"),SETTINGS.complaints_channel_id||"");
+  buildSelect($("csChV"),SETTINGS.verdicts_channel_id||"");
+  buildSelect($("csCh2"),SETTINGS.report_channel_id||"");
+  buildSelect($("csChConf"),SETTINGS.confinement_channel_id||"");
+  buildSelect($("csCh3"),SETTINGS.removal_channel_id||"");
+}
+
+$("csSaveBtn").addEventListener("click",async()=>{
+  const msg=$("csMsg");
+  const row={
+    id:1,
+    complaints_channel_id:$("csCh1").value||null,
+    verdicts_channel_id:$("csChV").value||null,
+    report_channel_id:$("csCh2").value||null,
+    confinement_channel_id:$("csChConf").value||null,
+    removal_channel_id:$("csCh3").value||null,
+    ping_role_id:$("csPingRole").value||null,
+    expire_warn_days:parseInt($("csExpW").value)||14,
+    expire_reproach_days:parseInt($("csExpR").value)||30,
+    expire_talk_days:parseInt($("csExpT").value)||7,
+    expire_confinement_minutes:parseInt($("csExpC").value)||1440,
+    warn_to_reproach_threshold:parseInt($("csThr").value)||3
+  };
+  msg.className="form-msg info";msg.textContent="Сохранение...";
+  const r=await CGB_REGISTRY.saveSettings(row);
+  if(!r.ok){msg.className="form-msg error";msg.textContent=r.error;return}
+  msg.className="form-msg success";msg.textContent="✓ Сохранено";
+});
+
+if(window.CGB_ROLES) CGB_ROLES.onChange(boot);
+setTimeout(boot,500);
+</script>
+
+</body>
+</html>

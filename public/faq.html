@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title>Вопросы и ответы — ЦГБ №3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=26">
+<style>[data-admin]{display:none !important}body.faq-can-edit [data-admin]{display:initial !important}body.faq-can-edit .nav a[data-admin]{display:inline-flex !important}body.is-admin .nav a[data-admin]{display:inline-flex !important}</style>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+<div class="bg-noise"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+        <a class="brand" href="index.html">
+      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ЦГБ"></div>
+      <div class="brand-text">
+        <span class="brand-label">Министерство Здравоохранения</span>
+        <span class="brand-name">ЦГБ №3 · Центральная Городская</span>
+      </div>
+    </a>
+        <nav class="nav" id="mainNav">
+      <a href="index.html" data-page="index.html" data-transition>Главная</a>
+      <a href="info.html" data-page="info.html" data-transition>Информация</a>
+      <a href="services.html" data-page="services.html" data-transition>Услуги</a>
+      <a href="meds.html" data-page="meds.html" data-transition>Медикаменты</a>
+      <a href="ustav.html" data-page="ustav.html" data-transition>Устав</a>
+      <a href="learn.html" data-page="learn.html" data-transition data-loggedin>Учебные материалы</a>
+      <a href="tests.html" data-page="tests.html" data-transition data-loggedin>Тестирование</a>
+      <a href="composition.html" data-page="composition.html" data-transition>Состав</a>
+      <a href="docs.html" data-page="docs.html" data-transition data-perm="docs:view">Документы</a>
+      <a href="news.html" data-page="news.html" data-transition>Новости</a>
+      <a href="autopark.html" data-page="autopark.html" data-transition>Автопарк</a>
+      <a href="map.html" data-page="map.html" data-transition>Карта</a>
+      <a href="faq.html" data-page="faq.html" data-transition>FAQ</a>
+      <a href="complaints.html" data-page="complaints.html" data-transition>Жалобы</a>
+      <a href="supply.html" data-page="supply.html" data-transition data-perm="supply:view">Поставки</a>
+      <a href="apps.html" data-page="apps.html" data-transition data-perm="apps:view">Заявления</a>
+      <a href="vp.html" data-page="vp.html" data-transition data-perm="vp:view">Проверки АБ</a>
+      <a href="complaints-review.html" data-page="complaints-review.html" data-transition data-perm="complaints:review,complaints:view">Рассмотрение жалоб</a>
+      <a href="complaints-stats.html" data-page="complaints-stats.html" data-transition data-perm="complaints:review,complaints:view">Статистика жалоб</a>
+      <a href="leave.html" data-page="leave.html" data-transition data-loggedin>Отгул</a>
+      <a href="vacation-ic.html" data-page="vacation-ic.html" data-transition data-loggedin>Отпуск IC</a>
+      <a href="vacation-ooc.html" data-page="vacation-ooc.html" data-transition data-loggedin>Отпуск OOC</a>
+      <a href="dismissal.html" data-page="dismissal.html" data-transition data-loggedin>Увольнение</a>
+      <a href="promotion.html" data-page="promotion.html" data-transition data-loggedin>Повышение</a>
+      <a href="restoration.html" data-page="restoration.html" data-transition>Восстановление в ЦГБ №3</a>
+      <a href="appointment.html" data-page="appointment.html" data-transition>Запись к врачу</a>
+      <a href="requests-review.html" data-page="requests-review.html" data-transition data-perm="requests:review,requests:view">Рассмотрение заявок</a>
+      <a href="requests-stats.html" data-page="requests-stats.html" data-transition data-perm="requests:review,requests:view">Статистика заявок</a>
+      <a href="payroll.html" data-page="payroll.html" data-transition data-perm="payroll:view">Реестр премирования</a>
+      <a href="report.html" data-page="report.html" data-transition>Еженедельный отчёт</a>
+      <a href="report-settings.html" data-page="report-settings.html" data-transition data-perm="report:settings">Настройки отчётов</a>
+      <a href="vp-request.html" data-page="vp-request.html" data-transition data-perm="vp_request:submit">Запрос на наказание</a>
+      <a href="vp-request-settings.html" data-page="vp-request-settings.html" data-transition data-perm="vp_request:settings">Настройки запросов АБ</a>
+      <a href="lk.html" data-page="lk.html" data-transition>Личный кабинет</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-btn" data-open-search title="Поиск (Ctrl+K)">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+        <span>Поиск</span>
+        <span class="kbd">Ctrl K</span>
+      </button>
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Сменить тему">
+        <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24"><path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66l1.42-1.42M4.92 19.08l1.42-1.42m0-11.32L4.92 4.92m14.16 14.16l-1.42-1.42M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="login-btn" data-open-login>
+        <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/></svg>
+        <span>Войти</span>
+      </button>
+      <button class="burger" id="burger" type="button" aria-label="Открыть меню" aria-controls="mainNav" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="badge">Справочная</span>
+        <h2>Частые вопросы</h2>
+        <p>Ответы на самые частые вопросы пациентов и посетителей. Не нашли ответ — свяжитесь с регистратурой ЦГБ №3 или задайте вопрос через форму обратной связи.</p>
+      </div>
+
+      <div class="faq-toolbar reveal">
+        <div class="faq-search">
+          <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+          <input type="text" id="faqSearch" placeholder="Найти вопрос...">
+        </div>
+        <div class="faq-cats" id="faqCats"></div>
+        <div class="faq-admin-actions" data-admin>
+          <button class="btn btn-gold btn-sm" id="faqAdd">+ Добавить</button>
+          <button class="btn btn-ghost btn-sm" id="faqReset" title="Очистить локальную копию">↺ Сброс</button>
+          <button class="btn btn-ghost btn-sm" id="faqClear" title="Удалить все вопросы">🗑 Всё</button>
+        </div>
+      </div>
+      <div class="faq-mode-hint" id="faqModeHint" data-admin></div>
+
+      <div class="faq-list" id="faqList"></div>
+      <div class="faq-empty" id="faqEmpty" style="display:none">Ничего не найдено. Попробуйте другой запрос.</div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <h4>Настройки сайта</h4>
+        <div class="footer-settings">
+          <div class="footer-settings-row">
+            <span class="footer-settings-label">Анимации</span>
+            <label class="fs-switch"><input type="checkbox" id="fsAnim" checked><span class="fs-switch-track"><span class="fs-switch-thumb"></span></span></label>
+          </div>
+          <div>
+            <div class="footer-settings-label" style="margin-bottom:8px">Фон</div>
+            <div class="fs-modes" id="fsModes">
+              <button class="fs-mode" data-bg="falling">Атмосфера</button>
+              <button class="fs-mode" data-bg="grid">Сеть</button>
+              <button class="fs-mode" data-bg="dots">Точки</button>
+              <button class="fs-mode" data-bg="waves">Волны</button>
+            </div>
+          </div>
+          <div class="footer-note">Настройки сохраняются в браузере</div>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Разделы</h5>
+        <a href="index.html">Главная</a>
+        <a href="info.html">О больнице</a>
+        <a href="services.html">Услуги и цены</a>
+        <a href="meds.html">Медикаменты</a>
+        <a href="news.html">Новости</a>
+      </div>
+      <div class="footer-col">
+        <h5>Пациентам</h5>
+        <a href="info.html#functions">Направления помощи</a>
+        <a href="info.html#forms">Виды помощи</a>
+        <a href="info.html#steps">Как записаться</a>
+        <a href="faq.html">Вопросы и ответы</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> · Центральная Городская Больница №3</span>
+      <span>Спасаем жизни каждый день</span>
+    </div>
+  </div>
+</footer>
+
+<div class="fab-stack" id="fabStack">
+  <button class="fab" id="fabUp" title="Наверх">
+    <svg viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8z"/></svg>
+  </button>
+</div>
+
+<div class="search-modal" id="searchModal">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+      <input class="search-input" placeholder="Поиск по всему сайту..." spellcheck="false">
+      <button class="search-close-kbd">Esc</button>
+    </div>
+    <div class="search-results"></div>
+  </div>
+</div>
+
+<div class="modal-back" id="loginModal">
+  <div class="modal">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Вход администратора</h3>
+    <div class="modal-sub">Доступ к управлению контентом</div>
+    <form>
+      <div class="form-group"><label>Email</label><input type="email" name="email" required></div>
+      <div class="form-group"><label>Пароль</label><input type="password" name="password" required></div>
+      <button class="btn btn-gold" style="width:100%" type="submit">Войти</button>
+      <div class="form-msg"></div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-back" id="faqModal">
+  <div class="modal modal-lg">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3 id="faqModalTitle">Новый вопрос</h3>
+    <form id="faqForm">
+      <input type="hidden" name="id">
+      <div class="form-group"><label>Категория</label><input name="cat" required placeholder="Приём / Документы / Услуги..."></div>
+      <div class="form-group"><label>Вопрос</label><input name="q" required maxlength="200"></div>
+      <div class="form-group"><label>Ответ</label><textarea name="a" required rows="5" maxlength="2000"></textarea></div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-ghost" id="faqDelete" style="display:none">Удалить</button>
+        <button type="submit" class="btn btn-gold">Сохранить</button>
+      </div>
+      <div class="form-msg" id="faqFormMsg" role="status"></div>
+    </form>
+  </div>
+</div>
+
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=17"></script>
+<script src="assets/js/core/config.js?v=17"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/ui/holiday-engine.js?v=17"></script>
+<script src="assets/js/ui/sound-engine.js?v=17"></script>
+<script src="assets/js/core/auth.js?v=17"></script>
+<script src="assets/js/core/roles-engine.js?v=17"></script>
+<script src="assets/js/features/faq-engine.js?v=17"></script>
+<script src="assets/js/ui/search-engine.js?v=17"></script>
+<script src="assets/js/ui/notify-engine.js?v=19"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s||"").replace(/[<>&"']/g,c=>({"<":"&lt;",">":"&gt;","&":"&amp;",'"':"&quot;","'":"&#39;"}[c]));
+
+let ITEMS=[];
+let ACTIVE_CAT="all";
+let QUERY="";
+
+
+
+function render(){
+  const cats=Array.from(new Set(ITEMS.map(x=>x.cat).filter(Boolean)));
+  $("faqCats").innerHTML=[`<button class="faq-cat ${ACTIVE_CAT==="all"?"active":""}" data-cat="all">Все · ${ITEMS.length}</button>`]
+    .concat(cats.map(c=>`<button class="faq-cat ${ACTIVE_CAT===c?"active":""}" data-cat="${esc(c)}">${esc(c)} · ${ITEMS.filter(x=>x.cat===c).length}</button>`))
+    .join("");
+  $("faqCats").querySelectorAll("[data-cat]").forEach(b=>b.addEventListener("click",()=>{ACTIVE_CAT=b.dataset.cat;render()}));
+
+  const q=QUERY.trim().toLowerCase();
+  const filtered=ITEMS.filter(x=>{
+    if(ACTIVE_CAT!=="all"&&x.cat!==ACTIVE_CAT) return false;
+    if(!q) return true;
+    return (x.q+" "+x.a+" "+(x.cat||"")).toLowerCase().includes(q);
+  });
+
+  $("faqEmpty").style.display=filtered.length?"none":"block";
+  $("faqList").innerHTML=filtered.map(x=>`
+    <details class="faq-item" id="faq-${esc(x.id)}">
+      <summary class="faq-q">
+        <span class="faq-cat-badge">${esc(x.cat||"Общее")}</span>
+        <span class="faq-q-text">${esc(x.q)}</span>
+        <span class="faq-toggle-icon">+</span>
+      </summary>
+      <div class="faq-a">${esc(x.a).replace(/\n/g,"<br>")}</div>
+      <div class="faq-actions" data-admin>
+        <button class="btn btn-ghost btn-sm" data-edit="${esc(x.id)}">Редактировать</button>
+      </div>
+    </details>`).join("");
+  $("faqList").querySelectorAll("[data-edit]").forEach(b=>b.addEventListener("click",e=>{e.preventDefault();e.stopPropagation();openEdit(b.dataset.edit)}));
+  $("faqList").querySelectorAll(".faq-item").forEach(d=>{
+    d.addEventListener("toggle",()=>{if(d.open&&window.CGB_SOUND) window.CGB_SOUND.play("page")});
+  });
+}
+
+$("faqSearch").addEventListener("input",e=>{QUERY=e.target.value;render()});
+
+function setFaqFormMsg(text,type=""){
+  const el=$("faqFormMsg");
+  el.className="form-msg"+(type?" "+type:"");
+  el.textContent=text||"";
+}
+
+function openEdit(id){
+  const item=id?ITEMS.find(x=>String(x.id)===String(id)):null;
+  const modal=$("faqModal");
+  const form=$("faqForm");
+  form.reset();
+  setFaqFormMsg("");
+  form.id.value=item?item.id:CGB_FAQ.makeId();
+  form.cat.value=item?item.cat:"";
+  form.q.value=item?item.q:"";
+  form.a.value=item?item.a:"";
+  $("faqModalTitle").textContent=item?"Редактировать вопрос":"Новый вопрос";
+  $("faqDelete").style.display=item?"inline-flex":"none";
+  $("faqDelete").onclick=async()=>{
+    if(!confirm("Удалить вопрос?")) return;
+    setFaqFormMsg("Удаление...","info");
+    const result=await CGB_FAQ.remove(item.id);
+    if(!result.ok){setFaqFormMsg(result.error||"Не удалось удалить вопрос","error");return}
+    modal.classList.remove("active");
+    ITEMS=await CGB_FAQ.loadAll();render();
+    if(window.CGB_SEARCH) window.CGB_SEARCH.invalidate();
+  };
+  modal.classList.add("active");
+}
+$("faqModal").querySelector(".modal-close").addEventListener("click",()=>$("faqModal").classList.remove("active"));
+$("faqModal").addEventListener("click",e=>{if(e.target===$("faqModal")) $("faqModal").classList.remove("active")});
+$("faqForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const fd=new FormData(e.target);
+  const item={id:fd.get("id"),cat:fd.get("cat").trim(),q:fd.get("q").trim(),a:fd.get("a").trim(),sort:Date.now()};
+  setFaqFormMsg("Сохранение...","info");
+  const result=await CGB_FAQ.save(item);
+  if(!result.ok){setFaqFormMsg(result.error||"Не удалось сохранить вопрос","error");return}
+  $("faqModal").classList.remove("active");
+  ITEMS=await CGB_FAQ.loadAll();render();
+  if(window.CGB_SEARCH) window.CGB_SEARCH.invalidate();
+  if(window.CGB_SOUND) window.CGB_SOUND.play("success");
+});
+$("faqAdd").addEventListener("click",()=>openEdit(null));
+$("faqReset").addEventListener("click",async()=>{
+  if(CGB_FAQ.getMode()==="supabase"){alert("Сброс локальной копии недоступен, пока используется Supabase.");return}
+  if(!confirm("Очистить локальную копию вопросов? Это действие нельзя отменить.")) return;
+  const result=CGB_FAQ.resetDefaults();
+  if(!result.ok){alert(result.error||"Не удалось очистить локальную копию");return}
+  ITEMS=await CGB_FAQ.loadAll();render();updateModeHint();
+  if(window.CGB_SEARCH) window.CGB_SEARCH.invalidate();
+});
+$("faqClear").addEventListener("click",async()=>{
+  if(!confirm("Удалить все вопросы? Это действие нельзя отменить.")) return;
+  let failure=null;
+  if(CGB_FAQ.getMode()==="supabase"){
+    for(const item of ITEMS.slice()){
+      const result=await CGB_FAQ.remove(item.id);
+      if(!result.ok){failure=result;break}
+    }
+  }else{
+    const result=CGB_FAQ.clearAll();
+    if(!result.ok) failure=result;
+  }
+  if(failure){alert(failure.error||"Не удалось удалить все вопросы");return}
+  ITEMS=await CGB_FAQ.loadAll();render();updateModeHint();
+  if(window.CGB_SEARCH) window.CGB_SEARCH.invalidate();
+});
+function updateModeHint(){
+  const el=$("faqModeHint");if(!el) return;
+  const m=CGB_FAQ.getMode();
+  el.innerHTML=m==="supabase"
+    ? '<svg viewBox="0 0 24 24" width="14" height="14" style="vertical-align:-2px"><path fill="currentColor" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> Хранение: Supabase (общее для всех)'
+    : '<svg viewBox="0 0 24 24" width="14" height="14" style="vertical-align:-2px"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-5-5 1.41-1.41L11 14.17l7.59-7.59L20 8l-9 9z"/></svg> Хранение: локально в браузере (только у вас)';
+}
+
+function applyFaqAdmin(){
+  const can=!!(window.CGB_ROLES&&window.CGB_ROLES.can("faq","edit"));
+  document.body.classList.toggle("faq-can-edit",can);
+}
+async function reboot(){
+  ITEMS=await CGB_FAQ.loadAll();
+  render();
+  updateModeHint();
+  applyFaqAdmin();
+  const h=location.hash.slice(1);
+  if(h){setTimeout(()=>{const el=document.getElementById("faq-"+h);if(el){el.scrollIntoView({behavior:"smooth",block:"center"});el.classList.add("faq-item-open")}},300)}
+}
+if(window.CGB_ROLES) window.CGB_ROLES.onChange(applyFaqAdmin);
+if(window.CGB_AUTH) window.CGB_AUTH.onChange(reboot);
+else reboot();
+</script>
+</body>
+</html>

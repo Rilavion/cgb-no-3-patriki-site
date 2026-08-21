@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ru" class="home-page-html">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title>ЦГБ №3 · Центральная Городская Больница №3 · Главная</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=26">
+</head>
+<body class="home-page-body">
+<canvas id="bgCanvas"></canvas>
+<div class="bg-noise"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ЦГБ"></div>
+      <div class="brand-text">
+        <span class="brand-label">Министерство Здравоохранения</span>
+        <span class="brand-name">ЦГБ №3 · Центральная Городская</span>
+      </div>
+    </a>
+    <nav class="nav" id="mainNav">
+      <a href="index.html" data-page="index.html" data-transition>Главная</a>
+      <a href="info.html" data-page="info.html" data-transition>Информация</a>
+      <a href="services.html" data-page="services.html" data-transition>Услуги</a>
+      <a href="meds.html" data-page="meds.html" data-transition>Медикаменты</a>
+      <a href="ustav.html" data-page="ustav.html" data-transition>Устав</a>
+      <a href="learn.html" data-page="learn.html" data-transition data-loggedin>Учебные материалы</a>
+      <a href="tests.html" data-page="tests.html" data-transition data-loggedin>Тестирование</a>
+      <a href="composition.html" data-page="composition.html" data-transition>Состав</a>
+      <a href="docs.html" data-page="docs.html" data-transition data-perm="docs:view">Документы</a>
+      <a href="news.html" data-page="news.html" data-transition>Новости</a>
+      <a href="autopark.html" data-page="autopark.html" data-transition>Автопарк</a>
+      <a href="map.html" data-page="map.html" data-transition>Карта</a>
+      <a href="faq.html" data-page="faq.html" data-transition>FAQ</a>
+      <a href="complaints.html" data-page="complaints.html" data-transition>Жалобы</a>
+      <a href="supply.html" data-page="supply.html" data-transition data-perm="supply:view">Поставки</a>
+      <a href="apps.html" data-page="apps.html" data-transition data-perm="apps:view">Заявления</a>
+      <a href="vp.html" data-page="vp.html" data-transition data-perm="vp:view">Проверки АБ</a>
+      <a href="complaints-review.html" data-page="complaints-review.html" data-transition data-perm="complaints:review,complaints:view">Рассмотрение жалоб</a>
+      <a href="complaints-stats.html" data-page="complaints-stats.html" data-transition data-perm="complaints:review,complaints:view">Статистика жалоб</a>
+      <a href="leave.html" data-page="leave.html" data-transition data-loggedin>Отгул</a>
+      <a href="vacation-ic.html" data-page="vacation-ic.html" data-transition data-loggedin>Отпуск IC</a>
+      <a href="vacation-ooc.html" data-page="vacation-ooc.html" data-transition data-loggedin>Отпуск OOC</a>
+      <a href="dismissal.html" data-page="dismissal.html" data-transition data-loggedin>Увольнение</a>
+      <a href="promotion.html" data-page="promotion.html" data-transition data-loggedin>Повышение</a>
+      <a href="restoration.html" data-page="restoration.html" data-transition>Восстановление в ЦГБ №3</a>
+      <a href="appointment.html" data-page="appointment.html" data-transition>Запись к врачу</a>
+      <a href="requests-review.html" data-page="requests-review.html" data-transition data-perm="requests:review,requests:view">Рассмотрение заявок</a>
+      <a href="requests-stats.html" data-page="requests-stats.html" data-transition data-perm="requests:review,requests:view">Статистика заявок</a>
+      <a href="payroll.html" data-page="payroll.html" data-transition data-perm="payroll:view">Реестр премирования</a>
+      <a href="report.html" data-page="report.html" data-transition>Еженедельный отчёт</a>
+      <a href="report-settings.html" data-page="report-settings.html" data-transition data-perm="report:settings">Настройки отчётов</a>
+      <a href="vp-request.html" data-page="vp-request.html" data-transition data-perm="vp_request:submit">Запрос на наказание</a>
+      <a href="vp-request-settings.html" data-page="vp-request-settings.html" data-transition data-perm="vp_request:settings">Настройки запросов АБ</a>
+      <a href="lk.html" data-page="lk.html" data-transition>Личный кабинет</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-btn" data-open-search title="Поиск (Ctrl+K)">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+        <span>Поиск</span>
+        <span class="kbd">Ctrl K</span>
+      </button>
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Сменить тему">
+        <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24"><path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66l1.42-1.42M4.92 19.08l1.42-1.42m0-11.32L4.92 4.92m14.16 14.16l-1.42-1.42M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="login-btn" data-open-login>
+        <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/></svg>
+        <span>Войти</span>
+      </button>
+      <button class="burger" id="burger" type="button" aria-label="Открыть меню" aria-controls="mainNav" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main class="home-onepage">
+  <section class="hero-v4" id="heroV4">
+    <div class="hero-v4-photo" style="background-image:url('assets/images/brand/fon.png')"></div>
+    <div class="hero-v4-veil"></div>
+    <div class="hero-v4-vignette"></div>
+    <canvas class="hero-v4-particles" id="heroParticles"></canvas>
+
+    <div class="container hero-v4-inner">
+      <div class="hero-v4-content">
+        <div class="hero-v4-kicker">Государственное учреждение здравоохранения</div>
+        <h1 class="hero-v4-title">
+          <span>Центральная Городская</span>
+          <span class="hero-v4-title-accent">Больница №3</span>
+        </h1>
+        <div class="hero-v4-badge">
+          <span class="hero-v4-badge-star">✚</span>
+          <span>Работаем 24/7</span>
+          <span class="hero-v4-badge-star">✚</span>
+        </div>
+        <p class="hero-v4-lead">
+          Заботимся о вашем здоровье с 1974 года. Современная медицина, опытные врачи, круглосуточная помощь. <b>Забота. Профессионализм. Жизнь.</b>
+        </p>
+
+        <div class="hero-v4-about">
+          <div class="hero-v4-about-label">О больнице</div>
+          <p>ЦГБ №3 — многопрофильное лечебное учреждение с полным спектром стационарной и амбулаторной помощи.</p>
+        </div>
+
+        <div class="hero-v4-cta">
+          <a class="btn btn-gold" href="appointment.html">Записаться</a>
+          <a class="btn btn-ghost" href="composition.html">Состав</a>
+          <a class="btn btn-ghost" href="news.html">Новости →</a>
+        </div>
+      </div>
+
+      <div class="hero-v4-emblem" id="heroEmblem">
+        <div class="hero-v4-emblem-glow"></div>
+        <div class="hero-v4-emblem-ring"></div>
+        <div class="hero-v4-emblem-ring hero-v4-emblem-ring-2"></div>
+        <div class="hero-v4-emblem-star" aria-hidden="true">
+          <svg viewBox="0 0 200 200">
+            <path d="M80 20 L120 20 L120 80 L180 80 L180 120 L120 120 L120 180 L80 180 L80 120 L20 120 L20 80 L80 80 Z"
+                  fill="none" stroke="#4a8ea5" stroke-width="1.2" opacity=".45"/>
+          </svg>
+        </div>
+        <div class="hero-v4-emblem-3d">
+          <div class="hero-v4-emblem-inner">
+            <img src="assets/images/brand/logo.png" alt="Логотип ЦГБ №3">
+            <span class="hero-v4-emblem-shine"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-v4-newsline" id="heroNewsline">
+        <div class="hvn-head">
+          <span class="hvn-live" aria-hidden="true"></span>
+          <span class="hvn-head-title">Новости больницы</span>
+          <a class="hvn-all" href="news.html">Все новости
+            <svg viewBox="0 0 24 24"><path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+          </a>
+        </div>
+        <div class="hvn-track" id="heroNewsTrack" data-count="0">
+          <span class="hvn-hint">Загружаем публикации…</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <h4>Настройки сайта</h4>
+        <div class="footer-settings">
+          <div class="footer-settings-row">
+            <span class="footer-settings-label">Анимации</span>
+            <label class="fs-switch"><input type="checkbox" id="fsAnim" checked><span class="fs-switch-track"><span class="fs-switch-thumb"></span></span></label>
+          </div>
+          <div>
+            <div class="footer-settings-label" style="margin-bottom:8px">Фон</div>
+            <div class="fs-modes" id="fsModes">
+              <button class="fs-mode" data-bg="falling">Атмосфера</button>
+              <button class="fs-mode" data-bg="grid">Сеть</button>
+              <button class="fs-mode" data-bg="dots">Точки</button>
+              <button class="fs-mode" data-bg="waves">Волны</button>
+            </div>
+          </div>
+          <div class="footer-note">Настройки сохраняются в браузере</div>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Разделы</h5>
+        <a href="index.html">Главная</a>
+        <a href="info.html">О больнице</a>
+        <a href="services.html">Услуги и цены</a>
+        <a href="meds.html">Медикаменты</a>
+        <a href="news.html">Новости</a>
+      </div>
+      <div class="footer-col">
+        <h5>Пациентам</h5>
+        <a href="info.html#functions">Направления помощи</a>
+        <a href="info.html#forms">Виды помощи</a>
+        <a href="info.html#steps">Как записаться</a>
+        <a href="faq.html">Вопросы и ответы</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> · Центральная Городская Больница №3</span>
+      <span>Спасаем жизни каждый день</span>
+    </div>
+  </div>
+</footer>
+
+<div class="fab-stack" id="fabStack">
+  <button class="fab" id="fabUp" title="Наверх">
+    <svg viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8z"/></svg>
+    <span class="fab-hint">Наверх</span>
+  </button>
+</div>
+
+<div class="search-modal" id="searchModal">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+      <input class="search-input" placeholder="Поиск по разделам..." spellcheck="false">
+      <button class="search-close-kbd">Esc</button>
+    </div>
+    <div class="search-results"></div>
+  </div>
+</div>
+
+<div class="modal-back" id="loginModal">
+  <div class="modal">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Вход в личный кабинет</h3>
+    <div class="modal-sub">Пациенты и сотрудники</div>
+    <form>
+      <div class="form-group"><label>Email</label><input type="email" name="email" required></div>
+      <div class="form-group"><label>Пароль</label><input type="password" name="password" required></div>
+      <button class="btn btn-gold" style="width:100%" type="submit">Войти</button>
+      <div class="form-msg"></div>
+    </form>
+  </div>
+</div>
+
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=18"></script>
+<script src="assets/js/core/config.js?v=18"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/ui/holiday-engine.js?v=18"></script>
+<script src="assets/js/ui/sound-engine.js?v=18"></script>
+<script src="assets/js/core/auth.js?v=18"></script>
+<script src="assets/js/core/roles-engine.js?v=18"></script>
+<script src="assets/js/ui/search-engine.js?v=18"></script>
+<script src="assets/js/ui/notify-engine.js?v=19"></script>
+<script src="assets/js/features/news.js?v=19"></script>
+<script src="assets/js/features/news-reader.js?v=19"></script>
+<script src="assets/js/features/home-news.js?v=19"></script>
+<script>document.getElementById("year").textContent=new Date().getFullYear();</script>
+</body>
+</html>

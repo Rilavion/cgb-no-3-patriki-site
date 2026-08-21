@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title>Устав · ЦГБ №3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=36">
+<style id="cgb-admin-guard">
+[data-admin]{display:none !important}
+body.cgb-is-admin .nav a[data-admin],body.cgb-is-admin .footer-col a[data-admin]{display:inline-flex !important}
+body.cgb-is-admin .footer-col a[data-admin]{display:block !important}
+</style>
+<style>
+/* ===== Уставы: страница одного основного документа ===== */
+.ut-one{display:grid;grid-template-columns:290px minmax(0,1fr);gap:46px;align-items:center;margin-top:10px}
+.ut-info .badge{margin-bottom:14px}
+.ut-info-title{font-family:"Cormorant Garamond",serif;font-size:clamp(24px,2.6vw,32px);font-weight:600;line-height:1.2;color:var(--text);margin:0 0 10px}
+.ut-stats{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 16px}
+.ut-pre{color:var(--muted);font-size:14.5px;line-height:1.7;margin:0 0 20px;max-width:60ch}
+.art{scroll-margin-top:96px}
+.chapter{scroll-margin-top:84px}
+.ut-flash{animation:utFlash 1.8s ease}
+@keyframes utFlash{
+  0%{background:rgba(34,211,238,.22);box-shadow:0 0 0 8px rgba(34,211,238,.10)}
+  100%{background:transparent;box-shadow:none}
+}
+.hero-book-cursor{cursor:pointer}
+@media(max-width:900px){
+  .ut-one{grid-template-columns:1fr;gap:26px}
+  .ut-one .book-card{max-width:300px;margin:0 auto;width:100%}
+}
+@media print{
+  .site-set-btn,.site-set-panel,.search-modal,.modal-back{display:none !important}
+}
+</style>
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+<div class="bg-noise"></div>
+<div class="page-transition-overlay" id="overlay"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ЦГБ"></div>
+      <div class="brand-text">
+        <span class="brand-label">Министерство Здравоохранения</span>
+        <span class="brand-name">ЦГБ №3 · Центральная Городская</span>
+      </div>
+    </a>
+    <nav class="nav" id="mainNav">
+      <a href="index.html" data-page="index.html" data-transition>Главная</a>
+      <a href="info.html" data-page="info.html" data-transition>Информация</a>
+      <a href="services.html" data-page="services.html" data-transition>Услуги</a>
+      <a href="meds.html" data-page="meds.html" data-transition>Медикаменты</a>
+      <a href="ustav.html" data-page="ustav.html" data-transition>Устав</a>
+      <a href="learn.html" data-page="learn.html" data-transition data-loggedin>Учебные материалы</a>
+      <a href="tests.html" data-page="tests.html" data-transition data-loggedin>Тестирование</a>
+      <a href="composition.html" data-page="composition.html" data-transition>Состав</a>
+      <a href="docs.html" data-page="docs.html" data-transition data-perm="docs:view">Документы</a>
+      <a href="news.html" data-page="news.html" data-transition>Новости</a>
+      <a href="autopark.html" data-page="autopark.html" data-transition>Автопарк</a>
+      <a href="map.html" data-page="map.html" data-transition>Карта</a>
+      <a href="faq.html" data-page="faq.html" data-transition>FAQ</a>
+      <a href="complaints.html" data-page="complaints.html" data-transition>Жалобы</a>
+      <a href="supply.html" data-page="supply.html" data-transition data-perm="supply:view">Поставки</a>
+      <a href="apps.html" data-page="apps.html" data-transition data-perm="apps:view">Заявления</a>
+      <a href="vp.html" data-page="vp.html" data-transition data-perm="vp:view">Проверки АБ</a>
+      <a href="complaints-review.html" data-page="complaints-review.html" data-transition data-perm="complaints:review,complaints:view">Рассмотрение жалоб</a>
+      <a href="complaints-stats.html" data-page="complaints-stats.html" data-transition data-perm="complaints:review,complaints:view">Статистика жалоб</a>
+      <a href="leave.html" data-page="leave.html" data-transition data-loggedin>Отгул</a>
+      <a href="vacation-ic.html" data-page="vacation-ic.html" data-transition data-loggedin>Отпуск IC</a>
+      <a href="vacation-ooc.html" data-page="vacation-ooc.html" data-transition data-loggedin>Отпуск OOC</a>
+      <a href="dismissal.html" data-page="dismissal.html" data-transition data-loggedin>Увольнение</a>
+      <a href="promotion.html" data-page="promotion.html" data-transition data-loggedin>Повышение</a>
+      <a href="restoration.html" data-page="restoration.html" data-transition>Восстановление в ЦГБ №3</a>
+      <a href="appointment.html" data-page="appointment.html" data-transition>Запись к врачу</a>
+      <a href="requests-review.html" data-page="requests-review.html" data-transition data-perm="requests:review,requests:view">Рассмотрение заявок</a>
+      <a href="requests-stats.html" data-page="requests-stats.html" data-transition data-perm="requests:review,requests:view">Статистика заявок</a>
+      <a href="payroll.html" data-page="payroll.html" data-transition data-perm="payroll:view">Реестр премирования</a>
+      <a href="report.html" data-page="report.html" data-transition>Еженедельный отчёт</a>
+      <a href="report-settings.html" data-page="report-settings.html" data-transition data-perm="report:settings">Настройки отчётов</a>
+      <a href="vp-request.html" data-page="vp-request.html" data-transition data-perm="vp_request:submit">Запрос на наказание</a>
+      <a href="vp-request-settings.html" data-page="vp-request-settings.html" data-transition data-perm="vp_request:settings">Настройки запросов АБ</a>
+      <a href="lk.html" data-page="lk.html" data-transition>Личный кабинет</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-btn" data-open-search title="Поиск (Ctrl+K)">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+        <span>Поиск</span>
+        <span class="kbd">Ctrl K</span>
+      </button>
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Сменить тему">
+        <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24"><path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66l1.42-1.42M4.92 19.08l1.42-1.42m0-11.32L4.92 4.92m14.16 14.16l-1.42-1.42M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="login-btn" data-open-login>
+        <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/></svg>
+        <span>Войти</span>
+      </button>
+      <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- ============ Обзор: один основной устав ============ -->
+  <section id="view-list">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="reveal-l">
+          <h1>Устав больницы</h1>
+          <p class="hero-lead">Устав Центральной Городской Больницы №3 — порядок работы учреждения, обязанности сотрудников и правила оказания помощи пациентам. Единый документ для ознакомления всего персонала.</p>
+          <div class="hero-actions">
+            <a class="btn btn-gold" href="#doc/ustav">Читать устав →</a>
+            <a class="btn btn-ghost" href="#catalog">К документу ↓</a>
+          </div>
+        </div>
+        <div class="hero-visual reveal-r">
+          <div class="hero-glow"></div>
+          <a class="hero-book hero-book-cursor" href="#doc/ustav" style="display:block;text-decoration:none">
+            <div class="hb-inner">
+              <div class="hb-spine"></div>
+              <div class="hb-cover t1" id="heroCover">
+                <div class="hb-emblem"><img id="heroEmblem" src="assets/images/brand/logo.png" alt="Эмблема"></div>
+                <div class="hb-divider"></div>
+                <div class="c-kicker">Министерство здравоохранения</div>
+                <div class="c-title" id="heroCoverTitle">Устав</div>
+                <p class="c-sub" id="heroCoverSub">Центральная Городская Больница №3</p>
+                <div class="c-meta" id="heroCoverMeta">ЦГБ №3</div>
+                <div class="c-tag" id="heroCoverCode"></div>
+              </div>
+              <div class="hb-pages"></div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="catalog">
+      <div class="container">
+        <div class="section-head reveal">
+          <div>
+            <span class="badge">Единый документ больницы</span>
+            <h2>Устав ЦГБ №3</h2>
+            <p>Кликните на книгу — откроется полный текст с оглавлением и поиском.</p>
+          </div>
+        </div>
+        <div class="ut-one reveal" id="utOne"></div>
+      </div>
+    </section>
+  </section>
+
+  <!-- ============ Чтение документа ============ -->
+  <section id="view-doc" style="display:none">
+    <div class="container">
+      <div class="doc-toolbar" id="docToolbar">
+        <button class="back-btn" id="backBtn">
+          <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+          Вернуться
+        </button>
+        <div class="doc-chips">
+          <div class="chip" id="dChipCode"></div>
+          <div class="chip">ЦГБ №3 · Центральная Городская</div>
+          <button class="btn btn-ghost btn-sm" id="docPrintBtn">🖨 Печать</button>
+          <button class="btn btn-ghost btn-sm admin-only" id="editMetaBtn" style="display:none">⚙ Обложка и метаданные</button>
+          <button class="btn btn-ghost btn-sm admin-only" id="editDocBtn" style="display:none">✎ Редактировать содержание</button>
+        </div>
+        <div class="doc-toolbar-progress" id="docProgress"></div>
+      </div>
+      <div class="doc-grid">
+        <aside class="doc-sidebar">
+          <div class="doc-sidebar-inner">
+            <div class="mini-book">
+              <div class="b3d">
+                <div class="b-spine"></div>
+                <div class="b-front t1" id="dBookFront">
+                  <div class="b-emblem" id="dBookEmblem"><img id="dBookEmblemImg" src="assets/images/brand/logo.png" alt=""></div>
+                  <div class="b-divider"></div>
+                  <div class="b-label">ЦГБ №3</div>
+                  <h3 id="dBookTitle">Устав</h3>
+                  <div class="b-meta" id="dBookMeta">ЦГБ №3</div>
+                </div>
+                <div class="b-pages"></div>
+              </div>
+            </div>
+            <div class="toc-label"><span>Оглавление</span><span id="tocCounter" style="font-weight:400;letter-spacing:.05em"></span></div>
+            <div class="usearch-wrap">
+              <input type="search" id="usSearch" class="msg-input" placeholder="🔍 Поиск по документу..." autocomplete="off">
+              <div class="usearch-hits" id="usHits" style="display:none"></div>
+            </div>
+            <ul class="toc" id="tocList"></ul>
+          </div>
+        </aside>
+        <div>
+          <article class="paper" id="paperArticle"></article>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="printArea" style="display:none"></div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <h4>ЦГБ №3 · Центральная Городская</h4>
+        <p>Министерство Здравоохранения. Центральная Городская Больница №3.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Разделы</h5>
+        <a href="services.html" data-page="services.html">Услуги и цены</a>
+        <a href="meds.html" data-page="meds.html">Медикаменты</a>
+        <a href="index.html" data-page="index.html">Главная</a>
+        <a href="ustav.html" data-page="ustav.html">Устав</a>
+        <a href="composition.html" data-page="composition.html">Состав</a>
+        <a href="news.html" data-page="news.html">Новости</a>
+      </div>
+      <div class="footer-col">
+        <h5>Ресурсы</h5>
+        <a href="autopark.html" data-page="autopark.html">Автопарк</a>
+        <a href="map.html" data-page="map.html">Карта</a>
+        <a href="#" data-open-login>Личный кабинет</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> · Министерство Здравоохранения</span>
+      <span>ЦГБ №3 · Центральная Городская</span>
+    <span class="footer-note">🐞 Нашли баг? Обратитесь: <b>@rilavion</b></span></div>
+  </div>
+</footer>
+
+<div class="fab-stack" id="fabStack">
+  <button class="fab" id="fabPrint" title="Печать">
+    <svg viewBox="0 0 24 24"><path d="M19 8H5a3 3 0 0 0-3 3v6h4v4h12v-4h4v-6a3 3 0 0 0-3-3zm-3 11H8v-5h8zm3-7a1 1 0 1 1 1-1 1 1 0 0 1-1 1zM18 3H6v4h12z"/></svg>
+    <span class="fab-hint">Печать документа</span>
+  </button>
+  <button class="fab" id="fabUp" title="Наверх">
+    <svg viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8z"/></svg>
+    <span class="fab-hint">Наверх</span>
+  </button>
+</div>
+
+<div class="search-modal" id="searchModal">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+      <input class="search-input" placeholder="Поиск по разделам..." spellcheck="false">
+      <button class="search-close-kbd">Esc</button>
+    </div>
+    <div class="search-results"></div>
+  </div>
+</div>
+
+<div class="modal-back" id="loginModal">
+  <div class="modal">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Вход администратора</h3>
+    <div class="modal-sub">Доступ к управлению контентом</div>
+    <form>
+      <div class="form-group"><label>Email</label><input type="email" name="email" required></div>
+      <div class="form-group"><label>Пароль</label><input type="password" name="password" required></div>
+      <button class="btn btn-gold" style="width:100%" type="submit">Войти</button>
+      <div class="form-msg"></div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-back" id="metaModal">
+  <div class="modal modal-lg">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3 id="metaTitle">Обложка и метаданные</h3>
+    <div class="modal-sub">Название, эмблема и оформление обложки устава.</div>
+    <form id="metaForm">
+      <input type="hidden" name="slug">
+      <div class="form-group"><label>Название (короткое)</label><input name="title" required placeholder="Устав"></div>
+      <div class="form-group"><label>Полное название (для внутренней титульной страницы)</label><input name="full" placeholder="УСТАВ ЦГБ №3"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="form-group">
+          <label>Цвет обложки</label>
+          <select name="theme" id="metaTheme" class="form-select-custom"></select>
+        </div>
+        <div class="form-group"><label>Код документа</label><input name="code" placeholder="ЦГБ3-У-001"></div>
+      </div>
+      <div class="form-group"><label>Meta (маленькая подпись на обложке, разрешён &lt;br&gt;)</label><input name="meta" placeholder="Министерство здравоохранения<br>ЦГБ №3"></div>
+      <div class="form-group">
+        <label>Герб / эмблема — URL или файл изображения</label>
+        <input name="emblem" type="text" id="metaEmblem" placeholder="assets/images/brand/logo.png">
+        <div id="emblemPreview" style="margin-top:10px;display:flex;align-items:center;gap:14px">
+          <div class="paper-emblem" style="width:64px;height:64px;margin:0;min-width:64px"><img id="emblemImg" src="" alt=""></div>
+          <div style="font-size:12px;color:var(--muted)">Превью эмблемы</div>
+        </div>
+      </div>
+      <div class="form-group"><label>Подзаголовок документа</label><input name="sub" placeholder="ЦГБ №3 · Центральная Городская"></div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:8px">
+        <button class="btn btn-ghost btn-sm" id="metaCancel" type="button">Отмена</button>
+        <button class="btn btn-gold btn-sm" type="submit">Сохранить</button>
+      </div>
+      <div class="form-msg"></div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-back" id="editorModal">
+  <div class="modal modal-xl">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3 id="editorTitle">Редактор свода</h3>
+    <div class="modal-sub">Изменения сохраняются в Supabase и видны всем посетителям.</div>
+    <div class="editor">
+      <div class="editor-side" id="edSide"></div>
+      <div class="editor-main" id="edMain"></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;justify-content:flex-end">
+      <button class="btn btn-ghost btn-sm" id="edCancel">Отмена</button>
+      <button class="btn btn-gold btn-sm" id="edSave">Сохранить</button>
+    </div>
+    <div class="form-msg" id="edMsg"></div>
+  </div>
+</div>
+
+<script>
+try{ localStorage.removeItem("cgb-ustavy-local"); }catch(e){}
+</script>
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=18"></script>
+<script src="assets/js/core/config.js?v=18"></script>
+<script src="assets/js/core/auth.js?v=19"></script>
+<script src="assets/js/core/roles-engine.js?v=19"></script>
+<script src="assets/js/features/ustav-engine.js?v=19"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/utils/format-utils.js?v=18"></script>
+<script src="assets/js/ui/holiday-engine.js?v=18"></script>
+<script src="assets/js/ui/sound-engine.js?v=18"></script>
+<script src="assets/js/ui/settings-panel.js?v=18"></script>
+<script src="assets/js/features/faq-engine.js?v=18"></script>
+<script src="assets/js/ui/search-engine.js?v=18"></script>
+<script src="assets/js/utils/ds-cache.js?v=18"></script>
+<script src="assets/js/ui/notify-engine.js?v=19"></script>
+<script src="assets/js/ui/notify-live.js?v=18"></script>
+<script src="assets/js/ui/select-enhance.js?v=18"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+
+const $=id=>document.getElementById(id);
+const esc=s=>CGB_USTAV.esc(s);
+const assetUrl=s=>CGB_USTAV.assetUrl?CGB_USTAV.assetUrl(s):s;
+const MAIN_SLUG="ustav";
+const LEGACY_SLUG="svod-ustavov"; // старый слаг — подхватываем и переименовываем автоматически
+
+let DOC=null;
+let currentSlug=null;
+let tocObserver=null;
+
+const viewList=$("view-list"), viewDoc=$("view-doc"), overlay=$("overlay");
+const paperArticle=$("paperArticle"), tocList=$("tocList"), docProgress=$("docProgress");
+const grid=$("utOne");
+
+/* ---------- базовый документ по умолчанию ---------- */
+function defaultDoc(){
+  return {
+    slug:MAIN_SLUG,theme:"t1",
+    title:"Устав",full:"УСТАВ ЦЕНТРАЛЬНОЙ ГОРОДСКОЙ БОЛЬНИЦЫ №3",
+    sub:"ЦГБ №3 · Центральная Городская",code:"ЦГБ3-У-001",
+    meta:"Министерство здравоохранения<br>ЦГБ №3",emblem:"assets/images/brand/logo.png",
+    preamble:"Настоящий Устав определяет порядок деятельности Центральной Городской Больницы №3, обязанности и права её сотрудников, а также общие принципы оказания медицинской помощи пациентам.\n\nВсе сотрудники больницы обязаны знать и соблюдать положения настоящего Устава.",
+    chapters:[
+      {id:"ch1",title:"ГЛАВА I. ОБЩИЕ ПОЛОЖЕНИЯ",articles:[
+        {num:"1.1",text:"Центральная Городская Больница №3 (далее — ЦГБ №3) является государственным медицинским учреждением, оказывающим амбулаторную, стационарную и экстренную помощь жителям города.",notes:[]},
+        {num:"1.2",text:"Деятельность ЦГБ №3 осуществляется в строгом соответствии с законодательством, приказами Министерства здравоохранения и настоящим Сводом.",notes:[]},
+        {num:"1.3",text:"Сотрудник больницы обязан оказывать помощь любому пациенту независимо от его статуса, убеждений и обстоятельств обращения.",notes:["Примечание: отказ в оказании помощи без законных оснований является грубым дисциплинарным нарушением."]},
+        {num:"1.4",text:"Больница работает в круглосуточном режиме. Приёмное отделение принимает пациентов 24/7.",notes:[]}
+      ]},
+      {id:"ch2",title:"ГЛАВА II. ОБЯЗАННОСТИ СОТРУДНИКОВ",articles:[
+        {num:"2.1",text:"Сотрудник обязан соблюдать врачебную тайну и не разглашать сведения о состоянии здоровья пациентов.",notes:[]},
+        {num:"2.2",text:"Сотрудник обязан иметь при себе действующую медицинскую книжку и поддерживать её актуальность.",notes:[]},
+        {num:"2.3",text:"Во время дежурства сотрудник обязан находиться на своём рабочем месте и поддерживать связь по рации.",notes:[]},
+        {num:"2.4",text:"Сотрудник обязан соблюдать субординацию и выполнять законные распоряжения руководства.",notes:[]}
+      ]},
+      {id:"ch3",title:"ГЛАВА III. ДИСЦИПЛИНА И ОТВЕТСТВЕННОСТЬ",articles:[
+        {num:"3.1",text:"За нарушение положений настоящего Устава сотруднику могут быть применены меры дисциплинарного взыскания: замечание, выговор, отстранение от должности, увольнение.",notes:[]},
+        {num:"3.2",text:"Решение о применении взыскания принимает администрация больницы по представлению непосредственного руководителя.",notes:[]},
+        {num:"3.3",text:"Сотрудник вправе обжаловать взыскание через подачу жалобы администрации в установленном порядке.",notes:["Примечание: срок обжалования — 7 календарных дней с момента вынесения взыскания."]}
+      ]}
+    ],
+    signature:{title:"Главный врач ЦГБ №3",rank:"",name:"_____________"}
+  };
+}
+
+/* ---------- загрузка ---------- */
+async function boot(){
+  const all=await CGB_USTAV.loadAll().catch(()=>[]);
+  DOC=all.find(x=>x.slug===MAIN_SLUG)||null;
+  const old=DOC?null:(all.find(x=>x.slug===LEGACY_SLUG)||null);
+  if(!DOC&&old){
+    // Переезд со старого слага svod-ustavov → ustav: берём контент старой записи,
+    // сбрасываем типовые «Свод уставов»-значения на «Устав». При первом же
+    // сохранении у админа запись запишется уже под новым слагом.
+    DOC=Object.assign({},old,{
+      slug:MAIN_SLUG,
+      title:(old.title==="Свод уставов")?"Устав":old.title,
+      full:(old.full==="СВОД УСТАВОВ ЦЕНТРАЛЬНОЙ ГОРОДСКОЙ БОЛЬНИЦЫ №3")?"УСТАВ ЦЕНТРАЛЬНОЙ ГОРОДСКОЙ БОЛЬНИЦЫ №3":(old.full||"УСТАВ ЦЕНТРАЛЬНОЙ ГОРОДСКОЙ БОЛЬНИЦЫ №3"),
+      code:(old.code==="ЦГБ3-СУ-001")?"ЦГБ3-У-001":(old.code||"ЦГБ3-У-001")
+    });
+  }
+  if(!DOC) DOC=defaultDoc();
+  applyCover();
+  renderList();
+  updateExternalToc();
+  route();
+  updateAdminUI();
+}
+
+function applyCover(){
+  const t=DOC.title||"Устав";
+  document.title=t+" · ЦГБ №3";
+  const coverT=t.replace(/\s+у/i,"<br>у");
+  $("heroCoverTitle").innerHTML=coverT;
+  $("heroCoverSub").textContent=DOC.sub||"Центральная Городская Больница №3";
+  $("heroCoverMeta").innerHTML=DOC.meta||"ЦГБ №3";
+  $("heroCoverCode").textContent=DOC.code||"";
+  $("heroCover").className="hb-cover "+(DOC.theme||"t1");
+  $("heroEmblem").src=assetUrl(DOC.emblem||"assets/images/brand/logo.png");
+  document.querySelectorAll('a[href="#doc/svod-ustavov"]').forEach(a=>a.setAttribute("href","#doc/"+DOC.slug));
+}
+
+/* ---------- обзор: одна карточка + описание ---------- */
+function renderList(){
+  const chaps=(DOC.chapters||[]).length;
+  const arts=(DOC.chapters||[]).reduce((s,c)=>s+((c.articles||[]).length),0);
+  const pre=((DOC.preamble||"").split(/\n{2,}/)[0]||"").trim();
+  grid.innerHTML=`
+  <a class="book-card" href="#doc/${esc(DOC.slug)}">
+    <div class="b3d">
+      <div class="b-spine"></div>
+      <div class="b-front ${DOC.theme||"t1"}">
+        <div class="b-emblem"><img src="${esc(assetUrl(DOC.emblem||"assets/images/brand/logo.png"))}" alt=""></div>
+        <div class="b-divider"></div>
+        <div class="b-label">ЦГБ №3</div>
+        <h3>${esc(DOC.title||"Устав")}</h3>
+        <div class="b-meta">${DOC.meta||"ЦГБ №3"}</div>
+      </div>
+      <div class="b-pages"></div>
+    </div>
+  </a>
+  <div class="ut-info">
+    <span class="badge">Единый документ</span>
+    <h3 class="ut-info-title">${esc(DOC.full||DOC.title||"")}</h3>
+    <div class="ut-stats">
+      <div class="chip">📑 Глав: <b>&nbsp;${chaps}</b></div>
+      <div class="chip">✒ Статей: <b>&nbsp;${arts}</b></div>
+      ${DOC.code?`<div class="chip">№ ${esc(DOC.code)}</div>`:""}
+    </div>
+    ${pre?`<p class="ut-pre">${esc(pre)}</p>`:""}
+    <div class="hero-actions">
+      <a class="btn btn-gold" href="#doc/${esc(DOC.slug)}">Открыть документ →</a>
+      <button class="btn btn-ghost" id="utPrintBtn">🖨 Печать</button>
+    </div>
+  </div>`;
+  const pb=$("utPrintBtn");
+  if(pb) pb.addEventListener("click",()=>{location.hash="#doc/"+DOC.slug;setTimeout(()=>window.print(),650)});
+}
+
+/* ---------- чтение ---------- */
+function showList(){
+  document.title=(DOC?DOC.title:"Устав")+" · ЦГБ №3";
+  viewList.style.display="block";viewDoc.style.display="none";
+  currentSlug=null;
+  if(tocObserver){tocObserver.disconnect();tocObserver=null}
+  docProgress.style.width="0";
+}
+
+function showDoc(slug,anchor){
+  if(!DOC) return;
+  document.title=(DOC.title||"Устав")+" · ЦГБ №3";
+  viewList.style.display="none";viewDoc.style.display="block";
+  currentSlug=DOC.slug;
+  $("dChipCode").textContent=DOC.code||"";
+  $("dBookTitle").textContent=DOC.title||"";
+  $("dBookMeta").innerHTML=DOC.meta||"ЦГБ №3";
+  $("dBookFront").className="b-front "+(DOC.theme||"t1");
+  $("dBookEmblemImg").src=assetUrl(DOC.emblem||"assets/images/brand/logo.png");
+  paperArticle.innerHTML=CGB_USTAV.render(DOC);
+  updateExternalToc();
+  const toc=CGB_USTAV.buildToc(DOC);
+  $("tocCounter").textContent=toc.length?`${toc.length} разд.`:"";
+  if(toc.length){
+    tocList.innerHTML=toc.map(t=>`<li><a href="#doc/${esc(DOC.slug)}--${esc(t.id)}" data-toc="${esc(t.id)}">${esc(t.label)}</a></li>`).join("");
+    setupTocObserver(toc);
+  }else{
+    tocList.innerHTML=`<li style="padding:12px 14px;color:var(--muted);font-size:13px">Содержание пусто</li>`;
+  }
+  updateAdminUI();
+  if(anchor){setTimeout(()=>{const e=document.getElementById(anchor);if(e) e.scrollIntoView({behavior:"smooth",block:"start"})},300)}
+}
+
+function setupTocObserver(toc){
+  if(tocObserver) tocObserver.disconnect();
+  tocObserver=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        document.querySelectorAll(".toc a").forEach(a=>a.classList.remove("active"));
+        const a=document.querySelector(`.toc a[data-toc="${e.target.id}"]`);
+        if(a) a.classList.add("active");
+      }
+    });
+  },{rootMargin:"-160px 0px -60% 0px",threshold:0});
+  toc.forEach(t=>{const el=document.getElementById(t.id);if(el) tocObserver.observe(el)});
+}
+
+function transition(fn){
+  overlay.classList.add("active");
+  setTimeout(()=>{fn();window.scrollTo({top:0,behavior:"instant"});setTimeout(()=>overlay.classList.remove("active"),60)},350);
+}
+
+function route(){
+  const h=location.hash||"";
+  if(h.startsWith("#doc/")){
+    const raw=h.replace("#doc/","").trim();
+    const anchor=raw.split("--").slice(1).join("--");
+    // якорь статьи = полный raw (slug--глава--статья), якорь главы = без слага
+    const artAnchor=document.getElementById(raw)?raw:anchor;
+    if(currentSlug!==DOC.slug){transition(()=>showDoc(DOC.slug,artAnchor))}
+    else if(raw){
+      const e=document.getElementById(raw)||document.getElementById(anchor);
+      if(e) e.scrollIntoView({behavior:"smooth"});
+    }
+    else showDoc(DOC.slug);
+    return;
+  }
+  if(currentSlug!==null){transition(showList)}else showList();
+}
+window.addEventListener("hashchange",route);
+$("backBtn").addEventListener("click",e=>{e.preventDefault();location.hash=""});
+$("docPrintBtn").addEventListener("click",()=>window.print());
+
+tocList.addEventListener("click",e=>{
+  const a=e.target.closest("a[data-toc]");if(!a) return;
+  e.preventDefault();
+  const el=document.getElementById(a.dataset.toc);
+  if(el) el.scrollIntoView({behavior:"smooth"});
+});
+
+/* копирование ссылки на статью */
+document.addEventListener("click",e=>{
+  const c=e.target.closest("[data-copy-anchor]");
+  if(!c) return;
+  const url=location.origin+location.pathname+`#doc/${currentSlug}--${c.dataset.copyAnchor.split("--").slice(1).join("--")}`;
+  navigator.clipboard.writeText(url).then(()=>{
+    c.style.color="#0e7490";setTimeout(()=>{c.style.color=""},1200);
+  }).catch(()=>{});
+});
+
+/* прогресс чтения */
+window.addEventListener("scroll",()=>{
+  if(viewDoc.style.display!=="block"){docProgress.style.width="0";return}
+  const rect=paperArticle.getBoundingClientRect();
+  const total=rect.height-window.innerHeight+150;
+  const scrolled=Math.max(0,-rect.top+150);
+  const p=total>0?Math.min(scrolled/total,1):0;
+  docProgress.style.width=(p*100)+"%";
+},{passive:true});
+
+/* ---------- поиск по документу ---------- */
+let USEARCH_T=null;
+const usSearch=$("usSearch"), usHits=$("usHits");
+function clearHl(){
+  document.querySelectorAll("#paperArticle mark.us-hl").forEach(m=>{const t=document.createTextNode(m.textContent);m.replaceWith(t)});
+  document.querySelectorAll(".art.ut-flash,.chapter.ut-flash,.preamble.ut-flash").forEach(e=>e.classList.remove("ut-flash"));
+}
+function runUSearch(){
+  const q=usSearch.value.trim().toLowerCase();
+  clearHl();
+  if(q.length<2){usHits.style.display="none";usHits.innerHTML="";return}
+  const hits=[];
+  if(DOC.preamble&&DOC.preamble.toLowerCase().includes(q))
+    hits.push({id:"preamble",num:"Преамбула",text:DOC.preamble});
+  (DOC.chapters||[]).forEach(c=>{
+    (c.articles||[]).forEach(a=>{
+      const mediaText=(a.media||[]).map(item=>(item.group||"")+" "+(item.caption||"")+" "+(item.alt||"")).join(" ");
+      const full=((a.num||"")+" "+(a.text||"")+" "+(a.notes||[]).join(" ")+" "+mediaText).toLowerCase();
+      if(full.includes(q)){
+        hits.push({id:`${DOC.slug}--${c.id}--${String(a.num||"").replace(/\./g,"_")}`,num:"Статья "+a.num,text:a.text||""});
+      }
+    });
+  });
+  if(!hits.length){
+    usHits.innerHTML=`<div class="us-hit-empty">Ничего не найдено</div>`;
+    usHits.style.display="";return;
+  }
+  const re=new RegExp("("+q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","gi");
+  usHits.innerHTML=`<div class="us-hit-count">Найдено совпадений: ${hits.length}</div>`+hits.slice(0,30).map(h=>{
+    const plain=(h.text||"").replace(/\s+/g," ").trim();
+    const i=plain.toLowerCase().indexOf(q);
+    const start=Math.max(0,i-28);
+    let ex=(start>0?"…":"")+plain.slice(start,start+110)+(start+110<plain.length?"…":"");
+    ex=esc(ex).replace(re,"<b>$1</b>");
+    return `<a class="us-hit" data-target="${esc(h.id)}"><div class="us-hit-num">${esc(h.num)}</div><div class="us-hit-ex">${ex}</div></a>`;
+  }).join("");
+  usHits.style.display="";
+}
+usSearch.addEventListener("input",()=>{clearTimeout(USEARCH_T);USEARCH_T=setTimeout(runUSearch,250)});
+usSearch.addEventListener("keydown",e=>{if(e.key==="Escape"){usSearch.value="";usHits.style.display="none";clearHl()}});
+usHits.addEventListener("click",e=>{
+  const a=e.target.closest("[data-target]");if(!a) return;
+  const el=document.getElementById(a.dataset.target);if(!el) return;
+  el.scrollIntoView({behavior:"smooth",block:"center"});
+  el.classList.add("ut-flash");setTimeout(()=>el.classList.remove("ut-flash"),1900);
+});
+
+function updateExternalToc(){
+  window.CGB_USTAV_TOC=(DOC.chapters||[]).map(c=>({id:c.id,label:c.title}));
+}
+
+/* ---------- админ-панель ---------- */
+function updateAdminUI(){
+  const canEdit=window.CGB_ROLES&&window.CGB_ROLES.can&&window.CGB_ROLES.can("ustav","edit");
+  document.querySelectorAll(".admin-only").forEach(el=>el.style.display=canEdit?"":"none");
+}
+if(window.CGB_ROLES) window.CGB_ROLES.onChange(updateAdminUI);
+if(window.CGB_AUTH) window.CGB_AUTH.onChange(updateAdminUI);
+
+/* ---------- метаданные ---------- */
+const metaModal=$("metaModal"), metaForm=$("metaForm"), themeSelect=$("metaTheme");
+themeSelect.innerHTML=CGB_USTAV.THEMES.map(t=>`<option value="${t.id}">${t.name}</option>`).join("");
+if(window.CGB_SELECT&&window.CGB_SELECT.enhance) CGB_SELECT.enhance(themeSelect);
+$("metaEmblem").addEventListener("input",e=>{$("emblemImg").src=assetUrl(e.target.value||"assets/images/brand/logo.png")});
+$("metaCancel").addEventListener("click",()=>metaModal.classList.remove("active"));
+metaModal.querySelector(".modal-close").addEventListener("click",()=>metaModal.classList.remove("active"));
+metaModal.addEventListener("click",e=>{if(e.target===metaModal) metaModal.classList.remove("active")});
+$("editMetaBtn").addEventListener("click",()=>{
+  metaForm.reset();
+  metaForm.slug.value=DOC.slug;
+  metaForm.title.value=DOC.title||"";
+  metaForm.full.value=DOC.full||"";
+  metaForm.theme.value=DOC.theme||"t1";
+  metaForm.code.value=DOC.code||"";
+  metaForm.meta.value=DOC.meta||"";
+  metaForm.emblem.value=DOC.emblem||"";
+  metaForm.sub.value=DOC.sub||"";
+  themeSelect.dispatchEvent(new Event("__cgb_refresh"));
+  $("emblemImg").src=assetUrl(metaForm.emblem.value||"assets/images/brand/logo.png");
+  const msg=metaForm.querySelector(".form-msg");msg.className="form-msg";msg.textContent="";
+  metaModal.classList.add("active");
+});
+metaForm.addEventListener("submit",async e=>{
+  e.preventDefault();
+  const msg=metaForm.querySelector(".form-msg");
+  DOC=Object.assign({},DOC,{
+    title:metaForm.title.value.trim(),
+    full:metaForm.full.value.trim()||metaForm.title.value.trim().toUpperCase(),
+    sub:metaForm.sub.value.trim(),
+    theme:metaForm.theme.value,
+    code:metaForm.code.value.trim(),
+    meta:metaForm.meta.value.trim(),
+    emblem:metaForm.emblem.value.trim()||"assets/images/brand/logo.png"
+  });
+  msg.className="form-msg info";msg.textContent="Сохранение...";
+  const r=await CGB_USTAV.save(DOC);
+  applyCover();renderList();if(currentSlug) showDoc(DOC.slug);
+  if(window.CGB_SEARCH) CGB_SEARCH.invalidate();
+  msg.className="form-msg success";msg.textContent=r.remote?"Сохранено в Supabase":"Сохранено локально";
+  setTimeout(()=>metaModal.classList.remove("active"),600);
+});
+
+/* ---------- редактор содержания ---------- */
+const editorModal=$("editorModal"), edSide=$("edSide"), edMain=$("edMain"), edMsg=$("edMsg");
+let editDoc=null, editActiveChap=null;
+$("editDocBtn").addEventListener("click",()=>{
+  if(!DOC) return;
+  openEditor(DOC);
+});
+function uid(){return "id"+Math.random().toString(36).slice(2,9)}
+function deepClone(o){return JSON.parse(JSON.stringify(o))}
+function openEditor(doc){
+  editDoc=deepClone(doc);
+  editDoc.chapters=editDoc.chapters||[];
+  editDoc.preamble=editDoc.preamble||"";
+  editActiveChap="preamble";
+  edMsg.className="form-msg";edMsg.textContent="";
+  renderEditor();
+  editorModal.classList.add("active");
+}
+function renderEditor(){
+  const items=[
+    `<h4>Разделы</h4>`,
+    `<div class="chap-item ${editActiveChap==='preamble'?'active':''}" data-chap="preamble">Преамбула</div>`,
+    ...editDoc.chapters.map(c=>`<div class="chap-item ${editActiveChap===c.id?'active':''}" data-chap="${c.id}">
+      <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(c.title||"Без названия")}</span>
+      <span class="cx" data-remove-chap="${c.id}" title="Удалить главу">×</span>
+    </div>`),
+    `<button class="editor-add-btn" id="edAddChap">+ Добавить главу</button>`,
+    `<h4 style="margin-top:14px">Подпись</h4>`,
+    `<div class="chap-item ${editActiveChap==='__sig'?'active':''}" data-chap="__sig">Подпись документа</div>`
+  ];
+  edSide.innerHTML=items.join("");
+  if(editActiveChap==="preamble"){
+    edMain.innerHTML=`
+      <div class="art-editor">
+        <div class="art-editor-head"><span class="art-editor-num">Преамбула</span></div>
+        <textarea id="edPreamble" placeholder="Текст преамбулы. Разделяйте абзацы пустой строкой." style="min-height:280px">${esc(editDoc.preamble)}</textarea>
+      </div>`;
+    $("edPreamble").addEventListener("input",e=>{editDoc.preamble=e.target.value});
+  }else if(editActiveChap==="__sig"){
+    const sig=editDoc.signature||{title:"",rank:"",name:""};
+    edMain.innerHTML=`
+      <div class="art-editor">
+        <div class="art-editor-head"><span class="art-editor-num">Подпись</span>
+          <div class="art-editor-actions"><button class="mini-btn danger" id="sigClear">Удалить подпись</button></div>
+        </div>
+        <div class="form-group"><label>Должность</label><input id="sigTitle" value="${esc(sig.title||"")}" placeholder="Главный врач ЦГБ №3"></div>
+        <div class="form-group"><label>Ранг / звание</label><input id="sigRank" value="${esc(sig.rank||"")}" placeholder="заслуженный врач"></div>
+        <div class="form-group"><label>Фамилия и инициалы</label><input id="sigName" value="${esc(sig.name||"")}" placeholder="Иванов И.И."></div>
+      </div>`;
+    const upd=()=>{editDoc.signature={title:$("sigTitle").value,rank:$("sigRank").value,name:$("sigName").value}};
+    ["sigTitle","sigRank","sigName"].forEach(id=>$(id).addEventListener("input",upd));
+    if(!editDoc.signature) editDoc.signature={title:"",rank:"",name:""};
+    $("sigClear").addEventListener("click",()=>{editDoc.signature=null;renderEditor()});
+  }else{
+    const chap=editDoc.chapters.find(c=>c.id===editActiveChap);
+    if(!chap){edMain.innerHTML=`<div class="empty-state">Выберите или добавьте главу</div>`;return}
+    edMain.innerHTML=`
+      <div class="art-editor">
+        <div class="form-group"><label>Название главы</label><input id="chapTitle" value="${esc(chap.title)}" placeholder="ГЛАВА I. ОБЩИЕ ПОЛОЖЕНИЯ"></div>
+      </div>
+      <div id="artsList"></div>
+      <button class="editor-add-btn" id="edAddArt" style="width:100%">+ Добавить статью</button>
+    `;
+    $("chapTitle").addEventListener("input",e=>{chap.title=e.target.value;renderSide()});
+    renderArts(chap);
+    $("edAddArt").addEventListener("click",()=>{
+      chap.articles=chap.articles||[];
+      chap.articles.push({num:`${editDoc.chapters.indexOf(chap)+1}.${(chap.articles.length||0)+1}`,text:"",notes:[]});
+      renderArts(chap);
+    });
+  }
+  edSide.addEventListener("click",sideClick,{once:true});
+}
+function renderSide(){
+  edSide.querySelectorAll(".chap-item").forEach(el=>{
+    const id=el.dataset.chap;
+    if(id&&id!=="preamble"&&id!=="__sig"){
+      const c=editDoc.chapters.find(x=>x.id===id);
+      if(c){const s=el.querySelector("span");if(s) s.textContent=c.title||"Без названия"}
+    }
+  });
+}
+function sideClick(e){
+  const item=e.target.closest(".chap-item");
+  const rm=e.target.closest("[data-remove-chap]");
+  const add=e.target.closest("#edAddChap");
+  if(rm){e.stopPropagation();if(!confirm("Удалить главу?")) return renderEditor();editDoc.chapters=editDoc.chapters.filter(c=>c.id!==rm.dataset.removeChap);if(editActiveChap===rm.dataset.removeChap) editActiveChap="preamble";return renderEditor()}
+  if(add){
+    const n=editDoc.chapters.length+1;
+    const roman=["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII","XIII","XIV","XV"][editDoc.chapters.length]||n;
+    editDoc.chapters.push({id:"ch"+n+"_"+uid().slice(2,5),title:`ГЛАВА ${roman}. НОВАЯ ГЛАВА`,articles:[]});
+    editActiveChap=editDoc.chapters[editDoc.chapters.length-1].id;
+    return renderEditor();
+  }
+  if(item){editActiveChap=item.dataset.chap;renderEditor()}
+}
+function renderArts(chap){
+  const box=$("artsList");if(!box) return;
+  if(!chap.articles||!chap.articles.length){box.innerHTML=`<div class="empty-state" style="padding:24px">Пока нет статей.</div>`;return}
+  box.innerHTML=chap.articles.map((a,i)=>`
+    <div class="art-editor" data-art-i="${i}">
+      <div class="art-editor-head">
+        <input class="art-editor-num" style="width:auto" value="${esc(a.num)}" data-num>
+        <div class="art-editor-actions">
+          <button class="mini-btn" data-up ${i===0?'disabled':''}>↑</button>
+          <button class="mini-btn" data-down ${i===chap.articles.length-1?'disabled':''}>↓</button>
+          <button class="mini-btn" data-add-note>+ Прим.</button>
+          <button class="mini-btn" data-add-media>+ Фото</button>
+          <button class="mini-btn danger" data-del-art>Удалить</button>
+        </div>
+      </div>
+      <textarea data-text placeholder="Текст статьи">${esc(a.text)}</textarea>
+      ${(a.notes||[]).map((n,ni)=>`<div class="note-editor">
+        <button class="note-editor-remove" data-del-note="${ni}" title="Удалить">×</button>
+        <textarea data-note="${ni}" placeholder="Примечание / исключение">${esc(n)}</textarea>
+      </div>`).join("")}
+      ${(a.media||[]).map((item,mi)=>`<div class="ustav-media-editor" data-media="${mi}">
+        <button type="button" class="note-editor-remove" data-del-media="${mi}" title="Удалить изображение">×</button>
+        <div class="ustav-media-editor-preview">${item.url?`<img src="${esc(assetUrl(item.url))}" alt="">`:`<span>Фото</span>`}</div>
+        <div class="ustav-media-editor-fields">
+          <input data-media-group="${mi}" value="${esc(item.group||"")}" placeholder="Раздел, например: Администрация больницы">
+          <input data-media-caption="${mi}" value="${esc(item.caption||"")}" placeholder="Подпись изображения">
+          <input data-media-url="${mi}" value="${esc(item.url||"")}" placeholder="URL изображения на VPS">
+        </div>
+      </div>`).join("")}
+    </div>`).join("");
+  box.querySelectorAll("[data-art-i]").forEach(row=>{
+    const i=+row.dataset.artI;const art=chap.articles[i];
+    row.querySelector("[data-num]").addEventListener("input",e=>{art.num=e.target.value});
+    row.querySelector("[data-text]").addEventListener("input",e=>{art.text=e.target.value});
+    row.querySelectorAll("[data-note]").forEach(t=>{t.addEventListener("input",e=>{art.notes[+t.dataset.note]=e.target.value})});
+    row.querySelectorAll("[data-media-group]").forEach(input=>input.addEventListener("input",e=>{art.media[+input.dataset.mediaGroup].group=e.target.value}));
+    row.querySelectorAll("[data-media-caption]").forEach(input=>input.addEventListener("input",e=>{art.media[+input.dataset.mediaCaption].caption=e.target.value}));
+    row.querySelectorAll("[data-media-url]").forEach(input=>input.addEventListener("input",e=>{art.media[+input.dataset.mediaUrl].url=e.target.value;const preview=e.target.closest(".ustav-media-editor").querySelector(".ustav-media-editor-preview");preview.innerHTML=e.target.value?`<img src="${esc(e.target.value)}" alt="">`:`<span>Фото</span>`}));
+    const up=row.querySelector("[data-up]");if(up) up.addEventListener("click",()=>{if(i>0){const [x]=chap.articles.splice(i,1);chap.articles.splice(i-1,0,x);renderArts(chap)}});
+    const dn=row.querySelector("[data-down]");if(dn) dn.addEventListener("click",()=>{if(i<chap.articles.length-1){const [x]=chap.articles.splice(i,1);chap.articles.splice(i+1,0,x);renderArts(chap)}});
+    row.querySelector("[data-add-note]").addEventListener("click",()=>{art.notes=art.notes||[];art.notes.push("");renderArts(chap)});
+    row.querySelector("[data-add-media]").addEventListener("click",()=>{art.media=art.media||[];art.media.push({group:"",caption:"",url:""});renderArts(chap)});
+    row.querySelector("[data-del-art]").addEventListener("click",()=>{if(confirm("Удалить статью?")){chap.articles.splice(i,1);renderArts(chap)}});
+    row.querySelectorAll("[data-del-note]").forEach(b=>{b.addEventListener("click",()=>{art.notes.splice(+b.dataset.delNote,1);renderArts(chap)})});
+    row.querySelectorAll("[data-del-media]").forEach(b=>{b.addEventListener("click",()=>{art.media.splice(+b.dataset.delMedia,1);renderArts(chap)})});
+  });
+}
+$("edCancel").addEventListener("click",()=>editorModal.classList.remove("active"));
+editorModal.querySelector(".modal-close").addEventListener("click",()=>editorModal.classList.remove("active"));
+$("edSave").addEventListener("click",async()=>{
+  edMsg.className="form-msg info";edMsg.textContent="Сохранение...";
+  editDoc.slug=DOC.slug;
+  const r=await CGB_USTAV.save(editDoc);
+  if(r.ok){
+    DOC=Object.assign({},DOC,editDoc);
+    applyCover();renderList();updateExternalToc();
+    if(currentSlug) showDoc(DOC.slug);
+    if(window.CGB_SEARCH) CGB_SEARCH.invalidate();
+    edMsg.className="form-msg success";
+    edMsg.textContent=r.remote?"Сохранено в Supabase":"Сохранено локально";
+    setTimeout(()=>editorModal.classList.remove("active"),700);
+  }else{edMsg.className="form-msg error";edMsg.textContent="Ошибка сохранения: "+(r.error||"")}
+});
+
+boot();
+</script>
+</body>
+</html>

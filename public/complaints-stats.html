@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title>Статистика Жалоб и Нарушений · ЦГБ №3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=26">
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+<div class="bg-noise"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ВС"></div>
+      <div class="brand-text">
+        <span class="brand-label">Аналитика · Жалобы</span>
+        <span class="brand-name">Статистика</span>
+      </div>
+    </a>
+    <nav class="nav" id="mainNav">
+      <a href="index.html" data-page="index.html" data-transition>Главная</a>
+      <a href="info.html" data-page="info.html" data-transition>Информация</a>
+      <a href="services.html" data-page="services.html" data-transition>Услуги</a>
+      <a href="meds.html" data-page="meds.html" data-transition>Медикаменты</a>
+      <a href="ustav.html" data-page="ustav.html" data-transition>Устав</a>
+      <a href="learn.html" data-page="learn.html" data-transition data-loggedin>Учебные материалы</a>
+      <a href="tests.html" data-page="tests.html" data-transition data-loggedin>Тестирование</a>
+      <a href="composition.html" data-page="composition.html" data-transition>Состав</a>
+      <a href="docs.html" data-page="docs.html" data-transition data-perm="docs:view">Документы</a>
+      <a href="news.html" data-page="news.html" data-transition>Новости</a>
+      <a href="autopark.html" data-page="autopark.html" data-transition>Автопарк</a>
+      <a href="map.html" data-page="map.html" data-transition>Карта</a>
+      <a href="faq.html" data-page="faq.html" data-transition>FAQ</a>
+      <a href="complaints.html" data-page="complaints.html" data-transition>Жалобы</a>
+      <a href="supply.html" data-page="supply.html" data-transition data-perm="supply:view">Поставки</a>
+      <a href="apps.html" data-page="apps.html" data-transition data-perm="apps:view">Заявления</a>
+      <a href="vp.html" data-page="vp.html" data-transition data-perm="vp:view">Проверки АБ</a>
+      <a href="complaints-review.html" data-page="complaints-review.html" data-transition data-perm="complaints:review,complaints:view">Рассмотрение жалоб</a>
+      <a href="complaints-stats.html" data-page="complaints-stats.html" data-transition data-perm="complaints:review,complaints:view">Статистика жалоб</a>
+      <a href="leave.html" data-page="leave.html" data-transition data-loggedin>Отгул</a>
+      <a href="vacation-ic.html" data-page="vacation-ic.html" data-transition data-loggedin>Отпуск IC</a>
+      <a href="vacation-ooc.html" data-page="vacation-ooc.html" data-transition data-loggedin>Отпуск OOC</a>
+      <a href="dismissal.html" data-page="dismissal.html" data-transition data-loggedin>Увольнение</a>
+      <a href="promotion.html" data-page="promotion.html" data-transition data-loggedin>Повышение</a>
+      <a href="restoration.html" data-page="restoration.html" data-transition>Восстановление в ЦГБ №3</a>
+      <a href="appointment.html" data-page="appointment.html" data-transition>Запись к врачу</a>
+      <a href="requests-review.html" data-page="requests-review.html" data-transition data-perm="requests:review,requests:view">Рассмотрение заявок</a>
+      <a href="requests-stats.html" data-page="requests-stats.html" data-transition data-perm="requests:review,requests:view">Статистика заявок</a>
+      <a href="payroll.html" data-page="payroll.html" data-transition data-perm="payroll:view">Реестр премирования</a>
+      <a href="report.html" data-page="report.html" data-transition>Еженедельный отчёт</a>
+      <a href="report-settings.html" data-page="report-settings.html" data-transition data-perm="report:settings">Настройки отчётов</a>
+      <a href="vp-request.html" data-page="vp-request.html" data-transition data-perm="vp_request:submit">Запрос на наказание</a>
+      <a href="vp-request-settings.html" data-page="vp-request-settings.html" data-transition data-perm="vp_request:settings">Настройки запросов АБ</a>
+      <a href="lk.html" data-page="lk.html" data-transition>Личный кабинет</a>
+    </nav>
+    <div class="header-actions">
+      <a href="complaints-review.html" class="btn btn-ghost btn-sm">← К жалобам</a>
+      <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="stats-page">
+    <div class="stats-head">
+      <div>
+        <h1 class="stats-title">Статистика · Жалобы и Нарушения</h1>
+        <div class="stats-sub">Администрация ЦГБ №3 · Рассмотрение жалоб</div>
+      </div>
+      <div class="stats-actions">
+        <button class="btn btn-ghost btn-sm" id="csCopyText">📋 Discord</button>
+        <button class="btn btn-ghost btn-sm" id="csCopyMd">📝 Markdown</button>
+        <button class="btn btn-gold btn-sm" id="csCopyPng">🖼 PNG</button>
+        <button class="btn btn-ghost btn-sm" id="csDownloadPng">⬇ Файл</button>
+      </div>
+    </div>
+    <div class="stats-copy-msg" id="csMsg"></div>
+
+    <div id="csGuard" style="display:none">
+      <div class="apps-guard-box"><div class="apps-guard-icon">⚠</div><h2>Доступ ограничен</h2><p>Раздел доступен только Старшему Составу и Администрации.</p></div>
+    </div>
+
+    <div id="csRoot" style="display:none">
+      <div class="stats-filters">
+        <div class="stats-filters-grid">
+          <div class="stats-filter"><label>Раздел</label>
+            <select id="csSection">
+              <option value="both" selected>Жалобы + Нарушения</option>
+              <option value="complaints">Только жалобы</option>
+              <option value="violations">Только нарушения</option>
+            </select>
+          </div>
+          <div class="stats-filter"><label>Тип нарушения</label>
+            <select id="csFKind"><option value="">Все</option>
+              <option value="warn">⚠ Предупреждение</option>
+              <option value="reproach">‼ Выговор</option>
+              <option value="talk">💬 Беседа с АБ</option>
+              <option value="confinement">🔒 Дисц. заключение</option>
+              <option value="uval">⛔ Отстранение</option>
+            </select>
+          </div>
+          <div class="stats-filter"><label>Статус жалобы</label>
+            <select id="csFStatus"><option value="">Все</option>
+              <option value="pending">⏳ Ожидает</option>
+              <option value="decided">⚖ Решено</option>
+            </select>
+          </div>
+          <div class="stats-filter"><label>Вердикт по жалобе</label>
+            <select id="csFVerd"><option value="">Все</option>
+              <option value="refuse">✕ Отказано</option>
+              <option value="warn">⚠ Предупреждение</option>
+              <option value="reproach">‼ Выговор</option>
+              <option value="talk">💬 Беседа</option>
+              <option value="confinement">🔒 Дисц.закл.</option>
+              <option value="uval">⛔ Отстранение</option>
+            </select>
+          </div>
+          <div class="stats-filter"><label>Кто вынес</label>
+            <select id="csFBy"><option value="">Все</option></select>
+          </div>
+          <div class="stats-filter"><label>Нарушитель</label>
+            <select id="csFTarget"><option value="">Все</option></select>
+          </div>
+          <div class="stats-filter"><label>Дата с</label>
+            <input type="date" id="csFFrom">
+          </div>
+          <div class="stats-filter"><label>Дата по</label>
+            <input type="date" id="csFTo">
+          </div>
+        </div>
+        <div class="stats-filters-row">
+          <button class="stats-preset" data-preset="today">Сегодня</button>
+          <button class="stats-preset" data-preset="week">7 дней</button>
+          <button class="stats-preset" data-preset="month">30 дней</button>
+          <button class="stats-preset" data-preset="cmonth">Текущий месяц</button>
+          <button class="stats-preset" data-preset="all">Всё время</button>
+          <button class="stats-reset" id="csReset">✕ Сбросить</button>
+        </div>
+      </div>
+
+      <div class="stats-body" id="csBody"><div class="stats-empty">Загрузка…</div></div>
+    </div>
+  </div>
+
+  <div class="stats-png-canvas" id="csPngCanvas" aria-hidden="true"></div>
+</main>
+
+<footer class="footer"><div class="container"><div class="footer-bottom"><span>© <script>document.write(new Date().getFullYear())</script> · ЦГБ №3 · Центральная Городская</span><span class="footer-note">🐞 Нашли баг? Обратитесь: <b>@rilavion</b></span></div></div></footer>
+
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=17"></script>
+<script src="assets/js/core/config.js?v=17"></script>
+<script src="assets/js/core/auth.js?v=17"></script>
+<script src="assets/js/core/roles-engine.js?v=17"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/utils/format-utils.js?v=17"></script>
+<script src="assets/js/ui/holiday-engine.js?v=17"></script>
+<script src="assets/js/ui/settings-panel.js?v=17"></script>
+<script src="assets/js/ui/sound-engine.js?v=17"></script>
+<script src="assets/js/ui/search-engine.js?v=17"></script>
+<script src="assets/js/utils/ds-cache.js?v=17"></script>
+<script src="assets/js/ui/notify-engine.js?v=19"></script>
+<script src="assets/js/ui/notify-live.js?v=17"></script>
+<script src="assets/vendor/html2canvas.min.js?v=4"></script>
+<script src="assets/js/utils/png-export-utils.js?v=17"></script>
+<script src="assets/js/utils/stats-utils.js?v=17"></script>
+<script>
+const KIND_LABELS={warn:"Предупреждение",reproach:"Выговор",talk:"Беседа с АБ",confinement:"Дисц. заключение",uval:"Отстранение"};
+const KIND_ICON={warn:"⚠",reproach:"‼",talk:"💬",confinement:"🔒",uval:"⛔"};
+const VERD_LABELS={refuse:"Отказано",warn:"Предупреждение",reproach:"Выговор",talk:"Беседа",confinement:"Дисц.закл.",uval:"Отстранение"};
+const STATUS_LABELS={pending:"Ожидает",decided:"Решено",withdrawn:"Отозвано"};
+
+let COMP=[], VIOL=[];
+
+function $(id){return document.getElementById(id)}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c])}
+
+async function boot(){
+  const roles=window.CGB_ROLES;
+  const ok=roles && roles.isStaff && roles.isStaff();
+  if(!ok){ $("csGuard").style.display="block"; $("csRoot").style.display="none"; return; }
+  $("csGuard").style.display="none"; $("csRoot").style.display="block";
+  document.body.classList.toggle("cgb-is-staff",true);
+  document.body.classList.toggle("cgb-is-admin",!!(roles&&roles.isAdmin&&roles.isAdmin()));
+  await load();
+}
+
+async function load(){
+  const c=window.CGB_AUTH&&window.CGB_AUTH.state&&window.CGB_AUTH.state.client;
+  if(!c){ $("csBody").innerHTML='<div class="stats-empty">Инициализация…</div>'; setTimeout(load,300); return; }
+  const [rc,rv]=await Promise.all([
+    c.from("complaints").select("*").order("created_at",{ascending:false}).limit(3000),
+    c.from("violations_registry").select("*").order("created_at",{ascending:false}).limit(3000)
+  ]);
+  if(rc.error){ $("csBody").innerHTML='<div class="stats-empty">Ошибка жалоб: '+esc(rc.error.message)+'</div>'; return; }
+  if(rv.error){ $("csBody").innerHTML='<div class="stats-empty">Ошибка нарушений: '+esc(rv.error.message)+'</div>'; return; }
+  COMP=rc.data||[]; VIOL=rv.data||[];
+  fillSelects();
+  bindEvents();
+  render();
+}
+
+function fillSelects(){
+  const bys=new Set(), targets=new Set();
+  for(const c of COMP){ if(c.verdict_by_name) bys.add(c.verdict_by_name); if(c.target_fio) targets.add(c.target_fio); }
+  for(const v of VIOL){ if(v.issued_by_name) bys.add(v.issued_by_name); if(v.target_fio) targets.add(v.target_fio); }
+  fillSel("csFBy",bys); fillSel("csFTarget",targets);
+}
+function fillSel(id,set){
+  const el=$(id), cur=el.value;
+  const arr=Array.from(set).sort();
+  el.innerHTML='<option value="">Все</option>'+arr.map(x=>`<option value="${esc(x)}" ${x===cur?"selected":""}>${esc(x)}</option>`).join("");
+}
+
+function bindEvents(){
+  ["csSection","csFKind","csFStatus","csFVerd","csFBy","csFTarget","csFFrom","csFTo"].forEach(id=>$(id).addEventListener("change",render));
+  document.querySelectorAll(".stats-preset").forEach(b=>b.addEventListener("click",()=>{
+    document.querySelectorAll(".stats-preset").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active"); applyPreset(b.dataset.preset);
+  }));
+  $("csReset").addEventListener("click",()=>{
+    ["csFKind","csFStatus","csFVerd","csFBy","csFTarget","csFFrom","csFTo"].forEach(id=>$(id).value="");
+    $("csSection").value="both";
+    document.querySelectorAll(".stats-preset").forEach(x=>x.classList.remove("active"));
+    render();
+  });
+  window.CGB_STATS.bindCopyButtons({
+    textBtnId:"csCopyText", mdBtnId:"csCopyMd", pngBtnId:"csCopyPng", pngDownloadBtnId:"csDownloadPng",
+    msgId:"csMsg", pngFilename:"complaints-stats.png", pngScale:2,
+    getSections:()=>getSections(),
+    getPngNode:()=>{ renderPng(); return $("csPngCanvas"); }
+  });
+}
+
+function applyPreset(p){
+  const now=new Date();
+  const to=$("csFTo"), from=$("csFFrom");
+  function iso(d){return d.toISOString().slice(0,10)}
+  if(p==="today"){ from.value=iso(now); to.value=iso(now); }
+  else if(p==="week"){ const d=new Date(now); d.setDate(d.getDate()-6); from.value=iso(d); to.value=iso(now); }
+  else if(p==="month"){ const d=new Date(now); d.setDate(d.getDate()-29); from.value=iso(d); to.value=iso(now); }
+  else if(p==="cmonth"){ from.value=iso(new Date(now.getFullYear(),now.getMonth(),1)); to.value=iso(now); }
+  else{ from.value=""; to.value=""; }
+  render();
+}
+
+function filteredComp(){
+  const fStatus=$("csFStatus").value, fVerd=$("csFVerd").value, fBy=$("csFBy").value, fTarget=$("csFTarget").value;
+  const from=window.CGB_STATS.parseDate($("csFFrom").value), to=window.CGB_STATS.parseDate($("csFTo").value);
+  return COMP.filter(c=>{
+    if(fStatus && c.status!==fStatus) return false;
+    if(fVerd && c.verdict!==fVerd) return false;
+    if(fBy && c.verdict_by_name!==fBy) return false;
+    if(fTarget && c.target_fio!==fTarget) return false;
+    if(from||to){ if(!window.CGB_STATS.inRange(c.created_at,from,to)) return false; }
+    return true;
+  });
+}
+function filteredViol(){
+  const fKind=$("csFKind").value, fBy=$("csFBy").value, fTarget=$("csFTarget").value;
+  const from=window.CGB_STATS.parseDate($("csFFrom").value), to=window.CGB_STATS.parseDate($("csFTo").value);
+  return VIOL.filter(v=>{
+    if(fKind && v.kind!==fKind) return false;
+    if(fBy && v.issued_by_name!==fBy) return false;
+    if(fTarget && v.target_fio!==fTarget) return false;
+    if(from||to){ if(!window.CGB_STATS.inRange(v.created_at,from,to)) return false; }
+    return true;
+  });
+}
+
+function statsComp(list){
+  const total=list.length;
+  const byStatus={pending:0,decided:0};
+  const byVerd={};
+  const byBy={};
+  const byTarget={};
+  const bySubm={};
+  const byDay={};
+  let verdictTimes=[];
+  for(const c of list){
+    if(byStatus[c.status]!=null) byStatus[c.status]++;
+    if(c.verdict) byVerd[c.verdict]=(byVerd[c.verdict]||0)+1;
+    if(c.verdict_by_name) byBy[c.verdict_by_name]=(byBy[c.verdict_by_name]||0)+1;
+    if(c.target_fio) byTarget[c.target_fio]=(byTarget[c.target_fio]||0)+1;
+    if(c.submitter_fio) bySubm[c.submitter_fio]=(bySubm[c.submitter_fio]||0)+1;
+    const day=(c.created_at||"").slice(0,10);
+    if(day) byDay[day]=(byDay[day]||0)+1;
+    if(c.verdict_at && c.created_at){
+      const dt=(new Date(c.verdict_at)-new Date(c.created_at))/60000;
+      if(dt>=0 && dt<60*24*60) verdictTimes.push(dt);
+    }
+  }
+  const satisf=Object.entries(byVerd).filter(([k])=>k!=="refuse").reduce((a,[,v])=>a+v,0);
+  const refused=byVerd.refuse||0;
+  const decided=byStatus.decided;
+  const satRate=decided?Math.round(satisf*100/decided):0;
+  const avg=verdictTimes.length?Math.round(verdictTimes.reduce((a,b)=>a+b,0)/verdictTimes.length):0;
+  return { total, byStatus, byVerd, byBy, byTarget, bySubm, byDay, satisf, refused, satRate, avg, decided };
+}
+function statsViol(list){
+  const total=list.length;
+  const byKind={};
+  const active={}, removed={};
+  const byBy={};
+  const byTarget={};
+  const byDay={};
+  for(const v of list){
+    byKind[v.kind]=(byKind[v.kind]||0)+1;
+    if(v.removed_at) removed[v.kind]=(removed[v.kind]||0)+1;
+    else active[v.kind]=(active[v.kind]||0)+1;
+    if(v.issued_by_name) byBy[v.issued_by_name]=(byBy[v.issued_by_name]||0)+1;
+    if(v.target_fio) byTarget[v.target_fio]=(byTarget[v.target_fio]||0)+1;
+    const day=(v.created_at||"").slice(0,10);
+    if(day) byDay[day]=(byDay[day]||0)+1;
+  }
+  const activeTotal=Object.values(active).reduce((a,b)=>a+b,0);
+  const removedTotal=Object.values(removed).reduce((a,b)=>a+b,0);
+  return { total, byKind, active, removed, byBy, byTarget, byDay, activeTotal, removedTotal };
+}
+
+function fmtDur(min){
+  if(!min) return "—";
+  if(min<60) return min+" мин";
+  const h=Math.floor(min/60), m=min%60;
+  if(h<24) return h+" ч"+(m?" "+m+" мин":"");
+  const d=Math.floor(h/24), rh=h%24;
+  return d+" д"+(rh?" "+rh+" ч":"");
+}
+
+function render(){
+  const sec=$("csSection").value;
+  let html="";
+  if(sec==="both"||sec==="complaints"){
+    const list=filteredComp();
+    const s=statsComp(list);
+    html+='<div class="stats-block-title" style="font-size:16px;color:var(--gold-b);margin-bottom:12px">📨 Жалобы</div>';
+    if(!list.length) html+='<div class="stats-empty">Нет жалоб под фильтр</div>';
+    else html+=renderComp(s);
+  }
+  if(sec==="both"||sec==="violations"){
+    const list=filteredViol();
+    const s=statsViol(list);
+    html+='<div class="stats-block-title" style="font-size:16px;color:var(--gold-b);margin:20px 0 12px">⚠ Нарушения</div>';
+    if(!list.length) html+='<div class="stats-empty">Нет нарушений под фильтр</div>';
+    else html+=renderViol(s);
+  }
+  $("csBody").innerHTML=html;
+}
+
+function renderComp(s){
+  const cards=[
+    ["Всего жалоб",s.total,""],
+    ["Ожидают",s.byStatus.pending,"pend"],
+    ["Решено",s.byStatus.decided,""],
+    ["Удовлетворено",s.satisf,"ok"],
+    ["Отказано",s.refused,"err"],
+    ["% удовл.",s.satRate+"%","ok"],
+    ["Ср. время до решения",fmtDur(s.avg),""]
+  ];
+  const cardsHtml='<div class="stats-cards">'+cards.map(c=>`<div class="stats-card ${c[2]}"><div class="stats-card-label">${esc(c[0])}</div><div class="stats-card-value">${esc(String(c[1]))}</div></div>`).join("")+"</div>";
+  const verdHtml=barBlock("По вердиктам",s.byVerd,k=>(KIND_ICON[k]||(k==="refuse"?"✕":"•"))+" "+(VERD_LABELS[k]||k));
+  const byHtml=tableBlock("Топ 10 · кто вынес",window.CGB_STATS.topN(s.byBy,10),["ФИО","Кол-во"]);
+  const tHtml=tableBlock("Топ 10 · нарушители",window.CGB_STATS.topN(s.byTarget,10),["ФИО","Кол-во"]);
+  const submHtml=tableBlock("Топ 10 · заявители",window.CGB_STATS.topN(s.bySubm,10),["ФИО","Кол-во"]);
+  const dailyHtml=dailyChart(s.byDay);
+  return cardsHtml+verdHtml+dailyHtml+byHtml+tHtml+submHtml;
+}
+function renderViol(s){
+  const cards=[
+    ["Всего",s.total,""],
+    ["Активных",s.activeTotal,"pend"],
+    ["Снятых",s.removedTotal,""],
+    ["Варны",s.byKind.warn||0,"pend"],
+    ["Выговоры",s.byKind.reproach||0,"err"],
+    ["Беседы",s.byKind.talk||0,"info"],
+    ["Дисц.закл.",s.byKind.confinement||0,"err"],
+    ["Отстранения",s.byKind.uval||0,"err"]
+  ];
+  const cardsHtml='<div class="stats-cards">'+cards.map(c=>`<div class="stats-card ${c[2]}"><div class="stats-card-label">${esc(c[0])}</div><div class="stats-card-value">${esc(String(c[1]))}</div></div>`).join("")+"</div>";
+  const kindHtml=barBlock("По типу",s.byKind,k=>(KIND_ICON[k]||"•")+" "+(KIND_LABELS[k]||k));
+  const byHtml=tableBlock("Топ 10 · кто выдал",window.CGB_STATS.topN(s.byBy,10),["ФИО","Кол-во"]);
+  const tHtml=tableBlock("Топ 10 · получатели",window.CGB_STATS.topN(s.byTarget,10),["ФИО","Кол-во"]);
+  const dailyHtml=dailyChart(s.byDay);
+  return cardsHtml+kindHtml+dailyHtml+byHtml+tHtml;
+}
+
+function barBlock(title,mapObj,labelFn){
+  const entries=Object.entries(mapObj).sort((a,b)=>b[1]-a[1]);
+  if(!entries.length) return "";
+  const max=Math.max(...entries.map(x=>x[1]));
+  const rows=entries.map(([k,v])=>`<div class="stats-bar"><div class="stats-bar-label">${esc(labelFn(k))}</div><div class="stats-bar-track"><div class="stats-bar-fill" style="width:${Math.max(2,v*100/max)}%"></div></div><div class="stats-bar-val">${v}</div></div>`).join("");
+  return `<div class="stats-block"><div class="stats-block-title">${esc(title)}</div>${rows}</div>`;
+}
+function tableBlock(title,rows,headers){
+  if(!rows.length) return "";
+  const hd=headers.map(h=>`<th>${esc(h)}</th>`).join("");
+  const tr=rows.map(r=>`<tr><td>${esc(r[0])}</td><td class="num">${r[1]}</td></tr>`).join("");
+  return `<div class="stats-block"><div class="stats-block-title">${esc(title)}</div><table class="stats-table"><thead><tr>${hd}</tr></thead><tbody>${tr}</tbody></table></div>`;
+}
+function dailyChart(byDay){
+  const entries=Object.entries(byDay).sort((a,b)=>a[0]<b[0]?-1:1).slice(-30);
+  if(!entries.length) return "";
+  const max=Math.max(...entries.map(x=>x[1]));
+  const bars=entries.map(([d,v])=>{
+    const h=Math.max(4,v*100/max);
+    const short=d.slice(5).replace("-",".");
+    return `<div class="rd-daily-col"><div class="rd-daily-stack"><div class="rd-daily-success" style="height:${h}%"></div></div><div class="rd-daily-val">${v}</div><div class="rd-daily-lbl">${short}</div></div>`;
+  }).join("");
+  return `<div class="stats-block"><div class="stats-block-title">Динамика (последние ${entries.length} дн)</div><div class="rd-daily-bars">${bars}</div></div>`;
+}
+
+function filterSummary(){
+  const parts=[];
+  const sec=$("csSection").value; parts.push("раздел: "+({both:"жалобы+нарушения",complaints:"жалобы",violations:"нарушения"}[sec]));
+  const k=$("csFKind").value; if(k) parts.push("тип: "+(KIND_LABELS[k]||k));
+  const st=$("csFStatus").value; if(st) parts.push("статус: "+(STATUS_LABELS[st]||st));
+  const v=$("csFVerd").value; if(v) parts.push("вердикт: "+(VERD_LABELS[v]||v));
+  const b=$("csFBy").value; if(b) parts.push("вынес: "+b);
+  const t=$("csFTarget").value; if(t) parts.push("нарушитель: "+t);
+  const f=$("csFFrom").value, tv=$("csFTo").value;
+  if(f||tv) parts.push("период: "+(f||"…")+" — "+(tv||"…"));
+  return parts.join(" · ");
+}
+function getSections(){
+  const sec=$("csSection").value;
+  const sections=[{ title:"⚖ Статистика АБ", subtitle:filterSummary() }];
+  if(sec==="both"||sec==="complaints"){
+    const s=statsComp(filteredComp());
+    sections.push({ title:"📨 Жалобы", rows:[
+      ["Всего",String(s.total)],
+      ["Ожидают",String(s.byStatus.pending)],
+      ["Решено",String(s.byStatus.decided)],
+      ["Удовлетворено",s.satisf+" ("+s.satRate+"%)"],
+      ["Отказано",String(s.refused)],
+      ["Ср. время до решения",fmtDur(s.avg)]
+    ] });
+    const by=window.CGB_STATS.topN(s.byBy,10);
+    if(by.length) sections.push({ title:"Топ · кто вынес (жалобы)", rows:by.map(x=>[x[0],String(x[1])]) });
+  }
+  if(sec==="both"||sec==="violations"){
+    const s=statsViol(filteredViol());
+    sections.push({ title:"⚠ Нарушения", rows:[
+      ["Всего",String(s.total)],
+      ["Активных",String(s.activeTotal)],
+      ["Снятых",String(s.removedTotal)],
+      ["Варны",String(s.byKind.warn||0)],
+      ["Выговоры",String(s.byKind.reproach||0)],
+      ["Беседы",String(s.byKind.talk||0)],
+      ["Дисц.закл.",String(s.byKind.confinement||0)],
+      ["Отстранения",String(s.byKind.uval||0)]
+    ] });
+    const t=window.CGB_STATS.topN(s.byTarget,10);
+    if(t.length) sections.push({ title:"Топ · нарушители", rows:t.map(x=>[x[0],String(x[1])]) });
+  }
+  return sections;
+}
+function renderPng(){
+  const sec=$("csSection").value;
+  let inner="";
+  if(sec==="both"||sec==="complaints"){
+    const s=statsComp(filteredComp());
+    const cards=[["Жалоб",s.total,""],["Ожидают",s.byStatus.pending,"pend"],["Решено",s.byStatus.decided,""],["Удовл.",s.satisf,"ok"],["Отказ",s.refused,"err"],["% удовл.",s.satRate+"%","ok"]];
+    inner+='<div class="stats-block-title" style="font-size:16px;margin-bottom:8px">📨 Жалобы</div>';
+    inner+='<div class="stats-cards">'+cards.map(c=>`<div class="stats-card ${c[2]}"><div class="stats-card-label">${esc(c[0])}</div><div class="stats-card-value">${esc(String(c[1]))}</div></div>`).join("")+"</div>";
+    inner+=barBlock("По вердиктам",s.byVerd,k=>(VERD_LABELS[k]||k));
+  }
+  if(sec==="both"||sec==="violations"){
+    const s=statsViol(filteredViol());
+    const cards=[["Наруш.",s.total,""],["Активн.",s.activeTotal,"pend"],["Снятых",s.removedTotal,""],["Варны",s.byKind.warn||0,"pend"],["Выговоры",s.byKind.reproach||0,"err"],["Отстранения",s.byKind.uval||0,"err"]];
+    inner+='<div class="stats-block-title" style="font-size:16px;margin:16px 0 8px">⚠ Нарушения</div>';
+    inner+='<div class="stats-cards">'+cards.map(c=>`<div class="stats-card ${c[2]}"><div class="stats-card-label">${esc(c[0])}</div><div class="stats-card-value">${esc(String(c[1]))}</div></div>`).join("")+"</div>";
+    inner+=barBlock("По типу",s.byKind,k=>(KIND_ICON[k]||"•")+" "+(KIND_LABELS[k]||k));
+  }
+  $("csPngCanvas").innerHTML=`
+    <div class="stats-png-head">
+      <div class="stats-png-title">Статистика · ЦГБ №3</div>
+      <div class="stats-png-sub">${esc(filterSummary())}</div>
+    </div>
+    ${inner}
+    <div class="stats-png-foot">ЦГБ №3 · Центральная Городская · ${window.CGB_STATS.nowStamp()} МСК</div>
+  `;
+}
+
+if(window.CGB_ROLES) CGB_ROLES.onChange(boot);
+setTimeout(boot,600);
+</script>
+
+</body>
+</html>

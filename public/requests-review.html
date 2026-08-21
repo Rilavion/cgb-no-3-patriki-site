@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title>Рассмотрение заявок · ЦГБ №3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=26">
+<style id="cgb-admin-guard">
+[data-admin]{display:none !important}[data-staff]{display:none !important}
+body.cgb-is-admin .nav a[data-admin]{display:inline-flex !important}
+body.cgb-is-staff .nav a[data-staff]{display:inline-flex !important}
+body.cgb-is-admin [data-admin]:not(.nav a){display:initial !important}
+body.cgb-is-staff [data-staff]:not(.nav a){display:initial !important}
+</style>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas><div class="bg-noise"></div>
+<header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="index.html"><div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ВС"></div><div class="brand-text"><span class="brand-label">Приёмная</span><span class="brand-name">Рассмотрение заявок</span></div></a>
+  <nav class="nav" id="mainNav">
+      <a href="index.html" data-page="index.html" data-transition>Главная</a>
+      <a href="info.html" data-page="info.html" data-transition>Информация</a>
+      <a href="services.html" data-page="services.html" data-transition>Услуги</a>
+      <a href="meds.html" data-page="meds.html" data-transition>Медикаменты</a>
+      <a href="ustav.html" data-page="ustav.html" data-transition>Устав</a>
+      <a href="learn.html" data-page="learn.html" data-transition data-loggedin>Учебные материалы</a>
+      <a href="tests.html" data-page="tests.html" data-transition data-loggedin>Тестирование</a>
+      <a href="composition.html" data-page="composition.html" data-transition>Состав</a>
+      <a href="docs.html" data-page="docs.html" data-transition data-perm="docs:view">Документы</a>
+      <a href="news.html" data-page="news.html" data-transition>Новости</a>
+      <a href="autopark.html" data-page="autopark.html" data-transition>Автопарк</a>
+      <a href="map.html" data-page="map.html" data-transition>Карта</a>
+      <a href="faq.html" data-page="faq.html" data-transition>FAQ</a>
+      <a href="complaints.html" data-page="complaints.html" data-transition>Жалобы</a>
+      <a href="supply.html" data-page="supply.html" data-transition data-perm="supply:view">Поставки</a>
+      <a href="apps.html" data-page="apps.html" data-transition data-perm="apps:view">Заявления</a>
+      <a href="vp.html" data-page="vp.html" data-transition data-perm="vp:view">Проверки АБ</a>
+      <a href="complaints-review.html" data-page="complaints-review.html" data-transition data-perm="complaints:review,complaints:view">Рассмотрение жалоб</a>
+      <a href="complaints-stats.html" data-page="complaints-stats.html" data-transition data-perm="complaints:review,complaints:view">Статистика жалоб</a>
+      <a href="leave.html" data-page="leave.html" data-transition data-loggedin>Отгул</a>
+      <a href="vacation-ic.html" data-page="vacation-ic.html" data-transition data-loggedin>Отпуск IC</a>
+      <a href="vacation-ooc.html" data-page="vacation-ooc.html" data-transition data-loggedin>Отпуск OOC</a>
+      <a href="dismissal.html" data-page="dismissal.html" data-transition data-loggedin>Увольнение</a>
+      <a href="promotion.html" data-page="promotion.html" data-transition data-loggedin>Повышение</a>
+      <a href="restoration.html" data-page="restoration.html" data-transition>Восстановление в ЦГБ №3</a>
+      <a href="appointment.html" data-page="appointment.html" data-transition>Запись к врачу</a>
+      <a href="requests-review.html" data-page="requests-review.html" data-transition data-perm="requests:review,requests:view">Рассмотрение заявок</a>
+      <a href="requests-stats.html" data-page="requests-stats.html" data-transition data-perm="requests:review,requests:view">Статистика заявок</a>
+      <a href="payroll.html" data-page="payroll.html" data-transition data-perm="payroll:view">Реестр премирования</a>
+      <a href="report.html" data-page="report.html" data-transition>Еженедельный отчёт</a>
+      <a href="report-settings.html" data-page="report-settings.html" data-transition data-perm="report:settings">Настройки отчётов</a>
+      <a href="vp-request.html" data-page="vp-request.html" data-transition data-perm="vp_request:submit">Запрос на наказание</a>
+      <a href="vp-request-settings.html" data-page="vp-request-settings.html" data-transition data-perm="vp_request:settings">Настройки запросов АБ</a>
+      <a href="lk.html" data-page="lk.html" data-transition>Личный кабинет</a>
+    </nav>
+  <div class="header-actions">
+    <a href="requests-settings.html" data-page="requests-settings.html" class="btn btn-gold btn-sm" data-perm="requests:settings">⚙ Настройки</a>
+    <button class="search-btn" data-open-search title="Поиск"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg><span>Поиск</span></button>
+    <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Сменить тему"><svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="sun" viewBox="0 0 24 24"><path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66l1.42-1.42M4.92 19.08l1.42-1.42m0-11.32L4.92 4.92m14.16 14.16l-1.42-1.42M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+    <button class="login-btn" data-open-login><svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/></svg><span>Войти</span></button>
+    <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+  </div>
+</div></header>
+
+<main>
+  <section class="apps-head"><div class="container">
+    <div class="apps-head-ribbon"><span class="apps-head-ribbon-line"></span><span class="apps-head-ribbon-emblem">◈</span><span class="apps-head-ribbon-name">Приёмная · Рассмотрение заявок</span><span class="apps-head-ribbon-emblem">◈</span><span class="apps-head-ribbon-line"></span></div>
+    <h1 class="apps-head-title">Рассмотрение заявок</h1>
+  </div></section>
+
+  <section class="apps-body"><div class="container">
+    <div id="rvGuard" style="display:none"><div class="apps-guard-box"><div class="apps-guard-icon">⚠</div><h2>Доступ ограничен</h2><p>Только для командования.</p></div></div>
+    <div id="rvRoot" style="display:none">
+      <div class="vp-arc-tabs" style="margin-bottom:14px">
+        <button class="vp-arc-tab active" data-kind="">📋 Все <span class="cr-count" id="rvCntAll">0</span></button>
+        <button class="vp-arc-tab" data-kind="leave">🕒 Отгулы <span class="cr-count" id="rvCntLeave">0</span></button>
+        <button class="vp-arc-tab" data-kind="vacation_ic">🏖 Отпуск IC <span class="cr-count" id="rvCntVIC">0</span></button>
+        <button class="vp-arc-tab" data-kind="vacation_ooc">💤 Отпуск OOC <span class="cr-count" id="rvCntVOOC">0</span></button>
+        <button class="vp-arc-tab" data-kind="dismissal">⛔ Увольнения <span class="cr-count" id="rvCntDism">0</span></button>
+        <button class="vp-arc-tab" data-kind="promotion">⭐ Повышения <span class="cr-count" id="rvCntProm">0</span></button>
+        <button class="vp-arc-tab" data-kind="restoration">🔄 Восстановления <span class="cr-count" id="rvCntRest">0</span></button>
+        <button class="vp-arc-tab" data-kind="appointment">🩺 Записи к врачу <span class="cr-count" id="rvCntAppt">0</span></button>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;align-items:center">
+        <select id="rvStatus" class="msg-input" style="max-width:200px">
+          <option value="pending">⏳ Ожидают</option>
+          <option value="approved">✅ Одобрены</option>
+          <option value="rejected">❌ Отклонены</option>
+          <option value="withdrawn">↩ Отозваны</option>
+          <option value="">Все</option>
+        </select>
+        <input type="text" id="rvSearch" class="msg-input" placeholder="🔍 Поиск по коду/ФИО/статику" style="flex:1;max-width:400px">
+      </div>
+      <div id="rvList" class="cr-list"></div>
+    </div>
+  </div></section>
+</main>
+
+<div class="modal-back" id="rvDetailModal"><div class="modal modal-xl"><button class="modal-close" aria-label="Закрыть">✕</button><div id="rvDetailBody"></div></div></div>
+
+<div class="modal-back" id="rvVerdictModal"><div class="modal modal-lg">
+  <button class="modal-close" aria-label="Закрыть">✕</button>
+  <h3 id="rvVerdTitle">Вердикт по заявке</h3>
+  <div class="modal-sub" id="rvVerdSub"></div>
+  <div class="form-group"><label>Решение *</label>
+    <div class="cr-verd-grid">
+      <button type="button" class="cr-verd-btn" data-v="approved" style="--vc:#34d399">✅ Одобрить</button>
+      <button type="button" class="cr-verd-btn" data-v="rejected" style="--vc:#e97a7a">❌ Отказать</button>
+    </div>
+  </div>
+  <div class="form-group"><label>Комментарий</label><textarea class="msg-input" id="rvVerdComment" rows="3" placeholder="Обоснование" style="resize:vertical;font-family:inherit"></textarea></div>
+  <div class="form-msg" id="rvVerdMsg"></div>
+  <div style="display:flex;gap:10px;justify-content:flex-end;padding-top:12px;border-top:1px solid var(--gold-b);margin-top:14px">
+    <button class="btn btn-ghost btn-sm" id="rvVerdCancel">Отмена</button>
+    <button class="btn btn-gold btn-sm" id="rvVerdSave">Вынести вердикт</button>
+  </div>
+</div></div>
+
+<div class="modal-back" id="loginModal"><div class="modal"><button class="modal-close" aria-label="Закрыть">✕</button><h3>Вход</h3>
+  <form><div class="form-group"><label>Email</label><input type="email" name="email" required></div><div class="form-group"><label>Пароль</label><input type="password" name="password" required></div><button class="btn btn-gold" style="width:100%" type="submit">Войти</button><div class="form-msg"></div></form></div></div>
+
+<footer class="footer"><div class="container"><div class="footer-bottom"><span>© <span id="year"></span> · ЦГБ №3 · Центральная Городская</span><span class="footer-note">🐞 Нашли баг? Обратитесь: <b>@rilavion</b></span></div></div></footer>
+
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=17"></script>
+<script src="assets/js/core/config.js?v=17"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/utils/format-utils.js?v=17"></script>
+<script src="assets/js/ui/holiday-engine.js?v=17"></script>
+<script src="assets/js/ui/settings-panel.js?v=17"></script>
+<script src="assets/js/ui/sound-engine.js?v=17"></script>
+<script src="assets/js/core/auth.js?v=17"></script>
+<script src="assets/js/core/roles-engine.js?v=17"></script>
+<script src="assets/js/ui/search-engine.js?v=17"></script>
+<script src="assets/js/utils/ds-cache.js?v=17"></script>
+<script src="assets/js/ui/notify-engine.js?v=19"></script>
+<script src="assets/js/ui/notify-live.js?v=17"></script>
+<script src="assets/js/features/requests-engine.js?v=17"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ruDT=iso=>{if(!iso) return "—";return new Date(iso).toLocaleString("ru-RU",{timeZone:"Europe/Moscow",day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"})};
+const LABELS={
+  submitter_fio:"ФИО",submitter_static:"Статик",submitter_discord:"Discord",position:"Должность",department:"Отдел",
+  leave_date:"Дата отгула",split:"Разбить 2×30",time_start:"Начало ч.1",time_start_2:"Начало ч.2",duration:"Длительность (мин)",
+  reason:"Причина / Обоснование",mil_id:"Мед. книжка №",from_date:"Дата начала",to_date:"Дата окончания",
+  current_rank:"Текущая должность",target_rank:"Желаемая должность",exam_link:"Ссылка на экзамен",supply_link:"Ссылка на статистику поставок",vp_link:"Ссылка на проверку АБ",
+  achievements:"Достижения / Заслуги",return_gear:"Сдача имущества",
+  restore_type:"Тип восстановления",vb_rank:"Должность в МК / удостоверении",dismissed_at:"Дата увольнения",
+  dismiss_reason:"Причина прошлого увольнения",name_changed:"Смена имени/фамилии",
+  vb_screenshot:"Скриншот медицинской книжки",passport_screenshot:"Скриншот паспорта",personal_file:"Личное дело",
+  certificates:"Скриншот справок",udost_screenshot:"Скриншот удостоверения",
+  ready_reattest:"Готов пройти переаттестацию",rules_ack:"Согласен с правилами",comment:"Комментарий",
+  appt_dept:"Отделение",doctor:"Врач",appt_date:"Желаемая дата",appt_time:"Желаемое время",
+  address:"Место жительства",phone:"Контактный номер",urgency:"Характер / срочность"
+};
+let ALL=[], KIND="", CUR=null, CUR_V=null;
+
+async function boot(){
+  const canView=window.CGB_ROLES&&(window.CGB_ROLES.can("requests","view")||window.CGB_ROLES.can("requests","review"));
+  if(!canView){$("rvGuard").style.display="";$("rvRoot").style.display="none";return}
+  $("rvGuard").style.display="none";$("rvRoot").style.display="";
+  await loadAll();
+}
+
+async function loadAll(){
+  ALL=await CGB_REQUESTS.fetchAll({});
+  const pend=x=>x.status==="pending";
+  $("rvCntAll").textContent=ALL.filter(pend).length;
+  $("rvCntLeave").textContent=ALL.filter(x=>x.kind==="leave"&&pend(x)).length;
+  $("rvCntVIC").textContent=ALL.filter(x=>x.kind==="vacation_ic"&&pend(x)).length;
+  $("rvCntVOOC").textContent=ALL.filter(x=>x.kind==="vacation_ooc"&&pend(x)).length;
+  $("rvCntDism").textContent=ALL.filter(x=>x.kind==="dismissal"&&pend(x)).length;
+  $("rvCntProm").textContent=ALL.filter(x=>x.kind==="promotion"&&pend(x)).length;
+  const rc=$("rvCntRest");if(rc) rc.textContent=ALL.filter(x=>x.kind==="restoration"&&pend(x)).length;
+  const ra=$("rvCntAppt");if(ra) ra.textContent=ALL.filter(x=>x.kind==="appointment"&&pend(x)).length;
+  renderList();
+}
+
+document.querySelectorAll("[data-kind]").forEach(b=>b.addEventListener("click",()=>{
+  KIND=b.dataset.kind;
+  document.querySelectorAll("[data-kind]").forEach(x=>x.classList.toggle("active",x.dataset.kind===KIND));
+  renderList();
+}));
+
+function renderList(){
+  const st=$("rvStatus").value;
+  const q=$("rvSearch").value.trim().toLowerCase();
+  let list=ALL.filter(x=>(!KIND||x.kind===KIND)&&(!st||x.status===st));
+  if(q) list=list.filter(x=>(x.code||"").toLowerCase().includes(q)||(x.submitter_fio||"").toLowerCase().includes(q)||(x.submitter_static||"").toLowerCase().includes(q));
+  const box=$("rvList");
+  if(!list.length){box.innerHTML='<div class="apps-empty"><h3>Пусто</h3></div>';return}
+  box.innerHTML=list.map(r=>{
+    const m=CGB_REQUESTS.KIND_META[r.kind]||{icon:"📋",label:r.kind,color:"#888"};
+    const stColor=r.status==="approved"?"#34d399":r.status==="rejected"?"#e97a7a":r.status==="withdrawn"?"#999":"#a2d8ff";
+    const stIcon=r.status==="approved"?"✅":r.status==="rejected"?"❌":r.status==="withdrawn"?"↩":"⏳";
+    const stLbl=r.status==="approved"?"Одобрено":r.status==="rejected"?"Отказано":r.status==="withdrawn"?"Отозвано":"Ожидает";
+    return `<div class="cr-item" data-id="${r.id}">
+      <div class="cr-item-head">
+        <div class="cr-item-code"><code>${esc(r.code)}</code></div>
+        <div class="cr-item-target"><span style="color:${m.color}">${m.icon}</span> <b>${esc(m.label)}</b></div>
+        <div class="cr-item-target">👤 ${esc(r.submitter_fio||"—")} ${r.submitter_static?`<span class="cr-static">${esc(r.submitter_static)}</span>`:""}</div>
+        <div class="cr-item-date">${ruDT(r.created_at)}</div>
+        <div style="flex:1"></div>
+        <span class="cr-verd-badge" style="background:${stColor}22;border:1px solid ${stColor};color:${stColor}">${stIcon} ${stLbl}</span>
+      </div>
+    </div>`;
+  }).join("");
+  box.querySelectorAll(".cr-item").forEach(el=>el.addEventListener("click",()=>openDetail(el.dataset.id)));
+}
+
+async function openDetail(id){
+  CUR=await CGB_REQUESTS.fetchOne(id);
+  if(!CUR) return;
+  const r=CUR;
+  const m=CGB_REQUESTS.KIND_META[r.kind]||{};
+  const canReview=window.CGB_ROLES&&window.CGB_ROLES.can("requests","review");
+  const canDel=window.CGB_ROLES&&window.CGB_ROLES.can("requests","delete");
+  const valuesRows=Object.entries(r.values||{}).map(([k,v])=>{
+    if(v===""||v==null||v===false) return "";
+    const label=LABELS[k]||k;
+    let vHtml;
+    if(typeof v==="boolean"){vHtml="✓ Да"}
+    else {
+      const s=String(v);
+      const isUrl=/^https?:\/\/\S+$/i.test(s.trim());
+      if(isUrl) vHtml=`<a href="${esc(s.trim())}" target="_blank" rel="noopener" class="cr-link">🔗 ${esc(s.trim().slice(0,80))}${s.length>80?"…":""}</a>`;
+      else vHtml=esc(s).replace(/\n/g,"<br>");
+    }
+    return `<div class="cr-kv"><div class="cr-k">${esc(label)}</div><div class="cr-v">${vHtml}</div></div>`;
+  }).join("");
+  const verd=r.status!=="pending"?`<div class="cr-verdict-doc"><div class="cr-vd-head"><div class="cr-vd-title">${r.status==="approved"?"✅ ОДОБРЕНО":r.status==="rejected"?"❌ ОТКАЗАНО":"↩ ОТОЗВАНО"}</div><div class="cr-vd-code">Заявка ${esc(r.code)}</div></div><div class="cr-vd-body"><div class="cr-vd-row"><span class="cr-vd-lbl">Вынес:</span> <b>${esc(r.verdict_by_name||"—")}</b></div><div class="cr-vd-row"><span class="cr-vd-lbl">Дата:</span> ${ruDT(r.verdict_at)}</div>${r.verdict_comment?`<div class="cr-vd-comment">${esc(r.verdict_comment).replace(/\n/g,"<br>")}</div>`:""}</div></div>`:"";
+  $("rvDetailBody").innerHTML=`
+    <div class="cr-det-head"><div><h3 style="margin:0 0 4px">${m.icon} ${esc(m.label)} · <code style="color:var(--gold-b)">${esc(r.code)}</code></h3><div class="modal-sub">Подано: ${ruDT(r.created_at)}</div></div></div>
+    <div class="cr-target-box"><div class="cr-tb-title">📬 Заявитель</div><div class="cr-tb-body"><b>${esc(r.submitter_fio||"—")}</b>${r.submitter_static?` · ${esc(r.submitter_static)}`:""}${r.submitter_discord?` · Discord: ${esc(r.submitter_discord)}`:""}</div></div>
+    <div class="cr-fields">${valuesRows}</div>
+    ${verd}
+    <div style="display:flex;gap:10px;justify-content:flex-end;padding-top:14px;border-top:1px solid var(--gold-b);margin-top:14px;flex-wrap:wrap">
+      ${canDel?`<button class="btn btn-ghost btn-sm" id="rvDel">🗑 Удалить</button>`:""}
+      <div style="flex:1"></div>
+      ${r.status==="pending"&&canReview?`<button class="btn btn-gold btn-sm" id="rvVerdict">⚖ Вынести вердикт</button>`:""}
+    </div>`;
+  $("rvDetailModal").classList.add("active");
+  const dv=$("rvVerdict");if(dv) dv.addEventListener("click",()=>openVerdict(r));
+  const dd=$("rvDel");if(dd) dd.addEventListener("click",async()=>{
+    if(!confirm("Удалить заявку "+r.code+"?")) return;
+    const rr=await CGB_REQUESTS.remove(r.id);
+    if(!rr.ok){alert(rr.error);return}
+    $("rvDetailModal").classList.remove("active");await loadAll();
+  });
+}
+function openVerdict(r){
+  CUR_V=null;
+  $("rvVerdTitle").textContent="Вердикт по заявке "+r.code;
+  $("rvVerdSub").textContent=(r.submitter_fio||"—")+(r.submitter_static?" · "+r.submitter_static:"");
+  $("rvVerdComment").value="";
+  document.querySelectorAll("#rvVerdictModal [data-v]").forEach(b=>{
+    b.classList.remove("active");
+    b.onclick=()=>{CUR_V=b.dataset.v;document.querySelectorAll("#rvVerdictModal [data-v]").forEach(x=>x.classList.toggle("active",x.dataset.v===CUR_V))};
+  });
+  $("rvVerdMsg").textContent="";
+  $("rvVerdictModal").classList.add("active");
+}
+$("rvVerdCancel").addEventListener("click",()=>$("rvVerdictModal").classList.remove("active"));
+$("rvVerdictModal").querySelector(".modal-close").addEventListener("click",()=>$("rvVerdictModal").classList.remove("active"));
+$("rvVerdictModal").addEventListener("click",e=>{if(e.target===$("rvVerdictModal")) $("rvVerdictModal").classList.remove("active")});
+$("rvVerdSave").addEventListener("click",async()=>{
+  const msg=$("rvVerdMsg");
+  if(!CUR_V){msg.className="form-msg error";msg.textContent="Выберите решение";return}
+  const dn=(function(){try{return localStorage.getItem("cgb-my-display-name")||""}catch(e){return""}})();
+  msg.className="form-msg info";msg.textContent="Сохранение...";
+  const r=await CGB_REQUESTS.decide(CUR.id,CUR_V,$("rvVerdComment").value.trim(),dn);
+  if(!r.ok){msg.className="form-msg error";msg.textContent=r.error;return}
+  msg.className="form-msg success";msg.textContent="✓ Сохранено";
+  setTimeout(async()=>{$("rvVerdictModal").classList.remove("active");$("rvDetailModal").classList.remove("active");await loadAll()},700);
+});
+$("rvDetailModal").querySelector(".modal-close").addEventListener("click",()=>$("rvDetailModal").classList.remove("active"));
+$("rvDetailModal").addEventListener("click",e=>{if(e.target===$("rvDetailModal")) $("rvDetailModal").classList.remove("active")});
+$("rvStatus").addEventListener("change",renderList);
+$("rvSearch").addEventListener("input",renderList);
+if(window.CGB_ROLES) CGB_ROLES.onChange(boot);
+setTimeout(boot,600);
+
+async function tryOpenFromHash(){
+  const h=location.hash||"";
+  const m=h.match(/^#r-(.+)$/);
+  if(!m) return;
+  const id=m[1];
+  const deadline=Date.now()+15000;
+  while(Date.now()<deadline){
+    const s=window.CGB_AUTH&&window.CGB_AUTH.state;
+    if(s&&s.ready&&s.client&&typeof openDetail==="function"){
+      const row=await CGB_REQUESTS.fetchOne(id);
+      if(row){
+        await openDetail(id);
+        history.replaceState(null,"",location.pathname);
+        return;
+      }
+    }
+    await new Promise(r=>setTimeout(r,300));
+  }
+  console.warn("[REQ-REVIEW] не удалось открыть #r-"+id+" за 15 сек");
+}
+setTimeout(tryOpenFromHash,600);
+</script>
+
+</body>
+</html>

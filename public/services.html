@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title>Услуги и цены · ЦГБ №3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=26">
+<style>
+.sv-hero{padding:72px 0 8px;text-align:center;position:relative;overflow:visible}
+.sv-hero::before{
+  content:"";position:absolute;left:50%;top:-40px;transform:translateX(-50%);
+  width:min(720px,92vw);height:340px;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 30%,rgba(34,211,238,.16),transparent 65%);
+  filter:blur(10px);
+}
+.sv-hero::after{
+  content:"✚";position:absolute;left:50%;top:120px;transform:translateX(-50%);
+  font-size:130px;color:var(--gold);opacity:.045;pointer-events:none;font-family:"Cormorant Garamond",serif;
+}
+.sv-hero>*{position:relative}
+.sv-overline{
+  display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:999px;
+  background:var(--gold-s);border:1px solid var(--line);color:var(--gold-b);
+  font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin-bottom:16px;
+  box-shadow:0 6px 20px rgba(8,145,178,.12);
+}
+.sv-title{
+  font-family:"Cormorant Garamond",serif;font-size:clamp(36px,5.4vw,60px);font-weight:700;
+  color:var(--text);line-height:1.08;letter-spacing:-.01em;
+}
+.sv-title span{
+  background:linear-gradient(120deg,var(--gold-b),#22d3ee 55%,var(--gold-b));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.sv-desc{color:var(--muted);max-width:640px;margin:14px auto 0;font-size:15px;line-height:1.75}
+.sv-chips{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:20px}
+.sv-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 15px;border-radius:999px;background:var(--card-bg);border:1px solid var(--line);color:var(--text);font-size:12.5px;font-weight:600}
+.sv-chip i,.sv-chip .em{color:var(--gold);font-style:normal}
+.sv-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:560px;margin:26px auto 0}
+.sv-stat{background:var(--card-bg);border:1px solid var(--line);border-radius:16px;padding:14px;text-align:center}
+.sv-stat b{font-family:"Cormorant Garamond",serif;font-size:24px;color:var(--gold-b)}
+.sv-stat div{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;margin-top:2px}
+
+.sv-toolbar{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:34px 0 14px}
+
+/* фильтр по категориям */
+.sv-cats{display:flex;gap:9px;flex-wrap:wrap;margin:0 0 24px}
+.sv-cat-chip{
+  display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;cursor:pointer;
+  background:var(--card-bg);border:1px solid var(--line);color:var(--muted);
+  font-size:12.5px;font-weight:700;font-family:inherit;transition:.25s;
+}
+.sv-cat-chip .em{font-style:normal;font-size:14px}
+.sv-cat-chip small{opacity:.7;font-weight:600}
+.sv-cat-chip:hover{border-color:var(--gold);color:var(--text);transform:translateY(-2px)}
+.sv-cat-chip.active{
+  background:linear-gradient(135deg,#0e7490,#06b6d4);color:#fff;border-color:transparent;
+  box-shadow:0 8px 22px rgba(6,182,212,.3);
+}
+.sv-cat-chip.active small{opacity:.85}
+.sv-search{flex:1;min-width:220px;position:relative}
+.sv-search input{
+  width:100%;padding:12px 16px 12px 42px;border-radius:14px;border:1px solid var(--line);
+  background:var(--input-bg);color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:border-color .2s;
+}
+.sv-search input:focus{border-color:var(--gold)}
+.sv-search::before{content:"🔍";position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:14px;opacity:.6}
+
+.sv-chapter{margin-bottom:38px}
+.sv-chap-head{
+  display:flex;align-items:center;gap:16px;margin-bottom:16px;padding-bottom:14px;
+  border-bottom:1px solid var(--line);position:relative;
+}
+.sv-chap-head::after{
+  content:"";position:absolute;bottom:-1px;left:0;height:3px;width:90px;border-radius:99px;
+  background:linear-gradient(90deg,var(--chap-color,var(--gold)),transparent);
+}
+.sv-chap-icon{
+  width:54px;height:54px;min-width:54px;border-radius:16px;display:flex;align-items:center;justify-content:center;
+  font-size:24px;color:#fff;background:linear-gradient(135deg,var(--chap-color,var(--gold)),#0e7490);
+  box-shadow:0 10px 24px rgba(14,116,144,.3);
+}
+.sv-chap-num{font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;color:var(--chap-color,var(--gold));margin-bottom:3px}
+.sv-chap-title{font-family:"Cormorant Garamond",serif;font-size:clamp(19px,2.4vw,26px);font-weight:700;color:var(--text)}
+.sv-chap-badge{margin-left:auto;padding:6px 14px;border-radius:999px;font-size:11.5px;font-weight:700;background:var(--gold-s);color:var(--gold-b);border:1px solid var(--line)}
+
+.sv-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.sv-card{
+  background:var(--card-bg);border:1px solid var(--line);border-radius:18px;padding:18px 20px;
+  display:flex;justify-content:space-between;gap:16px;align-items:flex-start;position:relative;overflow:hidden;
+  cursor:pointer;transition:transform .4s cubic-bezier(.34,1.56,.64,1),box-shadow .4s,border-color .4s;
+}
+.sv-card:hover{transform:translateY(-5px);border-color:var(--gold);box-shadow:0 18px 44px rgba(14,116,144,.2)}
+.sv-card.selected{border-color:var(--gold);box-shadow:0 6px 22px rgba(14,116,144,.2);background:linear-gradient(135deg,var(--gold-s),var(--card-bg))}
+.sv-card.featured{grid-column:1/-1;border-color:rgba(34,211,238,.42);background:linear-gradient(135deg,rgba(34,211,238,.07),var(--card-bg))}
+.sv-num{
+  display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:9px;
+  background:var(--gold-s);color:var(--gold-b);font-size:12px;font-weight:700;margin-bottom:8px;
+}
+.sv-card.featured .sv-num{background:rgba(34,211,238,.16);color:#0891b2}
+[data-theme="light"] .sv-card.featured .sv-num{color:#0e7490}
+.sv-name{font-weight:700;font-size:15px;color:var(--text);line-height:1.35}
+.sv-card:hover .sv-name{color:var(--gold-b)}
+.sv-description{font-size:12.5px;color:var(--muted);line-height:1.6;margin-top:5px}
+.sv-price{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
+.sv-price-v{
+  font-size:15px;font-weight:800;color:#10b981;background:rgba(16,185,129,.08);
+  border:1px solid rgba(16,185,129,.18);padding:8px 15px;border-radius:12px;white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+.sv-price-tag{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#0891b2}
+.sv-check{
+  position:absolute;top:14px;right:14px;width:24px;height:24px;border-radius:8px;border:2px solid var(--line);
+  display:flex;align-items:center;justify-content:center;font-size:12px;color:transparent;transition:.3s;
+}
+.sv-card.selected .sv-check{background:linear-gradient(135deg,#0e7490,#06b6d4);border-color:#06b6d4;color:#fff}
+.sv-card .sv-check+.sv-body{padding-right:32px}
+.sv-body{min-width:0;flex:1}
+
+.sv-banner{
+  margin-top:36px;background:var(--card-bg);border:1px solid var(--line);border-radius:20px;padding:24px 26px;
+  display:flex;gap:18px;align-items:flex-start;position:relative;overflow:hidden;
+}
+.sv-banner::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#0891b2,#22d3ee,#0891b2)}
+.sv-banner-ico{width:50px;height:50px;min-width:50px;border-radius:14px;background:rgba(34,211,238,.12);display:flex;align-items:center;justify-content:center;font-size:22px}
+.sv-banner h4{font-family:"Cormorant Garamond",serif;font-size:19px;color:var(--text);margin-bottom:6px}
+.sv-banner p{font-size:13.5px;color:var(--muted);line-height:1.75}
+.sv-banner strong{color:var(--text)}
+
+/* калькулятор */
+.sv-calc{
+  position:fixed;left:0;right:0;bottom:0;z-index:1200;
+  background:var(--toolbar-bg);backdrop-filter:blur(20px);
+  border-top:1px solid var(--line);box-shadow:0 -14px 44px rgba(0,10,25,.35);
+  transform:translateY(105%);transition:transform .5s cubic-bezier(.34,1.56,.64,1);
+}
+.sv-calc.active{transform:translateY(0)}
+.sv-calc-in{max-width:1280px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.sv-calc-list{flex:1;min-width:200px;display:flex;gap:8px;flex-wrap:wrap;max-height:74px;overflow-y:auto}
+.sv-calc-empty{color:var(--muted);font-size:13px}
+.sv-sel{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;background:var(--gold-s);border:1px solid var(--line);font-size:12px;font-weight:600;color:var(--text)}
+.sv-sel button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;padding:0;line-height:1}
+.sv-sel button:hover{color:#f87171}
+.sv-calc-total{text-align:right;min-width:120px}
+.sv-calc-lbl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.sv-calc-sum{font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:800;color:var(--gold-b);line-height:1.15}
+.sv-disc{font-size:11px;color:#34d399;font-weight:700}
+.sv-calc-actions{display:flex;gap:10px;flex-shrink:0}
+.sv-btn{padding:12px 20px;border-radius:12px;border:1px solid var(--line);background:var(--input-bg);color:var(--muted);font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;transition:.3s;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.sv-btn:hover{transform:translateY(-2px)}
+.sv-btn.danger:hover{background:rgba(239,68,68,.12);color:#f87171;border-color:rgba(239,68,68,.3)}
+.sv-btn.primary{background:linear-gradient(135deg,#0e7490,#06b6d4);color:#fff;border-color:transparent;box-shadow:0 8px 24px rgba(6,182,212,.3)}
+
+/* экспорт главы услуг в PNG — полностью клиентский, без записей в БД */
+.svx-controls{
+  display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin:14px 0;
+  padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--footer-bg);
+}
+.svx-controls .form-group{margin:0;flex:1 1 360px}
+.svx-actions{display:flex;gap:9px;flex-wrap:wrap}
+.svx-preview-shell{
+  overflow:auto;padding:16px;border:1px solid var(--line);border-radius:18px;
+  background:#03090e;max-height:64vh;
+}
+.svx-sheet{
+  --svx-color:#22d3ee;width:1080px;max-width:100%;box-sizing:border-box;margin:0 auto;
+  position:relative;overflow:hidden;padding:46px;border-radius:30px;color:#eefaff;
+  font-family:'Inter',sans-serif;
+  background:
+    radial-gradient(circle at 92% 5%,rgba(34,211,238,.2),transparent 28%),
+    radial-gradient(circle at 2% 98%,rgba(34,211,238,.13),transparent 31%),
+    linear-gradient(145deg,#07131c 0%,#0a202b 54%,#061219 100%);
+  border:2px solid var(--svx-color);
+  box-shadow:0 24px 70px rgba(0,0,0,.5),inset 0 0 80px rgba(4,15,22,.45);
+}
+.svx-sheet::before{
+  content:'✚';position:absolute;right:-10px;top:-76px;font:700 330px/1 'Cormorant Garamond',serif;
+  color:var(--svx-color);opacity:.045;pointer-events:none;
+}
+.svx-sheet::after{
+  content:'';position:absolute;inset:0;pointer-events:none;opacity:.16;
+  background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:32px 32px;
+}
+.svx-sheet>*{position:relative;z-index:1}
+.svx-brand{display:flex;align-items:center;gap:14px;padding-bottom:22px;border-bottom:1px solid rgba(174,226,241,.18)}
+.svx-brand img{width:58px;height:58px;object-fit:contain;filter:drop-shadow(0 8px 18px rgba(0,0,0,.45))}
+.svx-brand-copy{min-width:0}
+.svx-brand-over{font-size:11px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:#8bcfe4}
+.svx-brand-name{margin-top:3px;font:700 26px/1.05 'Cormorant Garamond',serif;color:#fff}
+.svx-price-label{margin-left:auto;padding:9px 15px;border-radius:999px;border:1px solid rgba(139,207,228,.22);background:rgba(5,20,29,.65);font-size:11px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#bdeafa;white-space:nowrap}
+.svx-head{display:flex;align-items:center;gap:20px;padding:30px 0 24px}
+.svx-icon{width:86px;height:86px;min-width:86px;display:flex;align-items:center;justify-content:center;border-radius:25px;font-size:40px;background:linear-gradient(145deg,var(--svx-color),#0e7490);box-shadow:0 15px 34px rgba(6,182,212,.22)}
+.svx-num{font-size:12px;font-weight:800;letter-spacing:.24em;text-transform:uppercase;color:var(--svx-color);margin-bottom:5px}
+.svx-title{font:700 42px/1.02 'Cormorant Garamond',serif;color:#fff;max-width:720px}
+.svx-count{margin-left:auto;text-align:center;min-width:92px;padding:12px 14px;border-radius:16px;background:rgba(6,20,28,.64);border:1px solid rgba(178,228,242,.17)}
+.svx-count b{display:block;font:700 30px/1 'Cormorant Garamond',serif;color:#fff}
+.svx-count span{font-size:9px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#86bfd0}
+.svx-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.svx-item{
+  min-height:138px;padding:18px 19px;box-sizing:border-box;border-radius:18px;
+  display:flex;flex-direction:column;background:linear-gradient(145deg,rgba(16,43,56,.96),rgba(8,28,38,.95));
+  border:1px solid rgba(152,212,229,.16);box-shadow:0 10px 24px rgba(0,0,0,.22);
+}
+.svx-item.featured{border-color:var(--svx-color);box-shadow:0 12px 32px rgba(6,182,212,.16)}
+.svx-item-top{display:flex;align-items:flex-start;gap:11px}
+.svx-index{width:31px;height:31px;min-width:31px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(34,211,238,.13);border:1px solid var(--svx-color);color:#dcf8ff;font-size:12px;font-weight:800}
+.svx-service-name{font-size:16px;line-height:1.25;font-weight:800;color:#f4fbff;padding-top:4px}
+.svx-desc{font-size:11.5px;line-height:1.5;color:#9ec0cb;margin:8px 0 12px;padding-left:42px}
+.svx-item-foot{margin-top:auto;padding-left:42px;display:flex;align-items:center;gap:10px;justify-content:space-between}
+.svx-price{font-size:18px;font-weight:900;color:#56e0a5;letter-spacing:.01em}
+.svx-tag{padding:5px 9px;border-radius:999px;background:rgba(34,211,238,.12);color:#d9f8ff;font-size:9px;font-weight:900;letter-spacing:.11em;text-transform:uppercase}
+.svx-footer{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:25px;padding-top:18px;border-top:1px solid rgba(174,226,241,.16);font-size:10px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:#7199a6}
+.svx-footer strong{color:#bdeafa}
+.svx-render-host{position:fixed;left:-20000px;top:0;width:1080px;z-index:99999;pointer-events:none}
+@media(max-width:720px){.svx-sheet{padding:26px}.svx-grid{grid-template-columns:1fr}.svx-title{font-size:30px}.svx-count{display:none}.svx-price-label{display:none}.svx-brand-name{font-size:21px}}
+
+/* редактор */
+.sv-ed-side h4{font-family:"Cormorant Garamond",serif;font-size:15px;color:var(--gold-b);margin:14px 0 8px;letter-spacing:.05em}
+.sv-ed-side h4:first-child{margin-top:0}
+.sv-ed-row{display:flex;gap:8px;margin-bottom:9px;align-items:flex-start}
+.sv-ed-row .form-group{flex:1;margin:0}
+.sv-ed-grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sv-ed-item{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;background:var(--footer-bg)}
+.sv-ed-item-h{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.sv-ed-item-h b{font-size:12px;color:var(--gold-b);flex:1}
+.sv-ed-item input,.sv-ed-item textarea{width:100%;padding:8px 10px;border-radius:9px;border:1px solid var(--line);background:var(--input-bg);color:var(--text);font-size:12.5px;font-family:inherit;resize:vertical}
+.sv-ed-item textarea{min-height:46px}
+.sv-ed-mini{padding:5px 9px;font-size:11px;border-radius:8px;border:1px solid var(--line);background:var(--card-bg);color:var(--muted);cursor:pointer;font-family:inherit}
+.sv-ed-mini:hover{color:var(--gold-b);border-color:var(--gold)}
+.sv-ed-mini.danger:hover{color:#f87171;border-color:rgba(239,68,68,.35)}
+.sv-ed-item-flags{display:flex;gap:12px;align-items:center;margin-top:8px;font-size:12px;color:var(--muted)}
+.sv-ed-item-flags label{display:flex;gap:6px;align-items:center;cursor:pointer}
+input[type="color"].sv-color{width:44px;height:34px;padding:2px;border:1px solid var(--line);border-radius:8px;background:var(--input-bg);cursor:pointer}
+
+@media(max-width:900px){
+  .sv-grid{grid-template-columns:1fr}
+  .sv-stats{grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .sv-calc-in{padding:12px 14px}
+  body{padding-bottom:150px}
+}
+@media(max-width:480px){.sv-stats{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+<div class="bg-noise"></div>
+<div class="page-transition-overlay" id="overlay"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ЦГБ"></div>
+      <div class="brand-text">
+        <span class="brand-label">Министерство Здравоохранения</span>
+        <span class="brand-name">ЦГБ №3 · Центральная Городская</span>
+      </div>
+    </a>
+    <nav class="nav" id="mainNav">
+      <a href="index.html" data-page="index.html" data-transition>Главная</a>
+      <a href="info.html" data-page="info.html" data-transition>Информация</a>
+      <a href="services.html" data-page="services.html" data-transition>Услуги</a>
+      <a href="meds.html" data-page="meds.html" data-transition>Медикаменты</a>
+      <a href="ustav.html" data-page="ustav.html" data-transition>Устав</a>
+      <a href="learn.html" data-page="learn.html" data-transition data-loggedin>Учебные материалы</a>
+      <a href="tests.html" data-page="tests.html" data-transition data-loggedin>Тестирование</a>
+      <a href="composition.html" data-page="composition.html" data-transition>Состав</a>
+      <a href="docs.html" data-page="docs.html" data-transition data-perm="docs:view">Документы</a>
+      <a href="news.html" data-page="news.html" data-transition>Новости</a>
+      <a href="autopark.html" data-page="autopark.html" data-transition>Автопарк</a>
+      <a href="map.html" data-page="map.html" data-transition>Карта</a>
+      <a href="faq.html" data-page="faq.html" data-transition>FAQ</a>
+      <a href="complaints.html" data-page="complaints.html" data-transition>Жалобы</a>
+      <a href="supply.html" data-page="supply.html" data-transition data-perm="supply:view">Поставки</a>
+      <a href="apps.html" data-page="apps.html" data-transition data-perm="apps:view">Заявления</a>
+      <a href="vp.html" data-page="vp.html" data-transition data-perm="vp:view">Проверки АБ</a>
+      <a href="complaints-review.html" data-page="complaints-review.html" data-transition data-perm="complaints:review,complaints:view">Рассмотрение жалоб</a>
+      <a href="complaints-stats.html" data-page="complaints-stats.html" data-transition data-perm="complaints:review,complaints:view">Статистика жалоб</a>
+      <a href="leave.html" data-page="leave.html" data-transition data-loggedin>Отгул</a>
+      <a href="vacation-ic.html" data-page="vacation-ic.html" data-transition data-loggedin>Отпуск IC</a>
+      <a href="vacation-ooc.html" data-page="vacation-ooc.html" data-transition data-loggedin>Отпуск OOC</a>
+      <a href="dismissal.html" data-page="dismissal.html" data-transition data-loggedin>Увольнение</a>
+      <a href="promotion.html" data-page="promotion.html" data-transition data-loggedin>Повышение</a>
+      <a href="restoration.html" data-page="restoration.html" data-transition>Восстановление в ЦГБ №3</a>
+      <a href="appointment.html" data-page="appointment.html" data-transition>Запись к врачу</a>
+      <a href="requests-review.html" data-page="requests-review.html" data-transition data-perm="requests:review,requests:view">Рассмотрение заявок</a>
+      <a href="requests-stats.html" data-page="requests-stats.html" data-transition data-perm="requests:review,requests:view">Статистика заявок</a>
+      <a href="payroll.html" data-page="payroll.html" data-transition data-perm="payroll:view">Реестр премирования</a>
+      <a href="report.html" data-page="report.html" data-transition>Еженедельный отчёт</a>
+      <a href="report-settings.html" data-page="report-settings.html" data-transition data-perm="report:settings">Настройки отчётов</a>
+      <a href="vp-request.html" data-page="vp-request.html" data-transition data-perm="vp_request:submit">Запрос на наказание</a>
+      <a href="vp-request-settings.html" data-page="vp-request-settings.html" data-transition data-perm="vp_request:settings">Настройки запросов АБ</a>
+      <a href="lk.html" data-page="lk.html" data-transition>Личный кабинет</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-btn" data-open-search title="Поиск (Ctrl+K)">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+        <span>Поиск</span>
+        <span class="kbd">Ctrl K</span>
+      </button>
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Сменить тему">
+        <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24"><path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66l1.42-1.42M4.92 19.08l1.42-1.42m0-11.32L4.92 4.92m14.16 14.16l-1.42-1.42M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="login-btn" data-open-login>
+        <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/></svg>
+        <span>Войти</span>
+      </button>
+      <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+    <section class="sv-hero">
+      <div class="sv-overline">✚ <span id="heroOverline">Прайс-лист ЦГБ №3</span></div>
+      <h1 class="sv-title" id="heroTitle">Платные медицинские <span>услуги</span></h1>
+      <p class="sv-desc" id="heroDesc"></p>
+      <div class="sv-chips" id="heroChips"></div>
+      <div class="sv-stats">
+        <div class="sv-stat"><b id="statServices">0</b><div>Услуг</div></div>
+        <div class="sv-stat"><b id="statCats">0</b><div>Категорий</div></div>
+        <div class="sv-stat"><b id="statDiscount">0%</b><div>Макс. скидка</div></div>
+      </div>
+    </section>
+
+    <div class="sv-toolbar">
+      <div class="sv-search"><input id="svSearch" type="search" placeholder="Поиск услуги..." autocomplete="off"></div>
+      <button class="btn btn-gold btn-sm" id="svExportBtn" style="display:none">📸 Экспорт по главам</button>
+      <button class="btn btn-ghost btn-sm admin-only" id="editPageBtn" style="display:none">✎ Редактировать страницу</button>
+    </div>
+
+    <div class="sv-cats" id="svCats"></div>
+
+    <div id="svChapters"></div>
+
+    <div class="sv-banner" id="svBanner">
+      <div class="sv-banner-ico">ℹ️</div>
+      <div><h4 id="bannerTitle"></h4><p id="bannerText"></p></div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <h4>ЦГБ №3 · Центральная Городская</h4>
+        <p>Министерство Здравоохранения. Центральная Городская Больница №3.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Пациентам</h5>
+        <a href="services.html">Услуги и цены</a>
+        <a href="meds.html">Медикаменты</a>
+        <a href="info.html#steps">Как записаться</a>
+      </div>
+      <div class="footer-col">
+        <h5>Контакты</h5>
+        <a href="map.html">Моховая ул., 85</a>
+        <a href="faq.html">Вопросы и ответы</a>
+        <a href="complaints.html">Обратная связь</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> · ЦГБ №3 · Центральная Городская</span>
+      <span>Забота · Профессионализм · Жизнь</span>
+    <span class="footer-note">🐞 Нашли баг? Обратитесь: <b>@rilavion</b></span></div>
+  </div>
+</footer>
+
+<div class="fab-stack" id="fabStack">
+  <button class="fab" id="fabUp" title="Наверх">
+    <svg viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8z"/></svg>
+    <span class="fab-hint">Наверх</span>
+  </button>
+</div>
+
+<div class="sv-calc" id="svCalc">
+  <div class="sv-calc-in">
+    <div class="sv-calc-list" id="svCalcList"><span class="sv-calc-empty">Ничего не выбрано — нажмите на карточку услуги</span></div>
+    <div class="sv-calc-total">
+      <div class="sv-calc-lbl">Итого</div>
+      <div class="sv-calc-sum" id="svCalcSum">0 ₽</div>
+      <div class="sv-disc" id="svCalcDisc" style="display:none"></div>
+    </div>
+    <div class="sv-calc-actions">
+      <button class="sv-btn danger" id="svCalcClear">Очистить</button>
+      <a class="sv-btn primary" id="svOrderBtn" href="#" target="_blank" rel="noopener">✈ Записаться</a>
+    </div>
+  </div>
+</div>
+
+<div class="search-modal" id="searchModal">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+      <input class="search-input" placeholder="Поиск по разделам..." spellcheck="false">
+      <button class="search-close-kbd">Esc</button>
+    </div>
+    <div class="search-results"></div>
+  </div>
+</div>
+
+<div class="modal-back" id="loginModal">
+  <div class="modal">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Вход в личный кабинет</h3>
+    <div class="modal-sub">Пациенты и сотрудники</div>
+    <form>
+      <div class="form-group"><label>Email</label><input type="email" name="email" required></div>
+      <div class="form-group"><label>Пароль</label><input type="password" name="password" required></div>
+      <button class="btn btn-gold" style="width:100%" type="submit">Войти</button>
+      <div class="form-msg"></div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-back" id="svExportModal">
+  <div class="modal modal-xl" style="max-width:1180px">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>📸 Экспорт медицинских услуг</h3>
+    <div class="modal-sub">Выберите главу — готовый прайс можно скопировать в буфер или скачать как PNG.</div>
+    <div class="svx-controls">
+      <div class="form-group"><label>Глава прайс-листа</label><select id="svExportChapter" class="msg-input"></select></div>
+      <div class="svx-actions">
+        <button type="button" class="btn btn-gold btn-sm" id="svExportCopy">📋 Копировать PNG</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="svExportDownload">⬇ Скачать PNG</button>
+      </div>
+    </div>
+    <div class="svx-preview-shell" id="svExportPreview"></div>
+    <div class="form-msg" id="svExportMsg" style="margin-top:12px"></div>
+  </div>
+</div>
+
+<div class="modal-back" id="editModal">
+  <div class="modal modal-xl">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Редактор страницы «Услуги»</h3>
+    <div class="modal-sub">Всё гибко: шапка, категории, услуги, цены, скидка, кнопка записи.</div>
+    <div class="editor">
+      <div class="editor-side sv-ed-side" id="edSide">
+        <h4>Страница</h4>
+        <div class="chap-item" data-tab="hero">🏥 Шапка и чипы</div>
+        <div class="chap-item" data-tab="sale">🏷 Скидка и кнопка</div>
+        <div class="chap-item" data-tab="banner">ℹ️ Инфо-баннер</div>
+        <h4>Категории</h4>
+        <div id="edCatList"></div>
+        <button class="editor-add-btn" id="edAddCat">+ Добавить категорию</button>
+      </div>
+      <div class="editor-main" id="edMain"></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;justify-content:flex-end">
+      <button class="btn btn-ghost btn-sm" id="edCancel">Отмена</button>
+      <button class="btn btn-gold btn-sm" id="edSave">Сохранить</button>
+    </div>
+    <div class="form-msg" id="edMsg"></div>
+  </div>
+</div>
+
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=18"></script>
+<script src="assets/js/core/config.js?v=18"></script>
+<script src="assets/js/core/auth.js?v=18"></script>
+<script src="assets/js/core/roles-engine.js?v=18"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/ui/holiday-engine.js?v=18"></script>
+<script src="assets/js/ui/sound-engine.js?v=18"></script>
+<script src="assets/js/ui/search-engine.js?v=18"></script>
+<script src="assets/js/ui/notify-engine.js?v=19"></script>
+<script src="assets/js/ui/notify-live.js?v=18"></script>
+<script src="assets/js/features/site-data-engine.js?v=18"></script>
+<script src="assets/vendor/html2canvas.min.js?v=4"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+const $=id=>document.getElementById(id);
+const KEY="services_page";
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt=p=>Number(p||0).toString().replace(/\B(?=(\d{3})+(?!\d))/g," ")+" ₽";
+
+const DEFAULT={
+  hero:{overline:"Прайс-лист ЦГБ №3",title:"Платные медицинские",accent:"услуги",
+    desc:"Полный перечень медицинских услуг с актуальными ценами. Выберите нужные позиции — калькулятор автоматически подсчитает итоговую стоимость со всеми скидками.",
+    chips:[{icon:"⚖️",text:"Постановление №172"},{icon:"🏥",text:"ЦГБ №3 и №7"},{icon:"🏷️",text:"Скидка 10% от 5 услуг"}]},
+  discount:{min:5,percent:10,currency:"₽"},
+  orderUrl:"https://discord.com/invite/ehVefZqKgd",
+  orderLabel:"Записаться",
+  banner:{title:"Важная информация",text:"Все цены указаны в соответствии с внутренним прейскурантом. При выборе 5 и более услуг предоставляется скидка 10%. Для записи на приём используйте Discord."},
+  categories:[
+    {id:"c1",num:"Глава I",title:"Основные медицинские услуги",icon:"🩺",color:"#0891b2",items:[
+      {name:"Осмотр у терапевта",desc:"Первичный приём и консультация врача-терапевта",price:75000,featured:false,tag:""},
+      {name:"Получение новой медицинской книжки",desc:"Оформление и выдача новой медкнижки",price:45000,featured:false,tag:""},
+      {name:"Актуализация медицинской книжки",desc:"Продление и обновление данных медкнижки",price:82000,featured:false,tag:""},
+      {name:"Сдача анализов у нарколога и выдача справки",desc:"Наркологическое обследование с выдачей справки",price:60000,featured:false,tag:""},
+      {name:"Актуализация справки от нарколога",desc:"Продление действующей наркологической справки",price:98000,featured:false,tag:""},
+      {name:"Медицинское освидетельствование",desc:"Официальное медицинское освидетельствование",price:105000,featured:false,tag:""},
+      {name:"Комплексный медицинский осмотр",desc:"Включает выдачу и обновление медкнижек и справок от нарколога, сдачу анализов, осмотр терапевта и профильных врачей по направлению",price:195000,featured:true,tag:"Выгодно"}
+    ]},
+    {id:"c2",num:"Глава II",title:"Стоматологические услуги",icon:"🦷",color:"#7c3aed",items:[
+      {name:"Стоматологический осмотр",desc:"Первичный осмотр и консультация стоматолога",price:40000,featured:false,tag:""},
+      {name:"Лечение кариеса (1 зуб)",desc:"Терапевтическое лечение кариеса одного зуба",price:65000,featured:false,tag:""},
+      {name:"Удаление зуба",desc:"Хирургическое удаление зуба",price:55000,featured:false,tag:""},
+      {name:"Профессиональная чистка зубов",desc:"Гигиеническая чистка полости рта",price:70000,featured:false,tag:""},
+      {name:"Установка пломбы",desc:"Пломбирование зуба качественными материалами",price:50000,featured:false,tag:""},
+      {name:"Протезирование (1 единица)",desc:"Установка зубного протеза",price:120000,featured:false,tag:""}
+    ]},
+    {id:"c3",num:"Глава III",title:"Диагностика и лабораторные исследования",icon:"🔬",color:"#0284c7",items:[
+      {name:"Общий анализ крови",desc:"Клинический анализ крови",price:25000,featured:false,tag:""},
+      {name:"Биохимический анализ крови",desc:"Расширенный биохимический анализ",price:35000,featured:false,tag:""},
+      {name:"Общий анализ мочи",desc:"Клинический анализ мочи",price:15000,featured:false,tag:""},
+      {name:"УЗИ (1 область)",desc:"Ультразвуковое исследование одной области",price:55000,featured:false,tag:""},
+      {name:"ЭКГ",desc:"Исследование работы сердца",price:40000,featured:false,tag:""},
+      {name:"Рентгенография (1 снимок)",desc:"Рентгеновское исследование",price:45000,featured:false,tag:""},
+      {name:"Флюорография",desc:"Исследование органов грудной клетки",price:30000,featured:false,tag:""},
+      {name:"МРТ (1 область)",desc:"Магнитно-резонансная томография",price:150000,featured:false,tag:""},
+      {name:"ДНК-тест на установление родства",desc:"Генетическое исследование",price:85000,featured:false,tag:""}
+    ]},
+    {id:"c4",num:"Глава IV",title:"Офтальмологические услуги",icon:"👁",color:"#059669",items:[
+      {name:"Консультация офтальмолога",desc:"Приём и консультация врача-офтальмолога",price:45000,featured:false,tag:""},
+      {name:"Проверка зрения и подбор очков",desc:"Диагностика зрения с подбором коррекции",price:35000,featured:false,tag:""},
+      {name:"Осмотр глазного дна",desc:"Офтальмоскопия глазного дна",price:40000,featured:false,tag:""}
+    ]},
+    {id:"c5",num:"Глава V",title:"Дополнительные услуги",icon:"➕",color:"#d97706",items:[
+      {name:"Консультация хирурга",desc:"Приём и консультация врача-хирурга",price:60000,featured:false,tag:""},
+      {name:"Консультация кардиолога",desc:"Приём и консультация врача-кардиолога",price:55000,featured:false,tag:""},
+      {name:"Консультация невролога",desc:"Приём и консультация врача-невролога",price:55000,featured:false,tag:""},
+      {name:"Консультация дерматолога",desc:"Приём и консультация врача-дерматолога",price:45000,featured:false,tag:""},
+      {name:"Вакцинация (1 прививка)",desc:"Профилактическая вакцинация",price:35000,featured:false,tag:""},
+      {name:"Оформление больничного листа",desc:"Выдача листка нетрудоспособности",price:40000,featured:false,tag:""},
+      {name:"Справка о состоянии здоровья",desc:"Медицинская справка общего образца",price:30000,featured:false,tag:""},
+      {name:"Расширенный комплексный медицинский осмотр",desc:"Включает все услуги комплексного осмотра, стоматологический осмотр, консультацию офтальмолога, ЭКГ, флюорографию, общий и биохимический анализы крови",price:350000,featured:true,tag:"Максимум"}
+    ]}
+  ]
+};
+
+let DATA=null;
+const selected=new Set();
+
+async function boot(){
+  DATA=await CGB_SITE_DATA.load(KEY,DEFAULT);
+  renderAll();
+  updateAdminUI();
+  if(window.CGB_ROLES) CGB_ROLES.onChange(updateAdminUI);
+  if(window.CGB_AUTH) CGB_AUTH.onChange(updateAdminUI);
+}
+function updateAdminUI(){
+  const ok=CGB_SITE_DATA.canEdit("services");
+  $("editPageBtn").style.display=ok?"":"none";
+  const authState=window.CGB_AUTH&&window.CGB_AUTH.state;
+  const logged=!!(authState&&authState.ready&&authState.user);
+  $("svExportBtn").style.display=logged?"inline-flex":"none";
+  if(!logged) $("svExportModal").classList.remove("active");
+}
+function mergeDiscount(){const d=DATA.discount||{};return {min:+d.min||5,percent:+d.percent||10,currency:d.currency||"₽"}}
+
+function renderAll(){
+  $("heroOverline").textContent=DATA.hero.overline||"";
+  $("heroTitle").innerHTML=esc(DATA.hero.title||"")+" <span>"+esc(DATA.hero.accent||"")+"</span>";
+  $("heroDesc").textContent=DATA.hero.desc||"";
+  $("heroChips").innerHTML=(DATA.hero.chips||[]).map(c=>`<div class="sv-chip"><span class="em">${esc(c.icon)}</span> ${esc(c.text)}</div>`).join("");
+  const disc=mergeDiscount();
+  let total=0;(DATA.categories||[]).forEach(c=>total+=(c.items||[]).length);
+  $("statServices").textContent=total;
+  $("statCats").textContent=(DATA.categories||[]).length;
+  $("statDiscount").textContent=disc.percent+"%";
+  $("bannerTitle").textContent=DATA.banner.title||"";
+  $("bannerText").textContent=DATA.banner.text||"";
+  $("svBanner").style.display=(DATA.banner.title||DATA.banner.text)?"":"none";
+  $("svOrderBtn").textContent="✈ "+(DATA.orderLabel||"Записаться");
+  $("svOrderBtn").href=DATA.orderUrl||"#";
+  renderCats();
+  renderChapters();
+  updateCalc();
+}
+
+let query="";
+let activeCat=null;
+function renderCats(){
+  const box=$("svCats");if(!box) return;
+  const cats=DATA.categories||[];
+  const mk=(idx,icon,label,count)=>`<button class="sv-cat-chip ${activeCat===idx?"active":""}" data-cat="${idx}"><span class="em">${esc(icon)}</span>${esc(label)}<small>${count}</small></button>`;
+  let total=0;cats.forEach(c=>total+=(c.items||[]).length);
+  box.innerHTML=mk(null,"🗂","Все разделы",total)+cats.map((c,i)=>mk(i,c.icon||"🩺",c.title,(c.items||[]).length)).join("");
+  box.querySelectorAll("[data-cat]").forEach(b=>b.addEventListener("click",()=>{
+    activeCat=(b.dataset.cat==="null")?null:+b.dataset.cat;
+    renderCats();renderChapters();
+  }));
+}
+function renderChapters(){
+  const box=$("svChapters");
+  const q=query.trim().toLowerCase();
+  let n=0;
+  box.innerHTML=(DATA.categories||[]).map((cat,ci)=>{
+    if(activeCat!==null&&ci!==activeCat) return "";
+    let items=(cat.items||[]).map((it,ii)=>({it,ii})).filter(x=>!q||(x.it.name+" "+(x.it.desc||"")).toLowerCase().includes(q));
+    if(!items.length&&q) return "";
+    n++;
+    const rows=items.map(({it,ii})=>{
+      const id=ci+":"+ii;
+      return `<div class="sv-card ${it.featured?"featured":""} ${selected.has(id)?"selected":""}" data-id="${id}">
+        <div class="sv-check">✓</div>
+        <div class="sv-body">
+          <div class="sv-num">${ii+1}</div>
+          <div class="sv-name">${esc(it.name)}</div>
+          ${it.desc?`<div class="sv-description">${esc(it.desc)}</div>`:""}
+        </div>
+        <div class="sv-price">
+          <div class="sv-price-v">${fmt(it.price)}</div>
+          ${it.tag?`<div class="sv-price-tag">★ ${esc(it.tag)}</div>`:""}
+        </div>
+      </div>`;
+    }).join("");
+    return `<div class="sv-chapter" style="--chap-color:${esc(cat.color||"#0891b2")}">
+      <div class="sv-chap-head">
+        <div class="sv-chap-icon">${esc(cat.icon||"🩺")}</div>
+        <div><div class="sv-chap-num">${esc(cat.num||"")}</div><div class="sv-chap-title">${esc(cat.title)}</div></div>
+        <div class="sv-chap-badge">${(cat.items||[]).length} услуг</div>
+      </div>
+      <div class="sv-grid">${rows}</div>
+    </div>`;
+  }).join("");
+  if(!n) box.innerHTML=`<div class="empty-state">Ничего не найдено по запросу «${esc(query)}»</div>`;
+  box.querySelectorAll(".sv-card").forEach(card=>card.addEventListener("click",()=>{
+    const id=card.dataset.id;
+    if(selected.has(id)) selected.delete(id);else selected.add(id);
+    card.classList.toggle("selected");
+    updateCalc();
+  }));
+}
+
+function findItem(id){const[a,b]=id.split(":").map(Number);const c=(DATA.categories||[])[a];return c?(c.items||[])[b]:null}
+function updateCalc(){
+  const panel=$("svCalc");
+  const disc=mergeDiscount();
+  let sum=0;const names=[];
+  selected.forEach(id=>{const it=findItem(id);if(it){sum+=Number(it.price)||0;names.push({id,name:it.name})}});
+  if(!names.length){panel.classList.remove("active");return}
+  panel.classList.add("active");
+  $("svCalcList").innerHTML=names.map(x=>`<span class="sv-sel">${esc(x.name)}<button data-rm="${x.id}" title="Убрать">✕</button></span>`).join("");
+  $("svCalcList").querySelectorAll("[data-rm]").forEach(b=>b.addEventListener("click",e=>{
+    e.stopPropagation();
+    selected.delete(b.dataset.rm);
+    const card=document.querySelector(`.sv-card[data-id="${b.dataset.rm}"]`);
+    if(card) card.classList.remove("selected");
+    updateCalc();
+  }));
+  let final=sum,discSum=0;
+  if(names.length>=disc.min&&disc.percent>0){final=Math.round(sum*(100-disc.percent)/100);discSum=sum-final}
+  $("svCalcSum").textContent=fmt(final);
+  const db=$("svCalcDisc");
+  if(discSum>0){db.style.display="";db.textContent=`−${fmt(discSum)} (скидка ${disc.percent}%)`}
+  else db.style.display="none";
+}
+$("svCalcClear").addEventListener("click",()=>{
+  selected.clear();
+  document.querySelectorAll(".sv-card.selected").forEach(c=>c.classList.remove("selected"));
+  updateCalc();
+});
+$("svSearch").addEventListener("input",e=>{query=e.target.value;renderChapters()});
+
+/* ================= ЭКСПОРТ УСЛУГ ПО ГЛАВАМ ================= */
+const svExportModal=$("svExportModal"),svExportSelect=$("svExportChapter"),svExportPreview=$("svExportPreview"),svExportMsg=$("svExportMsg");
+function svExportLogged(){
+  const st=window.CGB_AUTH&&window.CGB_AUTH.state;
+  return !!(st&&st.ready&&st.user);
+}
+function svExportColor(cat){
+  const color=String(cat&&cat.color||"");
+  return /^#[0-9a-f]{6}$/i.test(color)?color:"#22d3ee";
+}
+function svExportMarkup(cat){
+  const items=Array.isArray(cat&&cat.items)?cat.items:[];
+  const date=new Date().toLocaleDateString("ru-RU",{day:"2-digit",month:"2-digit",year:"numeric"});
+  return `<section class="svx-sheet" style="--svx-color:${svExportColor(cat)}">
+    <div class="svx-brand">
+      <img src="assets/images/brand/logo.png" alt="ЦГБ №3">
+      <div class="svx-brand-copy"><div class="svx-brand-over">Министерство здравоохранения</div><div class="svx-brand-name">ЦГБ №3 · Центральная Городская</div></div>
+      <div class="svx-price-label">Прайс-лист медицинских услуг</div>
+    </div>
+    <div class="svx-head">
+      <div class="svx-icon">${esc(cat&&cat.icon||"🩺")}</div>
+      <div><div class="svx-num">${esc(cat&&cat.num||"Глава")}</div><div class="svx-title">${esc(cat&&cat.title||"Медицинские услуги")}</div></div>
+      <div class="svx-count"><b>${items.length}</b><span>услуг</span></div>
+    </div>
+    <div class="svx-grid">${items.map((it,index)=>`<article class="svx-item ${it.featured?"featured":""}">
+      <div class="svx-item-top"><div class="svx-index">${index+1}</div><div class="svx-service-name">${esc(it.name||"Услуга")}</div></div>
+      ${it.desc?`<div class="svx-desc">${esc(it.desc)}</div>`:""}
+      <div class="svx-item-foot"><div class="svx-price">${fmt(it.price)}</div>${it.tag?`<div class="svx-tag">★ ${esc(it.tag)}</div>`:""}</div>
+    </article>`).join("")}</div>
+    <div class="svx-footer"><span><strong>ЦГБ №3</strong> · внутренний прейскурант</span><span>Актуально на ${date}</span></div>
+  </section>`;
+}
+function svExportCurrentCat(){
+  const cats=DATA&&Array.isArray(DATA.categories)?DATA.categories:[];
+  return cats[Number(svExportSelect.value)||0]||null;
+}
+function svExportRefresh(){
+  const cat=svExportCurrentCat();
+  svExportPreview.innerHTML=cat?svExportMarkup(cat):'<div class="empty-state">В прайс-листе нет глав для экспорта.</div>';
+  svExportMsg.className="form-msg";svExportMsg.textContent="";
+}
+function svExportOpen(){
+  if(!svExportLogged()) return;
+  const cats=DATA&&Array.isArray(DATA.categories)?DATA.categories:[];
+  svExportSelect.innerHTML=cats.map((cat,index)=>`<option value="${index}">${esc(cat.num||"Глава")} · ${esc(cat.title||"Без названия")}</option>`).join("");
+  svExportSelect.value=activeCat!==null&&cats[activeCat]?String(activeCat):"0";
+  svExportRefresh();
+  svExportModal.classList.add("active");
+}
+function svExportFileName(cat){
+  const raw=((cat&&cat.num)||"Глава")+"_"+((cat&&cat.title)||"Медицинские_услуги");
+  return raw.replace(/[\\/:*?"<>|]+/g," ").replace(/\s+/g,"_").slice(0,100)+".png";
+}
+async function svWaitExportImages(node){
+  const images=Array.from(node.querySelectorAll("img"));
+  await Promise.all(images.map(img=>img.complete?Promise.resolve():new Promise(resolve=>{
+    const done=()=>resolve();img.addEventListener("load",done,{once:true});img.addEventListener("error",done,{once:true});
+  })));
+}
+async function svExportCanvas(){
+  if(!svExportLogged()) throw new Error("Экспорт доступен только после входа");
+  if(!window.html2canvas) throw new Error("Модуль PNG не загрузился — обновите страницу");
+  const cat=svExportCurrentCat();
+  if(!cat) throw new Error("Выберите главу");
+  const host=document.createElement("div");host.className="svx-render-host";host.innerHTML=svExportMarkup(cat);document.body.appendChild(host);
+  try{
+    if(document.fonts&&document.fonts.ready) await document.fonts.ready;
+    await svWaitExportImages(host);
+    await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+    return await html2canvas(host.firstElementChild,{backgroundColor:"#07131c",scale:2,useCORS:true,allowTaint:false,logging:false,imageTimeout:15000});
+  }finally{host.remove()}
+}
+function svCanvasBlob(canvas){
+  return new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(new Error("Не удалось создать PNG")),"image/png"));
+}
+async function svRunExport(mode){
+  const copyBtn=$("svExportCopy"),downloadBtn=$("svExportDownload"),activeBtn=mode==="copy"?copyBtn:downloadBtn;
+  const old=activeBtn.textContent;copyBtn.disabled=true;downloadBtn.disabled=true;activeBtn.textContent="⏳ Создание PNG...";
+  svExportMsg.className="form-msg info";svExportMsg.textContent="Формируем изображение в браузере...";
+  try{
+    const canvas=await svExportCanvas();const blob=await svCanvasBlob(canvas);const cat=svExportCurrentCat();
+    if(mode==="copy"){
+      if(!navigator.clipboard||!window.ClipboardItem) throw new Error("Буфер изображений недоступен — используйте скачивание");
+      await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);
+      svExportMsg.className="form-msg success";svExportMsg.textContent="✓ PNG скопирован — можно вставлять в Discord";
+    }else{
+      const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=svExportFileName(cat);document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1200);
+      svExportMsg.className="form-msg success";svExportMsg.textContent="✓ PNG скачан";
+    }
+  }catch(err){svExportMsg.className="form-msg error";svExportMsg.textContent="Ошибка: "+(err&&err.message||err)}
+  finally{copyBtn.disabled=false;downloadBtn.disabled=false;activeBtn.textContent=old}
+}
+$("svExportBtn").addEventListener("click",svExportOpen);
+svExportSelect.addEventListener("change",svExportRefresh);
+$("svExportCopy").addEventListener("click",()=>svRunExport("copy"));
+$("svExportDownload").addEventListener("click",()=>svRunExport("download"));
+svExportModal.querySelector(".modal-close").addEventListener("click",()=>svExportModal.classList.remove("active"));
+svExportModal.addEventListener("click",e=>{if(e.target===svExportModal)svExportModal.classList.remove("active")});
+
+/* ================= РЕДАКТОР ================= */
+const editModal=$("editModal"), edSide=$("edSide"), edMain=$("edMain"), edMsg=$("edMsg");
+let ED=null, edTab="hero", edCat=null;
+function uid(){return "c"+Math.random().toString(36).slice(2,8)}
+$("editPageBtn").addEventListener("click",()=>{
+  ED=JSON.parse(JSON.stringify(DATA));
+  edTab="hero";edCat=(ED.categories[0]||{}).id||null;
+  edMsg.className="form-msg";edMsg.textContent="";
+  renderEd();
+  editModal.classList.add("active");
+});
+$("edCancel").addEventListener("click",()=>editModal.classList.remove("active"));
+editModal.querySelector(".modal-close").addEventListener("click",()=>editModal.classList.remove("active"));
+editModal.addEventListener("click",e=>{if(e.target===editModal)editModal.classList.remove("active")});
+
+edSide.addEventListener("click",e=>{
+  const t=e.target.closest("[data-tab]");
+  if(t){edTab=t.dataset.tab;edCat=null;renderEd();return}
+  const c=e.target.closest("[data-cat]");
+  if(c){edTab="cat";edCat=c.dataset.cat;renderEd();return}
+  if(e.target.closest("#edAddCat")){
+    const id=uid();
+    ED.categories.push({id,num:"Глава "+(ED.categories.length+1),title:"Новая категория",icon:"🩺",color:"#0891b2",items:[]});
+    edTab="cat";edCat=id;renderEd();
+  }
+});
+
+function renderEd(){
+  edSide.querySelectorAll("[data-tab]").forEach(el=>el.classList.toggle("active",el.dataset.tab===edTab));
+  $("edCatList").innerHTML=ED.categories.map(c=>`<div class="chap-item ${edTab==="cat"&&edCat===c.id?"active":""}" data-cat="${c.id}"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(c.icon||"")} ${esc(c.title||"Без названия")}</span></div>`).join("");
+  if(edTab==="hero") renderEdHero();
+  else if(edTab==="sale") renderEdSale();
+  else if(edTab==="banner") renderEdBanner();
+  else renderEdCat();
+}
+function bindIn(sel,fn){const el=edMain.querySelector(sel);if(el)el.addEventListener("input",()=>fn(el.value))}
+
+function renderEdHero(){
+  edMain.innerHTML=`
+    <div class="form-group"><label>Надзаголовок</label><input id="ehOv" value="${esc(ED.hero.overline||"")}"></div>
+    <div class="sv-ed-grid2">
+      <div class="form-group"><label>Заголовок (первая часть)</label><input id="ehT" value="${esc(ED.hero.title||"")}"></div>
+      <div class="form-group"><label>Акцент (вторая часть, выделена)</label><input id="ehA" value="${esc(ED.hero.accent||"")}"></div>
+    </div>
+    <div class="form-group"><label>Описание</label><textarea id="ehD" style="min-height:70px">${esc(ED.hero.desc||"")}</textarea></div>
+    <h4 style="font-family:'Cormorant Garamond',serif;color:var(--gold-b);margin:14px 0 8px">Чипы шапки</h4>
+    <div id="ehChips"></div>
+    <button class="editor-add-btn" id="ehAddChip">+ Добавить чип</button>`;
+  bindIn("#ehOv",v=>ED.hero.overline=v);bindIn("#ehT",v=>ED.hero.title=v);
+  bindIn("#ehA",v=>ED.hero.accent=v);bindIn("#ehD",v=>ED.hero.desc=v);
+  const box=edMain.querySelector("#ehChips");
+  const draw=()=>{
+    box.innerHTML=(ED.hero.chips||[]).map((c,i)=>`
+      <div class="sv-ed-row">
+        <input style="width:70px;text-align:center" value="${esc(c.icon||"")}" data-ci="${i}" placeholder="🏥">
+        <div class="form-group"><input value="${esc(c.text||"")}" data-ct="${i}" placeholder="Текст чипа"></div>
+        <button class="sv-ed-mini danger" data-cd="${i}">✕</button>
+      </div>`).join("");
+    box.querySelectorAll("[data-ci]").forEach(el=>el.addEventListener("input",()=>ED.hero.chips[+el.dataset.ci].icon=el.value));
+    box.querySelectorAll("[data-ct]").forEach(el=>el.addEventListener("input",()=>ED.hero.chips[+el.dataset.ct].text=el.value));
+    box.querySelectorAll("[data-cd]").forEach(el=>el.addEventListener("click",()=>{ED.hero.chips.splice(+el.dataset.cd,1);draw()}));
+  };
+  draw();
+  edMain.querySelector("#ehAddChip").addEventListener("click",()=>{ED.hero.chips=ED.hero.chips||[];ED.hero.chips.push({icon:"🏥",text:"Новый чип"});draw()});
+}
+
+function renderEdSale(){
+  const d=mergeDiscount();ED.discount=Object.assign({},ED.discount,d);
+  edMain.innerHTML=`
+    <div class="sv-ed-grid2">
+      <div class="form-group"><label>Скидка действует от (услуг)</label><input id="esMin" type="number" min="1" value="${d.min}"></div>
+      <div class="form-group"><label>Размер скидки, %</label><input id="esPc" type="number" min="0" max="100" value="${d.percent}"></div>
+    </div>
+    <div class="form-group"><label>Валюта (символ)</label><input id="esCur" value="${esc(d.currency)}" style="max-width:120px"></div>
+    <div class="sv-ed-grid2">
+      <div class="form-group"><label>Текст кнопки записи</label><input id="esLbl" value="${esc(ED.orderLabel||"Записаться")}"></div>
+      <div class="form-group"><label>Ссылка кнопки (Discord/форум)</label><input id="esUrl" value="${esc(ED.orderUrl||"")}"></div>
+    </div>`;
+  bindIn("#esMin",v=>ED.discount.min=+v||5);bindIn("#esPc",v=>ED.discount.percent=+v||0);
+  bindIn("#esCur",v=>ED.discount.currency=v||"₽");
+  bindIn("#esLbl",v=>ED.orderLabel=v);bindIn("#esUrl",v=>ED.orderUrl=v);
+}
+
+function renderEdBanner(){
+  edMain.innerHTML=`
+    <div class="form-group"><label>Заголовок баннера</label><input id="ebT" value="${esc(ED.banner.title||"")}"></div>
+    <div class="form-group"><label>Текст баннера</label><textarea id="ebX" style="min-height:90px">${esc(ED.banner.text||"")}</textarea></div>
+    <div style="font-size:12px;color:var(--muted)">Оставьте оба поля пустыми, чтобы скрыть баннер.</div>`;
+  bindIn("#ebT",v=>ED.banner.title=v);bindIn("#ebX",v=>ED.banner.text=v);
+}
+
+function renderEdCat(){
+  const cat=ED.categories.find(c=>c.id===edCat);
+  if(!cat){edMain.innerHTML=`<div class="empty-state">Выберите категорию слева или создайте новую.</div>`;return}
+  edMain.innerHTML=`
+    <div class="sv-ed-grid2">
+      <div class="form-group"><label>Номер / подпись главы</label><input id="ecNum" value="${esc(cat.num||"")}"></div>
+      <div class="form-group"><label>Название категории</label><input id="ecT" value="${esc(cat.title||"")}"></div>
+    </div>
+    <div class="sv-ed-grid2">
+      <div class="form-group"><label>Иконка (эмодзи)</label><input id="ecI" value="${esc(cat.icon||"")}" style="max-width:90px;text-align:center;font-size:18px"></div>
+      <div class="form-group"><label>Цвет категории</label><input id="ecC" type="color" class="sv-color" value="${esc(cat.color||"#0891b2")}"></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+      <button class="sv-ed-mini" id="ecUp">↑ Выше</button>
+      <button class="sv-ed-mini" id="ecDown">↓ Ниже</button>
+      <button class="sv-ed-mini danger" id="ecDel">🗑 Удалить категорию</button>
+    </div>
+    <h4 style="font-family:'Cormorant Garamond',serif;color:var(--gold-b);margin:10px 0 8px">Услуги (${(cat.items||[]).length})</h4>
+    <div id="ecItems"></div>
+    <button class="editor-add-btn" id="ecAdd">+ Добавить услугу</button>`;
+  bindIn("#ecNum",v=>{cat.num=v;renderEd()});bindIn("#ecT",v=>{cat.title=v;renderEd()});
+  bindIn("#ecI",v=>{cat.icon=v;renderEd()});bindIn("#ecC",v=>{cat.color=v});
+  edMain.querySelector("#ecUp").addEventListener("click",()=>{
+    const i=ED.categories.indexOf(cat);if(i>0){ED.categories.splice(i,1);ED.categories.splice(i-1,0,cat);renderEd()}
+  });
+  edMain.querySelector("#ecDown").addEventListener("click",()=>{
+    const i=ED.categories.indexOf(cat);if(i<ED.categories.length-1){ED.categories.splice(i,1);ED.categories.splice(i+1,0,cat);renderEd()}
+  });
+  edMain.querySelector("#ecDel").addEventListener("click",()=>{
+    if(!confirm("Удалить категорию со всеми услугами?"))return;
+    ED.categories=ED.categories.filter(c=>c.id!==cat.id);
+    edCat=(ED.categories[0]||{}).id||null;renderEd();
+  });
+  const box=edMain.querySelector("#ecItems");
+  const draw=()=>{
+    box.innerHTML=(cat.items||[]).map((it,i)=>`
+      <div class="sv-ed-item">
+        <div class="sv-ed-item-h"><b>Услуга ${i+1}</b>
+          <button class="sv-ed-mini" data-up="${i}">↑</button>
+          <button class="sv-ed-mini" data-dn="${i}">↓</button>
+          <button class="sv-ed-mini danger" data-del="${i}">✕</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 120px;gap:8px">
+          <input value="${esc(it.name||"")}" data-n="${i}" placeholder="Название услуги">
+          <input type="number" min="0" value="${+it.price||0}" data-p="${i}" placeholder="Цена">
+        </div>
+        <textarea data-d="${i}" placeholder="Описание" style="margin-top:8px">${esc(it.desc||"")}</textarea>
+        <div class="sv-ed-item-flags">
+          <label><input type="checkbox" data-f="${i}" ${it.featured?"checked":""}> Выделенная (featured)</label>
+          <input style="max-width:140px" value="${esc(it.tag||"")}" data-tg="${i}" placeholder="Метка (Выгодно)">
+        </div>
+      </div>`).join("");
+    box.querySelectorAll("[data-n]").forEach(el=>el.addEventListener("input",()=>cat.items[+el.dataset.n].name=el.value));
+    box.querySelectorAll("[data-p]").forEach(el=>el.addEventListener("input",()=>cat.items[+el.dataset.p].price=+el.value||0));
+    box.querySelectorAll("[data-d]").forEach(el=>el.addEventListener("input",()=>cat.items[+el.dataset.d].desc=el.value));
+    box.querySelectorAll("[data-f]").forEach(el=>el.addEventListener("change",()=>cat.items[+el.dataset.f].featured=el.checked));
+    box.querySelectorAll("[data-tg]").forEach(el=>el.addEventListener("input",()=>cat.items[+el.dataset.tg].tag=el.value));
+    box.querySelectorAll("[data-del]").forEach(el=>el.addEventListener("click",()=>{cat.items.splice(+el.dataset.del,1);draw();renderSideCount(cat)}));
+    box.querySelectorAll("[data-up]").forEach(el=>el.addEventListener("click",()=>{const i=+el.dataset.up;if(i>0){const[x]=cat.items.splice(i,1);cat.items.splice(i-1,0,x);draw()}}));
+    box.querySelectorAll("[data-dn]").forEach(el=>el.addEventListener("click",()=>{const i=+el.dataset.dn;if(i<cat.items.length-1){const[x]=cat.items.splice(i,1);cat.items.splice(i+1,0,x);draw()}}));
+  };
+  draw();
+  edMain.querySelector("#ecAdd").addEventListener("click",()=>{cat.items=cat.items||[];cat.items.push({name:"Новая услуга",desc:"",price:0,featured:false,tag:""});draw()});
+}
+function renderSideCount(){/* no-op для простоты */}
+
+$("edSave").addEventListener("click",async()=>{
+  edMsg.className="form-msg info";edMsg.textContent="Сохранение...";
+  const r=await CGB_SITE_DATA.save(KEY,ED);
+  if(r.ok){
+    DATA=ED;renderAll();
+    edMsg.className="form-msg success";
+    edMsg.textContent=r.remote?"Сохранено в Supabase — видно всем":"Сохранено локально в этом браузере";
+    setTimeout(()=>editModal.classList.remove("active"),700);
+  }else{edMsg.className="form-msg error";edMsg.textContent="Ошибка: "+(r.error||"")}
+});
+
+boot();
+</script>
+</body>
+</html>

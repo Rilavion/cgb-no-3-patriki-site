@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title>Личный кабинет — ЦГБ №3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=26">
+<style id="cgb-admin-guard">
+[data-admin]{display:none !important}
+body.cgb-is-admin .nav a[data-admin],body.cgb-is-admin .footer-col a[data-admin]{display:inline-flex !important}
+body.cgb-is-admin .footer-col a[data-admin]{display:block !important}
+</style>
+<script>
+(function(){
+  var _lkChecked=false;
+  function apply(){
+    var s=window.CGB_AUTH&&window.CGB_AUTH.state;if(!s||!s.ready) return;
+    if(!window.CGB_ROLES||!window.CGB_ROLES.getMyRole) return;
+    var role=window.CGB_ROLES.getMyRole();
+    if(role===null&&s.user) return;
+    _lkChecked=true;
+    if(!s.user){return}
+  }
+  document.addEventListener("DOMContentLoaded",function(){
+    apply();
+    if(window.CGB_ROLES&&window.CGB_ROLES.onChange) window.CGB_ROLES.onChange(apply);
+    if(window.CGB_AUTH&&window.CGB_AUTH.onChange) window.CGB_AUTH.onChange(apply);
+    var t=setInterval(function(){if(window.CGB_ROLES){clearInterval(t);apply()}},80);
+    setTimeout(function(){clearInterval(t)},4000);
+  });
+})();
+</script>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+<div class="bg-noise"></div>
+<div class="page-transition-overlay" id="overlay"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ВС"></div>
+      <div class="brand-text">
+        <span class="brand-label">Министерство Здравоохранения</span>
+        <span class="brand-name">ЦГБ №3 · Центральная Городская</span>
+      </div>
+    </a>
+    <nav class="nav" id="mainNav">
+      <a href="index.html" data-page="index.html" data-transition>Главная</a>
+      <a href="info.html" data-page="info.html" data-transition>Информация</a>
+      <a href="services.html" data-page="services.html" data-transition>Услуги</a>
+      <a href="meds.html" data-page="meds.html" data-transition>Медикаменты</a>
+      <a href="ustav.html" data-page="ustav.html" data-transition>Устав</a>
+      <a href="learn.html" data-page="learn.html" data-transition data-loggedin>Учебные материалы</a>
+      <a href="tests.html" data-page="tests.html" data-transition data-loggedin>Тестирование</a>
+      <a href="composition.html" data-page="composition.html" data-transition>Состав</a>
+      <a href="docs.html" data-page="docs.html" data-transition data-perm="docs:view">Документы</a>
+      <a href="news.html" data-page="news.html" data-transition>Новости</a>
+      <a href="autopark.html" data-page="autopark.html" data-transition>Автопарк</a>
+      <a href="map.html" data-page="map.html" data-transition>Карта</a>
+      <a href="faq.html" data-page="faq.html" data-transition>FAQ</a>
+      <a href="complaints.html" data-page="complaints.html" data-transition>Жалобы</a>
+      <a href="supply.html" data-page="supply.html" data-transition data-perm="supply:view">Поставки</a>
+      <a href="apps.html" data-page="apps.html" data-transition data-perm="apps:view">Заявления</a>
+      <a href="vp.html" data-page="vp.html" data-transition data-perm="vp:view">Проверки АБ</a>
+      <a href="complaints-review.html" data-page="complaints-review.html" data-transition data-perm="complaints:review,complaints:view">Рассмотрение жалоб</a>
+      <a href="complaints-stats.html" data-page="complaints-stats.html" data-transition data-perm="complaints:review,complaints:view">Статистика жалоб</a>
+      <a href="leave.html" data-page="leave.html" data-transition data-loggedin>Отгул</a>
+      <a href="vacation-ic.html" data-page="vacation-ic.html" data-transition data-loggedin>Отпуск IC</a>
+      <a href="vacation-ooc.html" data-page="vacation-ooc.html" data-transition data-loggedin>Отпуск OOC</a>
+      <a href="dismissal.html" data-page="dismissal.html" data-transition data-loggedin>Увольнение</a>
+      <a href="promotion.html" data-page="promotion.html" data-transition data-loggedin>Повышение</a>
+      <a href="restoration.html" data-page="restoration.html" data-transition>Восстановление в ЦГБ №3</a>
+      <a href="appointment.html" data-page="appointment.html" data-transition>Запись к врачу</a>
+      <a href="requests-review.html" data-page="requests-review.html" data-transition data-perm="requests:review,requests:view">Рассмотрение заявок</a>
+      <a href="requests-stats.html" data-page="requests-stats.html" data-transition data-perm="requests:review,requests:view">Статистика заявок</a>
+      <a href="payroll.html" data-page="payroll.html" data-transition data-perm="payroll:view">Реестр премирования</a>
+      <a href="report.html" data-page="report.html" data-transition>Еженедельный отчёт</a>
+      <a href="report-settings.html" data-page="report-settings.html" data-transition data-perm="report:settings">Настройки отчётов</a>
+      <a href="vp-request.html" data-page="vp-request.html" data-transition data-perm="vp_request:submit">Запрос на наказание</a>
+      <a href="vp-request-settings.html" data-page="vp-request-settings.html" data-transition data-perm="vp_request:settings">Настройки запросов АБ</a>
+      <a href="lk.html" data-page="lk.html" data-transition>Личный кабинет</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Сменить тему">
+        <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24"><path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66l1.42-1.42M4.92 19.08l1.42-1.42m0-11.32L4.92 4.92m14.16 14.16l-1.42-1.42M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="login-btn" data-open-login>
+        <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/></svg>
+        <span>Войти</span>
+      </button>
+      <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="section" style="padding-top:32px">
+    <div class="container lk-wrap">
+
+      <div id="lkGuest" class="lk-guest" style="display:none">
+        <svg viewBox="0 0 24 24"><path d="M12 17a2 2 0 0 0 2-2 2 2 0 0 0-2-2 2 2 0 0 0-2 2 2 2 0 0 0 2 2m6-9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2h1V6a5 5 0 0 1 5-5 5 5 0 0 1 5 5v2h1M12 2.9A3.1 3.1 0 0 0 8.9 6V8h6.2V6A3.1 3.1 0 0 0 12 2.9z"/></svg>
+        <h2>Личный кабинет</h2>
+        <p>Доступ имеют только авторизованные администраторы. Войдите в систему для управления сайтом.</p>
+        <button class="btn btn-gold" data-open-login>Войти</button>
+      </div>
+
+      <div id="lkApp" style="display:none">
+        <div class="lk-head">
+          <div class="lk-avatar" id="lkAvatar">?</div>
+          <div class="lk-head-body">
+            <div class="lk-hello" id="lkHello">С возвращением</div>
+            <div class="lk-email" id="lkEmail">—</div>
+          </div>
+          <div class="lk-head-actions">
+            <button class="lk-logout lk-settings-btn" data-open-settings title="Панель сайта" data-admin>⚙ Панель сайта</button>
+            <button class="lk-logout" id="lkLogout">Выйти</button>
+          </div>
+        </div>
+
+        <div class="lk-grid">
+          <div class="lk-panel">
+            <div class="lk-panel-head">
+              <span class="lk-panel-title">Журнал аудита</span>
+            </div>
+            <div class="lk-panel-body">
+              <div class="lk-audit-controls">
+                <input type="text" id="lkAuditSearch" class="msg-input" placeholder="🔍 Поиск: по имени, коду, типу, дате...">
+                <select id="lkAuditType" class="msg-input" style="max-width:180px">
+                  <option value="">Все типы</option>
+                  <option value="news">📰 Новости</option>
+                  <option value="vehicle">🚙 Автопарк</option>
+                  <option value="ustav">📖 Уставы</option>
+                  <option value="lesson">🎓 Уроки</option>
+                  <option value="test">📝 Тесты</option>
+                  <option value="holiday">🎨 Праздничная тема</option>
+                  <option value="composition">👥 Состав</option>
+                  <option value="raid">💥 Налёты</option>
+                  <option value="app">📋 Заявления</option>
+                  <option value="complaint">⚠ Жалобы</option>
+                  <option value="request">📄 Заявки</option>
+                  <option value="violation">⚠ Нарушения</option>
+                  <option value="vp">🎖 ВП</option>
+                  <option value="supply">📦 Поставки</option>
+                  <option value="payroll">💰 Премии</option>
+                  <option value="role">👤 Роли</option>
+                </select>
+                <select id="lkAuditPeriod" class="msg-input" style="max-width:150px">
+                  <option value="">Всё время</option>
+                  <option value="1">За сутки</option>
+                  <option value="7">За неделю</option>
+                  <option value="30">За месяц</option>
+                </select>
+              </div>
+              <div class="lk-audit" id="lkAudit">
+                <div class="lk-act-empty">Загрузка активности...</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lk-panel">
+            <div class="lk-panel-head">
+              <span class="lk-panel-title">🔔 Уведомления на сайте</span>
+            </div>
+            <div class="lk-panel-body">
+              <div id="npBox">
+                <div class="np-status">💡 Работают <b>только когда сайт открыт</b> в вкладке. Всплывающие карточки в правом верхнем углу + короткий звук. Проверяют новые события каждые 25 секунд.</div>
+                <div class="np-master">
+                  <label class="np-toggle"><input type="checkbox" id="npEnabled"><span>🔔 Показывать всплывающие уведомления</span></label>
+                  <label class="np-toggle"><input type="checkbox" id="npSound"><span>🔊 Проигрывать звук</span></label>
+                  <button class="btn btn-ghost btn-sm" id="npTestBtn" style="margin-top:8px">🎯 Тест (звук + карточка)</button>
+                </div>
+                <div class="np-events" id="npEvents" style="display:none;margin-top:14px">
+                  <div class="np-events-title">Типы событий (доступны по вашей роли)</div>
+                  <div id="npEventsList"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lk-panel" data-perm="lk:settings">
+            <div class="lk-panel-head">
+              <span class="lk-panel-title">Праздничные темы</span>
+            </div>
+            <div class="lk-panel-body">
+
+              <div class="hf-panel">
+                <div class="hf-panel-title">Выбор темы</div>
+                <div class="hf-presets" id="hfPresets"></div>
+
+                <div class="hf-custom" id="hfCustom">
+                  <div class="hf-row">
+                    <div class="hf-field">
+                      <span class="hf-field-label">Основной цвет</span>
+                      <div class="hf-color-row"><input type="color" id="hfCustomColor" value="#37b3a0"><span class="hf-color-code" id="hfCustomColorCode">#37B3A0</span></div>
+                    </div>
+                    <div class="hf-field">
+                      <span class="hf-field-label">Второй цвет</span>
+                      <div class="hf-color-row"><input type="color" id="hfCustomColor2" value="#8fe0d0"><span class="hf-color-code" id="hfCustomColor2Code">#8FE0D0</span></div>
+                    </div>
+                  </div>
+                  <div class="hf-field">
+                    <span class="hf-field-label">Название праздника</span>
+                    <input class="hf-input" id="hfCustomLabel" placeholder="Название" maxlength="40">
+                  </div>
+                  <div class="hf-field">
+                    <span class="hf-field-label">Иконка</span>
+                    <div class="hf-icon-grid" id="hfIconGrid"></div>
+                  </div>
+                  <div class="hf-field">
+                    <span class="hf-field-label">Эффект на фоне</span>
+                    <div class="hf-fx-grid" id="hfFxGrid"></div>
+                  </div>
+                  <div class="hf-preview-box">
+                    <span class="hf-preview-icon" id="hfPreviewIcon">✦</span>
+                    <span class="hf-preview-text" id="hfPreviewText">МОЙ ПРАЗДНИК</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hf-panel">
+                <div class="hf-panel-title">Свой текст баннера</div>
+                <input class="hf-input" id="hfBanner" placeholder="ТРЕТЬЕ ВОСКРЕСЕНЬЕ ИЮНЯ — ДЕНЬ МЕДИЦИНСКОГО РАБОТНИКА" maxlength="80">
+                <div class="hf-hint">Оставьте пустым — используется стандартный текст выбранной темы. Отображается на всех страницах сайта. При открытии сайта — красивое приветствие на весь экран.</div>
+                <div class="hf-banner-toggle">
+                  <span>Показывать баннер сверху</span>
+                  <label class="fs-switch"><input type="checkbox" id="hfShow" checked><span class="fs-switch-track"><span class="fs-switch-thumb"></span></span></label>
+                </div>
+              </div>
+
+              <button class="btn btn-ghost btn-sm" id="hfPreview" style="width:100%;margin-top:4px">👁 Показать приветствие</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lk-full-block" data-admin>
+        <div class="lk-full-head">
+          <div>
+            <div class="lk-full-kicker">Администрирование</div>
+            <h2 class="lk-full-title">Роли пользователей</h2>
+          </div>
+          <div style="display:flex;gap:8px">
+            <a href="roles.html" data-page="roles.html" class="btn btn-ghost btn-sm">📖 Справочник ролей</a>
+            <button class="btn btn-ghost btn-sm" id="rolesRefreshBtn" title="Обновить список">🔄</button>
+            <button class="btn btn-gold btn-sm" id="rolesAddBtn">+ Создать аккаунт</button>
+          </div>
+        </div>
+        <div class="lk-full-body">
+          <div class="roles-hint">
+            Здесь вы создаёте учётные записи для Старшего Состава (СС). После входа они получают доступ к «Электронным заявлениям» и другим служебным разделам.
+          </div>
+          <div class="roles-list" id="rolesList">
+            <div class="roles-empty">Загрузка...</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <h4>Настройки сайта</h4>
+        <div class="footer-settings">
+          <div class="footer-settings-row">
+            <span class="footer-settings-label"><svg viewBox="0 0 24 24"><path d="M13 3l-1.5 6H15l-3.5 12v-8H9l1.5-10H13z"/></svg>Анимации</span>
+            <label class="fs-switch"><input type="checkbox" id="fsAnim" checked><span class="fs-switch-track"><span class="fs-switch-thumb"></span></span></label>
+          </div>
+          <div>
+            <div class="footer-settings-label" style="margin-bottom:8px"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>Фон</div>
+            <div class="fs-modes">
+              <button class="fs-mode" data-bg="falling">Атмосфера</button>
+              <button class="fs-mode" data-bg="grid"><svg viewBox="0 0 24 24"><path d="M4 4h6v6H4zm10 0h6v6h-6zm-10 10h6v6H4zm10 0h6v6h-6z"/></svg>Сеть</button>
+              <button class="fs-mode" data-bg="stars"><svg viewBox="0 0 24 24"><path d="M12 2l3 6.5 7 .8-5.2 4.7 1.5 7L12 17.3 5.7 21l1.5-7L2 9.3l7-.8z"/></svg>Звёзды</button>
+              <button class="fs-mode" data-bg="radar"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9h-2a7 7 0 1 1-7-7V3z"/><circle cx="12" cy="12" r="1.5"/></svg>Радар</button>
+            </div>
+          </div>
+          <div class="footer-settings-row fs-sound-row">
+            <span class="footer-settings-label">
+              <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4z"/></svg>
+              Звуки
+            </span>
+            <label class="fs-switch"><input type="checkbox" id="fsSound"><span class="fs-switch-track"><span class="fs-switch-thumb"></span></span></label>
+          </div>
+          <div class="fs-sound-vol"><span>тише</span><input type="range" id="fsSoundVol" min="0" max="1" step="0.05"><span id="fsSoundVolVal">35%</span></div>
+          <div class="footer-note">Настройки сохраняются в браузере</div>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Разделы</h5>
+        <a href="services.html" data-page="services.html">Услуги и цены</a>
+        <a href="meds.html" data-page="meds.html">Медикаменты</a>
+        <a href="index.html" data-page="index.html">Главная</a>
+        <a href="ustav.html" data-page="ustav.html">Устав</a>
+        <a href="composition.html" data-page="composition.html">Состав</a>
+        <a href="news.html" data-page="news.html">Новости</a>
+      </div>
+      <div class="footer-col">
+        <h5>Ресурсы</h5>
+        <a href="docs.html" data-page="docs.html" data-perm="docs:view">Документы</a>
+        <a href="autopark.html" data-page="autopark.html">Автопарк</a>
+        <a href="map.html" data-page="map.html">Карта</a>
+        <a href="faq.html" data-page="faq.html">FAQ</a>
+        <a href="lk.html" data-page="lk.html">Личный кабинет</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> · Министерство Здравоохранения</span>
+      <span>ЦГБ №3 · Центральная Городская</span>
+    </div>
+  </div>
+</footer>
+
+<div class="modal-back" id="loginModal">
+  <div class="modal">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Вход администратора</h3>
+    <div class="modal-sub">Доступ к управлению контентом</div>
+    <form>
+      <div class="form-group"><label>Email</label><input type="email" name="email" required></div>
+      <div class="form-group"><label>Пароль</label><input type="password" name="password" required></div>
+      <button class="btn btn-gold" style="width:100%" type="submit">Войти</button>
+      <div class="form-msg"></div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-back" id="createUserModal">
+  <div class="modal modal-lg">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Создать учётную запись</h3>
+    <div class="modal-sub">Новый пользователь получит доступ после подтверждения email (если включено в Supabase).</div>
+    <form id="createUserForm">
+      <div class="form-group"><label>Email</label><input name="email" type="email" required autocomplete="off"></div>
+      <div class="form-group"><label>Пароль (не менее 6 символов)</label><input name="password" type="password" minlength="6" required autocomplete="new-password"></div>
+      <div class="form-group"><label>Отображаемое имя (Должность + Фамилия)</label><input name="display_name" type="text" placeholder="Врач Иванов" required></div>
+      <div class="form-group">
+        <label>Роль</label>
+        <select name="role" id="createUserRoleSel" required>
+          <option value="">Загрузка ролей…</option>
+        </select>
+      </div>
+      <div class="form-msg"></div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap">
+        <button type="button" class="btn btn-ghost btn-sm" id="createUserCancel">Отмена</button>
+        <button type="submit" class="btn btn-gold btn-sm">Создать</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=18"></script>
+<script src="assets/js/core/config.js?v=18"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/utils/format-utils.js?v=18"></script>
+<script src="assets/js/core/auth.js?v=19"></script>
+<script src="assets/js/core/roles-engine.js?v=19"></script>
+<script src="assets/js/ui/holiday-engine.js?v=18"></script>
+<script src="assets/js/ui/settings-panel.js?v=18"></script>
+<script src="assets/js/ui/sound-engine.js?v=18"></script>
+<script src="assets/js/features/faq-engine.js?v=18"></script>
+<script src="assets/js/ui/search-engine.js?v=18"></script>
+<script src="assets/js/utils/ds-cache.js?v=18"></script>
+<script src="assets/js/ui/notify-engine.js?v=19"></script>
+<script src="assets/js/ui/notify-live.js?v=18"></script>
+
+<script src="assets/js/features/lk-engine.js?v=18"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+const $=id=>document.getElementById(id);
+const lkGuest=$("lkGuest"),lkApp=$("lkApp");
+
+function initials(s){const p=(s||"").trim().split(/[\s@.]+/);return (p.slice(0,2).map(x=>x[0]||"").join("")||"?").toUpperCase()}
+function esc(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+
+const TYPE_COLORS={
+  news:"#a5f3fc",vehicle:"#8fd97a",ustav:"#7ac3f0",lesson:"#c99af7",
+  app:"#38bdf8","app-verdict":"#a2d8ff",
+  complaint:"#e97a7a","complaint-verdict":"#a5f3fc",
+  violation:"#e97a7a","violation-removed":"#8fd97a",
+  vp:"#22d3ee","vp-check":"#8fd97a",
+  supply:"#c99af7",payroll:"#a5f3fc",
+  role:"#22d3ee"
+};
+const TYPE_LABELS={
+  news:"Новость",vehicle:"Техника",ustav:"Устав",lesson:"Урок",
+  app:"Заявление","app-verdict":"Вердикт",
+  complaint:"Жалоба","complaint-verdict":"Вердикт",
+  violation:"Нарушение","violation-removed":"Снятие",
+  vp:"АБ","vp-check":"Проверка АБ",
+  supply:"Поставка",payroll:"Премирование",
+  role:"Роль"
+};
+["leave","vacation_ic","vacation_ooc","promotion","dismissal"].forEach(k=>{
+  TYPE_COLORS["request-"+k]="#38bdf8";
+  TYPE_LABELS["request-"+k]="Заявка";
+});
+TYPE_COLORS["request-verdict"]="#a2d8ff";
+TYPE_LABELS["request-verdict"]="Вердикт";
+TYPE_COLORS["test"]="#c99af7";TYPE_LABELS["test"]="Тест";
+TYPE_COLORS["test-attempt"]="#8fd97a";TYPE_LABELS["test-attempt"]="Экзамен";
+TYPE_COLORS["test-review"]="#a5f3fc";TYPE_LABELS["test-review"]="Проверка";
+TYPE_COLORS["lesson-cat"]="#c99af7";TYPE_LABELS["lesson-cat"]="Категория";
+TYPE_COLORS["holiday"]="#a5f3fc";TYPE_LABELS["holiday"]="Тема";
+TYPE_COLORS["composition"]="#7ac3f0";TYPE_LABELS["composition"]="Состав";
+TYPE_COLORS["raid-success"]="#34d399";TYPE_LABELS["raid-success"]="Налёт ✅";
+TYPE_COLORS["raid-fail"]="#e97a7a";TYPE_LABELS["raid-fail"]="Налёт ❌";
+
+async function boot(){
+  await CGB_LK.waitReady();
+  const s=window.CGB_AUTH.state;
+  if(!s.user){lkGuest.style.display="";lkApp.style.display="none";return}
+  lkGuest.style.display="none";lkApp.style.display="";
+  const meta=s.user.user_metadata||{};
+  const displayName=meta.display_name||s.user.email.split("@")[0];
+  $("lkAvatar").textContent=initials(displayName);
+  $("lkHello").textContent="С возвращением, "+displayName;
+  $("lkEmail").textContent=s.user.email+" · онлайн";
+  renderAudit();
+  renderHolidayUI();
+  initNotifyPanel();
+}
+
+const NOTIFY_EVENTS=[
+  {key:"apps.new",label:"📋 Новые заявления",perm:["apps","view"]},
+  {key:"complaints.new",label:"⚠ Новые жалобы",perm:["complaints","review"]},
+  {key:"vp_request.new",label:"⚖ Запросы от АБ (на наказание)",perm:["vp_request","review"]},
+  {key:"requests.leave.new",label:"🕒 Заявки на отгулы",perm:["requests","review"]},
+  {key:"requests.vacation_ic.new",label:"🏖 Заявки на отпуск IC",perm:["requests","review"]},
+  {key:"requests.vacation_ooc.new",label:"💤 Заявки на отпуск OOC",perm:["requests","review"]},
+  {key:"requests.promotion.new",label:"⭐ Заявки на повышение",perm:["requests","review"]},
+  {key:"requests.dismissal.new",label:"⛔ Заявки на увольнение",perm:["requests","review"]},
+  {key:"requests.restoration.new",label:"🔄 Заявки на восстановление",perm:["requests","review"]}
+];
+
+function initNotifyPanel(){
+  if(!window.CGB_NOTIFY_LIVE) return;
+  const eventsBox=$("npEvents"),eventsList=$("npEventsList");
+
+  function render(){
+    const p=CGB_NOTIFY_LIVE.readPrefs();
+    $("npEnabled").checked=p.enabled!==false;
+    $("npSound").checked=p.sound!==false;
+    const perms=window.CGB_ROLES;
+    const available=NOTIFY_EVENTS.filter(ev=>{
+      if(!perms||!ev.perm) return true;
+      return perms.can(ev.perm[0],ev.perm[1]);
+    });
+    if(available.length){
+      eventsBox.style.display="";
+      eventsList.innerHTML=available.map(ev=>{
+        const on=(ev.key in (p.events||{}))?p.events[ev.key]:true;
+        return `<label class="np-toggle np-event"><input type="checkbox" data-ev="${ev.key}" ${on?"checked":""}><span>${ev.label}</span></label>`;
+      }).join("");
+      eventsList.querySelectorAll("[data-ev]").forEach(el=>el.addEventListener("change",()=>{
+        const key=el.getAttribute("data-ev");
+        const cur=CGB_NOTIFY_LIVE.readPrefs();
+        cur.events=cur.events||{};cur.events[key]=el.checked;
+        CGB_NOTIFY_LIVE.savePrefs(cur);
+      }));
+    } else {
+      eventsBox.style.display="none";
+    }
+  }
+
+  $("npEnabled").addEventListener("change",()=>{
+    const p=CGB_NOTIFY_LIVE.readPrefs();p.enabled=$("npEnabled").checked;CGB_NOTIFY_LIVE.savePrefs(p);
+  });
+  $("npSound").addEventListener("change",()=>{
+    const p=CGB_NOTIFY_LIVE.readPrefs();p.sound=$("npSound").checked;CGB_NOTIFY_LIVE.savePrefs(p);
+  });
+  $("npTestBtn").addEventListener("click",()=>{
+    CGB_NOTIFY_LIVE.showTest();
+    if($("npSound").checked) CGB_NOTIFY_LIVE.playTestSound();
+  });
+
+  if(window.CGB_ROLES) window.CGB_ROLES.onChange(render);
+  setTimeout(render,300);
+}
+
+let AUDIT_ALL=[];
+async function renderAudit(){
+  const box=$("lkAudit");
+  box.innerHTML='<div class="lk-act-empty">Загрузка активности...</div>';
+  AUDIT_ALL=await CGB_LK.recent({limit:200});
+  applyAuditFilter();
+}
+function applyAuditFilter(){
+  const box=$("lkAudit");
+  const q=(($("lkAuditSearch")||{}).value||"").trim().toLowerCase();
+  const type=($("lkAuditType")||{}).value||"";
+  const period=($("lkAuditPeriod")||{}).value||"";
+  const now=Date.now();
+  let items=AUDIT_ALL.slice();
+  if(type){
+    items=items.filter(it=>{
+      const t=it.type||"";
+      if(type==="request") return t.startsWith("request-");
+      if(type==="complaint") return t==="complaint"||t==="complaint-verdict";
+      if(type==="app") return t==="app"||t==="app-verdict";
+      if(type==="violation") return t==="violation"||t==="violation-removed";
+      if(type==="vp") return t==="vp"||t==="vp-check";
+      if(type==="test") return t==="test"||t==="test-attempt"||t==="test-review";
+      if(type==="lesson") return t==="lesson"||t==="lesson-cat";
+      if(type==="raid") return t==="raid-success"||t==="raid-fail";
+      return t===type;
+    });
+  }
+  if(period){
+    const cutoff=now-parseInt(period)*86400000;
+    items=items.filter(it=>{const t=new Date(it.at||0).getTime();return t>=cutoff});
+  }
+  if(q){
+    items=items.filter(it=>{
+      const hay=((it.title||"")+" "+(it.who||"")+" "+(it.type||"")+" "+(it.at||"")).toLowerCase();
+      return hay.indexOf(q)>=0;
+    });
+  }
+  if(!items.length){
+    box.innerHTML=`<div class="lk-act-empty">${q||type||period?"По фильтру ничего не найдено.":"Пока нет действий на сайте."}</div>`;
+    return;
+  }
+  box.innerHTML='<div class="lk-audit-count">Показано: <b>'+items.length+'</b> из '+AUDIT_ALL.length+'</div>'+items.map(it=>{
+    const when=it.at?new Date(it.at).toLocaleString("ru-RU",{timeZone:"Europe/Moscow",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):"";
+    const color=TYPE_COLORS[it.type]||"var(--gold)";
+    const label=TYPE_LABELS[it.type]||"Запись";
+    const who=it.who&&it.who!=="—"?`<span class="lk-audit-meta-sep">·</span><span class="lk-audit-who">👤 ${esc(it.who)}</span>`:"";
+    return `<a class="lk-audit-item" href="${it.href}" style="--item-color:${color}">
+      <span class="lk-audit-icon">${it.icon}</span>
+      <div class="lk-audit-body">
+        <div class="lk-audit-title">${esc(it.title)}</div>
+        <div class="lk-audit-meta">
+          <span class="lk-audit-meta-type">${label}</span>
+          ${who}
+          <span class="lk-audit-meta-sep">·</span>
+          <span>${when}</span>
+        </div>
+      </div>
+    </a>`;
+  }).join("");
+}
+document.addEventListener("input",e=>{
+  if(e.target&&(e.target.id==="lkAuditSearch"||e.target.id==="lkAuditType"||e.target.id==="lkAuditPeriod")) applyAuditFilter();
+});
+document.addEventListener("change",e=>{
+  if(e.target&&(e.target.id==="lkAuditType"||e.target.id==="lkAuditPeriod")) applyAuditFilter();
+});
+
+const HF_ICONS=["✦","★","⚔","◈","❆","⚜","☀","✧","♛","⚑","☭","⚓","✈","☘","♥","☆","❋","✺","☯","✵"];
+
+function renderHolidayUI(){
+  const cfg=CGB_HOLIDAY.readCfg();
+  const wrap=$("hfPresets");
+  wrap.innerHTML=Object.keys(CGB_HOLIDAY.PRESETS).map(id=>{
+    const p=CGB_HOLIDAY.PRESETS[id];
+    const isActive=cfg.preset===id;
+    const color=id==="custom"?(cfg.custom&&cfg.custom.color||p.color):p.color;
+    const icon=id==="custom"?(cfg.custom&&cfg.custom.icon||p.icon):p.icon;
+    const label=id==="custom"?(cfg.custom&&cfg.custom.label||p.label):p.label;
+    return `<button class="hf-preset ${isActive?"active":""}" data-preset="${id}" style="--hf-color:${color}">
+      <span class="hf-preset-icon">${icon}</span>${esc(label)}
+    </button>`;
+  }).join("");
+  wrap.querySelectorAll("[data-preset]").forEach(b=>b.addEventListener("click",()=>{
+    CGB_HOLIDAY.setPreset(b.dataset.preset);
+    renderHolidayUI();
+  }));
+  $("hfBanner").value=cfg.customBanner||"";
+  $("hfShow").checked=cfg.showBanner!==false;
+
+  const custom=$("hfCustom");
+  custom.classList.toggle("visible",cfg.preset==="custom");
+  const cc=cfg.custom||{};
+  $("hfCustomColor").value=cc.color||"#37b3a0";
+  $("hfCustomColorCode").textContent=(cc.color||"#37b3a0").toUpperCase();
+  $("hfCustomColor2").value=cc.color2||"#8fe0d0";
+  $("hfCustomColor2Code").textContent=(cc.color2||"#8fe0d0").toUpperCase();
+  $("hfCustomLabel").value=cc.label||"";
+  custom.style.setProperty("--hf-color",cc.color||"#37b3a0");
+  $("hfPreviewIcon").textContent=cc.icon||"✦";
+  $("hfPreviewText").textContent=(cfg.customBanner||cc.label||"МОЙ ПРАЗДНИК").toUpperCase();
+
+  const iconGrid=$("hfIconGrid");
+  iconGrid.innerHTML=HF_ICONS.map(i=>`<button class="hf-icon-btn ${cc.icon===i?"active":""}" data-icon="${i}">${i}</button>`).join("");
+  iconGrid.querySelectorAll("[data-icon]").forEach(b=>b.addEventListener("click",()=>{
+    CGB_HOLIDAY.setCustom({icon:b.dataset.icon});renderHolidayUI();
+  }));
+
+  const fxGrid=$("hfFxGrid");
+  const FX_EMOJI={none:"⊘",confetti:"🎉",snow:"❄",rain:"💧",sparks:"✨",leaves:"🍂",hearts:"♥",fireworks:"🎆"};
+  fxGrid.innerHTML=Object.keys(CGB_HOLIDAY.FX_LABELS).map(k=>`<button class="hf-fx-btn ${cc.fx===k?"active":""}" data-fx="${k}"><span class="hf-fx-emoji">${FX_EMOJI[k]||"·"}</span>${esc(CGB_HOLIDAY.FX_LABELS[k])}</button>`).join("");
+  fxGrid.querySelectorAll("[data-fx]").forEach(b=>b.addEventListener("click",()=>{
+    CGB_HOLIDAY.setCustom({fx:b.dataset.fx});renderHolidayUI();
+  }));
+}
+$("hfBanner").addEventListener("input",e=>{CGB_HOLIDAY.setBanner(e.target.value);
+  const cfg=CGB_HOLIDAY.readCfg();if(cfg.preset==="custom"){$("hfPreviewText").textContent=(e.target.value||cfg.custom.label||"МОЙ ПРАЗДНИК").toUpperCase()}
+});
+$("hfShow").addEventListener("change",e=>CGB_HOLIDAY.toggleBanner(e.target.checked));
+$("hfCustomColor").addEventListener("input",e=>{CGB_HOLIDAY.setCustom({color:e.target.value});$("hfCustomColorCode").textContent=e.target.value.toUpperCase();$("hfCustom").style.setProperty("--hf-color",e.target.value)});
+$("hfCustomColor2").addEventListener("input",e=>{CGB_HOLIDAY.setCustom({color2:e.target.value});$("hfCustomColor2Code").textContent=e.target.value.toUpperCase()});
+$("hfCustomLabel").addEventListener("input",e=>{CGB_HOLIDAY.setCustom({label:e.target.value});
+  const cfg=CGB_HOLIDAY.readCfg();$("hfPreviewText").textContent=(cfg.customBanner||e.target.value||"МОЙ ПРАЗДНИК").toUpperCase();
+  document.querySelectorAll('.hf-preset[data-preset="custom"]').forEach(el=>{const s=el.querySelector(':scope > :not(.hf-preset-icon)');if(!s){el.lastChild.textContent=e.target.value||"Свой праздник"}});
+});
+$("hfPreview").addEventListener("click",()=>{
+  Object.keys(sessionStorage).forEach(k=>{if(k.indexOf("cgb-holiday-welcome-")===0) sessionStorage.removeItem(k)});
+  CGB_HOLIDAY.maybeShowWelcome();
+});
+document.addEventListener("cgb-holiday-updated",()=>{if(document.getElementById("hfPresets")) renderHolidayUI()});
+
+$("lkLogout").addEventListener("click",async()=>{
+  if(window.CGB_AUTH.signOut){await window.CGB_AUTH.signOut();location.href="index.html"}
+});
+
+if(window.CGB_AUTH) window.CGB_AUTH.onChange(boot);
+boot();
+
+(function initBgSettings(){
+  function apply(){
+    if(!window.CGB_BG) return;
+    const anim=document.getElementById("fsAnim");
+    const modes=document.querySelectorAll(".fs-mode");
+    const en=window.CGB_BG.isEnabled();const cur=window.CGB_BG.getMode();
+    if(anim) anim.checked=en;
+    modes.forEach(m=>{m.classList.toggle("active",m.dataset.bg===cur);m.disabled=!en});
+  }
+  function bind(){
+    const anim=document.getElementById("fsAnim");
+    const modes=document.querySelectorAll(".fs-mode");
+    if(!anim) return;
+    anim.addEventListener("change",()=>{window.CGB_BG&&window.CGB_BG.setEnabled(anim.checked);apply()});
+    modes.forEach(m=>m.addEventListener("click",()=>{
+      if(!window.CGB_BG||!window.CGB_BG.isEnabled()) return;
+      window.CGB_BG.setMode(m.dataset.bg);apply();
+    }));
+  }
+  if(window.CGB_BG){bind();apply()}else document.addEventListener("cgb-bg-ready",()=>{bind();apply()});
+})();
+
+
+(function initSoundSettings(){
+  const s=document.getElementById("fsSound");
+  const v=document.getElementById("fsSoundVol");
+  const vv=document.getElementById("fsSoundVolVal");
+  if(!s||!window.CGB_SOUND) return;
+  s.checked=CGB_SOUND.isEnabled();
+  v.value=CGB_SOUND.getVolume();
+  vv.textContent=Math.round(CGB_SOUND.getVolume()*100)+"%";
+  s.addEventListener("change",()=>CGB_SOUND.setEnabled(s.checked));
+  v.addEventListener("input",()=>{CGB_SOUND.setVolume(v.value);vv.textContent=Math.round(v.value*100)+"%"});
+})();
+
+// ===== Управление ролями (только для админа) =====
+async function loadRolesList(){
+  if(!window.CGB_ROLES||!CGB_ROLES.isAdmin()){$("rolesList").innerHTML='<div class="roles-empty">Только для администраторов</div>';return}
+  const list=await CGB_ROLES.listAllRoles();
+  const box=$("rolesList");
+  if(!list.length){box.innerHTML='<div class="roles-empty">Пока нет назначенных ролей.<br>Нажмите «+ Создать аккаунт» для добавления Старшего Состава.</div>';return}
+  const ROLE_LABEL={admin:"Администратор",ss:"Ст. Состав",user:"Пользователь"};
+  const ROLE_CLS={admin:"role-adm",ss:"role-ss",user:"role-usr"};
+  const customRoles=await CGB_ROLES.listCustomRoles();
+  const roleOpts=customRoles.map(cr=>`<option value="${cr.id}" data-base="${cr.base_role}" data-key="${cr.key}">${(cr.name||cr.key).replace(/</g,"&lt;")}</option>`).join("");
+  box.innerHTML=list.map(r=>{
+    const curCr=customRoles.find(cr=>(r.custom_role_id&&cr.id===r.custom_role_id)||(!r.custom_role_id&&cr.key===r.role));
+    const badge=curCr?`<div class="role-badge" style="background:${curCr.color}22;border:1px solid ${curCr.color};color:${curCr.color}">${(curCr.name||curCr.key).replace(/</g,"&lt;")}</div>`:`<div class="role-badge ${ROLE_CLS[r.role]||""}">${ROLE_LABEL[r.role]||r.role}</div>`;
+    return `<div class="role-row">
+      <div class="role-avatar">${(r.display_name||"?").slice(0,1).toUpperCase()}</div>
+      <div class="role-info">
+        <div class="role-name">${(r.display_name||"— без имени —").replace(/</g,"&lt;")}</div>
+        <div class="role-uid">${r.user_id.slice(0,8)}…</div>
+      </div>
+      ${badge}
+      <div class="role-actions">
+        <select class="role-sel" data-uid="${r.user_id}">
+          ${customRoles.map(cr=>`<option value="${cr.id}" ${(r.custom_role_id===cr.id||(!r.custom_role_id&&r.role===cr.key))?"selected":""}>${(cr.name||cr.key).replace(/</g,"&lt;")}</option>`).join("")}
+        </select>
+        <button class="role-del" data-uid="${r.user_id}" title="Удалить роль">🗑</button>
+      </div>
+    </div>`;
+  }).join("");
+  box.querySelectorAll(".role-sel").forEach(sel=>{
+    sel.addEventListener("change",async()=>{
+      const uid=sel.dataset.uid;
+      const crId=sel.value;
+      const cr=customRoles.find(x=>x.id===crId);
+      if(!cr) return;
+      const row=list.find(x=>x.user_id===uid);
+      const r=await CGB_ROLES.setRole(uid,cr.base_role,row?row.display_name:null,cr.id);
+      if(!r.ok){alert("Ошибка: "+r.error);return}
+      loadRolesList();
+    });
+  });
+  box.querySelectorAll(".role-del").forEach(b=>{
+    b.addEventListener("click",async()=>{
+      if(!confirm("Полностью удалить пользователя? Его учётная запись, пароль и доступ к сайту будут удалены. Отменить это действие нельзя.")) return;
+      const r=await CGB_ROLES.removeUser(b.dataset.uid);
+      if(!r.ok){alert("Ошибка: "+r.error);return}
+      loadRolesList();
+    });
+  });
+}
+if(window.CGB_ROLES) CGB_ROLES.onChange(()=>{if(CGB_ROLES.isAdmin()) loadRolesList()});
+setTimeout(()=>{if(window.CGB_ROLES&&CGB_ROLES.isAdmin()) loadRolesList()},800);
+const rolesRefreshBtn=$("rolesRefreshBtn");
+if(rolesRefreshBtn) rolesRefreshBtn.addEventListener("click",()=>{if(window.CGB_ROLES&&CGB_ROLES.isAdmin()) loadRolesList()});
+
+const rolesBtn=$("rolesAddBtn");
+if(rolesBtn){
+  const createModal=$("createUserModal");
+  const roleSel=$("createUserRoleSel");
+  async function fillRoleOptions(){
+    if(!window.CGB_ROLES||!CGB_ROLES.listCustomRoles) return;
+    try{
+      const list=await CGB_ROLES.listCustomRoles();
+      if(!list.length){roleSel.innerHTML='<option value="">Нет ролей — создайте через «Управление ролями»</option>';return}
+      const order={admin:0,ss:1,user:2};
+      const sorted=list.slice().sort((a,b)=>{
+        const sa=a.is_system?(order[a.key]==null?3:order[a.key]):100;
+        const sb=b.is_system?(order[b.key]==null?3:order[b.key]):100;
+        if(sa!==sb) return sa-sb;
+        return (a.sort||100)-(b.sort||100);
+      });
+      roleSel.innerHTML='<option value="" selected>— выберите роль —</option>'+sorted.map(cr=>{
+        const desc=cr.description?" — "+cr.description:"";
+        const name=(cr.name||cr.key).replace(/</g,"&lt;");
+        const d=desc.replace(/</g,"&lt;");
+        return `<option value="${cr.id}" data-base="${cr.base_role||''}" data-key="${cr.key}">${name}${d}</option>`;
+      }).join("");
+    }catch(e){roleSel.innerHTML='<option value="">Ошибка загрузки ролей</option>'}
+  }
+  rolesBtn.addEventListener("click",async()=>{
+    createModal.classList.add("active");
+    createModal.querySelector(".form-msg").textContent="";
+    await fillRoleOptions();
+  });
+  createModal.querySelector(".modal-close").addEventListener("click",()=>createModal.classList.remove("active"));
+  $("createUserCancel").addEventListener("click",()=>createModal.classList.remove("active"));
+  createModal.addEventListener("click",e=>{if(e.target===createModal) createModal.classList.remove("active")});
+  $("createUserForm").addEventListener("submit",async e=>{
+    e.preventDefault();
+    const fd=new FormData(e.target);
+    const msg=createModal.querySelector(".form-msg");
+    const selectedId=fd.get("role");
+    if(!selectedId){msg.className="form-msg error";msg.textContent="Выберите роль";return}
+    const opt=roleSel.options[roleSel.selectedIndex];
+    const baseRole=opt&&opt.dataset.base?opt.dataset.base:"user";
+    msg.className="form-msg info";msg.textContent="Создание...";
+    const r=await CGB_ROLES.inviteAndSetRole(
+      fd.get("email").trim(),
+      fd.get("password"),
+      baseRole,
+      fd.get("display_name").trim(),
+      selectedId
+    );
+    if(!r.ok){
+      msg.className="form-msg error";
+      if(r.code==="rate_limit"){
+        msg.innerHTML='<b>⏱ Лимит писем Supabase превышен</b><br>На встроенном SMTP лимит ~4 письма/час. Рекомендация:<br>→ Supabase Dashboard → <b>Authentication → Providers → Email</b> → выключить <b>«Confirm email»</b>.<br>После этого юзеры создаются мгновенно без писем. Для внутреннего сайта части — норма.<br><br>Альтернативы: подождать час или настроить свой SMTP.';
+      } else if(r.code==="exists"){
+        msg.innerHTML='<b>👤 Уже зарегистрирован</b><br>'+String(r.error).replace(/</g,"&lt;");
+      } else {
+        msg.textContent=r.error;
+      }
+      return;
+    }
+    msg.className="form-msg success";
+    const rn=r.saved&&(r.saved.custom_role_name||r.saved.custom_role_key||r.saved.role);
+    msg.textContent="✓ Создано. "+(rn?("Выдана роль: «"+rn+"». "):"")+(r.warning||"");
+    setTimeout(()=>{createModal.classList.remove("active");e.target.reset();loadRolesList()},1400);
+  });
+}
+
+</script>
+
+</body>
+</html>

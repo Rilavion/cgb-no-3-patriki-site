@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title>ЦГБ №3 — Жалобы на сотрудников</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=26">
+<style id="cgb-admin-guard">
+[data-admin]{display:none !important}
+[data-staff]{display:none !important}
+body.cgb-is-admin .nav a[data-admin]{display:inline-flex !important}
+body.cgb-is-staff .nav a[data-staff]{display:inline-flex !important}
+body.cgb-is-admin [data-admin]:not(.nav a){display:initial !important}
+body.cgb-is-staff [data-staff]:not(.nav a){display:initial !important}
+</style>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+<div class="bg-noise"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ВС"></div>
+      <div class="brand-text">
+        <span class="brand-label">Министерство Здравоохранения</span>
+        <span class="brand-name">ЦГБ №3 · Жалобы</span>
+      </div>
+    </a>
+    <nav class="nav" id="mainNav">
+      <a href="index.html" data-page="index.html" data-transition>Главная</a>
+      <a href="info.html" data-page="info.html" data-transition>Информация</a>
+      <a href="services.html" data-page="services.html" data-transition>Услуги</a>
+      <a href="meds.html" data-page="meds.html" data-transition>Медикаменты</a>
+      <a href="ustav.html" data-page="ustav.html" data-transition>Устав</a>
+      <a href="learn.html" data-page="learn.html" data-transition data-loggedin>Учебные материалы</a>
+      <a href="tests.html" data-page="tests.html" data-transition data-loggedin>Тестирование</a>
+      <a href="composition.html" data-page="composition.html" data-transition>Состав</a>
+      <a href="docs.html" data-page="docs.html" data-transition data-perm="docs:view">Документы</a>
+      <a href="news.html" data-page="news.html" data-transition>Новости</a>
+      <a href="autopark.html" data-page="autopark.html" data-transition>Автопарк</a>
+      <a href="map.html" data-page="map.html" data-transition>Карта</a>
+      <a href="faq.html" data-page="faq.html" data-transition>FAQ</a>
+      <a href="complaints.html" data-page="complaints.html" data-transition>Жалобы</a>
+      <a href="supply.html" data-page="supply.html" data-transition data-perm="supply:view">Поставки</a>
+      <a href="apps.html" data-page="apps.html" data-transition data-perm="apps:view">Заявления</a>
+      <a href="vp.html" data-page="vp.html" data-transition data-perm="vp:view">Проверки АБ</a>
+      <a href="complaints-review.html" data-page="complaints-review.html" data-transition data-perm="complaints:review,complaints:view">Рассмотрение жалоб</a>
+      <a href="complaints-stats.html" data-page="complaints-stats.html" data-transition data-perm="complaints:review,complaints:view">Статистика жалоб</a>
+      <a href="leave.html" data-page="leave.html" data-transition data-loggedin>Отгул</a>
+      <a href="vacation-ic.html" data-page="vacation-ic.html" data-transition data-loggedin>Отпуск IC</a>
+      <a href="vacation-ooc.html" data-page="vacation-ooc.html" data-transition data-loggedin>Отпуск OOC</a>
+      <a href="dismissal.html" data-page="dismissal.html" data-transition data-loggedin>Увольнение</a>
+      <a href="promotion.html" data-page="promotion.html" data-transition data-loggedin>Повышение</a>
+      <a href="restoration.html" data-page="restoration.html" data-transition>Восстановление в ЦГБ №3</a>
+      <a href="appointment.html" data-page="appointment.html" data-transition>Запись к врачу</a>
+      <a href="requests-review.html" data-page="requests-review.html" data-transition data-perm="requests:review,requests:view">Рассмотрение заявок</a>
+      <a href="requests-stats.html" data-page="requests-stats.html" data-transition data-perm="requests:review,requests:view">Статистика заявок</a>
+      <a href="payroll.html" data-page="payroll.html" data-transition data-perm="payroll:view">Реестр премирования</a>
+      <a href="report.html" data-page="report.html" data-transition>Еженедельный отчёт</a>
+      <a href="report-settings.html" data-page="report-settings.html" data-transition data-perm="report:settings">Настройки отчётов</a>
+      <a href="vp-request.html" data-page="vp-request.html" data-transition data-perm="vp_request:submit">Запрос на наказание</a>
+      <a href="vp-request-settings.html" data-page="vp-request-settings.html" data-transition data-perm="vp_request:settings">Настройки запросов АБ</a>
+      <a href="lk.html" data-page="lk.html" data-transition>Личный кабинет</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-btn" data-open-search title="Поиск (Ctrl+K)">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+        <span>Поиск</span>
+        <span class="kbd">Ctrl K</span>
+      </button>
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Сменить тему">
+        <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24"><path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66l1.42-1.42M4.92 19.08l1.42-1.42m0-11.32L4.92 4.92m14.16 14.16l-1.42-1.42M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="login-btn" data-open-login>
+        <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/></svg>
+        <span>Войти</span>
+      </button>
+      <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="apps-head">
+    <div class="container">
+      <div class="apps-head-ribbon">
+        <span class="apps-head-ribbon-line"></span>
+        <span class="apps-head-ribbon-emblem">◈</span>
+        <span class="apps-head-ribbon-name">Администрация ЦГБ №3 · Подача жалобы</span>
+        <span class="apps-head-ribbon-emblem">◈</span>
+        <span class="apps-head-ribbon-line"></span>
+      </div>
+      <h1 class="apps-head-title" id="cfTitle">Жалоба на сотрудника</h1>
+      <div class="apps-head-subtitle" id="cfIntro">Заполните форму — жалоба будет рассмотрена Администрацией больницы</div>
+    </div>
+  </section>
+
+  <section class="apps-body">
+    <div class="container">
+      <div id="cfRoot"><div class="apps-empty">Загрузка формы...</div></div>
+    </div>
+  </section>
+</main>
+
+<div class="modal-back" id="cfSuccessModal">
+  <div class="modal">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <div style="text-align:center;padding:12px 0">
+      <div style="font-size:56px;line-height:1">📨</div>
+      <h3 style="margin:8px 0 6px">Жалоба принята</h3>
+      <div class="modal-sub">Ваш уникальный код жалобы:</div>
+      <div id="cfCode" style="font:700 22px/1 'Inter',sans-serif;color:var(--gold-b);letter-spacing:.05em;background:rgba(21,36,29,.6);padding:14px 18px;border-radius:10px;border:1px dashed var(--gold);margin:12px auto;display:inline-block"></div>
+      <div class="modal-sub" style="margin-top:8px">Сохраните код — по нему можно уточнить статус у АБ</div>
+      <button class="btn btn-gold" style="margin-top:14px" id="cfSuccessOk">Понятно</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-back" id="loginModal">
+  <div class="modal"><button class="modal-close" aria-label="Закрыть">✕</button><h3>Вход</h3>
+    <form><div class="form-group"><label>Email</label><input type="email" name="email" required></div><div class="form-group"><label>Пароль</label><input type="password" name="password" required></div><button class="btn btn-gold" style="width:100%" type="submit">Войти</button><div class="form-msg"></div></form></div>
+</div>
+
+<footer class="footer"><div class="container"><div class="footer-bottom"><span>© <span id="year"></span> · ЦГБ №3 · Центральная Городская</span><span class="footer-note">🐞 Нашли баг? Обратитесь: <b>@rilavion</b></span></div></div></footer>
+
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=17"></script>
+<script src="assets/js/core/config.js?v=17"></script>
+<script src="assets/js/utils/ds-autocomplete.js?v=17"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/ui/holiday-engine.js?v=17"></script>
+<script src="assets/js/ui/settings-panel.js?v=17"></script>
+<script src="assets/js/ui/sound-engine.js?v=17"></script>
+<script src="assets/js/core/auth.js?v=17"></script>
+<script src="assets/js/core/roles-engine.js?v=17"></script>
+<script src="assets/js/ui/search-engine.js?v=17"></script>
+<script src="assets/js/utils/ds-cache.js?v=17"></script>
+<script src="assets/js/ui/notify-engine.js?v=19"></script>
+<script src="assets/js/ui/notify-live.js?v=17"></script>
+<script src="assets/js/utils/format-utils.js?v=17"></script>
+<script src="assets/js/features/complaints-engine.js?v=17"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+const FALLBACK_FORM={
+  id:1,
+  title:"Жалоба на сотрудника",
+  description:"Заполните форму — жалоба будет рассмотрена Администрацией больницы",
+  fields:[
+    {key:"submitter_fio",label:"Ваше ФИО",type:"text",required:true,placeholder:"Иван Иванов",order:10,group:"Ваши данные"},
+    {key:"submitter_static",label:"Ваш статик",type:"text",required:true,placeholder:"123-456",order:20,group:"Ваши данные"},
+    {key:"submitter_discord",label:"Ваш @тег Discord",type:"text",required:false,placeholder:"@username или ID",order:30,group:"Ваши данные"},
+    {key:"target_fio",label:"ФИО нарушителя",type:"text",required:false,placeholder:"Пётр Петров",order:40,group:"Данные нарушителя"},
+    {key:"target_static",label:"Статик нарушителя",type:"text",required:true,placeholder:"789-012",order:50,group:"Данные нарушителя"},
+    {key:"description",label:"Суть нарушения",type:"textarea",required:true,placeholder:"Опишите, что произошло, где и когда",order:60,group:"Обстоятельства"},
+    {key:"norms",label:"Нарушенные нормы (ВУ ЦГБ №3, УК, ПК и иные)",type:"textarea",required:true,placeholder:"Например: ст. 12 ВУ ЦГБ №3, п.3 ПК",order:70,group:"Обстоятельства"},
+    {key:"evidence_url",label:"Доказательства нарушения",type:"text",required:true,placeholder:"https:// (ссылка на видео/скриншот)",order:80,group:"Обстоятельства"}
+  ]
+};
+
+let FORM=null;
+
+async function load(){
+  let f=null;
+  try{f=await CGB_COMPLAINTS.getForm()}catch(e){}
+  if(!f||!f.fields||!f.fields.length){
+    console.warn("[COMPLAINTS] Форма из БД пуста или недоступна, использую дефолтную");
+    f=FALLBACK_FORM;
+  }
+  FORM=f;
+  if(f.title) $("cfTitle").textContent=f.title;
+  if(f.description) $("cfIntro").textContent=f.description;
+  render();
+}
+
+function fieldHtml(f){
+  const req=f.required?` <span style="color:#e77070">*</span>`:` <span style="color:#8a8a8a;font-size:12px">(необязательно)</span>`;
+  const ph=f.placeholder||"";
+  if(f.type==="textarea"){
+    return `<div class="form-group"><label>${esc(f.label)}${req}</label><textarea class="msg-input" name="${esc(f.key)}" ${f.required?"required":""} placeholder="${esc(ph)}" rows="5" style="resize:vertical;font-family:inherit"></textarea></div>`;
+  }
+  if(f.type==="select"){
+    const opts=(f.options||[]).map(o=>`<option value="${esc(o)}">${esc(o)}</option>`).join("");
+    return `<div class="form-group"><label>${esc(f.label)}${req}</label><select class="msg-input" name="${esc(f.key)}" ${f.required?"required":""}><option value="">— выбрать —</option>${opts}</select></div>`;
+  }
+  return `<div class="form-group"><label>${esc(f.label)}${req}</label><input class="msg-input" type="text" name="${esc(f.key)}" ${f.required?"required":""} placeholder="${esc(ph)}"></div>`;
+}
+
+function render(){
+  const fields=(FORM.fields||[]).slice().sort((a,b)=>(a.order||0)-(b.order||0));
+  const groups=new Map();
+  for(const f of fields){
+    const g=f.group||"Данные";
+    if(!groups.has(g)) groups.set(g,[]);
+    groups.get(g).push(f);
+  }
+  let html='<form id="cfForm" class="cf-form">';
+  for(const [gname,gfields] of groups){
+    html+=`<div class="cf-group">
+      <div class="cf-group-title">${esc(gname)}</div>
+      <div class="cf-group-body">${gfields.map(fieldHtml).join("")}</div>
+    </div>`;
+  }
+  html+=`<div class="form-msg" id="cfMsg"></div>
+    <div style="display:flex;justify-content:center;padding-top:8px">
+      <button type="submit" class="btn btn-gold" id="cfSubmit" style="min-width:280px;padding:14px 28px;font-size:15px">📨 Подать жалобу</button>
+    </div>
+  </form>`;
+  $("cfRoot").innerHTML=html;
+  $("cfForm").addEventListener("submit",onSubmit);
+}
+
+async function onSubmit(e){
+  e.preventDefault();
+  const fd=new FormData(e.target);
+  const values={};
+  (FORM.fields||[]).forEach(f=>{values[f.key]=(fd.get(f.key)||"").toString().trim()});
+  const msg=$("cfMsg");
+  const submitter={fio:values.submitter_fio||"",static:values.submitter_static||"",discord:values.submitter_discord||""};
+  const target={fio:values.target_fio||"",static:values.target_static||"",discord_id:values.target_discord_id||""};
+  const evidence=values.evidence_url||"";
+  msg.className="form-msg info";msg.textContent="Отправка жалобы...";
+  const r=await CGB_COMPLAINTS.submit(values,submitter,target,evidence);
+  if(!r.ok){msg.className="form-msg error";msg.textContent="Ошибка: "+r.error;return}
+  msg.className="form-msg success";msg.textContent="";
+  $("cfCode").textContent=r.code;
+  $("cfSuccessModal").classList.add("active");
+  e.target.reset();
+}
+
+$("cfSuccessModal").querySelector(".modal-close").addEventListener("click",()=>$("cfSuccessModal").classList.remove("active"));
+$("cfSuccessOk").addEventListener("click",()=>$("cfSuccessModal").classList.remove("active"));
+$("cfSuccessModal").addEventListener("click",e=>{if(e.target===$("cfSuccessModal")) $("cfSuccessModal").classList.remove("active")});
+
+load();
+</script>
+
+</body>
+</html>

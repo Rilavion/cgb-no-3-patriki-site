@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title>Запрос на наказание · ЦГБ №3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=26">
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+<div class="bg-noise"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ВС"></div>
+      <div class="brand-text">
+        <span class="brand-label">Администрация</span>
+        <span class="brand-name">Запрос на наказание</span>
+      </div>
+    </a>
+    <nav class="nav" id="mainNav">
+      <a href="index.html" data-page="index.html" data-transition>Главная</a>
+      <a href="info.html" data-page="info.html" data-transition>Информация</a>
+      <a href="services.html" data-page="services.html" data-transition>Услуги</a>
+      <a href="meds.html" data-page="meds.html" data-transition>Медикаменты</a>
+      <a href="ustav.html" data-page="ustav.html" data-transition>Устав</a>
+      <a href="learn.html" data-page="learn.html" data-transition data-loggedin>Учебные материалы</a>
+      <a href="tests.html" data-page="tests.html" data-transition data-loggedin>Тестирование</a>
+      <a href="composition.html" data-page="composition.html" data-transition>Состав</a>
+      <a href="docs.html" data-page="docs.html" data-transition data-perm="docs:view">Документы</a>
+      <a href="news.html" data-page="news.html" data-transition>Новости</a>
+      <a href="autopark.html" data-page="autopark.html" data-transition>Автопарк</a>
+      <a href="map.html" data-page="map.html" data-transition>Карта</a>
+      <a href="faq.html" data-page="faq.html" data-transition>FAQ</a>
+      <a href="complaints.html" data-page="complaints.html" data-transition>Жалобы</a>
+      <a href="supply.html" data-page="supply.html" data-transition data-perm="supply:view">Поставки</a>
+      <a href="apps.html" data-page="apps.html" data-transition data-perm="apps:view">Заявления</a>
+      <a href="vp.html" data-page="vp.html" data-transition data-perm="vp:view">Проверки АБ</a>
+      <a href="complaints-review.html" data-page="complaints-review.html" data-transition data-perm="complaints:review,complaints:view">Рассмотрение жалоб</a>
+      <a href="complaints-stats.html" data-page="complaints-stats.html" data-transition data-perm="complaints:review,complaints:view">Статистика жалоб</a>
+      <a href="leave.html" data-page="leave.html" data-transition data-loggedin>Отгул</a>
+      <a href="vacation-ic.html" data-page="vacation-ic.html" data-transition data-loggedin>Отпуск IC</a>
+      <a href="vacation-ooc.html" data-page="vacation-ooc.html" data-transition data-loggedin>Отпуск OOC</a>
+      <a href="dismissal.html" data-page="dismissal.html" data-transition data-loggedin>Увольнение</a>
+      <a href="promotion.html" data-page="promotion.html" data-transition data-loggedin>Повышение</a>
+      <a href="restoration.html" data-page="restoration.html" data-transition>Восстановление в ЦГБ №3</a>
+      <a href="appointment.html" data-page="appointment.html" data-transition>Запись к врачу</a>
+      <a href="requests-review.html" data-page="requests-review.html" data-transition data-perm="requests:review,requests:view">Рассмотрение заявок</a>
+      <a href="requests-stats.html" data-page="requests-stats.html" data-transition data-perm="requests:review,requests:view">Статистика заявок</a>
+      <a href="payroll.html" data-page="payroll.html" data-transition data-perm="payroll:view">Реестр премирования</a>
+      <a href="report.html" data-page="report.html" data-transition>Еженедельный отчёт</a>
+      <a href="report-settings.html" data-page="report-settings.html" data-transition data-perm="report:settings">Настройки отчётов</a>
+      <a href="vp-request.html" data-page="vp-request.html" data-transition data-perm="vp_request:submit">Запрос на наказание</a>
+      <a href="vp-request-settings.html" data-page="vp-request-settings.html" data-transition data-perm="vp_request:settings">Настройки запросов АБ</a>
+      <a href="lk.html" data-page="lk.html" data-transition>Личный кабинет</a>
+    </nav>
+    <div class="header-actions">
+      <a href="complaints-review.html" class="btn btn-ghost btn-sm">← К рассмотрению</a>
+      <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="apps-head">
+    <div class="container">
+      <div class="apps-head-ribbon"><span class="apps-head-ribbon-line"></span><span class="apps-head-ribbon-emblem">⚖</span><span class="apps-head-ribbon-name">Администрация</span><span class="apps-head-ribbon-emblem">⚖</span><span class="apps-head-ribbon-line"></span></div>
+      <h1 class="apps-head-title">Запрос на выдачу наказания</h1>
+      <div class="apps-head-subtitle">Заполни форму — руководство рассмотрит и вынесет вердикт</div>
+    </div>
+  </section>
+
+  <section class="apps-body">
+    <div class="container" style="max-width:900px">
+      <div id="vpqGuard" style="display:none">
+        <div class="apps-guard-box"><div class="apps-guard-icon">🔒</div><h2>Доступ ограничен</h2><p>Форма доступна только сотрудникам с ролью Администрации ЦГБ №3, СС или Администрации.</p></div>
+      </div>
+
+      <div id="vpqRoot" style="display:none">
+        <div class="stats-filters" style="margin-bottom:16px">
+          <div class="stats-filters-grid" style="grid-template-columns:1fr">
+            <div class="stats-filter">
+              <label>Шаблон запроса</label>
+              <select id="vpqFormSel"></select>
+            </div>
+          </div>
+        </div>
+
+        <form id="vpqForm" class="apps-form" onsubmit="return false">
+          <div class="cf-group">
+            <div class="cf-group-title">👤 Запрашивающий (АБ)</div>
+            <div class="cf-group-body">
+              <div class="msg-row">
+                <div class="form-group msg-flex-1"><label>ФИО <span style="color:#e97a7a">*</span></label><input class="msg-input" id="vpqFio" required placeholder="Начните вводить ФИО..." data-dsac data-dsac-stat="#vpqStatic" data-dsac-pos="#vpqPos" data-dsac-did="#vpqDid"></div>
+                <div class="form-group msg-flex-1"><label>Статик <span style="color:#e97a7a">*</span></label><input class="msg-input" id="vpqStatic" required></div>
+              </div>
+              <div class="form-group"><label>Должность / Звание <span style="color:#e97a7a">*</span></label><input class="msg-input" id="vpqPos" required></div>
+              <input type="hidden" id="vpqDid">
+            </div>
+          </div>
+
+          <div class="cf-group">
+            <div class="cf-group-title">🎯 Нарушитель</div>
+            <div class="cf-group-body">
+              <div class="msg-row">
+                <div class="form-group msg-flex-1"><label>ФИО нарушителя <span style="color:#e97a7a">*</span></label><input class="msg-input" id="vpqTFio" required placeholder="Начните вводить ФИО..." data-dsac data-dsac-stat="#vpqTStatic" data-dsac-did="#vpqTDid"></div>
+                <div class="form-group msg-flex-1"><label>Статик нарушителя <span style="color:#e97a7a">*</span></label><input class="msg-input" id="vpqTStatic" required></div>
+              </div>
+              <input type="hidden" id="vpqTDid">
+            </div>
+          </div>
+
+          <div id="vpqDynamic"></div>
+
+          <div class="apps-cfg-actions" style="margin-top:20px">
+            <button type="button" class="btn btn-gold" id="vpqSend">📤 Отправить запрос</button>
+            <button type="button" class="btn btn-ghost btn-sm" id="vpqClear">✕ Очистить</button>
+            <span class="stats-copy-msg" id="vpqMsg"></span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer"><div class="container"><div class="footer-bottom"><span>© <span id="year"></span> · ЦГБ №3 · Центральная Городская</span><span class="footer-note">🐞 Нашли баг? Обратитесь: <b>@rilavion</b></span></div></div></footer>
+
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=17"></script>
+<script src="assets/js/core/config.js?v=17"></script>
+<script src="assets/js/core/auth.js?v=17"></script>
+<script src="assets/js/core/roles-engine.js?v=17"></script>
+<script src="assets/js/utils/ds-autocomplete.js?v=17"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/utils/format-utils.js?v=17"></script>
+<script src="assets/js/ui/holiday-engine.js?v=17"></script>
+<script src="assets/js/ui/settings-panel.js?v=17"></script>
+<script src="assets/js/ui/sound-engine.js?v=17"></script>
+<script src="assets/js/ui/search-engine.js?v=17"></script>
+<script src="assets/js/utils/ds-cache.js?v=17"></script>
+<script src="assets/js/ui/notify-engine.js?v=19"></script>
+<script src="assets/js/ui/notify-live.js?v=17"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+const LS_KEY="cgb_vpq_draft_v1";
+const KIND_MAP={"Предупреждение":"warn","Выговор":"reproach","Беседа с АБ":"talk","Беседа с ВП":"talk","Отстранение":"uval","Увал":"uval"};
+const KIND_CODES=["warn","reproach","talk","uval"];
+const KIND_OPTIONS=["Предупреждение","Выговор","Беседа с АБ","Отстранение"];
+// Обязательные служебные поля запроса: если их нет в шаблоне — подставляем сами,
+// иначе форму нельзя отправить корректно. Заодно принудительно делаем их обязательными.
+const SYS_FIELDS=[
+  {key:"kind",label:"Вид наказания",type:"select",required:true,options:KIND_OPTIONS,help:"Добавлено автоматически — в шаблоне его не было"},
+  {key:"description",label:"Обстоятельства / Суть нарушения",type:"textarea",required:true,help:"Добавлено автоматически — в шаблоне его не было"},
+  {key:"norms",label:"Нарушенные нормы (ВУ ЦГБ №3, УК, ПК и иные)",type:"textarea",required:true,help:"Добавлено автоматически — в шаблоне его не было"},
+  {key:"evidence_url",label:"Доказательства нарушения (ссылка)",type:"url",required:true,help:"Добавлено автоматически — в шаблоне его не было"}
+];
+const FORCE_REQUIRED=["kind","description","norms","evidence_url"];
+function effectiveFields(){
+  const fs=(Array.isArray(CUR&&CUR.fields)?CUR.fields:[]).map(f=>Object.assign({},f));
+  for(const sf of SYS_FIELDS){
+    const ex=fs.find(f=>f&&f.key===sf.key);
+    if(!ex) continue;
+    if(FORCE_REQUIRED.includes(sf.key)) ex.required=true;
+    if(ex.key==="kind"){ ex.type="select"; if(!Array.isArray(ex.options)||!ex.options.length) ex.options=sf.options.slice(); }
+  }
+  const miss=SYS_FIELDS.filter(sf=>!fs.some(f=>f&&f.key===sf.key)).map(sf=>{const nf=Object.assign({},sf); if(sf.options) nf.options=sf.options.slice(); return nf});
+  if(!miss.length) return fs;
+  const ki=fs.findIndex(f=>f&&f.key==="kind");
+  if(ki>=0) return fs.slice(0,ki+1).concat(miss,fs.slice(ki+1));
+  return miss.concat(fs);
+}
+let FORMS=[], CUR=null;
+
+async function boot(){
+  const roles=window.CGB_ROLES;
+  const ok=roles && (roles.can && (roles.can("vp_request","submit")||roles.isAdmin()));
+  if(!ok){ $("vpqGuard").style.display=""; $("vpqRoot").style.display="none"; return; }
+  $("vpqGuard").style.display="none"; $("vpqRoot").style.display="";
+  await loadForms();
+  if(window.CGB_DSAC) window.CGB_DSAC.bindAll();
+  restoreDraft();
+}
+
+async function loadForms(){
+  const c=window.CGB_AUTH.state.client;
+  const {data,error}=await c.from("vp_request_forms").select("*").eq("active",true).order("sort_order").order("label");
+  if(error){ $("vpqMsg").className="stats-copy-msg err"; $("vpqMsg").textContent="Ошибка: "+error.message; return; }
+  FORMS=data||[];
+  if(!FORMS.length){
+    $("vpqDynamic").innerHTML='<div class="apps-guard-box" style="margin-top:20px"><div class="apps-guard-icon">📭</div><h2>Нет шаблонов</h2><p>Администратор ещё не настроил ни один шаблон запроса.</p></div>';
+    return;
+  }
+  const cur=localStorage.getItem(LS_KEY+"_form")||FORMS[0].id;
+  $("vpqFormSel").innerHTML=FORMS.map(f=>`<option value="${esc(f.id)}" ${f.id===cur?"selected":""}>${esc(f.icon||"⚖")} ${esc(f.label)}</option>`).join("");
+  $("vpqFormSel").addEventListener("change",()=>{ localStorage.setItem(LS_KEY+"_form",$("vpqFormSel").value); selectForm($("vpqFormSel").value); });
+  selectForm(cur);
+}
+
+function selectForm(id){
+  CUR=FORMS.find(f=>f.id===id)||FORMS[0];
+  if(!CUR){ $("vpqDynamic").innerHTML=""; return; }
+  renderFields();
+}
+
+function renderFields(){
+  const fields=effectiveFields();
+  const html=`<div class="cf-group">
+    <div class="cf-group-title">📝 ${esc(CUR.label)}</div>
+    <div class="cf-group-body">${fields.map(f=>renderField(f)).join("")}</div>
+  </div>`;
+  $("vpqDynamic").innerHTML=html;
+}
+function renderField(f){
+  const key=esc(f.key||""), lbl=esc(f.label||f.key||"—");
+  const req=f.required?`<span style="color:#e97a7a">*</span>`:"";
+  const ph=esc(f.placeholder||"");
+  const help=f.help?`<div class="msg-help">${esc(f.help)}</div>`:"";
+  const t=f.type||"text";
+  const id="vpqF_"+key;
+  if(t==="textarea"){
+    const rows=Math.max(2,parseInt(f.rows)||4);
+    return `<div class="form-group"><label>${lbl} ${req}</label><textarea id="${id}" class="msg-input" rows="${rows}" placeholder="${ph}"></textarea>${help}</div>`;
+  }
+  if(t==="select"){
+    const opts=Array.isArray(f.options)?f.options:[];
+    return `<div class="form-group"><label>${lbl} ${req}</label><select id="${id}" class="msg-input"><option value="">— выбрать —</option>${opts.map(o=>`<option value="${esc(o)}">${esc(o)}</option>`).join("")}</select>${help}</div>`;
+  }
+  if(t==="checkbox"){
+    return `<div class="form-group"><label style="cursor:pointer"><input type="checkbox" id="${id}" style="margin-right:8px">${lbl} ${req}</label>${help}</div>`;
+  }
+  const it={number:"number",date:"date",url:"url",text:"text"}[t]||"text";
+  return `<div class="form-group"><label>${lbl} ${req}</label><input type="${it}" id="${id}" class="msg-input" placeholder="${ph}">${help}</div>`;
+}
+
+function collect(){
+  const fields=effectiveFields();
+  const values={}; const missing=[];
+  for(const f of fields){
+    const el=$("vpqF_"+f.key); if(!el) continue;
+    const v=f.type==="checkbox"?el.checked:el.value;
+    if(f.required && (v===null||v===""||v===false)) missing.push(f.label||f.key);
+    values[f.key]=v;
+  }
+  return {values,missing};
+}
+
+function saveDraft(){
+  try{
+    const s={form:CUR&&CUR.id, fio:$("vpqFio").value, static:$("vpqStatic").value, pos:$("vpqPos").value, tfio:$("vpqTFio").value, tstatic:$("vpqTStatic").value};
+    if(CUR){
+      s.values={};
+      for(const f of effectiveFields()){
+        const el=$("vpqF_"+f.key); if(!el) continue;
+        s.values[f.key]=f.type==="checkbox"?el.checked:el.value;
+      }
+    }
+    localStorage.setItem(LS_KEY,JSON.stringify(s));
+  }catch(e){}
+}
+function restoreDraft(){
+  try{
+    const s=JSON.parse(localStorage.getItem(LS_KEY)||"{}");
+    if(s.fio) $("vpqFio").value=s.fio;
+    if(s.static) $("vpqStatic").value=s.static;
+    if(s.pos) $("vpqPos").value=s.pos;
+    if(s.tfio) $("vpqTFio").value=s.tfio;
+    if(s.tstatic) $("vpqTStatic").value=s.tstatic;
+    if(s.values && CUR){
+      for(const k of Object.keys(s.values)){
+        const el=$("vpqF_"+k); if(!el) continue;
+        if(el.type==="checkbox") el.checked=!!s.values[k]; else el.value=s.values[k]||"";
+      }
+    }
+  }catch(e){}
+}
+["vpqFio","vpqStatic","vpqPos","vpqTFio","vpqTStatic"].forEach(id=>{const el=$(id);if(el)el.addEventListener("input",saveDraft)});
+$("vpqDynamic").addEventListener("input",saveDraft);
+$("vpqDynamic").addEventListener("change",saveDraft);
+
+$("vpqClear").addEventListener("click",()=>{
+  if(!confirm("Очистить всю форму?")) return;
+  localStorage.removeItem(LS_KEY);
+  ["vpqFio","vpqStatic","vpqPos","vpqTFio","vpqTStatic"].forEach(id=>{const el=$(id);if(el)el.value=""});
+  renderFields();
+});
+
+$("vpqSend").addEventListener("click",async()=>{
+  const msg=$("vpqMsg");
+  if(!CUR){ msg.className="stats-copy-msg err"; msg.textContent="Выбери шаблон"; return; }
+  const fio=$("vpqFio").value.trim(), stat=$("vpqStatic").value.trim(), pos=$("vpqPos").value.trim();
+  const tfio=$("vpqTFio").value.trim(), tstat=$("vpqTStatic").value.trim();
+  if(!fio||!stat||!pos){ msg.className="stats-copy-msg err"; msg.textContent="Заполни ФИО/Статик/Должность запрашивающего"; return; }
+  if(!tfio||!tstat){ msg.className="stats-copy-msg err"; msg.textContent="Заполни ФИО и статик нарушителя"; return; }
+  const {values,missing}=collect();
+  if(missing.length){ msg.className="stats-copy-msg err"; msg.textContent="Заполни: "+missing.join(", "); return; }
+
+  const kindHuman=values.kind||"";
+  const kind=KIND_MAP[kindHuman]||(KIND_CODES.includes(kindHuman)?kindHuman:null);
+  if(!kind){ msg.className="stats-copy-msg err"; msg.textContent="Выбери вид наказания"; return; }
+
+  msg.className="stats-copy-msg info"; msg.textContent="⏳ Отправка…";
+  $("vpqSend").disabled=true;
+  try{
+    const c=window.CGB_AUTH.state.client;
+    const u=window.CGB_AUTH.state.user;
+    const extra=Object.assign({},values);
+    delete extra.kind; delete extra.confinement_minutes; delete extra.description; delete extra.evidence_url; delete extra.target_position; delete extra.target_discord;
+    const targetDid=$("vpqTDid").value||values.target_discord||null;
+    const authorDid=$("vpqDid").value||null;
+    const row={
+      target_fio:tfio, target_static:tstat,
+      target_discord_id:targetDid,
+      target_position:values.target_position||null,
+      kind:kind,
+      reason:values.description||"—",
+      evidence_url:values.evidence_url||null,
+      notify_mode:"notify",
+      status:"pending",
+      issued_by_uid:u.id,
+      issued_by_name:fio,
+      issued_by_discord_id:authorDid,
+      requested_by_uid:u.id,
+      requested_by_name:fio,
+      requested_by_static:stat,
+      requested_by_position:pos,
+      requested_at:new Date().toISOString(),
+      request_source:CUR.id,
+      request_extra:extra
+    };
+    const {data,error}=await c.from("violations_registry").insert(row).select().single();
+    if(error) throw error;
+    msg.className="stats-copy-msg ok"; msg.textContent="✓ Запрос отправлен. Ожидай вердикта СС/Администрации.";
+    localStorage.removeItem(LS_KEY);
+  }catch(e){
+    msg.className="stats-copy-msg err"; msg.textContent="✗ "+e.message;
+  } finally { $("vpqSend").disabled=false; }
+});
+
+if(window.CGB_ROLES) CGB_ROLES.onChange(boot);
+setTimeout(boot,600);
+</script>
+
+</body>
+</html>

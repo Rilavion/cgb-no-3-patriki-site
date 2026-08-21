@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title>Новости — ЦГБ №3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=26">
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+<div class="bg-noise"></div>
+<div class="page-transition-overlay" id="overlay"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+        <a class="brand" href="index.html">
+      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ЦГБ"></div>
+      <div class="brand-text">
+        <span class="brand-label">Министерство Здравоохранения</span>
+        <span class="brand-name">ЦГБ №3 · Центральная Городская</span>
+      </div>
+    </a>
+        <nav class="nav" id="mainNav">
+      <a href="index.html" data-page="index.html" data-transition>Главная</a>
+      <a href="info.html" data-page="info.html" data-transition>Информация</a>
+      <a href="services.html" data-page="services.html" data-transition>Услуги</a>
+      <a href="meds.html" data-page="meds.html" data-transition>Медикаменты</a>
+      <a href="ustav.html" data-page="ustav.html" data-transition>Устав</a>
+      <a href="learn.html" data-page="learn.html" data-transition data-loggedin>Учебные материалы</a>
+      <a href="tests.html" data-page="tests.html" data-transition data-loggedin>Тестирование</a>
+      <a href="composition.html" data-page="composition.html" data-transition>Состав</a>
+      <a href="docs.html" data-page="docs.html" data-transition data-perm="docs:view">Документы</a>
+      <a href="news.html" data-page="news.html" data-transition>Новости</a>
+      <a href="autopark.html" data-page="autopark.html" data-transition>Автопарк</a>
+      <a href="map.html" data-page="map.html" data-transition>Карта</a>
+      <a href="faq.html" data-page="faq.html" data-transition>FAQ</a>
+      <a href="complaints.html" data-page="complaints.html" data-transition>Жалобы</a>
+      <a href="supply.html" data-page="supply.html" data-transition data-perm="supply:view">Поставки</a>
+      <a href="apps.html" data-page="apps.html" data-transition data-perm="apps:view">Заявления</a>
+      <a href="vp.html" data-page="vp.html" data-transition data-perm="vp:view">Проверки АБ</a>
+      <a href="complaints-review.html" data-page="complaints-review.html" data-transition data-perm="complaints:review,complaints:view">Рассмотрение жалоб</a>
+      <a href="complaints-stats.html" data-page="complaints-stats.html" data-transition data-perm="complaints:review,complaints:view">Статистика жалоб</a>
+      <a href="leave.html" data-page="leave.html" data-transition data-loggedin>Отгул</a>
+      <a href="vacation-ic.html" data-page="vacation-ic.html" data-transition data-loggedin>Отпуск IC</a>
+      <a href="vacation-ooc.html" data-page="vacation-ooc.html" data-transition data-loggedin>Отпуск OOC</a>
+      <a href="dismissal.html" data-page="dismissal.html" data-transition data-loggedin>Увольнение</a>
+      <a href="promotion.html" data-page="promotion.html" data-transition data-loggedin>Повышение</a>
+      <a href="restoration.html" data-page="restoration.html" data-transition>Восстановление в ЦГБ №3</a>
+      <a href="appointment.html" data-page="appointment.html" data-transition>Запись к врачу</a>
+      <a href="requests-review.html" data-page="requests-review.html" data-transition data-perm="requests:review,requests:view">Рассмотрение заявок</a>
+      <a href="requests-stats.html" data-page="requests-stats.html" data-transition data-perm="requests:review,requests:view">Статистика заявок</a>
+      <a href="payroll.html" data-page="payroll.html" data-transition data-perm="payroll:view">Реестр премирования</a>
+      <a href="report.html" data-page="report.html" data-transition>Еженедельный отчёт</a>
+      <a href="report-settings.html" data-page="report-settings.html" data-transition data-perm="report:settings">Настройки отчётов</a>
+      <a href="vp-request.html" data-page="vp-request.html" data-transition data-perm="vp_request:submit">Запрос на наказание</a>
+      <a href="vp-request-settings.html" data-page="vp-request-settings.html" data-transition data-perm="vp_request:settings">Настройки запросов АБ</a>
+      <a href="lk.html" data-page="lk.html" data-transition>Личный кабинет</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-btn" data-open-search title="Поиск (Ctrl+K)">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+        <span>Поиск</span>
+        <span class="kbd">Ctrl K</span>
+      </button>
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Сменить тему">
+        <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24"><path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66l1.42-1.42M4.92 19.08l1.42-1.42m0-11.32L4.92 4.92m14.16 14.16l-1.42-1.42M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="login-btn" data-open-login>
+        <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/></svg>
+        <span>Войти</span>
+      </button>
+      <button class="burger" id="burger" type="button" aria-label="Открыть меню" aria-controls="mainNav" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="section" style="padding-top:60px">
+    <div class="container">
+      <div class="section-head reveal" style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px">
+        <div>
+          <span class="badge">Новости больницы</span>
+          <h2>Новости и объявления</h2>
+          <p>Актуальные события, полезные материалы и объявления.</p>
+        </div>
+        <button class="btn btn-gold" id="addNewsBtn" data-perm="news:create,news:edit" style="display:none">＋ Добавить новость</button>
+      </div>
+
+      <div id="newsHeroSlot"></div>
+      <div class="news-grid" id="newsGrid" style="margin-bottom:32px"></div>
+      <div class="news-list" id="newsList"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <h4>Настройки сайта</h4>
+        <div class="footer-settings">
+          <div class="footer-settings-row">
+            <span class="footer-settings-label">Анимации</span>
+            <label class="fs-switch"><input type="checkbox" id="fsAnim" checked><span class="fs-switch-track"><span class="fs-switch-thumb"></span></span></label>
+          </div>
+          <div>
+            <div class="footer-settings-label" style="margin-bottom:8px">Фон</div>
+            <div class="fs-modes" id="fsModes">
+              <button class="fs-mode" data-bg="falling">Атмосфера</button>
+              <button class="fs-mode" data-bg="grid">Сеть</button>
+              <button class="fs-mode" data-bg="dots">Точки</button>
+              <button class="fs-mode" data-bg="waves">Волны</button>
+            </div>
+          </div>
+          <div class="footer-note">Настройки сохраняются в браузере</div>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Разделы</h5>
+        <a href="index.html">Главная</a>
+        <a href="info.html">О больнице</a>
+        <a href="services.html">Услуги и цены</a>
+        <a href="meds.html">Медикаменты</a>
+        <a href="news.html">Новости</a>
+      </div>
+      <div class="footer-col">
+        <h5>Пациентам</h5>
+        <a href="info.html#functions">Направления помощи</a>
+        <a href="info.html#forms">Виды помощи</a>
+        <a href="info.html#steps">Как записаться</a>
+        <a href="faq.html">Вопросы и ответы</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> · Центральная Городская Больница №3</span>
+      <span>Спасаем жизни каждый день</span>
+    </div>
+  </div>
+</footer>
+
+<div class="fab-stack" id="fabStack">
+  <button class="fab" id="fabUp" title="Наверх">
+    <svg viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8z"/></svg>
+    <span class="fab-hint">Наверх</span>
+  </button>
+</div>
+
+<div class="search-modal" id="searchModal">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+      <input class="search-input" placeholder="Поиск..." spellcheck="false">
+      <button class="search-close-kbd">Esc</button>
+    </div>
+    <div class="search-results"></div>
+  </div>
+</div>
+
+<div class="modal-back" id="loginModal">
+  <div class="modal">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Вход администратора</h3>
+    <div class="modal-sub">Доступ к управлению контентом</div>
+    <form>
+      <div class="form-group"><label>Email</label><input type="email" name="email" required></div>
+      <div class="form-group"><label>Пароль</label><input type="password" name="password" required></div>
+      <button class="btn btn-gold" style="width:100%" type="submit">Войти</button>
+      <div class="form-msg"></div>
+    </form>
+  </div>
+</div>
+
+
+
+<div class="modal-back" id="editNewsModal">
+  <div class="modal modal-lg">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3 id="editNewsTitle">Новая новость</h3>
+    <div class="modal-sub">Заполните поля публикации. Абзацы разделяйте пустой строкой.</div>
+    <form id="newsForm">
+      <input type="hidden" name="id">
+      <div class="form-group"><label>Заголовок</label><input name="title" required></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+        <div class="form-group"><label>Дата</label><input name="date" type="date" required></div>
+        <div class="form-group"><label>Тег</label><select name="tag" id="tagSelect" class="form-select-custom"></select></div>
+        <div class="form-group"><label>Отдел</label><select name="dept" id="deptSelect" class="form-select-custom"></select></div>
+      </div>
+      <div class="form-group"><label>Главное изображение (для карточки)</label><input name="image" type="url" placeholder="https://..."></div>
+      <div class="form-group"><label>Дополнительные изображения (URL через запятую или с новой строки)</label><textarea name="images" placeholder="https://example.com/img2.jpg&#10;https://example.com/img3.jpg" style="min-height:60px;font-family:monospace;font-size:12px"></textarea></div>
+      <div class="form-group"><label>Краткое описание (для карточек)</label><textarea name="excerpt" required style="min-height:80px"></textarea></div>
+      <div class="form-group"><label>Полный текст (в модалке)</label><textarea name="body" style="min-height:200px" required></textarea></div>
+      <button class="btn btn-gold" style="width:100%" type="submit">Сохранить</button>
+      <div class="form-msg"></div>
+    </form>
+  </div>
+</div>
+
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=18"></script>
+<script src="assets/js/core/config.js?v=18"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/ui/holiday-engine.js?v=18"></script>
+<script src="assets/js/ui/sound-engine.js?v=18"></script>
+<script src="assets/js/features/faq-engine.js?v=18"></script>
+<script src="assets/js/ui/search-engine.js?v=18"></script>
+<script src="assets/js/ui/notify-engine.js?v=19"></script>
+<script src="assets/js/core/auth.js?v=18"></script>
+<script src="assets/js/core/roles-engine.js?v=18"></script>
+<script src="assets/js/features/news.js?v=19"></script>
+<script src="assets/js/features/news-reader.js?v=19"></script>
+<script src="assets/js/ui/select-enhance.js?v=18"></script>
+<script src="assets/js/utils/draft-engine.js?v=18"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+
+const heroSlot=document.getElementById("newsHeroSlot");
+const grid=document.getElementById("newsGrid");
+const listEl=document.getElementById("newsList");
+const addBtn=document.getElementById("addNewsBtn");
+const editNewsModal=document.getElementById("editNewsModal");
+const newsForm=document.getElementById("newsForm");
+
+let LOADED=[];
+let currentNews=null;
+
+function fmt(d){try{return new Date(d).toLocaleDateString("ru-RU",{timeZone:"Europe/Moscow",day:"numeric",month:"long",year:"numeric"})}catch(e){return d}}
+function esc(s){return CGB_NEWS.esc(s)}
+
+function heroHtml(n){
+  const heroImg=CGB_NEWS.firstImage(n);
+  const img=heroImg?`<img src="${esc(heroImg)}" alt="${esc(n.title)}" loading="lazy">`:"";
+  const t=CGB_NEWS.tagInfo(n.tag);
+  const d=CGB_NEWS.deptInfo(n.dept);
+  return `<div class="news-hero" data-news-id="${n.id}">
+    <div class="news-hero-thumb">${img}
+      <div class="news-thumb-badges" style="top:20px;left:20px">
+        <span class="news-thumb-tag ${t.cls}">${t.label}</span>
+        <span class="news-thumb-dept ${d.cls}">${d.label}</span>
+      </div>
+    </div>
+    <div class="news-hero-body">
+      <span class="news-hero-tag">Главное</span>
+      <div class="news-date">${fmt(n.date)}</div>
+      <h2>${esc(n.title)}</h2>
+      <p>${esc(n.excerpt||n.body||"")}</p>
+      <div class="news-more">Читать материал</div>
+    </div>
+  </div>`;
+}
+
+function cardHtml(n){
+  return CGB_NEWS.cardHtml(n);
+}
+
+function itemHtml(n){
+  const heroImg=CGB_NEWS.firstImage(n);
+  const img=heroImg?`<img src="${esc(heroImg)}" alt="${esc(n.title)}" loading="lazy">`:"";
+  const t=CGB_NEWS.tagInfo(n.tag);
+  const d=CGB_NEWS.deptInfo(n.dept);
+  return `<article class="news-item" data-news-id="${n.id}">
+    <div class="news-thumb">${img}
+      <div class="news-thumb-badges">
+        <span class="news-thumb-tag ${t.cls}">${t.label}</span>
+        <span class="news-thumb-dept ${d.cls}">${d.label}</span>
+      </div>
+    </div>
+    <div class="news-item-body">
+      <div class="news-date">${fmt(n.date)}</div>
+      <h3>${esc(n.title)}</h3>
+      <p>${esc(n.excerpt||n.body||"")}</p>
+    </div>
+    <div class="news-item-actions">
+      <span class="btn btn-ghost btn-sm">Читать →</span>
+    </div>
+  </article>`;
+}
+
+function openNews(id){
+  const n=LOADED.find(x=>String(x.id)===String(id));if(!n) return;
+  currentNews=n;
+  const canEdit=window.CGB_ROLES&&window.CGB_ROLES.can("news","edit");
+  const canDelete=window.CGB_ROLES&&window.CGB_ROLES.can("news","delete");
+  CGB_NEWS_READER.open(n,{
+    admin:canEdit||canDelete,
+    canEdit,canDelete,
+    onEdit:(item)=>{if(canEdit) openEdit(item)},
+    onDelete:async(item)=>{
+      if(!canDelete) return;
+      const s=window.CGB_AUTH.state;
+      if(!s.available||!s.client){alert("Supabase не настроен");return}
+      if(!confirm("Удалить новость «"+item.title+"»?")) return;
+      try{
+        const {error}=await s.client.from("news").delete().eq("id",item.id);
+        if(error) throw error;
+        CGB_NEWS_READER.close();
+        await load();
+      }catch(error){alert(error.message||"Ошибка удаления")}
+    }
+  });
+}
+function closeNews(){CGB_NEWS_READER.close()}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&editNewsModal.classList.contains("active")) editNewsModal.classList.remove("active")});
+
+function renderSkeleton(){
+  heroSlot.innerHTML=`<div class="news-hero" style="min-height:420px;background:transparent;border:0;box-shadow:none;padding:0;display:grid;grid-template-columns:1.4fr 1fr;gap:0">
+    <div class="skeleton skeleton-block" style="border-radius:26px 0 0 26px"></div>
+    <div style="padding:44px;display:flex;flex-direction:column;gap:14px;justify-content:center">
+      <div class="skeleton skeleton-tag"></div>
+      <div class="skeleton skeleton-text" style="width:40%"></div>
+      <div class="skeleton skeleton-title" style="width:90%;height:32px"></div>
+      <div class="skeleton skeleton-text"></div>
+      <div class="skeleton skeleton-text" style="width:75%"></div>
+    </div>
+  </div>`;
+  grid.innerHTML=Array(3).fill(0).map(()=>`
+    <div class="sk-news-card"><div class="skeleton skeleton-img"></div>
+      <div class="sk-body">
+        <div class="skeleton skeleton-text" style="width:30%"></div>
+        <div class="skeleton skeleton-title"></div>
+        <div class="skeleton skeleton-text"></div>
+        <div class="skeleton skeleton-text" style="width:80%"></div>
+      </div>
+    </div>`).join("");
+  listEl.innerHTML="";
+}
+
+async function load(){
+  const canCreate=window.CGB_ROLES&&(window.CGB_ROLES.can("news","create")||window.CGB_ROLES.can("news","edit"));
+  renderSkeleton();
+  LOADED=await CGB_NEWS.fetchNews();
+  if(!LOADED.length){
+    heroSlot.innerHTML="";grid.innerHTML="";
+    listEl.innerHTML=`<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zM5 8h5v2H5zm14 8H5v-2h14zm0-4h-7v-2h7z"/></svg><h3>Пока нет публикаций</h3><p>Как только появятся новости — они будут отображены здесь.</p></div>`;
+    return;
+  }
+  const [hero,...rest]=LOADED;
+  const featured=rest.slice(0,3);
+  const archive=rest.slice(3);
+  heroSlot.innerHTML=heroHtml(hero);
+  grid.innerHTML=featured.map(cardHtml).join("");
+  listEl.innerHTML=archive.length
+    ? `<div class="section-head" style="margin-top:20px"><span class="badge">Архив</span></div>`+archive.map(itemHtml).join("")
+    : "";
+  document.querySelectorAll("[data-news-id]").forEach(el=>{
+    el.addEventListener("click",()=>openNews(el.dataset.newsId));
+  });
+  document.querySelectorAll(".reveal").forEach(el=>{
+    new IntersectionObserver((es,io)=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");io.unobserve(e.target)}}),{threshold:.1}).observe(el);
+  });
+  document.querySelectorAll(".admin-only").forEach(el=>el.style.display=canCreate?"":"none");
+}
+
+if(window.CGB_ROLES) window.CGB_ROLES.onChange(()=>load());
+if(window.CGB_AUTH) window.CGB_AUTH.onChange(()=>load());
+
+document.getElementById("tagSelect").innerHTML=CGB_NEWS.tagsList().map(t=>`<option value="${t.key}">${t.label}</option>`).join("");
+document.getElementById("deptSelect").innerHTML=CGB_NEWS.deptsList().map(t=>`<option value="${t.key}">${t.label}</option>`).join("");
+CGB_SELECT.enhance(document.getElementById("tagSelect"));
+CGB_SELECT.enhance(document.getElementById("deptSelect"));
+
+let draftHandle=null;
+addBtn.addEventListener("click",()=>{
+  openEdit();
+  if(window.CGB_DRAFT&&!draftHandle){
+    draftHandle=CGB_DRAFT.attach(newsForm,"news-new");
+    CGB_DRAFT.offerRestore("news-new",data=>{
+      Object.keys(data||{}).forEach(k=>{const el=newsForm.elements[k];if(el&&el.type!=="file") el.value=data[k]});
+      if(newsForm.tag) newsForm.tag.dispatchEvent(new Event("__cgb_refresh"));
+      if(newsForm.dept) newsForm.dept.dispatchEvent(new Event("__cgb_refresh"));
+    });
+  }
+});
+function openEdit(item){
+  document.getElementById("editNewsTitle").textContent=item?"Редактировать новость":"Новая новость";
+  newsForm.reset();
+  newsForm.id.value=item?item.id:"";
+  if(item){
+    newsForm.title.value=item.title||"";
+    newsForm.date.value=(item.date||"").slice(0,10);
+    newsForm.image.value=item.image||"";
+    let extra=item.images;
+    if(Array.isArray(extra)) extra=extra.join("\n");
+    else if(typeof extra==="string") extra=extra.split(/[\s,]+/).filter(Boolean).join("\n");
+    else extra="";
+    newsForm.images.value=extra||"";
+    newsForm.excerpt.value=item.excerpt||"";
+    newsForm.body.value=item.body||"";
+    newsForm.tag.value=item.tag||"news";
+    newsForm.dept.value=item.dept||"general";
+  }else{
+    newsForm.date.value=new Date().toISOString().slice(0,10);
+    newsForm.tag.value="news";
+    newsForm.dept.value="general";
+  }
+  newsForm.tag.dispatchEvent(new Event("__cgb_refresh"));
+  newsForm.dept.dispatchEvent(new Event("__cgb_refresh"));
+  const msg=editNewsModal.querySelector(".form-msg");msg.className="form-msg";msg.textContent="";
+  editNewsModal.classList.add("active");
+}
+editNewsModal.addEventListener("click",e=>{if(e.target===editNewsModal) editNewsModal.classList.remove("active")});
+editNewsModal.querySelector(".modal-close").addEventListener("click",()=>editNewsModal.classList.remove("active"));
+
+newsForm.addEventListener("submit",async e=>{
+  e.preventDefault();
+  const msg=editNewsModal.querySelector(".form-msg");
+  const s=window.CGB_AUTH.state;
+  if(!s.available||!s.client){
+    msg.className="form-msg info";msg.textContent="Редактирование недоступно — настройте Supabase.";return;
+  }
+  const extraImages=newsForm.images.value.split(/[\s,\n]+/).map(x=>x.trim()).filter(Boolean);
+  const payload={
+    title:newsForm.title.value.trim(),
+    date:newsForm.date.value,
+    tag:newsForm.tag.value||"news",
+    dept:newsForm.dept.value||"general",
+    image:newsForm.image.value.trim()||null,
+    images:extraImages,
+    excerpt:newsForm.excerpt.value.trim(),
+    body:newsForm.body.value.trim()
+  };
+  msg.className="form-msg info";msg.textContent="Сохранение...";
+  try{
+    if(newsForm.id.value){
+      const {error}=await s.client.from("news").update(payload).eq("id",newsForm.id.value);
+      if(error) throw error;
+    }else{
+      const {error}=await s.client.from("news").insert(payload);
+      if(error) throw error;
+    }
+    msg.className="form-msg success";msg.textContent="Готово";
+    if(window.CGB_DRAFT) CGB_DRAFT.clear("news-new");
+    setTimeout(()=>{editNewsModal.classList.remove("active");load()},500);
+  }catch(err){msg.className="form-msg error";msg.textContent=err.message||"Ошибка сохранения"}
+});
+
+load();
+
+
+if(location.hash&&location.hash.indexOf("#news-")===0){
+  const wantId=location.hash.slice(6);
+  const iv=setInterval(()=>{
+    if(LOADED.length){clearInterval(iv);const n=LOADED.find(x=>String(x.id)===String(wantId));if(n) openNews(n.id)}
+  },200);
+  setTimeout(()=>clearInterval(iv),4000);
+}
+
+
+(function initSoundSettings(){
+  const s=document.getElementById("fsSound");
+  const v=document.getElementById("fsSoundVol");
+  const vv=document.getElementById("fsSoundVolVal");
+  if(!s||!window.CGB_SOUND) return;
+  s.checked=CGB_SOUND.isEnabled();
+  v.value=CGB_SOUND.getVolume();
+  vv.textContent=Math.round(CGB_SOUND.getVolume()*100)+"%";
+  s.addEventListener("change",()=>CGB_SOUND.setEnabled(s.checked));
+  v.addEventListener("input",()=>{CGB_SOUND.setVolume(v.value);vv.textContent=Math.round(v.value*100)+"%"});
+})();
+
+</script>
+</body>
+</html>

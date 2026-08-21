@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title id="rfTitle">Подача заявки · ЦГБ №3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=26">
+<style id="cgb-admin-guard">
+[data-admin]{display:none !important}[data-staff]{display:none !important}
+body.cgb-is-admin .nav a[data-admin]{display:inline-flex !important}
+body.cgb-is-staff .nav a[data-staff]{display:inline-flex !important}
+body.cgb-is-admin [data-admin]:not(.nav a){display:initial !important}
+body.cgb-is-staff [data-staff]:not(.nav a){display:initial !important}
+</style>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas><div class="bg-noise"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html"><div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ВС"></div>
+      <div class="brand-text"><span class="brand-label">Приёмная</span><span class="brand-name" id="rfBrand">Заявка</span></div>
+    </a>
+    <nav class="nav" id="mainNav">
+      <a href="index.html" data-page="index.html" data-transition>Главная</a>
+      <a href="info.html" data-page="info.html" data-transition>Информация</a>
+      <a href="services.html" data-page="services.html" data-transition>Услуги</a>
+      <a href="meds.html" data-page="meds.html" data-transition>Медикаменты</a>
+      <a href="ustav.html" data-page="ustav.html" data-transition>Устав</a>
+      <a href="learn.html" data-page="learn.html" data-transition data-loggedin>Учебные материалы</a>
+      <a href="tests.html" data-page="tests.html" data-transition data-loggedin>Тестирование</a>
+      <a href="composition.html" data-page="composition.html" data-transition>Состав</a>
+      <a href="docs.html" data-page="docs.html" data-transition data-perm="docs:view">Документы</a>
+      <a href="news.html" data-page="news.html" data-transition>Новости</a>
+      <a href="autopark.html" data-page="autopark.html" data-transition>Автопарк</a>
+      <a href="map.html" data-page="map.html" data-transition>Карта</a>
+      <a href="faq.html" data-page="faq.html" data-transition>FAQ</a>
+      <a href="complaints.html" data-page="complaints.html" data-transition>Жалобы</a>
+      <a href="supply.html" data-page="supply.html" data-transition data-perm="supply:view">Поставки</a>
+      <a href="apps.html" data-page="apps.html" data-transition data-perm="apps:view">Заявления</a>
+      <a href="vp.html" data-page="vp.html" data-transition data-perm="vp:view">Проверки АБ</a>
+      <a href="complaints-review.html" data-page="complaints-review.html" data-transition data-perm="complaints:review,complaints:view">Рассмотрение жалоб</a>
+      <a href="complaints-stats.html" data-page="complaints-stats.html" data-transition data-perm="complaints:review,complaints:view">Статистика жалоб</a>
+      <a href="leave.html" data-page="leave.html" data-transition data-loggedin>Отгул</a>
+      <a href="vacation-ic.html" data-page="vacation-ic.html" data-transition data-loggedin>Отпуск IC</a>
+      <a href="vacation-ooc.html" data-page="vacation-ooc.html" data-transition data-loggedin>Отпуск OOC</a>
+      <a href="dismissal.html" data-page="dismissal.html" data-transition data-loggedin>Увольнение</a>
+      <a href="promotion.html" data-page="promotion.html" data-transition data-loggedin>Повышение</a>
+      <a href="restoration.html" data-page="restoration.html" data-transition>Восстановление в ЦГБ №3</a>
+      <a href="appointment.html" data-page="appointment.html" data-transition>Запись к врачу</a>
+      <a href="requests-review.html" data-page="requests-review.html" data-transition data-perm="requests:review,requests:view">Рассмотрение заявок</a>
+      <a href="requests-stats.html" data-page="requests-stats.html" data-transition data-perm="requests:review,requests:view">Статистика заявок</a>
+      <a href="payroll.html" data-page="payroll.html" data-transition data-perm="payroll:view">Реестр премирования</a>
+      <a href="report.html" data-page="report.html" data-transition>Еженедельный отчёт</a>
+      <a href="report-settings.html" data-page="report-settings.html" data-transition data-perm="report:settings">Настройки отчётов</a>
+      <a href="vp-request.html" data-page="vp-request.html" data-transition data-perm="vp_request:submit">Запрос на наказание</a>
+      <a href="vp-request-settings.html" data-page="vp-request-settings.html" data-transition data-perm="vp_request:settings">Настройки запросов АБ</a>
+      <a href="lk.html" data-page="lk.html" data-transition>Личный кабинет</a>
+    </nav>
+    <div class="header-actions">
+      <a href="requests-settings.html" data-page="requests-settings.html" class="btn btn-gold btn-sm" data-perm="requests:settings">⚙ Настройки форм</a>
+      <button class="search-btn" data-open-search title="Поиск"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg><span>Поиск</span></button>
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Сменить тему"><svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="sun" viewBox="0 0 24 24"><path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66l1.42-1.42M4.92 19.08l1.42-1.42m0-11.32L4.92 4.92m14.16 14.16l-1.42-1.42M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+      <button class="login-btn" data-open-login><svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/></svg><span>Войти</span></button>
+      <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="apps-head">
+    <div class="container">
+      <div class="apps-head-ribbon"><span class="apps-head-ribbon-line"></span><span class="apps-head-ribbon-emblem">◈</span><span class="apps-head-ribbon-name" id="rfRibbon">Заявка</span><span class="apps-head-ribbon-emblem">◈</span><span class="apps-head-ribbon-line"></span></div>
+      <h1 class="apps-head-title" id="rfTitleH1">Заявка</h1>
+      <div class="apps-head-subtitle" id="rfSubtitle"></div>
+    </div>
+  </section>
+
+  <section class="apps-body">
+    <div class="container">
+      <div id="rfInfo" style="display:none;margin-bottom:24px"></div>
+      <div id="rfRoot"><div class="apps-empty"><p>Загрузка формы...</p></div></div>
+    </div>
+  </section>
+</main>
+
+<div class="modal-back" id="rfSuccessModal">
+  <div class="modal">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <div style="text-align:center;padding:12px 0">
+      <div style="font-size:56px">✅</div>
+      <h3 style="margin:8px 0 6px">Заявка принята</h3>
+      <div class="modal-sub">Ваш уникальный код:</div>
+      <div id="rfCode" style="font:700 22px/1 Inter,sans-serif;color:var(--gold-b);letter-spacing:.05em;background:rgba(21,36,29,.6);padding:14px 18px;border-radius:10px;border:1px dashed var(--gold);margin:12px auto;display:inline-block"></div>
+      <div class="modal-sub">Ожидайте рассмотрения командованием</div>
+      <button class="btn btn-gold" style="margin-top:14px" id="rfSuccessOk">Понятно</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-back" id="loginModal">
+  <div class="modal"><button class="modal-close" aria-label="Закрыть">✕</button><h3>Вход</h3>
+    <form><div class="form-group"><label>Email</label><input type="email" name="email" required></div><div class="form-group"><label>Пароль</label><input type="password" name="password" required></div><button class="btn btn-gold" style="width:100%" type="submit">Войти</button><div class="form-msg"></div></form></div>
+</div>
+
+<footer class="footer"><div class="container"><div class="footer-bottom"><span>© <span id="year"></span> · ЦГБ №3 · Центральная Городская</span><span class="footer-note">🐞 Нашли баг? Обратитесь: <b>@rilavion</b></span></div></div></footer>
+
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=18"></script>
+<script src="assets/js/core/config.js?v=18"></script>
+<script src="assets/js/utils/ds-autocomplete.js?v=18"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/utils/format-utils.js?v=18"></script>
+<script src="assets/js/ui/holiday-engine.js?v=18"></script>
+<script src="assets/js/ui/settings-panel.js?v=18"></script>
+<script src="assets/js/ui/sound-engine.js?v=18"></script>
+<script src="assets/js/core/auth.js?v=18"></script>
+<script src="assets/js/core/roles-engine.js?v=18"></script>
+<script src="assets/js/ui/search-engine.js?v=18"></script>
+<script src="assets/js/utils/ds-cache.js?v=18"></script>
+<script src="assets/js/ui/notify-engine.js?v=19"></script>
+<script src="assets/js/ui/notify-live.js?v=18"></script>
+<script src="assets/js/features/requests-engine.js?v=18"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+const FALLBACK_KIND="vacation_ic";
+const PAGE_MAP={"leave":"leave","vacation-ic":"vacation_ic","vacation-ooc":"vacation_ooc","dismissal":"dismissal","promotion":"promotion","restoration":"restoration","appointment":"appointment"};
+const currentFile=(location.pathname.split("/").pop()||"").toLowerCase().replace(/\.html?$/,"");
+const KIND=PAGE_MAP[currentFile]||FALLBACK_KIND;
+
+const DEFAULT_FIELDS={
+  leave:[
+    {key:"submitter_fio",label:"ФИО",type:"text",required:true,placeholder:"Иванов И.",group:"Личные данные"},
+    {key:"submitter_static",label:"Статик",type:"text",required:true,placeholder:"123-456",group:"Личные данные"},
+    {key:"position",label:"Должность",type:"text",required:true,placeholder:"Интерн · Приёмное отделение",group:"Личные данные"},
+    {key:"submitter_discord",label:"Discord (@тег или ID)",type:"text",required:true,placeholder:"@user или 1234567890...",group:"Личные данные"},
+    {key:"leave_date",label:"Дата отгула",type:"date",required:true,group:"Время отгула"},
+    {key:"split",label:"Разбить на 2 части (по 30 мин)",type:"checkbox",required:false,group:"Время отгула"},
+    {key:"time_start",label:"Начало (часть 1)",type:"time",required:true,group:"Время отгула"},
+    {key:"duration",label:"Длительность (минут)",type:"select",required:true,options:["15","30","45","60"],group:"Время отгула"},
+    {key:"time_start_2",label:"Начало (часть 2)",type:"time",required:false,group:"Время отгула",show_if:"split"},
+    {key:"reason",label:"Причина отгула",type:"textarea",required:true,placeholder:"По каким причинам необходим отгул",group:"Обоснование"}
+  ],
+  vacation_ic:[
+    {key:"submitter_fio",label:"ФИО",type:"text",required:true,placeholder:"Иванов И.",group:"Личные данные"},
+    {key:"submitter_static",label:"Статик",type:"text",required:true,placeholder:"123-456",group:"Личные данные"},
+    {key:"position",label:"Должность",type:"text",required:true,placeholder:"Врач · Скорая помощь",group:"Личные данные"},
+    {key:"submitter_discord",label:"Discord (@тег или ID)",type:"text",required:true,placeholder:"@user или 1234567890...",group:"Личные данные"},
+    {key:"from_date",label:"Дата начала",type:"date",required:true,group:"Период"},
+    {key:"to_date",label:"Дата окончания",type:"date",required:true,group:"Период"},
+    {key:"reason",label:"Причина отпуска (IC/RP)",type:"textarea",required:true,placeholder:"По сюжету/RP",group:"Обоснование"}
+  ],
+  vacation_ooc:[
+    {key:"submitter_fio",label:"ФИО",type:"text",required:true,group:"Личные данные"},
+    {key:"submitter_static",label:"Статик",type:"text",required:true,group:"Личные данные"},
+    {key:"position",label:"Должность",type:"text",required:false,group:"Личные данные"},
+    {key:"submitter_discord",label:"Discord (@тег или ID)",type:"text",required:true,placeholder:"@user или 1234567890...",group:"Личные данные"},
+    {key:"from_date",label:"Дата начала",type:"date",required:true,group:"Период"},
+    {key:"to_date",label:"Дата окончания",type:"date",required:true,group:"Период"},
+    {key:"reason",label:"Причина (OOC/NonRP)",type:"textarea",required:true,placeholder:"Работа/учёба/личное",group:"Обоснование"}
+  ],
+  dismissal:[
+    {key:"submitter_fio",label:"ФИО",type:"text",required:true,group:"Личные данные"},
+    {key:"submitter_static",label:"Статик",type:"text",required:true,group:"Личные данные"},
+    {key:"position",label:"Текущая должность",type:"text",required:true,group:"Личные данные"},
+    {key:"submitter_discord",label:"Discord (@тег или ID)",type:"text",required:true,placeholder:"@user или 1234567890...",group:"Личные данные"},
+    {key:"reason",label:"Причина увольнения",type:"textarea",required:true,placeholder:"Развёрнутый ответ",group:"Обоснование"}
+  ],
+  promotion:[
+    {key:"submitter_fio",label:"ФИО",type:"text",required:true,group:"Личные данные"},
+    {key:"submitter_static",label:"Статик",type:"text",required:true,group:"Личные данные"},
+    {key:"submitter_discord",label:"Discord (@тег или ID)",type:"text",required:true,placeholder:"@user или 1234567890...",group:"Личные данные"},
+    {key:"current_rank",label:"Текущая должность",type:"select",required:true,options:["Интерн","Фельдшер","Лаборант","Врач","Хирург","Заведующий отделением","Заместитель главного врача"],group:"Должность"},
+    {key:"target_rank",label:"Желаемая должность",type:"select",required:true,options:["Фельдшер","Лаборант","Врач","Хирург","Заведующий отделением","Заместитель главного врача","Главный врач"],group:"Должность"}
+  ],
+  restoration:[
+    {key:"submitter_fio",label:"Имя Фамилия",type:"text",required:true,placeholder:"Иван Иванов",group:"Личные данные"},
+    {key:"submitter_static",label:"Статик",type:"text",required:true,placeholder:"111-111",group:"Личные данные"},
+    {key:"submitter_discord",label:"Discord (@тег или ID)",type:"text",required:true,placeholder:"@user или 1234567890...",group:"Личные данные"},
+    {key:"restore_type",label:"Тип восстановления",type:"select",required:true,options:["По медицинской книжке","По служебному удостоверению"],group:"Восстановление"},
+    {key:"vb_rank",label:"Должность в МК / удостоверении",type:"select",required:true,options:["Хирург","Заведующий отделением","Заместитель главного врача","Главный врач"],group:"Восстановление"},
+    {key:"dismissed_at",label:"Дата увольнения из фракции",type:"date",required:true,group:"Восстановление"},
+    {key:"dismiss_reason",label:"Причина прошлого увольнения",type:"select",required:true,options:["По собственному желанию","Иное"],group:"Восстановление"},
+    {key:"name_changed",label:"Менял(а) имя/фамилию после увольнения?",type:"select",required:true,options:["Нет","Да"],group:"Восстановление"},
+    {key:"vb_screenshot",label:"Скриншот медицинской книжки (URL, с бодикамерой)",type:"url",required:true,placeholder:"https://...",group:"Документы"},
+    {key:"passport_screenshot",label:"Скриншот паспорта (URL, с бодикамерой)",type:"url",required:true,placeholder:"https://...",group:"Документы"},
+    {key:"personal_file",label:"Скриншот личного дела (URL, с бодикамерой)",type:"url",required:true,placeholder:"https://...",group:"Документы"},
+    {key:"certificates",label:"Скриншот всех справок (URL, с бодикамерой)",type:"url",required:true,placeholder:"https://...",group:"Документы"},
+    {key:"udost_screenshot",label:"Скриншот удостоверения (URL, при наличии)",type:"url",required:false,placeholder:"https://...",group:"Документы"},
+    {key:"ready_reattest",label:"Готов пройти переаттестацию",type:"checkbox",required:true,group:"Согласие"},
+    {key:"rules_ack",label:"Ознакомлен(а) с правилами восстановления (за подделку — наказание)",type:"checkbox",required:true,group:"Согласие"},
+    {key:"comment",label:"Дополнительный комментарий",type:"textarea",required:false,placeholder:"Опционально",group:"Согласие"}
+  ]
+};
+
+const KIND_TITLES={
+  leave:"Отгул",
+  vacation_ic:"Отпуск IC (RP)",
+  vacation_ooc:"Отпуск OOC (NonRP)",
+  dismissal:"Увольнение из ЦГБ №3",
+  promotion:"Заявка на повышение",
+  restoration:"Восстановление в ЦГБ №3"
+};
+const KIND_SUBS={
+  leave:"",
+  vacation_ic:"Ролевой отпуск — до 7 дней раз в месяц.",
+  vacation_ooc:"Отпуск по личным причинам (работа/учёба/жизнь).",
+  dismissal:"Заявление на выход из состава больницы. Требуется одобрение администрации.",
+  promotion:"Заявка с прикреплением подтверждений (экзамен, статистика поставок и т.д.).",
+  restoration:"Восстановление в штат ЦГБ №3 по медицинской книжке или служебному удостоверению."
+};
+
+let FORM=null, SETTINGS=null;
+
+async function boot(){
+  const kindMeta=CGB_REQUESTS.KIND_META[KIND];
+  document.title=KIND_TITLES[KIND]+" · ЦГБ №3";
+  $("rfTitle").textContent=document.title;
+  $("rfBrand").textContent=kindMeta.icon+" "+kindMeta.label;
+  $("rfRibbon").textContent="Приёмная · "+kindMeta.label;
+  $("rfTitleH1").textContent=KIND_TITLES[KIND];
+  $("rfSubtitle").textContent=KIND_SUBS[KIND];
+
+  SETTINGS=await CGB_REQUESTS.getSettings();
+  const f=await CGB_REQUESTS.getForm(KIND);
+  FORM={
+    id:KIND,
+    title:(f&&f.title)||KIND_TITLES[KIND],
+    fields:(f&&f.fields&&f.fields.length)?f.fields:DEFAULT_FIELDS[KIND],
+    description:(f&&f.description)||KIND_SUBS[KIND],
+    rank_matrix:(f&&f.rank_matrix)||null
+  };
+  if(KIND==="promotion"){
+    const ranks=CGB_REQUESTS.getRankList(f||{});
+    const depts=CGB_REQUESTS.getDeptList(f||{});
+    FORM.fields=FORM.fields.map(fd=>{
+      if(fd.key==="current_rank"||fd.key==="target_rank"){
+        return Object.assign({},fd,{type:"select",options:ranks.slice()});
+      }
+      return fd;
+    });
+    if(depts.length){
+      const already=FORM.fields.some(fd=>fd.key==="department");
+      if(!already){
+        FORM.fields.unshift({
+          key:"department",
+          label:"Отдел / Подразделение",
+          type:"select",
+          required:true,
+          options:depts.map(d=>d.name),
+          group:"Личные данные"
+        });
+      } else {
+        FORM.fields=FORM.fields.map(fd=>fd.key==="department"?Object.assign({},fd,{type:"select",options:depts.map(d=>d.name),required:true}):fd);
+      }
+    }
+  }
+  render();
+  if(KIND==="restoration") renderRestorationInfo();
+}
+
+function renderRestorationInfo(){
+  const box=$("rfInfo");if(!box) return;
+  box.style.display="";
+  box.innerHTML=`
+    <div class="rst-hint">💡 Ознакомьтесь с регламентом ниже перед подачей заявки. Кликните на заголовок чтобы развернуть/свернуть.</div>
+
+    <details class="rst-details" open>
+      <summary><span class="rst-summary-icon">📋</span><span class="rst-summary-text">Регламент восстановления должности по Медицинской книжке</span><span class="rst-summary-arrow">▾</span></summary>
+      <div class="rst-details-body">
+        <p>В случае восстановления в штат ЦГБ №3 согласно Медицинской книжке (далее — <b>МК</b>), будет назначена <b>переаттестация</b> у Администрации больницы (АБ).</p>
+        <div class="rst-table">
+          <div class="rst-table-head"><div>Должность в МК</div><div>Фактическая должность после восстановления</div></div>
+          <div class="rst-row"><div>Врач или ниже</div><div style="color:#e97a7a">Восстановление НЕВОЗМОЖНО</div></div>
+          <div class="rst-row"><div>Хирург</div><div>Хирург</div></div>
+          <div class="rst-row"><div>Заведующий отделением</div><div>от Врача до Хирурга</div></div>
+          <div class="rst-row"><div>Заместитель главного врача</div><div>от Врача до Заведующего отделением</div></div>
+          <div class="rst-row"><div>Главный врач</div><div>от Врача до Заместителя главного врача</div></div>
+        </div>
+        <p style="color:var(--gold-b);margin-top:14px">💠 При восстановлении по <b>служебному удостоверению</b> присваивается должность <b>−3 ступени от указанной</b>.<br>Пример: удостоверение «Хирург» → должность «Фельдшер».</p>
+        <p style="color:#e97a7a;font-weight:600">⚠ При несоблюдении правил и ограничений заявка будет отклонена.</p>
+      </div>
+    </details>
+
+    <details class="rst-details">
+      <summary><span class="rst-summary-icon">📜</span><span class="rst-summary-text">Критерии восстановления</span><span class="rst-summary-arrow">▾</span></summary>
+      <div class="rst-details-body">
+        <ol class="rst-list">
+          <li><b>9.1.</b> При смене имени и/или фамилии восстановление во фракцию <b>невозможно</b>.</li>
+          <li><b>9.2.</b> Любой сотрудник имеет право восстановиться в должности <b>на −3 ступени</b> <i>(при восстановлении по удостоверению)</i>.</li>
+          <li><b>9.3.</b> Восстановление разрешено, если сотрудник был уволен из фракции <b>менее месяца назад</b> <i>(при восстановлении по удостоверению)</i>.</li>
+          <li><b>9.4.</b> Восстановление разрешено только, если сотрудник был уволен <b>по собственному желанию</b>.</li>
+          <li><b>9.7.</b> Доказательством может быть только скриншот удостоверения — <b>дата и время в правом верхнем углу должны быть видны</b>. Любое редактирование, обрезание и т.п. — запрещено.</li>
+          <li><b>9.8.</b> Игрок с медицинской книжкой может быть восстановлен во фракцию Больница. Максимальная должность для восстановления по МК — <b>Хирург</b>. Должность определяется на переаттестации, но не выше Хирурга и не ниже Врача.</li>
+        </ol>
+        <p style="color:var(--gold);font-style:italic;margin-top:10px">📅 Восстановление возможно <b>в течение 30 дней</b> с момента увольнения (по собственному желанию либо иному). После этого срока — только через общий набор.</p>
+      </div>
+    </details>
+
+    <details class="rst-details">
+      <summary><span class="rst-summary-icon">⚕</span><span class="rst-summary-text">Правила восстановления по медицинской книжке</span><span class="rst-summary-arrow">▾</span></summary>
+      <div class="rst-details-body">
+        <p style="color:#e97a7a;font-weight:600">⚠ ГЛАВНОЕ ПРАВИЛО: сотрудники с должностью <b>Врач и ниже</b> в медицинской книжке восстановлению НЕ ПОДЛЕЖАТ (только общий набор, без бодикамеры).</p>
+        <div class="rst-ranks">
+          <div class="rst-rank"><div class="rst-rank-icon">🎖</div><div class="rst-rank-body"><b>Должность выше Хирурга</b> (Зав. отделением, Зам. главврача и т.д.)<br><span>Восстановление в диапазоне от Врача до Хирурга (максимум).</span></div></div>
+          <div class="rst-rank"><div class="rst-rank-icon">🗂</div><div class="rst-rank-body"><b>Хирург</b><br><span>Восстанавливается на Врач — Хирург, строго после успешной переаттестации.</span></div></div>
+          <div class="rst-rank"><div class="rst-rank-icon">⚕</div><div class="rst-rank-body"><b>Врач и ниже</b><br><span>Восстановление невозможно — только общий набор.</span></div></div>
+        </div>
+        <p style="color:var(--muted);font-style:italic;margin-top:14px;font-size:12px">ℹ Примечание для Старшего Состава: перед вынесением вердикта обязательно проверяйте достоверность документов (в игре, на подделку) и заносите данные в кадровый аудит.</p>
+      </div>
+    </details>
+
+    <div class="rst-ack" id="rstAckBox">
+      <label class="rst-ack-label">
+        <input type="checkbox" id="rstAckChk">
+        <span>Я ознакомлен(а) со всеми правилами и регламентом восстановления, указанными выше. Понимаю, что за подделку документов буду нести наказание.</span>
+      </label>
+      <div class="rst-ack-hint">🔒 Форма заявки откроется после подтверждения ознакомления.</div>
+    </div>`;
+
+  const chk=$("rstAckChk");
+  const rfRoot=$("rfRoot");
+  const ackBox=$("rstAckBox");
+  if(chk&&rfRoot){
+    rfRoot.classList.add("rst-locked");
+    chk.addEventListener("change",()=>{
+      if(chk.checked){
+        rfRoot.classList.remove("rst-locked");
+        ackBox.classList.add("rst-ack-done");
+      }else{
+        rfRoot.classList.add("rst-locked");
+        ackBox.classList.remove("rst-ack-done");
+      }
+    });
+  }
+}
+
+function fieldHtml(f){
+  const req=f.required?` <span style="color:#e77070">*</span>`:` <span style="color:#8a8a8a;font-size:12px">(необязательно)</span>`;
+  const ph=f.placeholder||"";
+  const nm=esc(f.key);
+  if(f.type==="textarea") return `<div class="form-group" data-fkey="${nm}"><label>${esc(f.label)}${req}</label><textarea class="msg-input" name="${nm}" ${f.required?"required":""} placeholder="${esc(ph)}" rows="4" style="resize:vertical;font-family:inherit"></textarea></div>`;
+  if(f.type==="select"){
+    const opts=(f.options||[]).map(o=>`<option value="${esc(o)}">${esc(o)}</option>`).join("");
+    return `<div class="form-group" data-fkey="${nm}"><label>${esc(f.label)}${req}</label><select class="msg-input" name="${nm}" ${f.required?"required":""}><option value="">— выбрать —</option>${opts}</select></div>`;
+  }
+  if(f.type==="date") return `<div class="form-group" data-fkey="${nm}"><label>${esc(f.label)}${req}</label><input class="msg-input" type="date" name="${nm}" ${f.required?"required":""}></div>`;
+  if(f.type==="time") return `<div class="form-group" data-fkey="${nm}"><label>${esc(f.label)}${req}</label><input class="msg-input" type="time" name="${nm}" ${f.required?"required":""}></div>`;
+  if(f.type==="checkbox") return `<div class="form-group" data-fkey="${nm}"><label class="cr-notify" style="display:inline-flex"><input type="checkbox" name="${nm}"><span>${esc(f.label)}</span></label></div>`;
+  if(f.type==="url") return `<div class="form-group" data-fkey="${nm}"><label>${esc(f.label)}${req}</label><input class="msg-input" type="url" name="${nm}" ${f.required?"required":""} placeholder="${esc(ph)}"></div>`;
+  return `<div class="form-group" data-fkey="${nm}"><label>${esc(f.label)}${req}</label><input class="msg-input" type="text" name="${nm}" ${f.required?"required":""} placeholder="${esc(ph)}"></div>`;
+}
+
+function render(){
+  const fields=(FORM.fields||[]).slice();
+  const groups=new Map();
+  for(const f of fields){
+    const g=f.group||"Данные";
+    if(!groups.has(g)) groups.set(g,[]);
+    groups.get(g).push(f);
+  }
+  let html=`<form id="rfForm" class="cf-form">`;
+  if(KIND==="leave"||KIND==="vacation_ic"||KIND==="vacation_ooc"){
+    if(KIND_SUBS[KIND]) html+=`<div class="rf-rules">📖 <b>Правила:</b> ${esc(KIND_SUBS[KIND])}</div>`;
+  }
+  for(const [gn,gf] of groups){
+    html+=`<div class="cf-group"><div class="cf-group-title">${esc(gn)}</div><div class="cf-group-body">${gf.map(fieldHtml).join("")}</div></div>`;
+  }
+  if(KIND==="promotion"){
+    html+=`<div id="rfDynGroup"></div>`;
+  }
+  html+=`<div class="form-msg" id="rfMsg"></div>
+    <div style="display:flex;justify-content:center;padding-top:8px">
+      <button type="submit" class="btn btn-gold" style="min-width:280px;padding:14px 28px;font-size:15px">📨 Подать заявку</button>
+    </div></form>`;
+  $("rfRoot").innerHTML=html;
+  $("rfForm").addEventListener("submit",onSubmit);
+  applyConditionals();
+  document.querySelectorAll('#rfForm input[type="checkbox"]').forEach(el=>el.addEventListener("change",applyConditionals));
+  if(KIND==="promotion"){
+    const sel=document.querySelector('#rfForm [name="target_rank"]');
+    if(sel){
+      sel.addEventListener("change",renderDynamicPromotionFields);
+    }
+    const dsel=document.querySelector('#rfForm [name="department"]');
+    if(dsel) dsel.addEventListener("change",renderDynamicPromotionFields);
+    renderDynamicPromotionFields();
+  }
+}
+
+function currentDeptKey(){
+  const val=(document.querySelector('#rfForm [name="department"]')||{}).value||"";
+  if(!val) return "";
+  const depts=CGB_REQUESTS.getDeptList(FORM);
+  const found=depts.find(d=>d.name===val);
+  return found?found.key:"";
+}
+
+function renderDynamicPromotionFields(){
+  const box=$("rfDynGroup");
+  if(!box) return;
+  const target=(document.querySelector('#rfForm [name="target_rank"]')||{}).value||"";
+  const deptKey=currentDeptKey();
+  const deptName=(document.querySelector('#rfForm [name="department"]')||{}).value||"";
+  console.log("[REQ-FORM] target rank:",target,"dept:",deptKey,"FORM.rank_matrix:",FORM.rank_matrix);
+  if(!target){box.innerHTML="";return}
+  const list=CGB_REQUESTS.getRankFields(FORM,target,deptKey);
+  console.log("[REQ-FORM] extra fields for",target,"/"+deptKey+":",list);
+  const titleParts=["Подтверждения · "+esc(target)];
+  if(deptName) titleParts.push("Отдел: "+esc(deptName));
+  const titleHtml=titleParts.join(" <span style=\"opacity:.55;font-size:12px;font-weight:400\">·</span> ");
+  if(!list.length){
+    box.innerHTML=`<div class="cf-group"><div class="cf-group-title">${titleHtml}</div><div class="cf-group-body"><div class="msg-help">Для ${deptName?"отдела «"+esc(deptName)+"» и ":""}должности «${esc(target)}» администратор не настроил дополнительные подтверждения.</div></div></div>`;
+    return;
+  }
+  const inner=list.map(f=>fieldHtml(f)).join("");
+  box.innerHTML=`<div class="cf-group"><div class="cf-group-title">${titleHtml}</div><div class="cf-group-body">${inner}</div></div>`;
+}
+
+function applyConditionals(){
+  const fields=FORM.fields||[];
+  for(const f of fields){
+    if(!f.show_if) continue;
+    const master=document.querySelector(`#rfForm [name="${f.show_if}"]`);
+    const target=document.querySelector(`#rfForm [data-fkey="${f.key}"]`);
+    if(!target) continue;
+    const show=master&&master.type==="checkbox"?master.checked:master&&!!master.value;
+    target.style.display=show?"":"none";
+  }
+}
+
+async function onSubmit(e){
+  e.preventDefault();
+  const btn=e.target.querySelector('button[type="submit"]');
+  if(btn&&btn.disabled) return;
+  if(KIND==="restoration"){
+    const ack=$("rstAckChk");
+    if(!ack||!ack.checked){
+      const m=$("rfMsg");if(m){m.className="form-msg error";m.textContent="⛔ Отметьте «Я ознакомлен(а) с правилами» выше перед отправкой заявки."}
+      const box=$("rstAckBox");if(box){box.scrollIntoView({behavior:"smooth",block:"center"});box.classList.add("rst-ack-warn");setTimeout(()=>box.classList.remove("rst-ack-warn"),2000)}
+      return;
+    }
+  }
+  const fd=new FormData(e.target);
+  const values={};
+  const allFields=(FORM.fields||[]).slice();
+  if(KIND==="promotion"){
+    const target=(fd.get("target_rank")||"").toString();
+    const deptName=(fd.get("department")||"").toString();
+    const depts=CGB_REQUESTS.getDeptList(FORM);
+    const dept=depts.find(d=>d.name===deptName);
+    const deptKey=dept?dept.key:"";
+    if(target){
+      const extras=CGB_REQUESTS.getRankFields(FORM,target,deptKey);
+      extras.forEach(f=>allFields.push(f));
+    }
+  }
+  allFields.forEach(f=>{
+    const el=e.target.elements[f.key];
+    if(!el) return;
+    if(f.type==="checkbox") values[f.key]=el.checked;
+    else values[f.key]=(fd.get(f.key)||"").toString().trim();
+  });
+  const msg=$("rfMsg");
+
+  const fio=values.submitter_fio||"";
+  const stat=values.submitter_static||"";
+  const discord=values.submitter_discord||"";
+
+  if(!discord){msg.className="form-msg error";msg.textContent="Discord обязателен для связи и пинга в канале.";return}
+  if(KIND==="promotion"){
+    const target=values.target_rank;
+    const deptName=values.department||"";
+    const depts=CGB_REQUESTS.getDeptList(FORM);
+    const dept=depts.find(d=>d.name===deptName);
+    const deptKey=dept?dept.key:"";
+    if(target){
+      const extras=CGB_REQUESTS.getRankFields(FORM,target,deptKey);
+      for(const f of extras){
+        if(f.required){
+          const v=values[f.key];
+          if(f.type==="checkbox"?!v:!String(v||"").trim()){
+            msg.className="form-msg error";msg.textContent="Заполните: "+f.label;return;
+          }
+        }
+      }
+    }
+  }
+
+  if(KIND==="dismissal"||KIND==="promotion"){
+    const shouldBlock=!SETTINGS||SETTINGS.block_if_violations!==false;
+    if(stat&&shouldBlock){
+      msg.className="form-msg info";msg.textContent="Проверка реестра нарушений...";
+      const cnt=await CGB_REQUESTS.checkActiveViolations(stat);
+      console.log("[REQ-FORM] активных нарушений у",stat,":",cnt);
+      if(cnt>0){
+        msg.className="form-msg error";
+        msg.innerHTML="⛔ У сотрудника с этим статиком есть <b>"+cnt+"</b> активн"+(cnt===1?"ое нарушение":"ых нарушений")+" в реестре. Подача "+(KIND==="dismissal"?"увольнения":"повышения")+" заблокирована. Обратитесь к АБ для их снятия.";
+        return;
+      }
+    }
+  }
+
+  if(KIND==="leave"){
+    const startStr=values.time_start;
+    const dur=parseInt(values.duration)||0;
+    const dateStr=values.leave_date;
+    const chk=CGB_REQUESTS.validateLeaveTime(startStr,dur,SETTINGS,dateStr);
+    if(!chk.ok){msg.className="form-msg error";msg.textContent="⏱ "+chk.error;return}
+    if(values.split){
+      const chk2=CGB_REQUESTS.validateLeaveTime(values.time_start_2,30,SETTINGS,dateStr);
+      if(!chk2.ok){msg.className="form-msg error";msg.textContent="⏱ Часть 2: "+chk2.error;return}
+    }
+  }
+
+  msg.className="form-msg info";msg.textContent="Отправка заявки...";
+  if(btn){btn.disabled=true;btn.style.opacity=".6";btn.textContent="⏳ Отправка...";}
+  let r;
+  try{
+    r=await CGB_REQUESTS.submit(KIND,values,fio,stat,discord);
+  }catch(err){
+    r={ok:false,error:err&&err.message||"Неизвестная ошибка"};
+  }
+  if(btn){btn.disabled=false;btn.style.opacity="";btn.textContent="📨 Подать заявку";}
+  if(!r.ok){msg.className="form-msg error";msg.textContent="Ошибка: "+r.error;return}
+  msg.className="";msg.textContent="";
+  $("rfCode").textContent=r.code;
+  $("rfSuccessModal").classList.add("active");
+  e.target.reset();
+  applyConditionals();
+  if(KIND==="promotion") renderDynamicPromotionFields();
+}
+
+$("rfSuccessOk").addEventListener("click",()=>$("rfSuccessModal").classList.remove("active"));
+$("rfSuccessModal").querySelector(".modal-close").addEventListener("click",()=>$("rfSuccessModal").classList.remove("active"));
+$("rfSuccessModal").addEventListener("click",e=>{if(e.target===$("rfSuccessModal")) $("rfSuccessModal").classList.remove("active")});
+
+let __booted=false;
+async function bootWhenReady(){
+  if(__booted) return;
+  const c=window.CGB_AUTH&&window.CGB_AUTH.state&&window.CGB_AUTH.state.client;
+  if(!c) return;
+  __booted=true;
+  await boot();
+}
+if(window.CGB_AUTH&&window.CGB_AUTH.onChange) window.CGB_AUTH.onChange(bootWhenReady);
+if(window.CGB_ROLES&&window.CGB_ROLES.onChange) window.CGB_ROLES.onChange(bootWhenReady);
+setTimeout(bootWhenReady,300);
+setTimeout(bootWhenReady,1500);
+setTimeout(bootWhenReady,3000);
+</script>
+
+</body>
+</html>

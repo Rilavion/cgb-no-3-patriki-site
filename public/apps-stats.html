@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title>Статистика Заявлений · ЦГБ №3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=26">
+<style id="cgb-admin-guard">
+[data-admin]{display:none !important}
+[data-staff]{display:none !important}
+body.cgb-is-admin .nav a[data-admin]{display:inline-flex !important}
+body.cgb-is-staff .nav a[data-staff]{display:inline-flex !important}
+body.cgb-is-admin [data-admin]:not(.nav a){display:initial !important}
+body.cgb-is-staff [data-staff]:not(.nav a){display:initial !important}
+</style>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+<div class="bg-noise"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ВС"></div>
+      <div class="brand-text">
+        <span class="brand-label">Электронные Заявления</span>
+        <span class="brand-name">Статистика</span>
+      </div>
+    </a>
+    <nav class="nav" id="mainNav">
+      <a href="index.html" data-page="index.html" data-transition>Главная</a>
+      <a href="info.html" data-page="info.html" data-transition>Информация</a>
+      <a href="services.html" data-page="services.html" data-transition>Услуги</a>
+      <a href="meds.html" data-page="meds.html" data-transition>Медикаменты</a>
+      <a href="ustav.html" data-page="ustav.html" data-transition>Устав</a>
+      <a href="learn.html" data-page="learn.html" data-transition data-loggedin>Учебные материалы</a>
+      <a href="tests.html" data-page="tests.html" data-transition data-loggedin>Тестирование</a>
+      <a href="composition.html" data-page="composition.html" data-transition>Состав</a>
+      <a href="docs.html" data-page="docs.html" data-transition data-perm="docs:view">Документы</a>
+      <a href="news.html" data-page="news.html" data-transition>Новости</a>
+      <a href="autopark.html" data-page="autopark.html" data-transition>Автопарк</a>
+      <a href="map.html" data-page="map.html" data-transition>Карта</a>
+      <a href="faq.html" data-page="faq.html" data-transition>FAQ</a>
+      <a href="complaints.html" data-page="complaints.html" data-transition>Жалобы</a>
+      <a href="supply.html" data-page="supply.html" data-transition data-perm="supply:view">Поставки</a>
+      <a href="apps.html" data-page="apps.html" data-transition data-perm="apps:view">Заявления</a>
+      <a href="vp.html" data-page="vp.html" data-transition data-perm="vp:view">Проверки АБ</a>
+      <a href="complaints-review.html" data-page="complaints-review.html" data-transition data-perm="complaints:review,complaints:view">Рассмотрение жалоб</a>
+      <a href="complaints-stats.html" data-page="complaints-stats.html" data-transition data-perm="complaints:review,complaints:view">Статистика жалоб</a>
+      <a href="leave.html" data-page="leave.html" data-transition data-loggedin>Отгул</a>
+      <a href="vacation-ic.html" data-page="vacation-ic.html" data-transition data-loggedin>Отпуск IC</a>
+      <a href="vacation-ooc.html" data-page="vacation-ooc.html" data-transition data-loggedin>Отпуск OOC</a>
+      <a href="dismissal.html" data-page="dismissal.html" data-transition data-loggedin>Увольнение</a>
+      <a href="promotion.html" data-page="promotion.html" data-transition data-loggedin>Повышение</a>
+      <a href="restoration.html" data-page="restoration.html" data-transition>Восстановление в ЦГБ №3</a>
+      <a href="appointment.html" data-page="appointment.html" data-transition>Запись к врачу</a>
+      <a href="requests-review.html" data-page="requests-review.html" data-transition data-perm="requests:review,requests:view">Рассмотрение заявок</a>
+      <a href="requests-stats.html" data-page="requests-stats.html" data-transition data-perm="requests:review,requests:view">Статистика заявок</a>
+      <a href="payroll.html" data-page="payroll.html" data-transition data-perm="payroll:view">Реестр премирования</a>
+      <a href="report.html" data-page="report.html" data-transition>Еженедельный отчёт</a>
+      <a href="report-settings.html" data-page="report-settings.html" data-transition data-perm="report:settings">Настройки отчётов</a>
+      <a href="vp-request.html" data-page="vp-request.html" data-transition data-perm="vp_request:submit">Запрос на наказание</a>
+      <a href="vp-request-settings.html" data-page="vp-request-settings.html" data-transition data-perm="vp_request:settings">Настройки запросов АБ</a>
+      <a href="lk.html" data-page="lk.html" data-transition>Личный кабинет</a>
+    </nav>
+    <div class="header-actions">
+      <a href="apps.html" data-page="apps.html" class="btn btn-ghost btn-sm">← К заявлениям</a>
+      <button class="search-btn" data-open-search title="Поиск (Ctrl+K)"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg><span>Поиск</span></button>
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Сменить тему"><svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="sun" viewBox="0 0 24 24"><path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66l1.42-1.42M4.92 19.08l1.42-1.42m0-11.32L4.92 4.92m14.16 14.16l-1.42-1.42M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+      <button class="login-btn" data-open-login><svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/></svg><span>Войти</span></button>
+      <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="apps-head">
+    <div class="container">
+      <div class="apps-head-ribbon"><span class="apps-head-ribbon-line"></span><span class="apps-head-ribbon-emblem">◈</span><span class="apps-head-ribbon-name">Аналитика · Электронные заявления</span><span class="apps-head-ribbon-emblem">◈</span><span class="apps-head-ribbon-line"></span></div>
+      <h1 class="apps-head-title">Статистика заявлений</h1>
+    </div>
+  </section>
+
+  <section class="apps-body">
+    <div class="container" style="max-width:1300px">
+      <div id="asGuard" style="display:none"><div class="apps-guard-box"><div class="apps-guard-icon">⚠</div><h2>Доступ ограничен</h2><p>Раздел доступен только Старшему Составу и Администрации.</p></div></div>
+
+      <div id="asRoot" style="display:none">
+        <div class="apps-cfg-box" id="asCfgBox" style="display:none" data-perm="apps:admin">
+          <div class="apps-cfg-title">⚙ Настройки бота (только admin)</div>
+          <div class="apps-cfg-grid">
+            <div class="stats-filter"><label>Канал приёма заявлений</label>
+              <select id="asCfgIn"></select>
+            </div>
+            <div class="stats-filter"><label>Канал вердиктов</label>
+              <select id="asCfgOut"></select>
+            </div>
+            <div class="stats-filter"><label>Пинг-роль #1</label>
+              <select id="asCfgRole1"></select>
+            </div>
+            <div class="stats-filter"><label>Пинг-роль #2 (опц.)</label>
+              <select id="asCfgRole2"></select>
+            </div>
+          </div>
+          <div class="apps-cfg-help">
+            Бот читает новые заявления из «канала приёма», а после вынесения вердикта отправляет embed с решением в «канал вердиктов». При каждом вердикте будут пинговаться указанные роли. Настройки применяются в течение 30 секунд после сохранения.
+          </div>
+          <div class="apps-cfg-actions">
+            <button class="btn btn-gold btn-sm" id="asCfgSave">💾 Сохранить</button>
+            <span class="stats-copy-msg" id="asCfgMsg"></span>
+          </div>
+        </div>
+
+        <div class="stats-actions" style="margin-bottom:12px">
+          <button class="btn btn-ghost btn-sm" id="asCopyText">📋 Копировать (Discord)</button>
+          <button class="btn btn-ghost btn-sm" id="asCopyMd">📝 Копировать (Markdown)</button>
+          <button class="btn btn-gold btn-sm" id="asCopyPng">🖼 Копировать PNG</button>
+          <button class="btn btn-ghost btn-sm" id="asDownloadPng">⬇ PNG-файл</button>
+          <span class="stats-copy-msg" id="asCopyMsg"></span>
+        </div>
+
+        <div class="ss-toolbar">
+          <div class="ss-toolbar-l">
+            <label class="vp-search-lbl">
+              <span>📅 Период</span>
+              <select id="asPeriod" class="vp-search" style="min-width:170px">
+                <option value="month" selected>Текущий месяц</option>
+                <option value="week">Последние 7 дней</option>
+                <option value="prev">Прошлый месяц</option>
+                <option value="quarter">Квартал</option>
+                <option value="year">Год</option>
+                <option value="all">Всё время</option>
+                <option value="custom">Свой период</option>
+              </select>
+            </label>
+            <input type="date" id="asFrom" class="vp-search" style="max-width:160px;display:none">
+            <input type="date" id="asTo" class="vp-search" style="max-width:160px;display:none">
+            <label class="vp-search-lbl">
+              <span>👤 Обработчик</span>
+              <select id="asUser" class="vp-search" style="min-width:200px"><option value="">Все</option></select>
+            </label>
+            <label class="vp-search-lbl">
+              <span>📋 Тип заявки</span>
+              <select id="asType" class="vp-search" style="min-width:180px"><option value="">Все</option></select>
+            </label>
+          </div>
+        </div>
+
+        <div class="vp-stats-cards" id="asCards"></div>
+
+        <div class="ss-pie-wrap">
+          <div class="ss-chart-card">
+            <div class="ss-chart-title">🥧 Распределение по статусам</div>
+            <div class="ss-pie-container">
+              <div id="asPie" class="ss-pie ss-pie-css"></div>
+              <div id="asPieLegend" class="ss-pie-legend"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ss-charts">
+          <div class="ss-chart-card">
+            <div class="ss-chart-title">📊 По статусам</div>
+            <div id="asStatusChart"></div>
+          </div>
+          <div class="ss-chart-card">
+            <div class="ss-chart-title">🏆 Топ обработчиков (по количеству)</div>
+            <div id="asUserChart"></div>
+          </div>
+          <div class="ss-chart-card">
+            <div class="ss-chart-title">✅ Топ по одобренным</div>
+            <div id="asApprovedChart"></div>
+          </div>
+          <div class="ss-chart-card">
+            <div class="ss-chart-title">📋 Топ типов заявлений</div>
+            <div id="asTypeChart"></div>
+          </div>
+        </div>
+
+        <div class="te-card" style="margin-top:16px">
+          <div class="te-card-title-row">
+            <div class="te-card-title">📋 Заявки за период <span id="asListCnt" class="cr-count">0</span></div>
+            <div style="flex:1"></div>
+            <select id="asFilterStatus" class="vp-search" style="max-width:200px">
+              <option value="">Все статусы</option>
+              <option value="new">🆕 Новые</option>
+              <option value="approved">✅ Одобрены</option>
+              <option value="rejected">❌ Отказано</option>
+              <option value="archived">📦 В архиве</option>
+            </select>
+          </div>
+          <div id="asList" class="cr-list" style="margin-top:12px"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="stats-png-canvas" id="asPngCanvas" aria-hidden="true"></div>
+</main>
+
+<div class="modal-back" id="loginModal">
+  <div class="modal"><button class="modal-close" aria-label="Закрыть">✕</button><h3>Вход</h3>
+    <form><div class="form-group"><label>Email</label><input type="email" name="email" required></div><div class="form-group"><label>Пароль</label><input type="password" name="password" required></div><button class="btn btn-gold" style="width:100%" type="submit">Войти</button><div class="form-msg"></div></form></div>
+</div>
+
+<footer class="footer"><div class="container"><div class="footer-bottom"><span>© <span id="year"></span> · ЦГБ №3 · Центральная Городская</span><span class="footer-note">🐞 Нашли баг? Обратитесь: <b>@rilavion</b></span></div></div></footer>
+
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=17"></script>
+<script src="assets/js/core/config.js?v=17"></script>
+<script src="assets/js/core/auth.js?v=17"></script>
+<script src="assets/js/core/roles-engine.js?v=17"></script>
+<script src="assets/js/features/apps-engine.js?v=17"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/utils/format-utils.js?v=17"></script>
+<script src="assets/js/ui/holiday-engine.js?v=17"></script>
+<script src="assets/js/ui/settings-panel.js?v=17"></script>
+<script src="assets/js/ui/sound-engine.js?v=17"></script>
+<script src="assets/js/ui/search-engine.js?v=17"></script>
+<script src="assets/js/utils/ds-cache.js?v=17"></script>
+<script src="assets/js/ui/notify-engine.js?v=19"></script>
+<script src="assets/js/ui/notify-live.js?v=17"></script>
+<script src="assets/vendor/html2canvas.min.js?v=4"></script>
+<script src="assets/js/utils/png-export-utils.js?v=17"></script>
+<script src="assets/js/utils/stats-utils.js?v=17"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+const STATUS_LABELS={new:"Новые",approved:"Одобрено",rejected:"Отказано",archived:"Архив"};
+const STATUS_ICONS={new:"🆕",approved:"✅",rejected:"❌",archived:"📦"};
+const STATUS_COLORS={new:"#a2d8ff",approved:"#34d399",rejected:"#e97a7a",archived:"#999"};
+
+let ALL=[];
+
+function ruDT(d){try{return new Date(d).toLocaleString("ru-RU",{timeZone:"Europe/Moscow",day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"})}catch(e){return String(d||"")}}
+
+function getPeriod(){
+  const p=$("asPeriod").value;
+  const now=new Date();
+  let from=null,to=null;
+  if(p==="month"){from=new Date(now.getFullYear(),now.getMonth(),1);to=new Date(now.getFullYear(),now.getMonth()+1,0,23,59,59)}
+  else if(p==="week"){from=new Date(now);from.setDate(now.getDate()-7);to=now}
+  else if(p==="prev"){from=new Date(now.getFullYear(),now.getMonth()-1,1);to=new Date(now.getFullYear(),now.getMonth(),0,23,59,59)}
+  else if(p==="quarter"){from=new Date(now);from.setMonth(now.getMonth()-3);to=now}
+  else if(p==="year"){from=new Date(now);from.setFullYear(now.getFullYear()-1);to=now}
+  else if(p==="all"){from=null;to=null}
+  else if(p==="custom"){
+    from=$("asFrom").value?new Date($("asFrom").value):null;
+    to=$("asTo").value?new Date($("asTo").value+"T23:59:59"):null;
+  }
+  return {from,to};
+}
+
+async function boot(){
+  const roles=window.CGB_ROLES;
+  const ok=roles && roles.isStaff && roles.isStaff();
+  if(!ok){$("asGuard").style.display="";$("asRoot").style.display="none";return}
+  $("asGuard").style.display="none";$("asRoot").style.display="";
+  document.body.classList.toggle("cgb-is-staff",true);
+  document.body.classList.toggle("cgb-is-admin",!!(roles&&roles.isAdmin()));
+  await load();
+}
+
+async function load(){
+  const c=window.CGB_AUTH.state.client;
+  if(!c) return;
+  const {from,to}=getPeriod();
+  let q=c.from("applications").select("*").order("created_at",{ascending:false}).limit(2000);
+  if(from) q=q.gte("created_at",from.toISOString());
+  if(to) q=q.lte("created_at",to.toISOString());
+  const {data,error}=await q;
+  if(error){console.warn("[as] load:",error.message);return}
+  ALL=data||[];
+  fillFilters();
+  render();
+}
+
+function fillFilters(){
+  const users=new Map();
+  const types=new Set();
+  for(const r of ALL){
+    if(r.responded_by_name) users.set(r.responded_by_name,(users.get(r.responded_by_name)||0)+1);
+    if(r.app_type) types.add(r.app_type);
+  }
+  const curU=$("asUser").value;
+  const curT=$("asType").value;
+  $("asUser").innerHTML='<option value="">Все</option>'+Array.from(users.entries()).sort((a,b)=>b[1]-a[1]).map(([n,c])=>`<option value="${esc(n)}" ${n===curU?"selected":""}>${esc(n)} (${c})</option>`).join("");
+  $("asType").innerHTML='<option value="">Все</option>'+Array.from(types).sort().map(t=>`<option value="${esc(t)}" ${t===curT?"selected":""}>${esc(t)}</option>`).join("");
+}
+
+function filtered(){
+  const u=$("asUser").value;
+  const t=$("asType").value;
+  return ALL.filter(r=>{
+    if(u && r.responded_by_name!==u) return false;
+    if(t && r.app_type!==t) return false;
+    return true;
+  });
+}
+
+function render(){
+  const list=filtered();
+  const total=list.length;
+  const counts={new:0,approved:0,rejected:0,archived:0};
+  const userStats={};
+  const userApproved={};
+  const typeCount={};
+  for(const r of list){
+    const s=r.status||"new";
+    if(counts[s]!=null) counts[s]++;
+    const u=r.responded_by_name;
+    if(u){
+      userStats[u]=(userStats[u]||0)+1;
+      if(s==="approved") userApproved[u]=(userApproved[u]||0)+1;
+    }
+    const tp=r.app_type||"—";
+    typeCount[tp]=(typeCount[tp]||0)+1;
+  }
+  const processed=counts.approved+counts.rejected;
+  const approvedPct=processed?Math.round(counts.approved*100/processed):0;
+
+  $("asCards").innerHTML=`
+    <div class="vp-stats-card"><div class="vp-stats-card-num">${total}</div><div class="vp-stats-card-lbl">всего заявок</div></div>
+    <div class="vp-stats-card"><div class="vp-stats-card-num" style="color:#a2d8ff">${counts.new}</div><div class="vp-stats-card-lbl">ожидают</div></div>
+    <div class="vp-stats-card vp-arc-stat-ok"><div class="vp-stats-card-num">${counts.approved}</div><div class="vp-stats-card-lbl">одобрено${processed?" ("+approvedPct+"%)":""}</div></div>
+    <div class="vp-stats-card"><div class="vp-stats-card-num" style="color:#f0a5a5">${counts.rejected}</div><div class="vp-stats-card-lbl">отказано</div></div>
+    <div class="vp-stats-card"><div class="vp-stats-card-num" style="color:#999">${counts.archived}</div><div class="vp-stats-card-lbl">в архиве</div></div>
+    <div class="vp-stats-card vp-arc-stat-warn"><div class="vp-stats-card-num">${processed}</div><div class="vp-stats-card-lbl">обработано</div></div>
+  `;
+
+  renderPie(counts,total);
+  $("asStatusChart").innerHTML=renderBars(counts,total,k=>STATUS_ICONS[k]+" "+STATUS_LABELS[k],k=>STATUS_COLORS[k]);
+  $("asUserChart").innerHTML=renderBars(userStats,Math.max(1,total),k=>k,()=>"#22d3ee",10);
+  $("asApprovedChart").innerHTML=renderBars(userApproved,Math.max(1,counts.approved||1),k=>k,()=>"#34d399",10);
+  $("asTypeChart").innerHTML=renderBars(typeCount,total,k=>k,()=>"#a2d8ff",10);
+
+  renderList(list);
+}
+
+function renderPie(counts,total){
+  const pie=$("asPie");
+  const legend=$("asPieLegend");
+  if(!total){pie.innerHTML='<div style="padding:60px;color:var(--muted);text-align:center">Нет данных</div>';legend.innerHTML="";return}
+  const entries=Object.entries(counts).filter(([,v])=>v>0);
+  let angle=0;
+  const slices=entries.map(([k,v])=>{
+    const pct=v*100/total;
+    const start=angle;angle+=pct*3.6;
+    return {k,v,pct,start,end:angle,color:STATUS_COLORS[k]};
+  });
+  const gradient=slices.map(s=>`${s.color} ${s.start}deg ${s.end}deg`).join(",");
+  pie.style.background=`conic-gradient(${gradient})`;
+  pie.innerHTML=`<div class="ss-pie-hole"><div class="ss-pie-total">${total}</div><div class="ss-pie-total-lbl">всего</div></div>`;
+  legend.innerHTML=slices.map(s=>`<div class="ss-pie-leg-item"><div class="ss-pie-leg-color" style="background:${s.color}"></div><div class="ss-pie-leg-name">${STATUS_ICONS[s.k]} ${esc(STATUS_LABELS[s.k])}</div><div class="ss-pie-leg-val">${s.v} · ${s.pct.toFixed(1)}%</div></div>`).join("");
+}
+
+function renderBars(counts,total,labelFn,colorFn,limit){
+  const entries=Object.entries(counts).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]);
+  const list=limit?entries.slice(0,limit):entries;
+  if(!list.length) return '<div style="padding:20px;color:var(--muted);text-align:center;font-style:italic">Нет данных</div>';
+  const max=Math.max(...list.map(([,v])=>v),1);
+  return list.map(([k,v])=>`<div class="ss-bar-row">
+    <div class="ss-bar-lbl">${esc(labelFn(k))}</div>
+    <div class="ss-bar-track"><div class="ss-bar-fill" style="width:${v*100/max}%;background:${colorFn(k)}"></div></div>
+    <div class="ss-bar-val">${v}</div>
+  </div>`).join("");
+}
+
+function renderList(list){
+  const st=$("asFilterStatus").value;
+  const filt=st?list.filter(r=>(r.status||"new")===st):list;
+  $("asListCnt").textContent=filt.length;
+  const box=$("asList");
+  if(!filt.length){box.innerHTML='<div class="apps-empty"><p>Заявок нет</p></div>';return}
+  box.innerHTML=filt.slice(0,200).map(r=>{
+    const st=r.status||"new";
+    const badge=`<span class="cr-verd-badge" style="background:${STATUS_COLORS[st]}22;border:1px solid ${STATUS_COLORS[st]};color:${STATUS_COLORS[st]}">${STATUS_ICONS[st]} ${esc(STATUS_LABELS[st]||st)}</span>`;
+    return `<div class="cr-item">
+      <div class="cr-item-head">
+        <div class="cr-item-target">📋 <b>${esc(r.app_type||"—")}</b></div>
+        <div class="cr-item-date">${ruDT(r.created_at)}</div>
+        <div style="flex:1"></div>
+        ${badge}
+      </div>
+      <div class="cr-item-sub">Заявитель: <b>${esc(r.submitter_name||"—")}</b>${r.responded_by_name?` · Обработал: <b>${esc(r.responded_by_name)}</b> · ${ruDT(r.responded_at)}`:""}${r.reject_reason?` · <i style="color:#e97a7a">${esc(r.reject_reason)}</i>`:""}</div>
+    </div>`;
+  }).join("")+(filt.length>200?`<div style="text-align:center;color:var(--muted);padding:12px;font-size:12px">Показаны первые 200 из ${filt.length}</div>`:"");
+}
+
+$("asPeriod").addEventListener("change",()=>{
+  const p=$("asPeriod").value;
+  $("asFrom").style.display=p==="custom"?"":"none";
+  $("asTo").style.display=p==="custom"?"":"none";
+  load();
+});
+$("asFrom").addEventListener("change",load);
+$("asTo").addEventListener("change",load);
+$("asUser").addEventListener("change",render);
+$("asType").addEventListener("change",render);
+$("asFilterStatus").addEventListener("change",()=>renderList(filtered()));
+
+async function initCopyAndCfg(){
+  if(window.CGB_STATS){
+    window.CGB_STATS.bindCopyButtons({
+      textBtnId:"asCopyText", mdBtnId:"asCopyMd", pngBtnId:"asCopyPng", pngDownloadBtnId:"asDownloadPng",
+      msgId:"asCopyMsg", pngFilename:"apps-stats.png", pngScale:2,
+      getSections:getSectionsForCopy,
+      getPngNode:()=>{ renderPngNode(); return $("asPngCanvas"); }
+    });
+  }
+  const isAdmin=window.CGB_ROLES&&window.CGB_ROLES.can("apps","admin");
+  if(isAdmin){
+    $("asCfgBox").style.display="";
+    await loadAppsCfg();
+    const btn=$("asCfgSave");
+    if(btn && !btn.dataset.bound){ btn.dataset.bound="1"; btn.addEventListener("click",saveAppsCfg); }
+  }
+}
+
+function getSectionsForCopy(){
+  const list=filtered();
+  const total=list.length;
+  const counts={new:0,approved:0,rejected:0,archived:0};
+  const users={};
+  const types={};
+  for(const r of list){
+    const s=r.status||"new";
+    if(counts[s]!=null) counts[s]++;
+    if(r.responded_by_name) users[r.responded_by_name]=(users[r.responded_by_name]||0)+1;
+    if(r.app_type) types[r.app_type]=(types[r.app_type]||0)+1;
+  }
+  const processed=counts.approved+counts.rejected;
+  const approvedPct=processed?Math.round(counts.approved*100/processed):0;
+  const sections=[
+    { title:"📊 Статистика заявлений", subtitle:filterSummaryApps() },
+    { rows:[
+      ["Всего",String(total)],
+      ["Ожидают",String(counts.new)],
+      ["Одобрено",counts.approved+(processed?" ("+approvedPct+"%)":"")],
+      ["Отказано",String(counts.rejected)],
+      ["В архиве",String(counts.archived)],
+      ["Обработано",String(processed)]
+    ] }
+  ];
+  const t=Object.entries(types).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  if(t.length) sections.push({ title:"Топ типов", rows:t.map(x=>[x[0],String(x[1])]) });
+  const u=Object.entries(users).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  if(u.length) sections.push({ title:"Топ обработчиков", rows:u.map(x=>[x[0],String(x[1])]) });
+  return sections;
+}
+
+function filterSummaryApps(){
+  const p=$("asPeriod").options[$("asPeriod").selectedIndex].textContent;
+  const parts=["период: "+p];
+  const u=$("asUser").value; if(u) parts.push("обработчик: "+u);
+  const t=$("asType").value; if(t) parts.push("тип: "+t);
+  return parts.join(" · ");
+}
+
+function renderPngNode(){
+  const secs=getSectionsForCopy();
+  const cards=secs[1].rows.map(([k,v])=>`<div class="stats-card"><div class="stats-card-label">${esc(k)}</div><div class="stats-card-value">${esc(v)}</div></div>`).join("");
+  let body='<div class="stats-cards">'+cards+"</div>";
+  for(let i=2;i<secs.length;i++){
+    const s=secs[i];
+    body+='<div class="stats-block"><div class="stats-block-title">'+esc(s.title)+'</div><table class="stats-table"><tbody>'+
+      s.rows.map(r=>`<tr><td>${esc(r[0])}</td><td class="num">${esc(r[1])}</td></tr>`).join("")+'</tbody></table></div>';
+  }
+  $("asPngCanvas").innerHTML=`
+    <div class="stats-png-head">
+      <div class="stats-png-title">Статистика заявлений</div>
+      <div class="stats-png-sub">${esc(filterSummaryApps())}</div>
+    </div>
+    ${body}
+    <div class="stats-png-foot">ЦГБ №3 · Центральная Городская · ${window.CGB_STATS.nowStamp()} МСК</div>
+  `;
+}
+
+let APPS_CH=[], APPS_ROLES=[];
+async function loadAppsCfg(){
+  const c=window.CGB_AUTH&&window.CGB_AUTH.state&&window.CGB_AUTH.state.client;
+  if(!c) return;
+  const [chR,rlR,stR]=await Promise.all([
+    c.from("ds_channels").select("channel_id,name,parent_name").order("name"),
+    c.from("ds_guild_roles").select("role_id,name,position").order("position",{ascending:false}),
+    c.from("apps_settings").select("*").eq("id",1).maybeSingle()
+  ]);
+  APPS_CH=chR.data||[]; APPS_ROLES=rlR.data||[];
+  const s=stR.data||{};
+  fillChSel("asCfgIn",s.incoming_channel_id||"");
+  fillChSel("asCfgOut",s.verdict_channel_id||"");
+  fillRoleSel("asCfgRole1",s.ping_role_id||"");
+  fillRoleSel("asCfgRole2",s.ping_role_id_2||"");
+}
+function fillChSel(id,cur){
+  const byP=new Map();
+  for(const x of APPS_CH){ const k=x.parent_name||"Без категории"; if(!byP.has(k)) byP.set(k,[]); byP.get(k).push(x); }
+  let opts='<option value="">— не выбрано —</option>';
+  for(const [pn,list] of byP){
+    opts+='<optgroup label="'+esc(pn)+'">';
+    for(const c of list) opts+='<option value="'+c.channel_id+'" '+(c.channel_id===cur?"selected":"")+'>#'+esc(c.name)+'</option>';
+    opts+='</optgroup>';
+  }
+  $(id).innerHTML=opts;
+}
+function fillRoleSel(id,cur){
+  $(id).innerHTML='<option value="">— не выбрано —</option>'+APPS_ROLES.filter(r=>r.name!=="@everyone").map(r=>'<option value="'+r.role_id+'" '+(r.role_id===cur?"selected":"")+'>@'+esc(r.name)+'</option>').join("");
+}
+async function saveAppsCfg(){
+  const c=window.CGB_AUTH&&window.CGB_AUTH.state&&window.CGB_AUTH.state.client;
+  if(!c) return;
+  const msg=$("asCfgMsg");
+  msg.className="stats-copy-msg info"; msg.textContent="Сохранение…";
+  const patch={
+    id:1,
+    incoming_channel_id:$("asCfgIn").value||null,
+    verdict_channel_id:$("asCfgOut").value||null,
+    ping_role_id:$("asCfgRole1").value||null,
+    ping_role_id_2:$("asCfgRole2").value||null,
+    updated_at:new Date().toISOString(),
+    updated_by:window.CGB_AUTH.state.user.id,
+    updated_by_name:window.CGB_AUTH.state.user.email
+  };
+  const {error}=await c.from("apps_settings").upsert(patch,{onConflict:"id"});
+  if(error){ msg.className="stats-copy-msg err"; msg.textContent="✗ "+error.message; return; }
+  msg.className="stats-copy-msg ok"; msg.textContent="✓ Сохранено. Бот подхватит в течение 30 сек.";
+  setTimeout(()=>{ msg.textContent=""; msg.className="stats-copy-msg"; },4000);
+}
+
+if(window.CGB_ROLES) CGB_ROLES.onChange(()=>{ boot(); initCopyAndCfg(); });
+setTimeout(()=>{ boot(); initCopyAndCfg(); },600);
+</script>
+
+</body>
+</html>

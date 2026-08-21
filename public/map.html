@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title>Карта - ЦГБ №3 · ЦГБ №3</title>
+<link rel="icon" href="assets/images/brand/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=26">
+<style id="cgb-admin-guard">
+[data-admin]{display:none !important}
+body.cgb-is-admin .nav a[data-admin],body.cgb-is-admin .footer-col a[data-admin]{display:inline-flex !important}
+body.cgb-is-admin .footer-col a[data-admin]{display:block !important}
+html,body{overflow:hidden}
+</style>
+<script>
+(function(){
+  function apply(){
+    var s=window.CGB_AUTH&&window.CGB_AUTH.state;
+    if(!s||!s.ready) return;
+    document.body.classList.toggle("cgb-is-admin",!!s.user);
+  }
+  document.addEventListener("DOMContentLoaded",function(){
+    apply();
+    if(window.CGB_AUTH&&window.CGB_AUTH.onChange) window.CGB_AUTH.onChange(apply);
+    else{var t=setInterval(function(){if(window.CGB_AUTH){clearInterval(t);apply();window.CGB_AUTH.onChange(apply)}},80);setTimeout(function(){clearInterval(t)},4000);}
+  });
+})();
+</script>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+<div class="bg-noise"></div>
+<div class="page-transition-overlay" id="overlay"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-icon">ВС</div>
+      <div class="brand-text">
+        <span class="brand-label">Министерство Здравоохранения</span>
+        <span class="brand-name">ЦГБ №3 · ЦГБ №3</span>
+      </div>
+    </a>
+    <nav class="nav" id="mainNav">
+      <a href="index.html" data-page="index.html" data-transition>Главная</a>
+      <a href="info.html" data-page="info.html" data-transition>Информация</a>
+      <a href="services.html" data-page="services.html" data-transition>Услуги</a>
+      <a href="meds.html" data-page="meds.html" data-transition>Медикаменты</a>
+      <a href="ustav.html" data-page="ustav.html" data-transition>Устав</a>
+      <a href="learn.html" data-page="learn.html" data-transition data-loggedin>Учебные материалы</a>
+      <a href="tests.html" data-page="tests.html" data-transition data-loggedin>Тестирование</a>
+      <a href="composition.html" data-page="composition.html" data-transition>Состав</a>
+      <a href="docs.html" data-page="docs.html" data-transition data-perm="docs:view">Документы</a>
+      <a href="news.html" data-page="news.html" data-transition>Новости</a>
+      <a href="autopark.html" data-page="autopark.html" data-transition>Автопарк</a>
+      <a href="map.html" data-page="map.html" data-transition>Карта</a>
+      <a href="faq.html" data-page="faq.html" data-transition>FAQ</a>
+      <a href="complaints.html" data-page="complaints.html" data-transition>Жалобы</a>
+      <a href="supply.html" data-page="supply.html" data-transition data-perm="supply:view">Поставки</a>
+      <a href="apps.html" data-page="apps.html" data-transition data-perm="apps:view">Заявления</a>
+      <a href="vp.html" data-page="vp.html" data-transition data-perm="vp:view">Проверки АБ</a>
+      <a href="complaints-review.html" data-page="complaints-review.html" data-transition data-perm="complaints:review,complaints:view">Рассмотрение жалоб</a>
+      <a href="complaints-stats.html" data-page="complaints-stats.html" data-transition data-perm="complaints:review,complaints:view">Статистика жалоб</a>
+      <a href="leave.html" data-page="leave.html" data-transition data-loggedin>Отгул</a>
+      <a href="vacation-ic.html" data-page="vacation-ic.html" data-transition data-loggedin>Отпуск IC</a>
+      <a href="vacation-ooc.html" data-page="vacation-ooc.html" data-transition data-loggedin>Отпуск OOC</a>
+      <a href="dismissal.html" data-page="dismissal.html" data-transition data-loggedin>Увольнение</a>
+      <a href="promotion.html" data-page="promotion.html" data-transition data-loggedin>Повышение</a>
+      <a href="restoration.html" data-page="restoration.html" data-transition>Восстановление в ЦГБ №3</a>
+      <a href="appointment.html" data-page="appointment.html" data-transition>Запись к врачу</a>
+      <a href="requests-review.html" data-page="requests-review.html" data-transition data-perm="requests:review,requests:view">Рассмотрение заявок</a>
+      <a href="requests-stats.html" data-page="requests-stats.html" data-transition data-perm="requests:review,requests:view">Статистика заявок</a>
+      <a href="payroll.html" data-page="payroll.html" data-transition data-perm="payroll:view">Реестр премирования</a>
+      <a href="report.html" data-page="report.html" data-transition>Еженедельный отчёт</a>
+      <a href="report-settings.html" data-page="report-settings.html" data-transition data-perm="report:settings">Настройки отчётов</a>
+      <a href="vp-request.html" data-page="vp-request.html" data-transition data-perm="vp_request:submit">Запрос на наказание</a>
+      <a href="vp-request-settings.html" data-page="vp-request-settings.html" data-transition data-perm="vp_request:settings">Настройки запросов АБ</a>
+      <a href="lk.html" data-page="lk.html" data-transition>Личный кабинет</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Сменить тему">
+        <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24"><path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66l1.42-1.42M4.92 19.08l1.42-1.42m0-11.32L4.92 4.92m14.16 14.16l-1.42-1.42M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="login-btn" data-open-login>
+        <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/></svg>
+        <span>Войти</span>
+      </button>
+      <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="map-page">
+  <div class="map-vp" id="mapVp">
+    <div class="map-cv" id="mapCv">
+      <img id="mapImg" alt="Карта">
+    </div>
+  </div>
+
+  <div class="map-loading" id="mapLoading">
+    <div class="map-loading-inner">
+      <div class="map-loading-spinner"></div>
+      <div class="map-loading-text">Загрузка карты</div>
+      <div class="map-loading-sub">Патрики · GTA 5 RMRP</div>
+    </div>
+  </div>
+
+  <div class="map-help" id="mapHelp">
+    <span><kbd>ЛКМ</kbd> перемещение</span>
+    <span><kbd>Колёсико</kbd> зум</span>
+    <span><kbd>Esc</kbd> сброс</span>
+    <button class="map-help-close" id="mapHelpClose" title="Скрыть">✕</button>
+  </div>
+
+  <div class="map-toolbar">
+    <div class="map-tb-group">
+      <button class="map-btn" id="mapBtnList">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M3 5h18v2H3zm0 6h18v2H3zm0 6h18v2H3z"/></svg>
+        Список
+      </button>
+    </div>
+    <div class="map-search">
+      <input class="map-search-input" id="mapSearchIn" type="text" placeholder="Поиск по карте..." autocomplete="off">
+      <span class="map-search-icon"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg></span>
+      <div class="map-search-drop" id="mapSearchDrop"></div>
+    </div>
+    <div class="map-tb-group">
+      <span class="map-slider-label">Иконки</span>
+      <input type="range" class="map-slider" id="mapIconSlider" min="30" max="160" value="80">
+    </div>
+    <div class="map-tb-group">
+      <button class="map-btn map-btn-icon" id="mapBtnZo" title="Уменьшить">−</button>
+      <span class="map-zoom-txt" id="mapZoomTxt">100%</span>
+      <button class="map-btn map-btn-icon" id="mapBtnZi" title="Увеличить">+</button>
+      <button class="map-btn map-btn-icon" id="mapBtnRe" title="Сбросить">⌂</button>
+    </div>
+  </div>
+
+  <aside class="map-side" id="mapSide">
+    <div class="map-side-head">
+      <span class="map-side-title">Точки на карте</span>
+      <div class="map-side-acts">
+        <button class="map-side-abtn" id="mapSpAll">Все</button>
+        <button class="map-side-abtn" id="mapSpNone">Ничего</button>
+      </div>
+    </div>
+    <div class="map-side-search"><input type="text" id="mapSpSearch" placeholder="Фильтр..." autocomplete="off"></div>
+    <div class="map-side-list" id="mapSpList"></div>
+  </aside>
+
+  <aside class="map-info" id="mapInfo">
+    <button class="map-info-close" id="mapIpClose">✕</button>
+    <div class="map-info-scroll">
+      <div class="map-info-img" id="mapIpImg"><div class="map-info-img-empty">Нет фото</div></div>
+      <div class="map-info-body">
+        <div class="map-info-name" id="mapIpName"></div>
+        <div class="map-info-cat" id="mapIpCat"></div>
+        <div class="map-info-desc" id="mapIpDesc"></div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="map-mini" id="mapMini">
+    <img id="mapMmImg" alt="">
+    <div class="map-mini-view" id="mapMmView"></div>
+  </div>
+</div>
+
+<div class="modal-back" id="loginModal">
+  <div class="modal">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Вход администратора</h3>
+    <div class="modal-sub">Доступ к управлению контентом</div>
+    <form>
+      <div class="form-group"><label>Email</label><input type="email" name="email" required></div>
+      <div class="form-group"><label>Пароль</label><input type="password" name="password" required></div>
+      <button class="btn btn-gold" style="width:100%" type="submit">Войти</button>
+      <div class="form-msg"></div>
+    </form>
+  </div>
+</div>
+
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=18"></script>
+<script src="assets/js/core/config.js?v=18"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/ui/search-engine.js?v=18"></script>
+<script src="assets/js/core/auth.js?v=18"></script>
+<script src="assets/js/core/roles-engine.js?v=18"></script>
+<script src="assets/js/features/map-data.js?v=18"></script>
+<script>
+(function(){
+"use strict";
+var D=window.CGB_MAP_DATA;
+var MAP_ID=D.MAP_ID;
+var IMG_URL="https://lh3.googleusercontent.com/d/"+MAP_ID+"=s0";
+var IMG_FALL="https://drive.google.com/thumbnail?id="+MAP_ID+"&sz=w4000";
+var MIN_Z=0.1,MAX_Z=20,Z_BTN=1.4,Z_WHL=1.15,iconBaseSize=80;
+var MARKERS=D.MARKERS,CAT_COLORS=D.CAT_COLORS,CAT_ICONS=D.CAT_ICONS,INFO_CATS=D.INFO_CATS;
+var zoom=1,panX=0,panY=0,dragging=false,dsx=0,dsy=0,psx=0,psy=0,imgW=0,imgH=0;
+var catVisible={},highlightedIds={},highlightedCats={};
+var cats=[];MARKERS.forEach(function(m){if(cats.indexOf(m.cat)===-1) cats.push(m.cat);m._id=MARKERS.indexOf(m)});
+cats.forEach(function(c){catVisible[c]=true});
+
+var $=function(id){return document.getElementById(id)};
+var vp=$("mapVp"),cv=$("mapCv"),mapImg=$("mapImg"),markerEls=[],iconEls=[],dotEls=[];
+
+mapImg.src=IMG_URL;
+mapImg.onerror=function(){this.src=IMG_FALL};
+mapImg.onload=function(){
+  imgW=this.naturalWidth;imgH=this.naturalHeight;
+  cv.style.width=imgW+"px";cv.style.height=imgH+"px";
+  $("mapMmImg").src=this.src;
+  resetView();buildSidePanel();renderAllMarkers();
+  setTimeout(function(){$("mapLoading").classList.add("hidden");setTimeout(function(){$("mapLoading").style.display="none"},400)},300);
+};
+
+function tf(){
+  cv.style.transform="translate("+panX+"px,"+panY+"px) scale("+zoom+")";
+  $("mapZoomTxt").textContent=Math.round(zoom*100)+"%";
+  scaleMarkers();updateMinimap();
+}
+function resetView(){
+  var vw=vp.clientWidth,vh=vp.clientHeight;
+  zoom=Math.min(vw/imgW,vh/imgH,1);
+  panX=(vw-imgW*zoom)/2;panY=(vh-imgH*zoom)/2;
+  tf();
+}
+function zoomAt(f,cx,cy){
+  var oz=zoom,nz=Math.max(MIN_Z,Math.min(MAX_Z,oz*f)),r=nz/oz;
+  panX=cx-(cx-panX)*r;panY=cy-(cy-panY)*r;zoom=nz;tf();
+}
+function zoomC(f){zoomAt(f,vp.clientWidth/2,vp.clientHeight/2)}
+
+$("mapBtnZi").onclick=function(){zoomC(Z_BTN)};
+$("mapBtnZo").onclick=function(){zoomC(1/Z_BTN)};
+$("mapBtnRe").onclick=resetView;
+
+vp.addEventListener("wheel",function(e){
+  e.preventDefault();
+  var r=vp.getBoundingClientRect();
+  zoomAt(e.deltaY<0?Z_WHL:1/Z_WHL,e.clientX-r.left,e.clientY-r.top);
+},{passive:false});
+
+vp.addEventListener("mousedown",function(e){
+  if(e.button!==0) return;
+  dragging=true;dsx=e.clientX;dsy=e.clientY;psx=panX;psy=panY;
+  vp.classList.add("grabbing");
+});
+window.addEventListener("mousemove",function(e){
+  if(dragging){panX=psx+e.clientX-dsx;panY=psy+e.clientY-dsy;tf()}
+});
+window.addEventListener("mouseup",function(){dragging=false;vp.classList.remove("grabbing")});
+
+var ltd=0;
+vp.addEventListener("touchstart",function(e){
+  if(e.touches.length===1){dragging=true;dsx=e.touches[0].clientX;dsy=e.touches[0].clientY;psx=panX;psy=panY}
+  if(e.touches.length===2){dragging=false;var dx=e.touches[0].clientX-e.touches[1].clientX,dy=e.touches[0].clientY-e.touches[1].clientY;ltd=Math.sqrt(dx*dx+dy*dy)}
+},{passive:true});
+vp.addEventListener("touchmove",function(e){
+  if(e.touches.length===1&&dragging){panX=psx+e.touches[0].clientX-dsx;panY=psy+e.touches[0].clientY-dsy;tf()}
+  if(e.touches.length===2){
+    e.preventDefault();
+    var dx=e.touches[0].clientX-e.touches[1].clientX,dy=e.touches[0].clientY-e.touches[1].clientY,d=Math.sqrt(dx*dx+dy*dy);
+    if(ltd>0){var cx=(e.touches[0].clientX+e.touches[1].clientX)/2,cy=(e.touches[0].clientY+e.touches[1].clientY)/2,r=vp.getBoundingClientRect();zoomAt(d/ltd,cx-r.left,cy-r.top)}
+    ltd=d;
+  }
+},{passive:false});
+vp.addEventListener("touchend",function(){dragging=false;ltd=0},{passive:true});
+
+function updateIconSizes(){
+  iconEls.forEach(function(el){el.style.width=iconBaseSize+"px";el.style.height=iconBaseSize+"px"});
+  var ds=Math.max(16,iconBaseSize*.45);
+  dotEls.forEach(function(el){el.style.width=ds+"px";el.style.height=ds+"px"});
+}
+function scaleMarkers(){
+  var s=Math.max(.4,Math.min(2.5,1.2/zoom));
+  markerEls.forEach(function(el){el.style.transform="translate(-50%,-50%) scale("+s+")"});
+}
+$("mapIconSlider").addEventListener("input",function(){iconBaseSize=parseInt(this.value);updateIconSizes()});
+
+function hasAnyHighlight(){
+  for(var k in highlightedIds) if(highlightedIds[k]) return true;
+  for(var k2 in highlightedCats) if(highlightedCats[k2]) return true;
+  return false;
+}
+function applyHighlights(){
+  var any=hasAnyHighlight();
+  markerEls.forEach(function(el){
+    var id=parseInt(el.dataset.id),cat=el.dataset.cat;
+    var isHl=highlightedIds[id]||highlightedCats[cat];
+    if(!any){el.classList.remove("dimmed","highlighted")}
+    else if(isHl){el.classList.remove("dimmed");el.classList.add("highlighted")}
+    else{el.classList.add("dimmed");el.classList.remove("highlighted")}
+  });
+}
+
+function renderAllMarkers(){
+  MARKERS.forEach(function(m){
+    var el=document.createElement("div");
+    el.className="mk";
+    el.dataset.id=m._id;el.dataset.cat=m.cat;
+    el.style.left=m.x+"%";el.style.top=m.y+"%";
+    var isC=INFO_CATS.indexOf(m.cat)!==-1;
+    if(isC) el.classList.add("clickable");
+    var color=CAT_COLORS[m.cat]||"#22d3ee";
+    var iu=m.icon||CAT_ICONS[m.cat];
+    var dh;
+    if(iu){
+      dh='<div class="mk-icon" style="width:'+iconBaseSize+'px;height:'+iconBaseSize+'px;background-image:url(\''+iu+'\')"></div>';
+    }else{
+      var ds=Math.max(16,iconBaseSize*.45);
+      dh='<div class="mk-dot" style="width:'+ds+'px;height:'+ds+'px;background:'+color+'"></div>';
+    }
+    el.innerHTML='<div class="mk-ring"></div>'+dh+'<div class="mk-label">'+esc(m.name)+'</div>';
+    var ico=el.querySelector(".mk-icon");if(ico) iconEls.push(ico);
+    var dot=el.querySelector(".mk-dot");if(dot) dotEls.push(dot);
+    if(isC){el.addEventListener("click",function(e){e.stopPropagation();openInfoPanel(m)})}
+    cv.appendChild(el);markerEls.push(el);
+  });
+  scaleMarkers();applyFilters();
+}
+
+function openInfoPanel(m){
+  $("mapSide").classList.remove("open");
+  $("mapBtnList").classList.remove("on");
+  var ipImg=$("mapIpImg");
+  if(m.photo&&m.photo.indexOf("http")===0){
+    ipImg.innerHTML='<img src="'+m.photo+'" alt="'+esc(m.name)+'">';
+  }else if(m.photo){
+    ipImg.innerHTML='<div class="map-info-img-empty">'+esc(m.photo)+'</div>';
+  }else{
+    ipImg.innerHTML='<div class="map-info-img-empty">Нет фото</div>';
+  }
+  $("mapIpName").textContent=m.name;
+  var badge=$("mapIpCat");
+  badge.textContent=m.cat;
+  var col=CAT_COLORS[m.cat]||"#22d3ee";
+  badge.style.color=col;
+  badge.style.background=col+"22";
+  var descEl=$("mapIpDesc");
+  if(m.cat==="ТОЧКИ ПОСТАВОК"){
+    var h="";
+    if(m.desc&&m.desc.indexOf("http")===0) h+='<img src="'+m.desc+'" alt="'+esc(m.name)+'">';
+    else if(m.desc) h+='<p>'+esc(m.desc)+'</p>';
+    if(m.desc2&&m.desc2.indexOf("http")===0) h+='<img src="'+m.desc2+'" alt="'+esc(m.name)+' (2)">';
+    descEl.innerHTML=h||'<span style="opacity:.6;font-style:italic">Нет описания</span>';
+  }else{
+    descEl.textContent=m.desc||"Описание отсутствует";
+  }
+  $("mapInfo").classList.add("open");
+}
+$("mapIpClose").onclick=function(){$("mapInfo").classList.remove("open")};
+
+function buildSidePanel(){
+  var list=$("mapSpList");list.innerHTML="";
+  cats.forEach(function(cat){
+    var items=MARKERS.filter(function(m){return m.cat===cat});
+    var color=CAT_COLORS[cat]||"#22d3ee";
+    var block=document.createElement("div");block.className="map-cat-block";block.dataset.cat=cat;
+    var header=document.createElement("div");header.className="map-cat-head";
+    header.innerHTML='<input type="checkbox" class="map-cat-cb" data-cat="'+esc(cat)+'" checked>'+
+      '<span class="map-cat-dot" style="background:'+color+';color:'+color+'"></span>'+
+      '<span class="map-cat-name">'+esc(cat)+'</span>'+
+      '<span class="map-cat-count">'+items.length+'</span>'+
+      '<span class="map-cat-hl" data-cat="'+esc(cat)+'" title="Выделить">◎</span>'+
+      '<span class="map-cat-arrow">▼</span>';
+    var itemsDiv=document.createElement("div");itemsDiv.className="map-cat-items";
+    itemsDiv.style.maxHeight=items.length*34+"px";
+    items.forEach(function(m){
+      var pt=document.createElement("div");pt.className="map-point";pt.dataset.id=m._id;
+      pt.innerHTML='<span class="map-point-dot" style="background:'+color+'"></span>'+
+        '<span class="map-point-name">'+esc(m.name)+'</span>'+
+        '<span class="map-point-hl" data-id="'+m._id+'" title="Выделить">◎</span>';
+      pt.addEventListener("click",function(e){
+        if(e.target.closest(".map-point-hl")) return;
+        e.stopPropagation();
+        if(!catVisible[m.cat]){catVisible[m.cat]=true;var cb=document.querySelector('.map-cat-cb[data-cat="'+m.cat+'"]');if(cb) cb.checked=true;applyFilters()}
+        flyTo(m.x,m.y,5);
+        document.querySelectorAll(".map-point").forEach(function(p){p.classList.remove("active")});
+        pt.classList.add("active");
+        if(INFO_CATS.indexOf(m.cat)!==-1) setTimeout(function(){openInfoPanel(m)},650);
+      });
+      itemsDiv.appendChild(pt);
+    });
+    var cb=header.querySelector(".map-cat-cb");
+    var arrow=header.querySelector(".map-cat-arrow");
+    var catHl=header.querySelector(".map-cat-hl");
+    cb.addEventListener("click",function(e){e.stopPropagation()});
+    cb.addEventListener("change",function(){catVisible[cat]=cb.checked;applyFilters()});
+    catHl.addEventListener("click",function(e){e.stopPropagation();highlightedCats[cat]=!highlightedCats[cat];catHl.classList.toggle("on",highlightedCats[cat]);applyHighlights()});
+    header.addEventListener("click",function(e){
+      if(e.target===cb||e.target.closest(".map-cat-hl")) return;
+      var c=itemsDiv.classList.toggle("collapsed");
+      arrow.classList.toggle("collapsed",c);
+    });
+    block.appendChild(header);block.appendChild(itemsDiv);list.appendChild(block);
+  });
+  document.querySelectorAll(".map-point-hl").forEach(function(btn){
+    btn.addEventListener("click",function(e){
+      e.stopPropagation();
+      var id=parseInt(btn.dataset.id);
+      highlightedIds[id]=!highlightedIds[id];
+      btn.classList.toggle("on",highlightedIds[id]);
+      applyHighlights();
+    });
+  });
+}
+
+$("mapSpAll").onclick=function(){sf(true)};
+$("mapSpNone").onclick=function(){sf(false)};
+function sf(v){
+  cats.forEach(function(c){catVisible[c]=v});
+  document.querySelectorAll(".map-cat-cb").forEach(function(cb){cb.checked=v});
+  applyFilters();
+}
+function applyFilters(){
+  markerEls.forEach(function(el){el.classList.toggle("hidden",!catVisible[el.dataset.cat])});
+}
+
+$("mapBtnList").onclick=function(){$("mapInfo").classList.remove("open");$("mapSide").classList.toggle("open");this.classList.toggle("on")};
+
+$("mapSpSearch").addEventListener("input",function(){
+  var q=this.value.trim().toLowerCase();
+  document.querySelectorAll(".map-point").forEach(function(pt){
+    var m=MARKERS[parseInt(pt.dataset.id)];
+    pt.style.display=(!q||m.name.toLowerCase().indexOf(q)!==-1)?"":"none";
+  });
+  document.querySelectorAll(".map-cat-block").forEach(function(bl){
+    var h=false;bl.querySelectorAll(".map-point").forEach(function(pt){if(pt.style.display!=="none") h=true});
+    bl.style.display=h?"":"none";
+  });
+});
+
+var searchIn=$("mapSearchIn"),searchDrop=$("mapSearchDrop");
+searchIn.addEventListener("input",function(){
+  var q=searchIn.value.trim().toLowerCase();
+  if(!q){searchDrop.classList.remove("open");return}
+  var res=MARKERS.filter(function(m){return m.name.toLowerCase().indexOf(q)!==-1||m.cat.toLowerCase().indexOf(q)!==-1}).slice(0,15);
+  if(!res.length){searchDrop.innerHTML='<div class="map-search-no">Ничего не найдено</div>'}
+  else{
+    searchDrop.innerHTML=res.map(function(m){
+      return '<div class="map-search-item" data-id="'+m._id+'"><div class="map-search-item-name">'+hlText(m.name,q)+'</div><div class="map-search-item-cat">'+esc(m.cat)+'</div></div>';
+    }).join("");
+  }
+  searchDrop.classList.add("open");
+});
+searchDrop.addEventListener("click",function(e){
+  var item=e.target.closest(".map-search-item");if(!item) return;
+  var id=parseInt(item.dataset.id),m=MARKERS[id];
+  if(!catVisible[m.cat]){catVisible[m.cat]=true;var cb=document.querySelector('.map-cat-cb[data-cat="'+m.cat+'"]');if(cb) cb.checked=true;applyFilters()}
+  flyTo(m.x,m.y,5);
+  highlightedIds={};highlightedCats={};highlightedIds[id]=true;
+  applyHighlights();updateHlButtons();
+  searchDrop.classList.remove("open");
+  searchIn.value=m.name;
+  if(INFO_CATS.indexOf(m.cat)!==-1) setTimeout(function(){openInfoPanel(m)},650);
+});
+searchIn.addEventListener("focus",function(){if(searchIn.value.trim()) searchIn.dispatchEvent(new Event("input"))});
+document.addEventListener("click",function(e){if(!e.target.closest(".map-search")) searchDrop.classList.remove("open")});
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape"){searchDrop.classList.remove("open");highlightedIds={};highlightedCats={};applyHighlights();updateHlButtons()}
+});
+
+function updateHlButtons(){
+  document.querySelectorAll(".map-point-hl").forEach(function(b){b.classList.toggle("on",!!highlightedIds[parseInt(b.dataset.id)])});
+  document.querySelectorAll(".map-cat-hl").forEach(function(b){b.classList.toggle("on",!!highlightedCats[b.dataset.cat])});
+}
+
+function flyTo(xP,yP,tz){
+  tz=tz||4;
+  var vw=vp.clientWidth,vh=vp.clientHeight;
+  var mx=xP/100*imgW,my=yP/100*imgH;
+  var sz=zoom,spx=panX,spy=panY;
+  var ez=Math.max(MIN_Z,Math.min(MAX_Z,tz));
+  var epx=vw/2-mx*ez,epy=vh/2-my*ez;
+  var dur=700,st=performance.now();
+  function anim(now){
+    var t=Math.min((now-st)/dur,1);t=1-Math.pow(1-t,3);
+    zoom=sz+(ez-sz)*t;panX=spx+(epx-spx)*t;panY=spy+(epy-spy)*t;
+    tf();if(t<1) requestAnimationFrame(anim);
+  }
+  requestAnimationFrame(anim);
+}
+
+function updateMinimap(){
+  if(!imgW||!imgH) return;
+  var vw=vp.clientWidth,vh=vp.clientHeight;
+  var mm=$("mapMini"),mw=mm.clientWidth,mh=mm.clientHeight;
+  var vl=-panX/zoom,vt=-panY/zoom,vW=vw/zoom,vH=vh/zoom;
+  var v=$("mapMmView");
+  v.style.left=Math.max(0,vl/imgW*mw)+"px";
+  v.style.top=Math.max(0,vt/imgH*mh)+"px";
+  v.style.width=Math.min(vW/imgW*mw,mw)+"px";
+  v.style.height=Math.min(vH/imgH*mh,mh)+"px";
+}
+$("mapMini").addEventListener("click",function(e){
+  var r=this.getBoundingClientRect();
+  flyTo((e.clientX-r.left)/r.width*100,(e.clientY-r.top)/r.height*100,zoom);
+});
+
+window.addEventListener("resize",function(){setTimeout(function(){updateMinimap()},100)});
+
+var helpEl=$("mapHelp"),helpHidden=localStorage.getItem("cgb-map-help")==="1";
+if(helpHidden) helpEl.classList.add("hidden");
+$("mapHelpClose").addEventListener("click",function(){helpEl.classList.add("hidden");localStorage.setItem("cgb-map-help","1")});
+
+function hlText(t,q){
+  var i=t.toLowerCase().indexOf(q);if(i===-1) return esc(t);
+  return esc(t.slice(0,i))+'<mark>'+esc(t.slice(i,i+q.length))+'</mark>'+esc(t.slice(i+q.length));
+}
+function esc(s){var d=document.createElement("div");d.textContent=s||"";return d.innerHTML}
+})();
+</script>
+
+
+</body>
+</html>

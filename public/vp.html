@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title> Проверки АБ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=26">
+<style id="cgb-admin-guard">
+[data-admin]{display:none !important}
+[data-staff]{display:none !important}
+body.cgb-is-admin .nav a[data-admin]{display:inline-flex !important}
+body.cgb-is-staff .nav a[data-staff]{display:inline-flex !important}
+body.cgb-is-admin [data-admin]:not(.nav a){display:initial !important}
+body.cgb-is-staff [data-staff]:not(.nav a){display:initial !important}
+</style>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+<div class="bg-noise"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ВС"></div>
+      <div class="brand-text">
+        <span class="brand-label">Министерство Здравоохранения</span>
+        <span class="brand-name">ЦГБ №3 · Центральная Городская</span>
+      </div>
+    </a>
+    <nav class="nav" id="mainNav">
+      <a href="index.html" data-page="index.html" data-transition>Главная</a>
+      <a href="info.html" data-page="info.html" data-transition>Информация</a>
+      <a href="services.html" data-page="services.html" data-transition>Услуги</a>
+      <a href="meds.html" data-page="meds.html" data-transition>Медикаменты</a>
+      <a href="ustav.html" data-page="ustav.html" data-transition>Устав</a>
+      <a href="learn.html" data-page="learn.html" data-transition data-loggedin>Учебные материалы</a>
+      <a href="tests.html" data-page="tests.html" data-transition data-loggedin>Тестирование</a>
+      <a href="composition.html" data-page="composition.html" data-transition>Состав</a>
+      <a href="docs.html" data-page="docs.html" data-transition data-perm="docs:view">Документы</a>
+      <a href="news.html" data-page="news.html" data-transition>Новости</a>
+      <a href="autopark.html" data-page="autopark.html" data-transition>Автопарк</a>
+      <a href="map.html" data-page="map.html" data-transition>Карта</a>
+      <a href="faq.html" data-page="faq.html" data-transition>FAQ</a>
+      <a href="complaints.html" data-page="complaints.html" data-transition>Жалобы</a>
+      <a href="supply.html" data-page="supply.html" data-transition data-perm="supply:view">Поставки</a>
+      <a href="apps.html" data-page="apps.html" data-transition data-perm="apps:view">Заявления</a>
+      <a href="vp.html" data-page="vp.html" data-transition data-perm="vp:view">Проверки АБ</a>
+      <a href="complaints-review.html" data-page="complaints-review.html" data-transition data-perm="complaints:review,complaints:view">Рассмотрение жалоб</a>
+      <a href="complaints-stats.html" data-page="complaints-stats.html" data-transition data-perm="complaints:review,complaints:view">Статистика жалоб</a>
+      <a href="leave.html" data-page="leave.html" data-transition data-loggedin>Отгул</a>
+      <a href="vacation-ic.html" data-page="vacation-ic.html" data-transition data-loggedin>Отпуск IC</a>
+      <a href="vacation-ooc.html" data-page="vacation-ooc.html" data-transition data-loggedin>Отпуск OOC</a>
+      <a href="dismissal.html" data-page="dismissal.html" data-transition data-loggedin>Увольнение</a>
+      <a href="promotion.html" data-page="promotion.html" data-transition data-loggedin>Повышение</a>
+      <a href="restoration.html" data-page="restoration.html" data-transition>Восстановление в ЦГБ №3</a>
+      <a href="appointment.html" data-page="appointment.html" data-transition>Запись к врачу</a>
+      <a href="requests-review.html" data-page="requests-review.html" data-transition data-perm="requests:review,requests:view">Рассмотрение заявок</a>
+      <a href="requests-stats.html" data-page="requests-stats.html" data-transition data-perm="requests:review,requests:view">Статистика заявок</a>
+      <a href="payroll.html" data-page="payroll.html" data-transition data-perm="payroll:view">Реестр премирования</a>
+      <a href="report.html" data-page="report.html" data-transition>Еженедельный отчёт</a>
+      <a href="report-settings.html" data-page="report-settings.html" data-transition data-perm="report:settings">Настройки отчётов</a>
+      <a href="vp-request.html" data-page="vp-request.html" data-transition data-perm="vp_request:submit">Запрос на наказание</a>
+      <a href="vp-request-settings.html" data-page="vp-request-settings.html" data-transition data-perm="vp_request:settings">Настройки запросов АБ</a>
+      <a href="lk.html" data-page="lk.html" data-transition>Личный кабинет</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-btn" data-open-search title="Поиск (Ctrl+K)">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+        <span>Поиск</span><span class="kbd">Ctrl K</span>
+      </button>
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Сменить тему">
+        <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24"><path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66l1.42-1.42M4.92 19.08l1.42-1.42m0-11.32L4.92 4.92m14.16 14.16l-1.42-1.42M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="login-btn" data-open-login>
+        <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/></svg>
+        <span>Войти</span>
+      </button>
+      <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="apps-head">
+    <div class="container">
+      <div class="apps-head-ribbon">
+        <span class="apps-head-ribbon-line"></span>
+        <span class="apps-head-ribbon-emblem">◈</span>
+        <span class="apps-head-ribbon-name">Администрация · Проверки</span>
+        <span class="apps-head-ribbon-emblem">◈</span>
+        <span class="apps-head-ribbon-line"></span>
+      </div>
+      <h1 class="apps-head-title">Проверки личного состава</h1>
+      <div class="apps-head-subtitle">Документы, аттестация, лицензии</div>
+    </div>
+  </section>
+
+  <section class="apps-guard" id="vpGuard" style="display:none">
+    <div class="container apps-guard-box">
+      <div class="apps-guard-icon">⚠</div>
+      <h2>Доступ ограничен</h2>
+      <p>Раздел «Проверки АБ» доступен только Старшему Составу и Администрации.</p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px">
+        <button class="btn btn-gold btn-sm" data-open-login>Войти</button>
+        <a class="btn btn-ghost btn-sm" href="index.html">На главную</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="apps-body" id="vpBody" style="display:none">
+    <div class="container">
+
+      <div class="vp-checker-bar" id="vpCheckerBar">
+        <div class="vp-checker-bar-icon">👤</div>
+        <div class="vp-checker-bar-txt">
+          <div class="vp-checker-bar-lbl">Вы проверяете как:</div>
+          <input type="text" class="vp-checker-input" id="vpCheckerInput" list="vpCheckerList" placeholder="Введите ФИО / позывной..." autocomplete="off">
+          <datalist id="vpCheckerList"></datalist>
+        </div>
+        <div class="vp-checker-bar-hint" id="vpCheckerHint">Обязательное поле — иначе нельзя ставить отметки</div>
+      </div>
+
+      <div class="vp-toolbar">
+        <div class="vp-toolbar-left">
+          <div class="vp-search-wrap">
+            <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+            <input type="search" class="vp-search" id="vpSearch" placeholder="Поиск по ФИО, званию, роли, отделу...">
+          </div>
+        </div>
+        <div class="vp-toolbar-right">
+          <label class="vp-toggle" title="Скрыть людей, у которых не определён отдел (нет роли-отдела и в нике нет «Отдел |»)">
+            <input type="checkbox" id="vpHideNoDept">
+            <span class="vp-toggle-slider"></span>
+            <span class="vp-toggle-lbl">Скрыть «Без отдела»</span>
+          </label>
+          <div class="vp-bot-indicator" id="vpBotIndicator" title="Статус Discord-бота">
+            <span class="vp-bot-dot"></span>
+            <span class="vp-bot-text">проверка...</span>
+          </div>
+          <button class="btn btn-ghost btn-sm" id="vpSyncBtn" title="Запросить свежий список из Discord">
+            <span id="vpSyncBtnLabel">↻ Синхронизировать</span>
+          </button>
+          <button class="btn btn-ghost btn-sm" id="vpArchiveBtn" title="Архив проверок и статистика">📊 Архив</button>
+          <button class="btn btn-gold btn-sm" id="vpSaveArchiveBtn" title="Сохранить текущие проверки в архив">💾 В архив</button>
+          <button class="btn btn-gold btn-sm" id="vpAddDeptBtn" data-perm="vp:settings" title="Добавить отдел из роли Discord">＋ Отдел</button>
+          <button class="btn btn-ghost btn-sm" id="vpSettingsBtn" data-perm="vp:settings" title="Управление отделами и ролями">⚙ Роли</button>
+        </div>
+      </div>
+
+      <div class="vp-tables" id="vpTables">
+        <div class="apps-empty">Загрузка...</div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<div class="modal-back" id="vpSaveArchiveModal">
+  <div class="modal modal-lg">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Сохранение проверок в архив</h3>
+    <div class="modal-sub">В архив попадут <b>только проверенные</b> люди (хотя бы одна отметка). Не проверенные автоматически исключаются.</div>
+
+    <div class="form-group">
+      <label>Название записи</label>
+      <input type="text" id="vpArcTitle" class="msg-input" placeholder="Например: Проверка от 15.11.2026">
+    </div>
+    <div class="msg-row">
+      <div class="form-group msg-flex-1">
+        <label>Период — с</label>
+        <input type="date" id="vpArcFrom" class="msg-input">
+      </div>
+      <div class="form-group msg-flex-1">
+        <label>Период — по</label>
+        <input type="date" id="vpArcTo" class="msg-input">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Примечание (опц.)</label>
+      <textarea id="vpArcNotes" class="msg-input msg-textarea msg-textarea-sm" placeholder="Комментарий к отчёту..."></textarea>
+    </div>
+
+    <div class="vp-arc-preview" id="vpArcPreview"></div>
+
+    <div class="form-group">
+      <label class="doc-toggle-row"><input type="checkbox" id="vpArcClear"><span>Очистить все текущие отметки после сохранения (начать новую неделю с нуля)</span></label>
+    </div>
+
+    <div class="form-msg" id="vpArcMsg"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid var(--gold-b)">
+      <button class="btn btn-ghost btn-sm" id="vpArcCancel">Отмена</button>
+      <button class="btn btn-gold btn-sm" id="vpArcConfirm">💾 Сохранить в архив</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-back" id="vpArchiveModal">
+  <div class="modal modal-xxl">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Архив проверок и статистика</h3>
+    <div class="modal-sub">Все сохранённые проверки. Можно выбрать период, посмотреть детали, отправить отчёт в Discord.</div>
+
+    <div class="vp-arc-tabs">
+      <button class="vp-arc-tab active" data-arc-tab="list">📋 Список</button>
+      <button class="vp-arc-tab" data-arc-tab="stats">📈 Статистика</button>
+      <button class="vp-arc-tab" data-arc-tab="settings" data-perm="vp_archive:settings">⚙ Канал отчётов</button>
+    </div>
+
+    <div class="vp-arc-tab-body" data-arc-body="list">
+      <div class="vp-arc-list" id="vpArcList">
+        <div class="apps-empty">Загрузка...</div>
+      </div>
+    </div>
+
+    <div class="vp-arc-tab-body" data-arc-body="stats" style="display:none">
+      <div class="vp-stats-toolbar">
+        <label>Период:
+          <select id="vpStatsPeriod" class="vp-search" style="max-width:180px">
+            <option value="week">Последняя неделя</option>
+            <option value="month" selected>Последний месяц</option>
+            <option value="quarter">Квартал</option>
+            <option value="year">Год</option>
+            <option value="all">Всё время</option>
+          </select>
+        </label>
+      </div>
+      <div class="vp-stats-body" id="vpStatsBody">
+        <div class="apps-empty">Загрузка...</div>
+      </div>
+    </div>
+
+    <div class="vp-arc-tab-body" data-arc-body="settings" style="display:none">
+      <div class="form-group">
+        <label>Канал Discord для отправки отчётов</label>
+        <select id="vpReportChannel" class="msg-input"></select>
+        <div class="msg-help">Бот будет отправлять сюда все отчёты о проверках. Только Администратор может менять.</div>
+      </div>
+      <div class="form-msg" id="vpArcSetMsg"></div>
+      <div style="display:flex;gap:10px;justify-content:flex-end">
+        <button class="btn btn-gold btn-sm" id="vpArcSetSave">Сохранить настройки</button>
+      </div>
+    </div>
+
+    <div class="form-msg" id="vpArcModalMsg"></div>
+  </div>
+</div>
+
+<div class="modal-back" id="vpArcDetailModal">
+  <div class="modal modal-xxl">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3 id="vpArcDetailTitle">Просмотр записи архива</h3>
+    <div class="modal-sub" id="vpArcDetailSub"></div>
+    <div class="vp-arc-detail-body" id="vpArcDetailBody"></div>
+    <div class="form-msg" id="vpArcDetailMsg"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid var(--gold-b)">
+      <button class="btn btn-ghost btn-sm" id="vpArcDetailDelete" data-perm="vp_archive:delete">🗑 Удалить (admin)</button>
+      <button class="btn btn-ghost btn-sm" id="vpArcDetailEdit" data-perm="vp_archive:edit">✎ Редактировать</button>
+      <div style="flex:1"></div>
+      <button class="btn btn-ghost btn-sm" id="vpArcDetailClose">Закрыть</button>
+      <button class="btn btn-gold btn-sm" id="vpArcDetailSend">📤 Отправить в Discord</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-back" id="vpEvidenceModal">
+  <div class="modal modal-lg">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>🔗 Доказательство проверки</h3>
+    <div class="modal-sub">При отметке <b>НЕТ</b> хотя бы по одному документу — необходимо приложить ссылку на скриншот/подтверждение. Ссылка сохраняется в архиве, но <b>НЕ идёт в Discord-отчёт</b>.</div>
+    <div class="form-group" id="vpEvHead"></div>
+    <div class="form-group">
+      <label>Ссылка на скриншот / imgur / yapx / диск (обязательна при НЕТ)</label>
+      <input type="url" id="vpEvUrl" class="msg-input" placeholder="https://imgur.com/... или https://disk.yandex.ru/...">
+    </div>
+    <div class="form-msg" id="vpEvMsg"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid var(--gold-b)">
+      <button class="btn btn-ghost btn-sm" id="vpEvClear">Очистить</button>
+      <div style="flex:1"></div>
+      <button class="btn btn-ghost btn-sm" id="vpEvCancel">Отмена</button>
+      <button class="btn btn-gold btn-sm" id="vpEvSave">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-back" id="vpArcEditModal">
+  <div class="modal modal-lg">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Редактирование записи архива</h3>
+    <div class="modal-sub">Изменить название и примечание. Данные о проверках менять нельзя — это снимок во времени.</div>
+    <div class="form-group"><label>Название</label><input type="text" id="vpArcEditTitle" class="msg-input"></div>
+    <div class="form-group"><label>Примечание</label><textarea id="vpArcEditNotes" class="msg-input msg-textarea msg-textarea-sm"></textarea></div>
+    <div class="form-msg" id="vpArcEditMsg"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px;padding-top:12px;border-top:1px solid var(--gold-b)">
+      <button class="btn btn-ghost btn-sm" id="vpArcEditCancel">Отмена</button>
+      <button class="btn btn-gold btn-sm" id="vpArcEditSave">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-back" id="vpAddDeptModal">
+  <div class="modal modal-lg">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>＋ Добавить отдел (из роли Discord)</h3>
+    <div class="modal-sub">Выберите роль Discord — все её участники попадут в отдельную таблицу.</div>
+    <div class="form-group">
+      <label>Роль Discord</label>
+      <select id="vpAddDeptRole" class="msg-input"></select>
+    </div>
+    <div class="form-group">
+      <label>Название отдела (можно своё)</label>
+      <input type="text" id="vpAddDeptName" class="msg-input" placeholder="Оставьте пустым — будет имя роли">
+    </div>
+    <div class="form-msg" id="vpAddDeptMsg"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;padding-top:12px;border-top:1px solid var(--gold-b);margin-top:14px">
+      <button class="btn btn-ghost btn-sm" id="vpAddDeptCancel">Отмена</button>
+      <button class="btn btn-gold btn-sm" id="vpAddDeptSave">＋ Добавить</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-back" id="vpSettingsModal">
+  <div class="modal modal-xxl">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Управление ролями Discord</h3>
+    <div class="modal-sub">Для быстрого добавления отдела используйте кнопку <b>＋ Отдел</b> на главном экране.</div>
+
+    <div class="vp-settings-toolbar">
+      <input type="search" class="vp-search" id="vpMapSearch" placeholder="Поиск роли по названию..." style="max-width:340px">
+      <select class="vp-search" id="vpMapFilter" style="max-width:200px">
+        <option value="">Все роли</option>
+        <option value="configured">Только настроенные</option>
+        <option value="unconfigured">Только не настроенные</option>
+        <option value="include">Показывать</option>
+        <option value="exclude">Скрывать</option>
+        <option value="department">Отделы</option>
+        <option value="position">Должности</option>
+      </select>
+      <button class="btn btn-ghost btn-sm" id="vpPresetHide" title="Автоматически пометить как «Скрыть»: Уволен, Гражданин, ЧС, Отпуск, Заморожен и подобные">⚡ Скрыть стандартные</button>
+      <div style="flex:1"></div>
+      <span class="vp-map-hint" id="vpMapHint"></span>
+      <button class="btn btn-ghost btn-sm" id="vpMapReload">Обновить</button>
+    </div>
+
+    <div class="vp-map-list" id="vpMapList">
+      <div class="apps-empty">Загрузка...</div>
+    </div>
+
+    <div class="form-msg" id="vpMapMsg"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid var(--gold-b)">
+      <button class="btn btn-ghost btn-sm" id="vpMapClose">Отмена</button>
+      <button class="btn btn-gold btn-sm" id="vpMapSave">Сохранить и применить</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-back" id="loginModal">
+  <div class="modal">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Вход в служебный раздел</h3>
+    <div class="modal-sub">Требуется роль СС или Администратора</div>
+    <form>
+      <div class="form-group"><label>Email</label><input type="email" name="email" required></div>
+      <div class="form-group"><label>Пароль</label><input type="password" name="password" required></div>
+      <button class="btn btn-gold" style="width:100%" type="submit">Войти</button>
+      <div class="form-msg"></div>
+    </form>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="brand-icon" style="width:44px;height:44px"><img src="assets/images/brand/logo.png" alt=""></div>
+        <p style="color:var(--muted);font-size:13px;margin-top:12px">Служебный раздел. Доступ ограничен.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Разделы</h5>
+        <a href="index.html" data-page="index.html">Главная</a>
+        <a href="info.html" data-page="info.html">Информация</a>
+        <a href="services.html" data-page="services.html">Услуги и цены</a>
+        <a href="meds.html" data-page="meds.html">Медикаменты</a>
+        <a href="ustav.html" data-page="ustav.html">Устав</a>
+      </div>
+      <div class="footer-col">
+        <h5>Служебное</h5>
+        <a href="apps.html" data-page="apps.html">Заявления</a>
+        <a href="vp.html" data-page="vp.html">Проверки АБ</a>
+        <a href="lk.html" data-page="lk.html">Личный кабинет</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> · Министерство Здравоохранения</span>
+      <span>ЦГБ №3 · Центральная Городская</span>
+    <span class="footer-note">🐞 Нашли баг? Обратитесь: <b>@rilavion</b></span></div>
+  </div>
+</footer>
+
+<div class="fab-stack" id="fabStack">
+  <button class="fab" id="fabUp" title="Наверх"><svg viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8z"/></svg></button>
+</div>
+
+<div class="search-modal" id="searchModal">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+      <input class="search-input" placeholder="Поиск..." spellcheck="false">
+      <button class="search-close-kbd">Esc</button>
+    </div>
+    <div class="search-results"></div>
+  </div>
+</div>
+
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=18"></script>
+<script src="assets/js/core/config.js?v=18"></script>
+<script src="assets/js/core/auth.js?v=18"></script>
+<script src="assets/js/core/roles-engine.js?v=18"></script>
+<script src="assets/js/features/vp-engine.js?v=18"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/utils/format-utils.js?v=18"></script>
+<script src="assets/js/ui/holiday-engine.js?v=18"></script>
+<script src="assets/js/ui/sound-engine.js?v=18"></script>
+<script src="assets/js/ui/settings-panel.js?v=18"></script>
+<script src="assets/js/features/faq-engine.js?v=18"></script>
+<script src="assets/js/ui/search-engine.js?v=18"></script>
+<script src="assets/js/utils/ds-cache.js?v=18"></script>
+<script src="assets/js/ui/notify-engine.js?v=19"></script>
+<script src="assets/js/ui/notify-live.js?v=18"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+let ALL_MEMBERS=[];
+let ALL_MAPPING=[];
+let ALL_CHECKS={};
+let ALL_ROLES=[];
+let ALL_GROUPS=[];
+let SEARCH_Q="";
+let CURRENT_CHECKER="";
+try{CURRENT_CHECKER=localStorage.getItem("cgb-vp-checker-name")||""}catch(e){}
+let RENDER_LOCK=false;
+let LAST_RENDER_HASH="";
+let REALTIME_SUB=null;
+let HIDE_NO_DEPT=false;
+try{HIDE_NO_DEPT=localStorage.getItem("cgb-vp-hide-nodept")==="1"}catch(e){}
+
+const COLS=[
+  {key:"medbook",label:"Мед. Книжка",short:"МК",opts:["yes","no","none"]},
+  {key:"narko",label:"Справка Нарк.",short:"Н",opts:["yes","no","none"]},
+  {key:"driver",label:"Вод. Права",short:"ВП",opts:["yes","no","none"]},
+  {key:"passport",label:"Паспорт",short:"П",opts:["yes","no","none"]},
+  {key:"personal_file",label:"Личное Дело",short:"ЛД",opts:["yes","no","none"]},
+  {key:"weapon_license",label:"Лицензия на Оружие",short:"ЛО",opts:["yes","no","absent","none"]},
+  {key:"attestation",label:"Аттестация",short:"АТ",opts:["yes","no","none"]}
+];
+
+const OPT_LABEL={yes:"ДА",no:"НЕТ",absent:"Отс.",none:"—",null:"—"};
+const OPT_ICON={yes:"✓",no:"✕",absent:"○",none:"—",null:"—"};
+
+function checkerReady(){return !!(CURRENT_CHECKER&&CURRENT_CHECKER.trim())}
+
+function updateCheckerBar(){
+  const bar=$("vpCheckerBar");
+  const hint=$("vpCheckerHint");
+  if(checkerReady()){
+    bar.classList.remove("vp-checker-bar-empty");
+    bar.classList.add("vp-checker-bar-ok");
+    hint.textContent="Можете ставить отметки";
+  } else {
+    bar.classList.add("vp-checker-bar-empty");
+    bar.classList.remove("vp-checker-bar-ok");
+    hint.textContent="Обязательное поле — иначе нельзя ставить отметки";
+  }
+}
+
+function matchesSearch(m){
+  if(!SEARCH_Q) return true;
+  const q=SEARCH_Q.toLowerCase();
+  return (m.parsed_fio||"").toLowerCase().includes(q)
+    || (m.parsed_static||"").toLowerCase().includes(q)
+    || (m.display_name||"").toLowerCase().includes(q)
+    || (m.raw_nick||"").toLowerCase().includes(q)
+    || (m.role_names||[]).join(" ").toLowerCase().includes(q);
+}
+
+function nextValue(cur,opts){
+  const idx=opts.indexOf(cur);
+  return opts[(idx+1)%opts.length];
+}
+
+function cellClass(val){
+  return {yes:"vp-cell-yes",no:"vp-cell-no",absent:"vp-cell-absent",none:"vp-cell-none"}[val]||"vp-cell-none";
+}
+function normalizeVal(v){return v==="none"?null:v}
+
+function renderRow(m,index){
+  const check=ALL_CHECKS[m.discord_id]||{};
+  const position=CGB_VP.positionFor(m,ALL_MAPPING);
+  const staticId=CGB_VP.staticFor(m);
+  const cells=COLS.map(c=>{
+    const val=check[c.key]||null;
+    const opts=c.opts;
+    return `<td class="vp-cell ${cellClass(val)}">
+      <button class="vp-pill-btn" data-check="${c.key}" data-id="${m.discord_id}" data-cur="${val==null?'':val}" data-opts='${JSON.stringify(opts)}' title="${esc(c.label)}: клик циклом (${opts.map(o=>OPT_LABEL[o]).join(' → ')})">
+        <span class="vp-pill-i">${OPT_ICON[val]}</span>
+        <span class="vp-pill-t">${OPT_LABEL[val]}</span>
+      </button>
+    </td>`;
+  }).join("");
+  const checker=check.checked_by_name?`<div class="vp-checker" title="${esc(new Date(check.checked_at).toLocaleString("ru-RU",{timeZone:"Europe/Moscow"}))}">${esc(check.checked_by_name)}</div>`:`<span class="vp-checker-empty">—</span>`;
+  const hasNo=COLS.some(c=>check[c.key]==="no");
+  const evUrl=check.evidence_url||"";
+  const evBtn=hasNo
+    ? (evUrl
+        ? `<a class="vp-ev-btn vp-ev-ok" href="${esc(evUrl)}" target="_blank" rel="noopener" data-ev-open="${m.discord_id}" title="Открыть доказательство: ${esc(evUrl)}">🔗</a>`
+        : `<button class="vp-ev-btn vp-ev-req" data-ev-edit="${m.discord_id}" title="Требуется ссылка на доказательство (есть НЕТ)">⚠</button>`)
+    : (evUrl
+        ? `<a class="vp-ev-btn vp-ev-info" href="${esc(evUrl)}" target="_blank" rel="noopener" title="Доказательство: ${esc(evUrl)}">🔗</a>`
+        : `<button class="vp-ev-btn vp-ev-empty" data-ev-edit="${m.discord_id}" title="Добавить ссылку на доказательство">＋</button>`);
+  const idx=String(index+1).padStart(2,"0");
+  return `<tr data-id="${m.discord_id}">
+    <td class="vp-td-idx">${idx}</td>
+    <td class="vp-td-name">
+      <div class="vp-fio">${esc(m.parsed_fio||m.display_name||"—")}</div>
+      <div class="vp-nick">${esc(m.raw_nick||"")}</div>
+    </td>
+    <td class="vp-td-pos">${esc(position)}</td>
+    <td class="vp-td-static">${esc(staticId)}</td>
+    ${cells}
+    <td class="vp-td-ev">${evBtn}</td>
+    <td class="vp-td-actions">
+      <button class="vp-row-btn vp-row-yes" data-row-all="yes" data-id="${m.discord_id}" title="Отметить все ДА">✓✓</button>
+      <button class="vp-row-btn vp-row-no" data-row-all="no" data-id="${m.discord_id}" title="Отметить все НЕТ">✕✕</button>
+      <button class="vp-row-btn vp-row-reset" data-reset-row="${m.discord_id}" title="Сбросить все">↺</button>
+    </td>
+    <td class="vp-td-checker">${checker}</td>
+  </tr>`;
+}
+
+function calcProgress(list){
+  let done=0;
+  for(const m of list){
+    const c=ALL_CHECKS[m.discord_id];
+    if(!c) continue;
+    const hasNo=COLS.some(col=>c[col.key]==="no");
+    const hasProof=!!(c.evidence_url && String(c.evidence_url).trim());
+    if(hasNo && !hasProof) continue;
+    const set=COLS.filter(col=>c[col.key]!=null && !(col && c[col.key]==="no" && !hasProof)).length;
+    if(set===COLS.length) done++;
+  }
+  return { done, total: list.length, pct: list.length ? Math.round(done*100/list.length) : 0 };
+}
+
+function renderTable(g){
+  const rows=g.list.filter(matchesSearch);
+  if(!rows.length) return "";
+  const p=calcProgress(rows);
+  return `<div class="vp-table-block">
+    <div class="vp-table-head">
+      <div class="vp-table-head-l">
+        <span class="vp-table-dot"></span>
+        <span class="vp-table-name">${esc(g.name)}</span>
+        <span class="vp-table-count">${rows.length}</span>
+      </div>
+      <div class="vp-table-progress" title="${p.done} из ${p.total} проверено полностью">
+        <div class="vp-table-progress-bar"><div class="vp-table-progress-fill" style="width:${p.pct}%"></div></div>
+        <div class="vp-table-progress-txt">${p.done}/${p.total} · ${p.pct}%</div>
+      </div>
+      <button class="vp-table-reset" data-reset-table="${esc(g.name)}" title="Обнулить проверки во всей таблице">↺ Сбросить отдел</button>
+    </div>
+    <div class="vp-legend-strip">
+      <div class="vp-legend-title">Обозначения:</div>
+      ${COLS.map(c=>`<span class="vp-legend-item" title="${esc(c.label)}"><b>${esc(c.short)}</b> — ${esc(c.label)}</span>`).join("")}
+      <div class="vp-legend-sep"></div>
+      <span class="vp-legend-item"><span class="vp-legend-icon vp-legend-yes">✓</span> ДА</span>
+      <span class="vp-legend-item"><span class="vp-legend-icon vp-legend-no">✕</span> НЕТ (нужна ссылка)</span>
+      <span class="vp-legend-item"><span class="vp-legend-icon vp-legend-abs">○</span> Отсутствует (только ЛО)</span>
+      <span class="vp-legend-item"><span class="vp-legend-icon vp-legend-none">—</span> Не проверено</span>
+    </div>
+    <div class="vp-table-wrap">
+      <table class="vp-table">
+        <thead><tr>
+          <th class="vp-th-idx">№</th>
+          <th class="vp-th-name">ФИО</th>
+          <th title="Должность/звание">Должн.</th>
+          <th title="Статик — числовой ID персонажа">Статик</th>
+          ${COLS.map(c=>`<th title="${esc(c.label)} — наведите курсор для полного названия">${esc(c.short)}</th>`).join("")}
+          <th title="Ссылка-доказательство (обязательна если есть хоть один НЕТ)">Дока</th>
+          <th class="vp-th-actions" title="Быстрые действия: ✓✓ все ДА, ✕✕ все НЕТ, ↺ сбросить">Быстро</th>
+          <th title="Кто последний проверял">Проверил</th>
+        </tr></thead>
+        <tbody>${rows.map((r,i)=>renderRow(r,i)).join("")}</tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function stateHash(){
+  let h=SEARCH_Q+"|"+(HIDE_NO_DEPT?"H":"S")+"|"+ALL_MEMBERS.length+"|"+ALL_MAPPING.length+"|";
+  for(const m of ALL_MEMBERS) h+=m.discord_id+":"+(m.updated_at||"")+";";
+  for(const k of Object.keys(ALL_CHECKS).sort()){
+    const c=ALL_CHECKS[k];
+    h+=k+"="+(c.medbook||"")+(c.narko||"")+(c.driver||"")+(c.passport||"")+(c.personal_file||"")+(c.weapon_license||"")+(c.attestation||"")+"|"+(c.checked_by_name||"")+";";
+  }
+  return h;
+}
+
+async function saveOne(id,key,val){
+  if(!checkerReady()){
+    $("vpCheckerInput").focus();
+    alert("Сначала введите ваше имя в поле «Вы проверяете как»");
+    return false;
+  }
+  const patch={};patch[key]=val;
+  const r=await CGB_VP.saveCheck(id,patch,CURRENT_CHECKER);
+  if(!r.ok){alert("Ошибка: "+r.error);return false}
+  ALL_CHECKS[id]=Object.assign({},ALL_CHECKS[id]||{},patch,{checked_by_name:r.checker,checked_at:new Date().toISOString()});
+  return true;
+}
+
+async function saveAll(id,val){
+  if(!checkerReady()){$("vpCheckerInput").focus();alert("Сначала введите ваше имя");return false}
+  const patch={};for(const c of COLS){patch[c.key]=val==="yes"?"yes":(c.key==="weapon_license"?(val==="no"?"no":"absent"):"no")}
+  const r=await CGB_VP.saveCheck(id,patch,CURRENT_CHECKER);
+  if(!r.ok){alert("Ошибка: "+r.error);return false}
+  ALL_CHECKS[id]=Object.assign({},ALL_CHECKS[id]||{},patch,{checked_by_name:r.checker,checked_at:new Date().toISOString()});
+  return true;
+}
+
+function updateCellUI(id,key,val){
+  const tr=document.querySelector(`tr[data-id="${id}"]`);
+  if(!tr) return;
+  const btn=tr.querySelector(`.vp-pill-btn[data-check="${key}"]`);
+  if(!btn) return;
+  btn.dataset.cur=val==null?"":val;
+  btn.querySelector(".vp-pill-i").textContent=OPT_ICON[val];
+  btn.querySelector(".vp-pill-t").textContent=OPT_LABEL[val];
+  const td=btn.closest("td");
+  td.className="vp-cell "+cellClass(val);
+}
+
+function updateRowCheckerUI(id){
+  const tr=document.querySelector(`tr[data-id="${id}"]`);
+  if(!tr) return;
+  const c=ALL_CHECKS[id]||{};
+  const box=tr.querySelector(".vp-td-checker");
+  box.innerHTML=c.checked_by_name?`<div class="vp-checker" title="${esc(new Date(c.checked_at).toLocaleString("ru-RU",{timeZone:"Europe/Moscow"}))}">${esc(c.checked_by_name)}</div>`:`<span class="vp-checker-empty">—</span>`;
+}
+
+function bindTableHandlers(box){
+  box.querySelectorAll(".vp-pill-btn").forEach(btn=>{
+    btn.addEventListener("click",async ()=>{
+      const id=btn.dataset.id;
+      const key=btn.dataset.check;
+      const opts=JSON.parse(btn.dataset.opts);
+      const cur=btn.dataset.cur||null;
+      let val=nextValue(cur,opts);
+      const saveVal=normalizeVal(val);
+      const ok=await saveOne(id,key,saveVal);
+      if(!ok) return;
+      updateCellUI(id,key,saveVal);
+      updateRowCheckerUI(id);
+      updateAllProgress();
+      updateEvBtnUI(id);
+      refreshCheckerList();
+      LAST_RENDER_HASH=stateHash();
+      if(saveVal==="no"){
+        const cur=(ALL_CHECKS[id]&&ALL_CHECKS[id].evidence_url)||"";
+        if(!cur) openEvidenceModal(id,true);
+      }
+    });
+  });
+
+  box.querySelectorAll("[data-ev-edit]").forEach(btn=>{
+    btn.addEventListener("click",()=>openEvidenceModal(btn.dataset.evEdit,false));
+  });
+
+  box.querySelectorAll("[data-row-all]").forEach(btn=>{
+    btn.addEventListener("click",async ()=>{
+      const id=btn.dataset.id;
+      const val=btn.dataset.rowAll;
+      const ok=await saveAll(id,val);
+      if(!ok) return;
+      for(const c of COLS){
+        updateCellUI(id,c.key,ALL_CHECKS[id][c.key]);
+      }
+      updateRowCheckerUI(id);
+      updateAllProgress();
+      updateEvBtnUI(id);
+      refreshCheckerList();
+      LAST_RENDER_HASH=stateHash();
+      if(val==="no"){
+        const cur=(ALL_CHECKS[id]&&ALL_CHECKS[id].evidence_url)||"";
+        if(!cur) openEvidenceModal(id,true);
+      }
+    });
+  });
+
+  box.querySelectorAll("[data-reset-row]").forEach(btn=>{
+    btn.addEventListener("click",async ()=>{
+      const id=btn.dataset.resetRow;
+      const mem=ALL_MEMBERS.find(x=>x.discord_id===id);
+      const who=mem?(mem.parsed_fio||mem.display_name):id;
+      if(!confirm("Сбросить все проверки для «"+who+"»?")) return;
+      const r=await CGB_VP.resetCheck(id);
+      if(!r.ok){alert("Ошибка: "+r.error);return}
+      delete ALL_CHECKS[id];
+      for(const c of COLS) updateCellUI(id,c.key,null);
+      updateRowCheckerUI(id);
+      updateEvBtnUI(id);
+      updateAllProgress();
+      LAST_RENDER_HASH=stateHash();
+    });
+  });
+
+  box.querySelectorAll("[data-reset-table]").forEach(btn=>{
+    btn.addEventListener("click",async ()=>{
+      const groupName=btn.dataset.resetTable;
+      const g=ALL_GROUPS.find(x=>x.name===groupName);
+      if(!g) return;
+      if(!confirm("Сбросить ВСЕ проверки отдела «"+groupName+"» ("+g.list.length+" человек)?\nЭто действие нельзя отменить.")) return;
+      const ids=g.list.map(x=>x.discord_id);
+      const r=await CGB_VP.resetChecksBulk(ids);
+      if(!r.ok){alert("Ошибка: "+r.error);return}
+      for(const id of ids){
+        delete ALL_CHECKS[id];
+        for(const c of COLS) updateCellUI(id,c.key,null);
+        updateRowCheckerUI(id);
+        updateEvBtnUI(id);
+      }
+      updateAllProgress();
+      LAST_RENDER_HASH=stateHash();
+    });
+  });
+}
+
+function updateEvBtnUI(id){
+  const tr=document.querySelector(`tr[data-id="${id}"]`);
+  if(!tr) return;
+  const c=ALL_CHECKS[id]||{};
+  const hasNo=COLS.some(col=>c[col.key]==="no");
+  const evUrl=c.evidence_url||"";
+  const td=tr.querySelector(".vp-td-ev");
+  if(!td) return;
+  let html="";
+  if(hasNo){
+    if(evUrl) html=`<a class="vp-ev-btn vp-ev-ok" href="${esc(evUrl)}" target="_blank" rel="noopener" title="Открыть доказательство: ${esc(evUrl)}">🔗</a>`;
+    else html=`<button class="vp-ev-btn vp-ev-req" data-ev-edit="${id}" title="Требуется ссылка на доказательство">⚠</button>`;
+  } else if(evUrl){
+    html=`<a class="vp-ev-btn vp-ev-info" href="${esc(evUrl)}" target="_blank" rel="noopener" title="Доказательство: ${esc(evUrl)}">🔗</a>`;
+  } else {
+    html=`<button class="vp-ev-btn vp-ev-empty" data-ev-edit="${id}" title="Добавить ссылку на доказательство">＋</button>`;
+  }
+  td.innerHTML=html;
+  const editBtn=td.querySelector("[data-ev-edit]");
+  if(editBtn) editBtn.addEventListener("click",()=>openEvidenceModal(editBtn.dataset.evEdit,false));
+}
+
+function updateAllProgress(){
+  document.querySelectorAll(".vp-table-block").forEach(block=>{
+    const rows=block.querySelectorAll("tbody tr");
+    let done=0;
+    rows.forEach(tr=>{
+      const id=tr.dataset.id;
+      const c=ALL_CHECKS[id];
+      if(!c) return;
+      const set=COLS.filter(col=>c[col.key]!=null).length;
+      if(set===COLS.length) done++;
+    });
+    const total=rows.length;
+    const pct=total?Math.round(done*100/total):0;
+    const fill=block.querySelector(".vp-table-progress-fill");
+    const txt=block.querySelector(".vp-table-progress-txt");
+    if(fill) fill.style.width=pct+"%";
+    if(txt) txt.textContent=done+"/"+total+" · "+pct+"%";
+  });
+}
+
+async function renderAll(force){
+  if(RENDER_LOCK) return;
+  RENDER_LOCK=true;
+  try{
+    const box=$("vpTables");
+    const isEmpty=!box.querySelector(".vp-table-block");
+    if(force||isEmpty) box.innerHTML=`<div class="apps-empty">Загрузка...</div>`;
+    const [members,mapping,checks]=await Promise.all([CGB_VP.fetchMembers(),CGB_VP.fetchMapping(),CGB_VP.fetchChecks()]);
+    ALL_MEMBERS=members;
+    ALL_MAPPING=mapping;
+    ALL_CHECKS=Object.fromEntries(checks.map(c=>[c.discord_id,c]));
+
+    if(!members.length){
+      box.innerHTML=`<div class="apps-empty">
+        <div class="apps-empty-icon">◎</div>
+        <h3>Список участников пуст</h3>
+        <p>Бот ещё не синхронизировал участников Discord.<br>Нажмите «↻ Синхронизировать» вверху или подождите пока бот запустится.</p>
+      </div>`;
+      LAST_RENDER_HASH=stateHash();
+      return;
+    }
+
+    ALL_GROUPS=CGB_VP.groupByDept(members,mapping,{hideNoDept:HIDE_NO_DEPT});
+    const filtered=CGB_VP.filterMembers(members,mapping);
+
+    const hash=stateHash();
+    if(!force&&hash===LAST_RENDER_HASH) return;
+    LAST_RENDER_HASH=hash;
+
+    const html=ALL_GROUPS.map(renderTable).filter(Boolean).join("");
+    if(!html){
+      const noDept=!mapping.some(m=>m.role_kind==="department");
+      box.innerHTML=`<div class="apps-empty">
+        <div class="apps-empty-icon">🏢</div>
+        <h3>${noDept?"Отделы ещё не выбраны":"Ничего не найдено"}</h3>
+        <p>${noDept?"Нажмите кнопку <b>＋ Отдел</b> вверху, чтобы добавить отдел из роли Discord.<br>Все участники этой роли попадут в отдельную таблицу для проверки.":"Попробуйте другой запрос в поиске."}</p>
+      </div>`;
+    } else {
+      box.innerHTML=html;
+      bindTableHandlers(box);
+    }
+    refreshCheckerList();
+  } finally { RENDER_LOCK=false; }
+}
+
+function refreshCheckerList(){
+  const set=new Set();
+  for(const c of Object.values(ALL_CHECKS)){if(c.checked_by_name) set.add(c.checked_by_name)}
+  if(CURRENT_CHECKER) set.add(CURRENT_CHECKER);
+  const list=$("vpCheckerList");if(!list) return;
+  list.innerHTML=Array.from(set).sort().map(n=>`<option value="${esc(n)}">`).join("");
+}
+
+$("vpSearch").addEventListener("input",()=>{SEARCH_Q=$("vpSearch").value.trim();LAST_RENDER_HASH="";renderAll(true)});
+
+$("vpHideNoDept").checked=HIDE_NO_DEPT;
+$("vpHideNoDept").addEventListener("change",()=>{
+  HIDE_NO_DEPT=$("vpHideNoDept").checked;
+  try{localStorage.setItem("cgb-vp-hide-nodept",HIDE_NO_DEPT?"1":"0")}catch(e){}
+  LAST_RENDER_HASH="";renderAll(true);
+});
+
+$("vpCheckerInput").value=CURRENT_CHECKER;
+updateCheckerBar();
+$("vpCheckerInput").addEventListener("input",()=>{
+  CURRENT_CHECKER=$("vpCheckerInput").value.trim();
+  try{localStorage.setItem("cgb-vp-checker-name",CURRENT_CHECKER)}catch(e){}
+  updateCheckerBar();
+});
+
+async function updateBotIndicator(){
+  const ind=$("vpBotIndicator");
+  const st=await CGB_VP.fetchBotStatus();
+  if(!st){ind.className="vp-bot-indicator vp-bot-unknown";ind.querySelector(".vp-bot-text").textContent="статус неизвестен";return}
+  const ageMs=Date.now()-new Date(st.last_seen).getTime();
+  const ageSec=Math.round(ageMs/1000);
+  const online=st.online&&ageSec<60;
+  ind.className="vp-bot-indicator "+(online?"vp-bot-online":"vp-bot-offline");
+  const rel=ageSec<60?"только что":ageSec<3600?Math.round(ageSec/60)+" мин назад":Math.round(ageSec/3600)+" ч назад";
+  ind.querySelector(".vp-bot-text").textContent=online?"бот онлайн":"оффлайн ("+rel+")";
+  ind.title=`Discord-бот · последняя активность: ${new Date(st.last_seen).toLocaleString("ru-RU",{timeZone:"Europe/Moscow"})}\nГильдия: ${st.guild_name||"?"} · участников: ${st.members_count||"?"}`;
+}
+
+$("vpSyncBtn").addEventListener("click",async ()=>{
+  const st=$("vpBotIndicator");
+  const btn=$("vpSyncBtn");
+  const lbl=$("vpSyncBtnLabel");
+  btn.disabled=true;lbl.textContent="⏳ ожидает бота...";
+  const r=await CGB_VP.requestSync();
+  if(!r.ok){lbl.textContent="↻ Синхронизировать";btn.disabled=false;alert("Ошибка: "+r.error);return}
+  lbl.textContent="⏳ бот сканирует...";
+  const res=await CGB_VP.pollSyncStatus(r.id,120000);
+  btn.disabled=false;
+  if(!res.ok){lbl.textContent="↻ Синхронизировать";alert("Не удалось: "+(res.error||res.message||res.status));return}
+  lbl.textContent="✓ Готово · "+res.members_scanned;
+  LAST_RENDER_HASH="";renderAll(true);
+  setTimeout(()=>{lbl.textContent="↻ Синхронизировать"},3500);
+});
+
+async function openMapping(){
+  $("vpSettingsModal").classList.add("active");
+  await loadMappingUI();
+}
+
+async function loadMappingUI(){
+  const box=$("vpMapList");
+  box.innerHTML=`<div class="apps-empty">Загрузка...</div>`;
+  ALL_ROLES=await CGB_VP.fetchRoles();
+  const mapping=await CGB_VP.fetchMapping();
+  const byId=Object.fromEntries(mapping.map(m=>[m.role_id,m]));
+  const q=($("vpMapSearch").value||"").toLowerCase().trim();
+  const filter=$("vpMapFilter").value;
+
+  let filtered=ALL_ROLES.filter(r=>!q||r.name.toLowerCase().includes(q));
+  if(filter){
+    filtered=filtered.filter(r=>{
+      const m=byId[r.role_id];
+      if(filter==="configured") return !!m;
+      if(filter==="unconfigured") return !m;
+      if(filter==="include") return m&&m.show==="include";
+      if(filter==="exclude") return m&&m.show==="exclude";
+      if(filter==="department") return m&&m.role_kind==="department";
+      if(filter==="position") return m&&m.role_kind==="position";
+      return true;
+    });
+  }
+
+  if(!filtered.length){box.innerHTML=`<div class="apps-empty">Ролей не найдено под фильтр</div>`;updateMapHint();return}
+
+  box.innerHTML=filtered.map(r=>{
+    const m=byId[r.role_id]||{show:null,role_kind:null,label:""};
+    const showVal=m.show||"";
+    const kindVal=m.role_kind||"";
+    return `<div class="vp-map-row" data-role-id="${r.role_id}" data-show="${showVal}" data-kind="${kindVal}">
+      <div class="vp-map-name" title="${esc(r.name)}">${esc(r.name)}</div>
+      <div class="vp-map-group vp-map-group-show">
+        <div class="vp-map-group-lbl">Показ:</div>
+        <div class="vp-pill-group">
+          <button class="vp-pill vp-pill-neu ${showVal===""?"active":""}" data-show="" data-id="${r.role_id}">—</button>
+          <button class="vp-pill vp-pill-inc ${showVal==="include"?"active":""}" data-show="include" data-id="${r.role_id}">✓ Показ</button>
+          <button class="vp-pill vp-pill-exc ${showVal==="exclude"?"active":""}" data-show="exclude" data-id="${r.role_id}">✕ Скрыть</button>
+        </div>
+      </div>
+      <div class="vp-map-group vp-map-group-kind">
+        <div class="vp-map-group-lbl">Роль:</div>
+        <div class="vp-pill-group">
+          <button class="vp-pill vp-pill-neu ${kindVal===""?"active":""}" data-kind="" data-id="${r.role_id}">—</button>
+          <button class="vp-pill vp-pill-dept ${kindVal==="department"?"active":""}" data-kind="department" data-id="${r.role_id}">🏢 Отдел</button>
+          <button class="vp-pill vp-pill-pos ${kindVal==="position"?"active":""}" data-kind="position" data-id="${r.role_id}">🎖 Должность</button>
+        </div>
+      </div>
+      <input type="text" class="vp-map-label" data-role-id="${r.role_id}" placeholder="Название колонки" value="${esc(m.label||"")}">
+    </div>`;
+  }).join("");
+
+  box.querySelectorAll("[data-show]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const row=btn.closest(".vp-map-row");
+      row.dataset.show=btn.dataset.show;
+      row.querySelectorAll("[data-show]").forEach(b=>b.classList.toggle("active",b.dataset.show===btn.dataset.show));
+      updateMapHint();
+    });
+  });
+  box.querySelectorAll("[data-kind]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const row=btn.closest(".vp-map-row");
+      row.dataset.kind=btn.dataset.kind;
+      row.querySelectorAll("[data-kind]").forEach(b=>b.classList.toggle("active",b.dataset.kind===btn.dataset.kind));
+      updateMapHint();
+    });
+  });
+  updateMapHint();
+}
+
+function updateMapHint(){
+  const hint=$("vpMapHint");if(!hint) return;
+  const rows=Array.from(document.querySelectorAll(".vp-map-row"));
+  const inc=rows.filter(r=>r.dataset.show==="include").length;
+  const exc=rows.filter(r=>r.dataset.show==="exclude").length;
+  const dep=rows.filter(r=>r.dataset.kind==="department").length;
+  const pos=rows.filter(r=>r.dataset.kind==="position").length;
+  const parts=[];
+  if(dep) parts.push(dep+" отдел"+(dep>1?"а/ов":""));
+  if(pos) parts.push(pos+" должн.");
+  if(inc) parts.push(inc+" показ.");
+  if(exc) parts.push(exc+" скрытых");
+  hint.textContent=parts.length?parts.join(" · "):"Ничего не настроено";
+}
+
+$("vpMapSearch").addEventListener("input",loadMappingUI);
+$("vpMapFilter").addEventListener("change",loadMappingUI);
+$("vpMapReload").addEventListener("click",loadMappingUI);
+
+const HIDE_PRESETS=[/уволен/i,/граждан/i,/^чс\b/i,/\bчс\b/i,/чёрн(ый|ому)?\s*спис/i,/черн(ый|ому)?\s*спис/i,/отпуск/i,/заморож/i,/забанен/i,/бан\b/i];
+$("vpPresetHide").addEventListener("click",()=>{
+  let n=0;
+  document.querySelectorAll(".vp-map-row").forEach(row=>{
+    const nameEl=row.querySelector(".vp-map-name");
+    const nm=nameEl?nameEl.textContent.trim():"";
+    if(HIDE_PRESETS.some(re=>re.test(nm))){
+      row.dataset.show="exclude";
+      row.querySelectorAll("[data-show]").forEach(b=>b.classList.toggle("active",b.dataset.show==="exclude"));
+      n++;
+    }
+  });
+  updateMapHint();
+  const msg=$("vpMapMsg");
+  msg.className="form-msg info";
+  msg.textContent=n?"Помечено "+n+" ролей как «Скрыть». Нажмите Сохранить чтобы применить.":"Стандартные роли (Уволен/Гражданин/ЧС/Отпуск/Заморожен) не найдены в этом списке.";
+  setTimeout(()=>{msg.textContent="";msg.className="form-msg"},5000);
+});
+$("vpMapClose").addEventListener("click",()=>$("vpSettingsModal").classList.remove("active"));
+$("vpSettingsModal").querySelector(".modal-close").addEventListener("click",()=>$("vpSettingsModal").classList.remove("active"));
+$("vpSettingsModal").addEventListener("click",e=>{if(e.target===$("vpSettingsModal")) $("vpSettingsModal").classList.remove("active")});
+
+$("vpMapSave").addEventListener("click",async ()=>{
+  const rows=[];
+  const toRemove=[];
+  document.querySelectorAll(".vp-map-row").forEach(el=>{
+    const roleId=el.dataset.roleId;
+    const show=el.dataset.show||null;
+    const kind=el.dataset.kind||null;
+    const label=(el.querySelector(".vp-map-label")||{}).value||"";
+    if(!show&&!kind){toRemove.push(roleId);return}
+    rows.push({role_id:roleId,show,role_kind:kind,kind:kind||show||"ignore",label:label||null,sort:100});
+  });
+  const msg=$("vpMapMsg");
+  msg.className="form-msg info";msg.textContent="Сохранение...";
+  const r=await CGB_VP.saveMappingBatch(rows,toRemove);
+  if(!r.ok){msg.className="form-msg error";msg.textContent=r.error;return}
+  msg.className="form-msg ok";msg.textContent="Сохранено · применяю...";
+  setTimeout(()=>{$("vpSettingsModal").classList.remove("active");msg.textContent="";LAST_RENDER_HASH="";renderAll(true)},600);
+});
+
+$("vpSettingsBtn").addEventListener("click",openMapping);
+
+function openAddDeptModal(){
+  const sel=$("vpAddDeptRole");
+  const already=new Set(ALL_MAPPING.filter(m=>m.role_kind==="department").map(m=>m.role_id));
+  const opts=ALL_ROLES.filter(r=>!already.has(r.role_id) && r.name!=="@everyone")
+    .sort((a,b)=>(b.position||0)-(a.position||0))
+    .map(r=>`<option value="${esc(r.role_id)}" data-name="${esc(r.name)}">@${esc(r.name)}</option>`).join("");
+  sel.innerHTML=opts||'<option value="">Все роли уже добавлены как отделы</option>';
+  $("vpAddDeptName").value="";
+  $("vpAddDeptMsg").textContent="";
+  $("vpAddDeptMsg").className="form-msg";
+  $("vpAddDeptModal").classList.add("active");
+}
+
+$("vpAddDeptBtn").addEventListener("click",openAddDeptModal);
+$("vpAddDeptCancel").addEventListener("click",()=>$("vpAddDeptModal").classList.remove("active"));
+$("vpAddDeptModal").querySelector(".modal-close").addEventListener("click",()=>$("vpAddDeptModal").classList.remove("active"));
+$("vpAddDeptModal").addEventListener("click",e=>{if(e.target===$("vpAddDeptModal")) $("vpAddDeptModal").classList.remove("active")});
+
+$("vpAddDeptSave").addEventListener("click",async()=>{
+  const roleId=$("vpAddDeptRole").value;
+  const msg=$("vpAddDeptMsg");
+  if(!roleId){ msg.className="form-msg error"; msg.textContent="Выберите роль"; return; }
+  const role=ALL_ROLES.find(r=>r.role_id===roleId);
+  const customName=$("vpAddDeptName").value.trim();
+  const label=customName || (role?role.name:"");
+  const existing=ALL_MAPPING.find(m=>m.role_id===roleId);
+  const row={
+    role_id: roleId,
+    show: existing?existing.show:null,
+    role_kind: "department",
+    kind: "department",
+    label: label||null,
+    sort: 100
+  };
+  msg.className="form-msg info"; msg.textContent="Сохранение...";
+  const r=await CGB_VP.saveMappingBatch([row],[]);
+  if(!r.ok){ msg.className="form-msg error"; msg.textContent="Ошибка: "+r.error; return; }
+  msg.className="form-msg success"; msg.textContent="✓ Отдел добавлен";
+  setTimeout(async()=>{
+    $("vpAddDeptModal").classList.remove("active");
+    ALL_MAPPING=await CGB_VP.fetchMapping();
+    LAST_RENDER_HASH="";
+    renderAll(true);
+  },500);
+});
+
+function subscribeRealtime(){
+  const s=window.CGB_AUTH&&window.CGB_AUTH.state;
+  if(!s||!s.client) return;
+  if(REALTIME_SUB) return;
+  REALTIME_SUB=s.client.channel("vp-live")
+    .on("postgres_changes",{event:"*",schema:"public",table:"vp_checks"},payload=>{
+      const row=payload.new||payload.old;if(!row) return;
+      if(payload.eventType==="DELETE"){delete ALL_CHECKS[row.discord_id]}
+      else {ALL_CHECKS[row.discord_id]=payload.new}
+      const id=(payload.new||payload.old).discord_id;
+      for(const c of COLS){
+        const v=payload.new?(payload.new[c.key]||null):null;
+        updateCellUI(id,c.key,v);
+      }
+      updateRowCheckerUI(id);
+      updateAllProgress();
+    })
+    .on("postgres_changes",{event:"*",schema:"public",table:"vp_role_mapping"},()=>{
+      LAST_RENDER_HASH="";renderAll(true);
+    })
+    .on("postgres_changes",{event:"UPDATE",schema:"public",table:"bot_status"},()=>{
+      updateBotIndicator();
+    })
+    .subscribe();
+}
+
+let LAST_GUARD_STATE=null;
+function applyGuard(){
+  const canVp=!!(window.CGB_ROLES&&window.CGB_ROLES.can("vp","view"));
+  const uid=(window.CGB_AUTH&&window.CGB_AUTH.state&&window.CGB_AUTH.state.user&&window.CGB_AUTH.state.user.id)||null;
+  const key=canVp+":"+uid;
+  $("vpBody").style.display=canVp?"":"none";
+  $("vpGuard").style.display=canVp?"none":"";
+  if(!canVp){LAST_GUARD_STATE=key;return}
+  if(LAST_GUARD_STATE===key) return;
+  LAST_GUARD_STATE=key;
+  renderAll(true);
+  updateBotIndicator();
+  subscribeRealtime();
+}
+if(window.CGB_ROLES){CGB_ROLES.onChange(()=>applyGuard())}
+setTimeout(applyGuard,600);
+setTimeout(applyGuard,1500);
+
+setInterval(()=>{if(!document.hidden) updateBotIndicator()},120000);
+
+let SOFT_TIMER=null;
+function softRefresh(){
+  if(SOFT_TIMER) clearTimeout(SOFT_TIMER);
+  SOFT_TIMER=setTimeout(()=>{
+    if(document.visibilityState==="visible"&&window.CGB_ROLES&&window.CGB_ROLES.can("vp","view")){renderAll(false);updateBotIndicator()}
+  },400);
+}
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible") softRefresh()});
+window.addEventListener("focus",softRefresh);
+
+/* ============ EVIDENCE (доказательство при НЕТ) ============ */
+
+let CURRENT_EV_ID=null;
+let CURRENT_EV_REQUIRED=false;
+
+function openEvidenceModal(discordId,required){
+  CURRENT_EV_ID=discordId;
+  CURRENT_EV_REQUIRED=!!required;
+  const mem=ALL_MEMBERS.find(m=>m.discord_id===discordId);
+  const check=ALL_CHECKS[discordId]||{};
+  const noList=COLS.filter(c=>check[c.key]==="no").map(c=>c.label);
+  $("vpEvHead").innerHTML=`
+    <div class="vp-ev-head-name"><b>${esc(mem?(mem.parsed_fio||mem.display_name):discordId)}</b> · <span class="vp-nick">${esc(mem?mem.raw_nick:"")}</span></div>
+    ${noList.length?`<div class="vp-ev-head-no">✕ НЕТ по: <b>${noList.map(esc).join(", ")}</b></div>`:`<div class="vp-ev-head-info">Нет отметок «НЕТ» — ссылка опциональна</div>`}
+  `;
+  $("vpEvUrl").value=check.evidence_url||"";
+  $("vpEvMsg").textContent="";$("vpEvMsg").className="form-msg";
+  $("vpEvUrl").className="msg-input"+(required?" vp-ev-required":"");
+  $("vpEvClear").style.display=(check.evidence_url&&!required)?"":"none";
+  $("vpEvidenceModal").classList.add("active");
+  setTimeout(()=>$("vpEvUrl").focus(),80);
+}
+
+$("vpEvCancel").addEventListener("click",()=>$("vpEvidenceModal").classList.remove("active"));
+$("vpEvidenceModal").querySelector(".modal-close").addEventListener("click",()=>{
+  if(CURRENT_EV_REQUIRED&&!$("vpEvUrl").value.trim()){
+    if(!confirm("Ссылка НЕ была указана, но она обязательна при НЕТ.\nЗакрыть без сохранения? Отметки останутся без доказательства (в отчёт всё равно уйдёт, но в архиве будет пусто).")) return;
+  }
+  $("vpEvidenceModal").classList.remove("active");
+});
+$("vpEvidenceModal").addEventListener("click",e=>{if(e.target===$("vpEvidenceModal")) $("vpEvidenceModal").classList.remove("active")});
+
+$("vpEvClear").addEventListener("click",async()=>{
+  if(!CURRENT_EV_ID) return;
+  if(!confirm("Удалить ссылку-доказательство?")) return;
+  const r=await CGB_VP.saveEvidence(CURRENT_EV_ID,null,CURRENT_CHECKER);
+  if(!r.ok){$("vpEvMsg").className="form-msg error";$("vpEvMsg").textContent=r.error;return}
+  if(ALL_CHECKS[CURRENT_EV_ID]) ALL_CHECKS[CURRENT_EV_ID].evidence_url=null;
+  updateEvBtnUI(CURRENT_EV_ID);
+  $("vpEvidenceModal").classList.remove("active");
+});
+
+$("vpEvSave").addEventListener("click",async()=>{
+  const url=$("vpEvUrl").value.trim();
+  const msg=$("vpEvMsg");
+  if(CURRENT_EV_REQUIRED&&!url){
+    msg.className="form-msg error";msg.textContent="Ссылка обязательна — вы поставили НЕТ";
+    return;
+  }
+  if(url&&!/^https?:\/\/\S+/i.test(url)){
+    msg.className="form-msg error";msg.textContent="Ссылка должна начинаться с http:// или https://";
+    return;
+  }
+  msg.className="form-msg info";msg.textContent="Сохранение...";
+  const r=await CGB_VP.saveEvidence(CURRENT_EV_ID,url||null,CURRENT_CHECKER);
+  if(!r.ok){msg.className="form-msg error";msg.textContent=r.error;return}
+  if(!ALL_CHECKS[CURRENT_EV_ID]) ALL_CHECKS[CURRENT_EV_ID]={};
+  ALL_CHECKS[CURRENT_EV_ID].evidence_url=url||null;
+  ALL_CHECKS[CURRENT_EV_ID].checked_by_name=r.checker||CURRENT_CHECKER;
+  ALL_CHECKS[CURRENT_EV_ID].checked_at=new Date().toISOString();
+  updateEvBtnUI(CURRENT_EV_ID);
+  updateRowCheckerUI(CURRENT_EV_ID);
+  refreshCheckerList();
+  LAST_RENDER_HASH=stateHash();
+  msg.className="form-msg ok";msg.textContent="✓ Сохранено";
+  setTimeout(()=>$("vpEvidenceModal").classList.remove("active"),400);
+});
+
+/* ============ АРХИВ И СТАТИСТИКА ============ */
+
+function ruDate(d){try{return new Date(d).toLocaleDateString("ru-RU",{timeZone:"Europe/Moscow",day:"2-digit",month:"2-digit",year:"numeric"})}catch(e){return String(d||"")}}
+function ruDateTime(d){try{return new Date(d).toLocaleString("ru-RU",{timeZone:"Europe/Moscow",day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"})}catch(e){return String(d||"")}}
+function isoDate(d){const dt=new Date(d);return dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0")+"-"+String(dt.getDate()).padStart(2,"0")}
+
+async function openSaveArchive(){
+  const snap=CGB_VP.buildSnapshot(ALL_MEMBERS,ALL_CHECKS,ALL_MAPPING,HIDE_NO_DEPT);
+  const stats=CGB_VP.calcSnapshotStats(snap);
+  if(stats.total===0){alert("Нет проверенных людей — сначала поставьте хотя бы одну отметку в таблице.");return}
+  const today=new Date();
+  const weekAgo=new Date(today);weekAgo.setDate(today.getDate()-7);
+  $("vpArcTitle").value="Проверка за "+ruDate(weekAgo)+" — "+ruDate(today);
+  $("vpArcFrom").value=isoDate(weekAgo);
+  $("vpArcTo").value=isoDate(today);
+  $("vpArcNotes").value="";
+  $("vpArcClear").checked=false;
+  const preview=$("vpArcPreview");
+  preview.innerHTML=`
+    <div class="vp-arc-preview-title">Что будет сохранено:</div>
+    <div class="vp-arc-preview-stats">
+      <div class="vp-arc-stat"><div class="vp-arc-stat-num">${stats.total}</div><div class="vp-arc-stat-lbl">всего проверенных</div></div>
+      <div class="vp-arc-stat vp-arc-stat-ok"><div class="vp-arc-stat-num">${stats.checked}</div><div class="vp-arc-stat-lbl">полностью</div></div>
+      <div class="vp-arc-stat vp-arc-stat-warn"><div class="vp-arc-stat-num">${stats.partial}</div><div class="vp-arc-stat-lbl">частично</div></div>
+      <div class="vp-arc-stat"><div class="vp-arc-stat-num">${snap.groups.length}</div><div class="vp-arc-stat-lbl">отдел${snap.groups.length===1?"":"ов"}</div></div>
+    </div>`;
+  $("vpArcMsg").textContent="";$("vpArcMsg").className="form-msg";
+  $("vpSaveArchiveModal").classList.add("active");
+}
+
+$("vpSaveArchiveBtn").addEventListener("click",openSaveArchive);
+$("vpArcCancel").addEventListener("click",()=>$("vpSaveArchiveModal").classList.remove("active"));
+$("vpSaveArchiveModal").querySelector(".modal-close").addEventListener("click",()=>$("vpSaveArchiveModal").classList.remove("active"));
+$("vpSaveArchiveModal").addEventListener("click",e=>{if(e.target===$("vpSaveArchiveModal"))$("vpSaveArchiveModal").classList.remove("active")});
+
+$("vpArcConfirm").addEventListener("click",async()=>{
+  const msg=$("vpArcMsg");
+  msg.className="form-msg info";msg.textContent="Сохранение...";
+  const snap=CGB_VP.buildSnapshot(ALL_MEMBERS,ALL_CHECKS,ALL_MAPPING,HIDE_NO_DEPT);
+  const from=$("vpArcFrom").value?new Date($("vpArcFrom").value).toISOString():null;
+  const to=$("vpArcTo").value?new Date($("vpArcTo").value+"T23:59:59").toISOString():new Date().toISOString();
+  const r=await CGB_VP.saveArchive({
+    title:$("vpArcTitle").value.trim()||null,
+    period_from:from,period_to:to,
+    snapshot:snap,
+    notes:$("vpArcNotes").value.trim()||null
+  });
+  if(!r.ok){msg.className="form-msg error";msg.textContent=r.error;return}
+  msg.className="form-msg ok";msg.textContent="✓ Сохранено · запись #"+r.id;
+  if($("vpArcClear").checked){
+    const ids=Object.keys(ALL_CHECKS);
+    if(ids.length){await CGB_VP.resetChecksBulk(ids);for(const id of ids) delete ALL_CHECKS[id]}
+  }
+  LAST_RENDER_HASH="";renderAll(true);
+  setTimeout(()=>{$("vpSaveArchiveModal").classList.remove("active")},1200);
+});
+
+/* ---------- Модалка «Архив и статистика» ---------- */
+
+let CURRENT_ARC_TAB="list";
+let LOADED_ARCHIVES=[];
+let VP_SETTINGS_STATE=null;
+
+function switchArcTab(name){
+  CURRENT_ARC_TAB=name;
+  document.querySelectorAll(".vp-arc-tab").forEach(t=>t.classList.toggle("active",t.dataset.arcTab===name));
+  document.querySelectorAll(".vp-arc-tab-body").forEach(b=>b.style.display=b.dataset.arcBody===name?"":"none");
+  if(name==="list") loadArchivesList();
+  if(name==="stats") loadStats();
+  if(name==="settings") loadArcSettings();
+}
+
+async function openArchiveModal(){
+  $("vpArchiveModal").classList.add("active");
+  switchArcTab("list");
+}
+$("vpArchiveBtn").addEventListener("click",openArchiveModal);
+$("vpArchiveModal").querySelector(".modal-close").addEventListener("click",()=>$("vpArchiveModal").classList.remove("active"));
+$("vpArchiveModal").addEventListener("click",e=>{if(e.target===$("vpArchiveModal"))$("vpArchiveModal").classList.remove("active")});
+document.querySelectorAll(".vp-arc-tab").forEach(t=>t.addEventListener("click",()=>switchArcTab(t.dataset.arcTab)));
+
+async function loadArchivesList(){
+  const box=$("vpArcList");
+  box.innerHTML=`<div class="apps-empty">Загрузка...</div>`;
+  LOADED_ARCHIVES=await CGB_VP.fetchArchives(100);
+  if(!LOADED_ARCHIVES.length){box.innerHTML=`<div class="apps-empty"><h3>Архив пуст</h3><p>Сохраните первую проверку кнопкой «💾 В архив» на главной странице.</p></div>`;return}
+  box.innerHTML=LOADED_ARCHIVES.map(a=>{
+    const pct=a.members_total?Math.round(a.members_checked*100/a.members_total):0;
+    const sent=a.report_message_id?`<span class="vp-arc-item-sent" title="Отчёт отправлен ${ruDateTime(a.report_sent_at)}">📤 отправлено</span>`:`<span class="vp-arc-item-nosent">не отправлено</span>`;
+    return `<div class="vp-arc-item" data-arc-id="${a.id}">
+      <div class="vp-arc-item-head">
+        <div class="vp-arc-item-title">${esc(a.title||"Без названия")}</div>
+        <div class="vp-arc-item-date">${ruDateTime(a.saved_at)}</div>
+      </div>
+      <div class="vp-arc-item-body">
+        <div class="vp-arc-item-stat"><b>${a.members_total||0}</b> чел.</div>
+        <div class="vp-arc-item-stat vp-arc-stat-ok"><b>${a.members_checked||0}</b> полностью (${pct}%)</div>
+        <div class="vp-arc-item-stat vp-arc-stat-warn"><b>${a.members_partial||0}</b> частично</div>
+        <div class="vp-arc-item-by">✎ ${esc(a.saved_by_name||"—")}</div>
+      </div>
+      <div class="vp-arc-item-foot">
+        ${a.period_from?`<span class="vp-arc-item-period">${ruDate(a.period_from)} — ${ruDate(a.period_to)}</span>`:""}
+        ${sent}
+        <button class="btn btn-ghost btn-sm" data-arc-open="${a.id}">Открыть →</button>
+      </div>
+    </div>`;
+  }).join("");
+  box.querySelectorAll("[data-arc-open]").forEach(b=>b.addEventListener("click",()=>openArcDetail(b.dataset.arcOpen)));
+}
+
+async function loadStats(){
+  const box=$("vpStatsBody");
+  box.innerHTML=`<div class="apps-empty">Загрузка...</div>`;
+  const period=$("vpStatsPeriod").value;
+  const now=new Date();
+  let from=null;
+  if(period==="week"){from=new Date(now);from.setDate(now.getDate()-7)}
+  else if(period==="month"){from=new Date(now);from.setMonth(now.getMonth()-1)}
+  else if(period==="quarter"){from=new Date(now);from.setMonth(now.getMonth()-3)}
+  else if(period==="year"){from=new Date(now);from.setFullYear(now.getFullYear()-1)}
+  const all=await CGB_VP.fetchArchives(500);
+  const list=from?all.filter(a=>new Date(a.saved_at)>=from):all;
+  if(!list.length){box.innerHTML=`<div class="apps-empty"><h3>Нет данных за этот период</h3></div>`;return}
+  let sumTotal=0,sumChecked=0,sumPartial=0;
+  const perDept={};
+  const keys=["medbook","narko","driver","passport","personal_file","weapon_license","attestation"];
+  const keyLabels={medbook:"Мед.Книжка",narko:"Справка Нарк.",driver:"Вод.Права",passport:"Паспорт",personal_file:"Лич.Дело",weapon_license:"Лиц.Оружия",attestation:"Аттестация"};
+  const docsSum={};for(const k of keys) docsSum[k]={yes:0,no:0,absent:0};
+  for(const a of list){
+    sumTotal+=a.members_total||0;sumChecked+=a.members_checked||0;sumPartial+=a.members_partial||0;
+    const s=a.stats||{};const t=s.totals||{};
+    for(const k of keys){
+      if(t[k]){docsSum[k].yes+=t[k].yes||0;docsSum[k].no+=t[k].no||0;docsSum[k].absent+=t[k].absent||0}
+    }
+  }
+  const chartMax=Math.max(1,...list.map(a=>a.members_checked||0));
+  const chartHtml=list.slice().reverse().map(a=>{
+    const h=Math.round((a.members_checked||0)*100/chartMax);
+    return `<div class="vp-chart-bar" title="${ruDate(a.saved_at)}: ${a.members_checked} полностью из ${a.members_total}">
+      <div class="vp-chart-fill" style="height:${h}%"></div>
+      <div class="vp-chart-num">${a.members_checked||0}</div>
+      <div class="vp-chart-lbl">${ruDate(a.saved_at)}</div>
+    </div>`;
+  }).join("");
+  box.innerHTML=`
+    <div class="vp-stats-cards">
+      <div class="vp-stats-card"><div class="vp-stats-card-num">${list.length}</div><div class="vp-stats-card-lbl">отчётов за период</div></div>
+      <div class="vp-stats-card"><div class="vp-stats-card-num">${sumTotal}</div><div class="vp-stats-card-lbl">всего проверок</div></div>
+      <div class="vp-stats-card vp-arc-stat-ok"><div class="vp-stats-card-num">${sumChecked}</div><div class="vp-stats-card-lbl">полностью</div></div>
+      <div class="vp-stats-card vp-arc-stat-warn"><div class="vp-stats-card-num">${sumPartial}</div><div class="vp-stats-card-lbl">частично</div></div>
+    </div>
+    <div class="vp-stats-section">
+      <div class="vp-stats-section-title">Динамика «полностью проверено» по датам</div>
+      <div class="vp-chart">${chartHtml}</div>
+    </div>
+    <div class="vp-stats-section">
+      <div class="vp-stats-section-title">Суммарно по типам документов (за период)</div>
+      <div class="vp-docs-grid">
+        ${keys.map(k=>{
+          const tot=docsSum[k].yes+docsSum[k].no+docsSum[k].absent;
+          const pct=tot?Math.round(docsSum[k].yes*100/tot):0;
+          return `<div class="vp-doc-card">
+            <div class="vp-doc-name">${keyLabels[k]}</div>
+            <div class="vp-doc-bar"><div class="vp-doc-fill" style="width:${pct}%"></div></div>
+            <div class="vp-doc-nums">
+              <span class="vp-arc-stat-ok">✓ ${docsSum[k].yes}</span>
+              <span class="vp-arc-stat-bad">✕ ${docsSum[k].no}</span>
+              ${docsSum[k].absent?`<span class="vp-arc-stat-neu">○ ${docsSum[k].absent}</span>`:""}
+              <span class="vp-doc-pct">${pct}% ДА</span>
+            </div>
+          </div>`;
+        }).join("")}
+      </div>
+    </div>`;
+}
+$("vpStatsPeriod").addEventListener("change",loadStats);
+
+async function loadArcSettings(){
+  const isAdmin=!!(window.CGB_ROLES&&window.CGB_ROLES.can("vp_archive","settings"));
+  const sel=$("vpReportChannel");
+  const [settings,channels]=await Promise.all([CGB_VP.fetchSettings(),CGB_VP.fetchDsChannels()]);
+  VP_SETTINGS_STATE=settings||{};
+  const cur=(settings&&settings.report_channel_id)||"";
+  if(!channels.length){
+    sel.innerHTML=`<option value="">— бот ещё не синхронизировал каналы —</option>`;
+  } else {
+    const byParent=new Map();
+    for(const c of channels){const k=c.parent_name||"Без категории";if(!byParent.has(k)) byParent.set(k,[]);byParent.get(k).push(c)}
+    const parts=[`<option value="">— не выбрано —</option>`];
+    for(const [pn,list] of byParent){
+      parts.push(`<optgroup label="${esc(pn)}">`);
+      for(const c of list) parts.push(`<option value="${c.channel_id}" ${c.channel_id===cur?"selected":""}>#${esc(c.name)}</option>`);
+      parts.push(`</optgroup>`);
+    }
+    sel.innerHTML=parts.join("");
+  }
+  sel.disabled=!isAdmin;
+  $("vpArcSetSave").disabled=!isAdmin;
+  $("vpArcSetSave").style.display=isAdmin?"":"none";
+}
+$("vpArcSetSave").addEventListener("click",async()=>{
+  const msg=$("vpArcSetMsg");
+  msg.className="form-msg info";msg.textContent="Сохранение...";
+  const sel=$("vpReportChannel");
+  const chId=sel.value||null;
+  const opt=sel.options[sel.selectedIndex];
+  const chName=opt?opt.textContent.replace(/^#/,""):null;
+  const r=await CGB_VP.saveSettings({report_channel_id:chId,report_channel_name:chName});
+  if(!r.ok){msg.className="form-msg error";msg.textContent=r.error;return}
+  msg.className="form-msg ok";msg.textContent="✓ Сохранено";
+  setTimeout(()=>{msg.textContent=""},2500);
+});
+
+/* ---------- Детали архивной записи ---------- */
+
+let CURRENT_ARC=null;
+
+async function openArcDetail(id){
+  CURRENT_ARC=await CGB_VP.fetchArchiveFull(id);
+  if(!CURRENT_ARC){alert("Запись не найдена");return}
+  const canDel=!!(window.CGB_ROLES&&window.CGB_ROLES.can("vp_archive","delete"));
+  const canEdit=!!(window.CGB_ROLES&&window.CGB_ROLES.can("vp_archive","edit"));
+  $("vpArcDetailTitle").textContent="📋 "+(CURRENT_ARC.title||"Без названия");
+  $("vpArcDetailSub").innerHTML=`Сохранено: <b>${esc(CURRENT_ARC.saved_by_name||"—")}</b> · ${ruDateTime(CURRENT_ARC.saved_at)}${CURRENT_ARC.period_from?` · период ${ruDate(CURRENT_ARC.period_from)} — ${ruDate(CURRENT_ARC.period_to)}`:""}${CURRENT_ARC.notes?`<br><i>${esc(CURRENT_ARC.notes)}</i>`:""}`;
+  const snap=CURRENT_ARC.snapshot||{};
+  const st=CURRENT_ARC.stats||{};
+  const KEY_LABELS={medbook:"МК",narko:"Н",driver:"ВП",passport:"П",personal_file:"ЛД",weapon_license:"ЛО",attestation:"АТ"};
+  const KEYS=Object.keys(KEY_LABELS);
+  const rowsHtml=(snap.groups||[]).map(g=>{
+    return `<div class="vp-arc-det-group">
+      <div class="vp-arc-det-group-title">▍ ${esc(g.name)} <span class="vp-table-count">${g.list.length}</span></div>
+      <div class="vp-table-wrap">
+        <table class="vp-table">
+          <thead><tr>
+            <th class="vp-th-name">ФИО</th>
+            <th>Должность</th>
+            <th>Статик</th>
+            ${KEYS.map(k=>`<th title="${esc(k)}">${KEY_LABELS[k]}</th>`).join("")}
+            <th title="Ссылка-доказательство">Дока</th>
+            <th>Проверил</th>
+          </tr></thead>
+          <tbody>${g.list.map(m=>{
+            return `<tr>
+              <td class="vp-td-name"><div class="vp-fio">${esc(m.parsed_fio)}</div><div class="vp-nick">${esc(m.raw_nick||"")}</div></td>
+              <td class="vp-td-pos">${esc(m.position||"—")}</td>
+              <td class="vp-td-static">${esc(m.parsed_static||"—")}</td>
+              ${KEYS.map(k=>{
+                const v=m[k];
+                const cls=v==="yes"?"vp-cell-yes":v==="no"?"vp-cell-no":v==="absent"?"vp-cell-absent":"vp-cell-none";
+                const ic=v==="yes"?"✓":v==="no"?"✕":v==="absent"?"○":"—";
+                return `<td class="vp-cell ${cls}"><div class="vp-pill-t" style="font-size:14px;font-weight:700">${ic}</div></td>`;
+              }).join("")}
+              <td class="vp-td-ev">${m.evidence_url?`<a class="vp-ev-btn vp-ev-ok" href="${esc(m.evidence_url)}" target="_blank" rel="noopener" title="${esc(m.evidence_url)}">🔗</a>`:`<span class="vp-checker-empty">—</span>`}</td>
+              <td class="vp-td-checker">${m.checked_by_name?`<div class="vp-checker">${esc(m.checked_by_name)}</div>`:`<span class="vp-checker-empty">—</span>`}</td>
+            </tr>`;
+          }).join("")}</tbody>
+        </table>
+      </div>
+    </div>`;
+  }).join("");
+  $("vpArcDetailBody").innerHTML=`
+    <div class="vp-stats-cards" style="margin-bottom:14px">
+      <div class="vp-stats-card"><div class="vp-stats-card-num">${CURRENT_ARC.members_total||0}</div><div class="vp-stats-card-lbl">всего</div></div>
+      <div class="vp-stats-card vp-arc-stat-ok"><div class="vp-stats-card-num">${CURRENT_ARC.members_checked||0}</div><div class="vp-stats-card-lbl">полностью</div></div>
+      <div class="vp-stats-card vp-arc-stat-warn"><div class="vp-stats-card-num">${CURRENT_ARC.members_partial||0}</div><div class="vp-stats-card-lbl">частично</div></div>
+    </div>
+    ${rowsHtml}
+    ${CURRENT_ARC.report_message_id?`<div class="vp-arc-det-sent">✓ Отчёт был отправлен в Discord ${ruDateTime(CURRENT_ARC.report_sent_at)} ${CURRENT_ARC.report_sent_by_name?"пользователем "+esc(CURRENT_ARC.report_sent_by_name):""}</div>`:""}
+  `;
+  $("vpArcDetailMsg").textContent="";$("vpArcDetailMsg").className="form-msg";
+  $("vpArcDetailDelete").style.display=canDel?"":"none";
+  $("vpArcDetailEdit").style.display=canEdit?"":"none";
+  $("vpArcDetailModal").classList.add("active");
+}
+
+$("vpArcDetailClose").addEventListener("click",()=>$("vpArcDetailModal").classList.remove("active"));
+$("vpArcDetailModal").querySelector(".modal-close").addEventListener("click",()=>$("vpArcDetailModal").classList.remove("active"));
+$("vpArcDetailModal").addEventListener("click",e=>{if(e.target===$("vpArcDetailModal"))$("vpArcDetailModal").classList.remove("active")});
+
+$("vpArcDetailDelete").addEventListener("click",async()=>{
+  if(!CURRENT_ARC) return;
+  if(!confirm("Удалить запись архива «"+(CURRENT_ARC.title||"Без названия")+"» БЕЗ ВОЗМОЖНОСТИ ВОССТАНОВЛЕНИЯ?")) return;
+  const r=await CGB_VP.deleteArchive(CURRENT_ARC.id);
+  if(!r.ok){alert("Ошибка: "+r.error);return}
+  $("vpArcDetailModal").classList.remove("active");
+  loadArchivesList();
+});
+
+$("vpArcDetailEdit").addEventListener("click",()=>{
+  if(!CURRENT_ARC) return;
+  $("vpArcEditTitle").value=CURRENT_ARC.title||"";
+  $("vpArcEditNotes").value=CURRENT_ARC.notes||"";
+  $("vpArcEditMsg").textContent="";
+  $("vpArcEditModal").classList.add("active");
+});
+$("vpArcEditCancel").addEventListener("click",()=>$("vpArcEditModal").classList.remove("active"));
+$("vpArcEditModal").querySelector(".modal-close").addEventListener("click",()=>$("vpArcEditModal").classList.remove("active"));
+$("vpArcEditModal").addEventListener("click",e=>{if(e.target===$("vpArcEditModal"))$("vpArcEditModal").classList.remove("active")});
+$("vpArcEditSave").addEventListener("click",async()=>{
+  if(!CURRENT_ARC) return;
+  const msg=$("vpArcEditMsg");
+  msg.className="form-msg info";msg.textContent="Сохранение...";
+  const r=await CGB_VP.updateArchive(CURRENT_ARC.id,{title:$("vpArcEditTitle").value.trim()||null,notes:$("vpArcEditNotes").value.trim()||null});
+  if(!r.ok){msg.className="form-msg error";msg.textContent=r.error;return}
+  msg.className="form-msg ok";msg.textContent="✓ Сохранено";
+  CURRENT_ARC.title=$("vpArcEditTitle").value.trim()||null;
+  CURRENT_ARC.notes=$("vpArcEditNotes").value.trim()||null;
+  setTimeout(()=>{$("vpArcEditModal").classList.remove("active");loadArchivesList();openArcDetail(CURRENT_ARC.id)},700);
+});
+
+$("vpArcDetailSend").addEventListener("click",async()=>{
+  if(!CURRENT_ARC) return;
+  const msg=$("vpArcDetailMsg");
+  const settings=await CGB_VP.fetchSettings();
+  if(!settings||!settings.report_channel_id){
+    msg.className="form-msg error";
+    msg.textContent="Канал отчётов не настроен. Админ должен выбрать канал в модалке «Архив» → вкладка «Канал отчётов».";
+    return;
+  }
+  if(!confirm("Отправить отчёт в канал #"+(settings.report_channel_name||"?")+"?\nОтчёт будет оформлен как приказ с таблицами и сравнением с предыдущим.")) return;
+  msg.className="form-msg info";msg.textContent="Отправка запроса боту...";
+  $("vpArcDetailSend").disabled=true;
+  const r=await CGB_VP.requestReport(CURRENT_ARC.id,settings.report_channel_id);
+  if(!r.ok){msg.className="form-msg error";msg.textContent=r.error;$("vpArcDetailSend").disabled=false;return}
+  msg.textContent="Бот формирует отчёт...";
+  const res=await CGB_VP.pollReportStatus(r.id,60000);
+  $("vpArcDetailSend").disabled=false;
+  if(!res.ok){msg.className="form-msg error";msg.textContent="Не отправлено: "+(res.error||res.status);return}
+  msg.className="form-msg ok";msg.textContent="✓ Отчёт отправлен в Discord";
+  setTimeout(()=>openArcDetail(CURRENT_ARC.id),1200);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title>Реестр Премирования · ЦГБ №3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=26">
+<style id="cgb-admin-guard">
+[data-admin]{display:none !important}
+[data-staff]{display:none !important}
+body.cgb-is-admin .nav a[data-admin]{display:inline-flex !important}
+body.cgb-is-staff .nav a[data-staff]{display:inline-flex !important}
+body.cgb-is-admin [data-admin]:not(.nav a){display:initial !important}
+body.cgb-is-staff [data-staff]:not(.nav a){display:initial !important}
+</style>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+<div class="bg-noise"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ВС"></div>
+      <div class="brand-text">
+        <span class="brand-label">Бухгалтерия ЦГБ №3</span>
+        <span class="brand-name">Реестр Премирования</span>
+      </div>
+    </a>
+    <nav class="nav" id="mainNav">
+      <a href="index.html" data-page="index.html" data-transition>Главная</a>
+      <a href="info.html" data-page="info.html" data-transition>Информация</a>
+      <a href="services.html" data-page="services.html" data-transition>Услуги</a>
+      <a href="meds.html" data-page="meds.html" data-transition>Медикаменты</a>
+      <a href="ustav.html" data-page="ustav.html" data-transition>Устав</a>
+      <a href="learn.html" data-page="learn.html" data-transition data-loggedin>Учебные материалы</a>
+      <a href="tests.html" data-page="tests.html" data-transition data-loggedin>Тестирование</a>
+      <a href="composition.html" data-page="composition.html" data-transition>Состав</a>
+      <a href="docs.html" data-page="docs.html" data-transition data-perm="docs:view">Документы</a>
+      <a href="news.html" data-page="news.html" data-transition>Новости</a>
+      <a href="autopark.html" data-page="autopark.html" data-transition>Автопарк</a>
+      <a href="map.html" data-page="map.html" data-transition>Карта</a>
+      <a href="faq.html" data-page="faq.html" data-transition>FAQ</a>
+      <a href="complaints.html" data-page="complaints.html" data-transition>Жалобы</a>
+      <a href="supply.html" data-page="supply.html" data-transition data-perm="supply:view">Поставки</a>
+      <a href="apps.html" data-page="apps.html" data-transition data-perm="apps:view">Заявления</a>
+      <a href="vp.html" data-page="vp.html" data-transition data-perm="vp:view">Проверки АБ</a>
+      <a href="complaints-review.html" data-page="complaints-review.html" data-transition data-perm="complaints:review,complaints:view">Рассмотрение жалоб</a>
+      <a href="complaints-stats.html" data-page="complaints-stats.html" data-transition data-perm="complaints:review,complaints:view">Статистика жалоб</a>
+      <a href="leave.html" data-page="leave.html" data-transition data-loggedin>Отгул</a>
+      <a href="vacation-ic.html" data-page="vacation-ic.html" data-transition data-loggedin>Отпуск IC</a>
+      <a href="vacation-ooc.html" data-page="vacation-ooc.html" data-transition data-loggedin>Отпуск OOC</a>
+      <a href="dismissal.html" data-page="dismissal.html" data-transition data-loggedin>Увольнение</a>
+      <a href="promotion.html" data-page="promotion.html" data-transition data-loggedin>Повышение</a>
+      <a href="restoration.html" data-page="restoration.html" data-transition>Восстановление в ЦГБ №3</a>
+      <a href="appointment.html" data-page="appointment.html" data-transition>Запись к врачу</a>
+      <a href="requests-review.html" data-page="requests-review.html" data-transition data-perm="requests:review,requests:view">Рассмотрение заявок</a>
+      <a href="requests-stats.html" data-page="requests-stats.html" data-transition data-perm="requests:review,requests:view">Статистика заявок</a>
+      <a href="payroll.html" data-page="payroll.html" data-transition data-perm="payroll:view">Реестр премирования</a>
+      <a href="report.html" data-page="report.html" data-transition>Еженедельный отчёт</a>
+      <a href="report-settings.html" data-page="report-settings.html" data-transition data-perm="report:settings">Настройки отчётов</a>
+      <a href="vp-request.html" data-page="vp-request.html" data-transition data-perm="vp_request:submit">Запрос на наказание</a>
+      <a href="vp-request-settings.html" data-page="vp-request-settings.html" data-transition data-perm="vp_request:settings">Настройки запросов АБ</a>
+      <a href="lk.html" data-page="lk.html" data-transition>Личный кабинет</a>
+    </nav>
+    <div class="header-actions">
+      <button class="btn btn-ghost btn-sm" id="prShowArchive">📚 Архив</button>
+      <button class="btn btn-ghost btn-sm" id="prShowSettings" data-perm="payroll:settings">⚙ Настройки</button>
+      <button class="btn btn-gold btn-sm" id="prSend" data-perm="payroll:send">📤 Отправить в DS</button>
+      <button class="search-btn" data-open-search title="Поиск"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg><span>Поиск</span></button>
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Сменить тему"><svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="sun" viewBox="0 0 24 24"><path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66l1.42-1.42M4.92 19.08l1.42-1.42m0-11.32L4.92 4.92m14.16 14.16l-1.42-1.42M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+      <button class="login-btn" data-open-login><svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/></svg><span>Войти</span></button>
+      <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="apps-head">
+    <div class="container">
+      <div class="apps-head-ribbon"><span class="apps-head-ribbon-line"></span><span class="apps-head-ribbon-emblem">◈</span><span class="apps-head-ribbon-name">Бухгалтерия · Реестр премирования</span><span class="apps-head-ribbon-emblem">◈</span><span class="apps-head-ribbon-line"></span></div>
+      <h1 class="apps-head-title">Реестр Премирования</h1>
+    </div>
+  </section>
+
+  <section class="apps-body">
+    <div class="container" style="max-width:1200px">
+      <div id="prGuard" style="display:none"><div class="apps-guard-box"><div class="apps-guard-icon">⚠</div><h2>Доступ ограничен</h2><p>Реестр премирования доступен только Администратору.</p></div></div>
+
+      <div id="prRoot" style="display:none">
+
+        <div class="pr-topbar">
+          <div class="msg-row">
+            <div class="form-group msg-flex-1">
+              <label>💰 Фонд премии</label>
+              <input type="text" id="prFund" class="msg-input" placeholder="15 000 000" data-money-input>
+            </div>
+            <div class="form-group msg-flex-1">
+              <label>📅 Период с</label>
+              <input type="date" id="prFrom" class="msg-input">
+            </div>
+            <div class="form-group msg-flex-1">
+              <label>📅 Период по</label>
+              <input type="date" id="prTo" class="msg-input">
+            </div>
+            <div class="form-group msg-flex-2">
+              <label>📝 Название приказа</label>
+              <input type="text" id="prTitle" class="msg-input" placeholder="Премия за август 2026">
+            </div>
+          </div>
+
+          <div class="pr-summary" id="prSummary"></div>
+        </div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin:16px 0;align-items:center">
+          <button class="btn btn-gold btn-sm" id="prAddDept">＋ Добавить отдел (из роли DS)</button>
+          <button class="btn btn-ghost btn-sm" id="prRefreshMembers">↻ Пересинхронизировать участников по ролям</button>
+          <label class="pr-toggle" title="Если выкл — фонд делится поровну между отделами автоматически">
+            <input type="checkbox" id="prPctManual" checked>
+            <span>Ручное распределение % между отделами</span>
+          </label>
+          <div style="flex:1"></div>
+          <button class="btn btn-ghost btn-sm" id="prPreviewDs">👁 Предпросмотр DS</button>
+        </div>
+
+        <div id="prDeptList" class="pr-dept-list"></div>
+
+        <div class="pr-save-hint" id="prSaveHint">💾 Сохранено</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="modal-back" id="prAddDeptModal">
+  <div class="modal modal-lg">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Добавить отдел</h3>
+    <div class="modal-sub">Выберите роль в Discord — все её участники будут добавлены в отдел</div>
+    <div class="form-group">
+      <label>Роль</label>
+      <select id="prRoleSelect" class="msg-input"></select>
+    </div>
+    <div class="form-group">
+      <label>Название отдела (можно свое)</label>
+      <input type="text" id="prDeptName" class="msg-input" placeholder="Оставьте пустым — будет имя роли">
+    </div>
+    <div class="form-group">
+      <label>Эмодзи (для DS embed)</label>
+      <input type="text" id="prDeptIcon" class="msg-input" placeholder="🎖" maxlength="4">
+    </div>
+    <div class="form-msg" id="prAddDeptMsg"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;padding-top:12px;border-top:1px solid var(--gold-b);margin-top:14px">
+      <button class="btn btn-ghost btn-sm" id="prAddDeptCancel">Отмена</button>
+      <button class="btn btn-gold btn-sm" id="prAddDeptSave">＋ Добавить</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-back" id="prAddMemberModal">
+  <div class="modal modal-lg">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Добавить человека вручную</h3>
+    <div class="modal-sub" id="prAddMemberSub"></div>
+    <div class="form-group" style="position:relative">
+      <label>Поиск сотрудника</label>
+      <input type="text" id="prMemSearch" class="msg-input" placeholder="Начните вводить ФИО или статик..." autocomplete="off">
+      <div id="prMemDropdown" class="cr-dropdown" style="display:none"></div>
+    </div>
+    <div class="form-msg" id="prAddMemberMsg"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;padding-top:12px;border-top:1px solid var(--gold-b);margin-top:14px">
+      <button class="btn btn-ghost btn-sm" id="prAddMemberCancel">Отмена</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-back" id="prSettingsModal">
+  <div class="modal modal-xl">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Настройки Реестра премирования</h3>
+    <div class="form-group">
+      <label>📨 Канал в Discord для приказа</label>
+      <select id="prSetCh" class="msg-input"></select>
+    </div>
+    <div class="form-group">
+      <label>🔔 Роль для пинга</label>
+      <select id="prSetRole" class="msg-input"></select>
+    </div>
+    <div class="form-group">
+      <label>Заголовок приказа</label>
+      <input type="text" id="prSetHeader" class="msg-input">
+    </div>
+    <div class="form-group">
+      <label>Футер</label>
+      <input type="text" id="prSetFooter" class="msg-input">
+    </div>
+    <div class="form-group">
+      <label>Формат приказа в Discord</label>
+      <div class="cr-notify-grid" style="grid-template-columns:repeat(3,1fr)">
+        <label class="cr-notify"><input type="radio" name="prOutMode" value="image"><span>🖼 Только картинка</span></label>
+        <label class="cr-notify"><input type="radio" name="prOutMode" value="text"><span>📝 Только текст</span></label>
+        <label class="cr-notify"><input type="radio" name="prOutMode" value="both"><span>🖼📝 Картинка + текст</span></label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="pr-toggle" style="display:flex">
+        <input type="checkbox" id="prSetSplit">
+        <span>✂ Дробить картинку по отделам (несколько сообщений)</span>
+      </label>
+      <span class="msg-help">Полезно если много отделов и картинка получается очень длинной. Каждый отдел уходит отдельным сообщением, пинг только в первом.</span>
+    </div>
+    <div class="form-msg" id="prSettingsMsg"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;padding-top:12px;border-top:1px solid var(--gold-b);margin-top:14px">
+      <button class="btn btn-ghost btn-sm" id="prSettingsCancel">Отмена</button>
+      <button class="btn btn-gold btn-sm" id="prSettingsSave">💾 Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-back" id="prPreviewModal">
+  <div class="modal modal-xl">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Предпросмотр приказа для DS</h3>
+    <div id="prPreviewBody"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;padding-top:12px;border-top:1px solid var(--gold-b);margin-top:14px">
+      <button class="btn btn-ghost btn-sm" id="prPreviewClose">Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-back" id="prArchiveModal">
+  <div class="modal modal-xxl">
+    <button class="modal-close" aria-label="Закрыть">✕</button>
+    <h3>Архив приказов</h3>
+    <div id="prArchiveBody"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;padding-top:12px;border-top:1px solid var(--gold-b);margin-top:14px">
+      <button class="btn btn-ghost btn-sm" id="prArchiveClose">Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-back" id="loginModal">
+  <div class="modal"><button class="modal-close" aria-label="Закрыть">✕</button><h3>Вход</h3>
+    <form><div class="form-group"><label>Email</label><input type="email" name="email" required></div><div class="form-group"><label>Пароль</label><input type="password" name="password" required></div><button class="btn btn-gold" style="width:100%" type="submit">Войти</button><div class="form-msg"></div></form></div>
+</div>
+
+<footer class="footer"><div class="container"><div class="footer-bottom"><span>© <span id="year"></span> · ЦГБ №3 · Центральная Городская</span><span class="footer-note">🐞 Нашли баг? Обратитесь: <b>@rilavion</b></span></div></div></footer>
+
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=17"></script>
+<script src="assets/js/core/config.js?v=17"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/utils/format-utils.js?v=17"></script>
+<script src="assets/js/ui/holiday-engine.js?v=17"></script>
+<script src="assets/js/ui/settings-panel.js?v=17"></script>
+<script src="assets/js/ui/sound-engine.js?v=17"></script>
+<script src="assets/js/core/auth.js?v=17"></script>
+<script src="assets/js/core/roles-engine.js?v=17"></script>
+<script src="assets/js/ui/search-engine.js?v=17"></script>
+<script src="assets/js/utils/ds-cache.js?v=17"></script>
+<script src="assets/js/ui/notify-engine.js?v=19"></script>
+<script src="assets/js/ui/notify-live.js?v=17"></script>
+<script src="assets/vendor/html2canvas.min.js?v=4"></script>
+<script src="assets/js/features/payroll-engine.js?v=17"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+let DRAFT=null, ROLES=[], SETTINGS=null, ADD_DEPT_IDX=null, DS_MEMBERS=[], AUTOSAVE_T=null;
+
+function parseMoney(s){return Number(String(s||"").replace(/[^\d.]/g,""))||0}
+function fmtMoneyInput(n){const v=Math.round(n);return v.toLocaleString("ru-RU",{timeZone:"Europe/Moscow"})}
+function attachMoneyInput(el){
+  el.addEventListener("blur",()=>{el.value=fmtMoneyInput(parseMoney(el.value))});
+}
+
+async function boot(){
+  const canView=window.CGB_ROLES&&window.CGB_ROLES.can("payroll","view");
+  if(!canView){$("prGuard").style.display="";$("prRoot").style.display="none";return}
+  $("prGuard").style.display="none";$("prRoot").style.display="";
+  attachMoneyInput($("prFund"));
+  DRAFT=await CGB_PAYROLL.ensureDraft();
+  ROLES=await CGB_PAYROLL.loadRoles();
+  SETTINGS=await CGB_PAYROLL.fetchSettings();
+  await loadDsMembers();
+  fillDraftUI();
+  render();
+}
+
+async function loadDsMembers(){
+  const c=window.CGB_AUTH.state.client;
+  const {data}=await c.from("ds_members").select("discord_id,parsed_fio,parsed_static,parsed_dept,display_name,raw_nick,role_ids,role_names").eq("active",true).limit(3000);
+  DS_MEMBERS=(data||[]).map(m=>({
+    did:m.discord_id,
+    fio:(m.parsed_fio||m.display_name||m.raw_nick||"—").trim(),
+    static:m.parsed_static||"",
+    dept:m.parsed_dept||"",
+    role_ids:m.role_ids||[]
+  }));
+}
+
+function fillDraftUI(){
+  $("prFund").value=fmtMoneyInput(Number(DRAFT.fund_amount)||0);
+  $("prFrom").value=DRAFT.period_from||"";
+  $("prTo").value=DRAFT.period_to||"";
+  $("prTitle").value=DRAFT.title||"Премия";
+  $("prPctManual").checked=DRAFT.pct_manual!==false;
+}
+
+function collectFromUI(){
+  DRAFT.fund_amount=parseMoney($("prFund").value);
+  DRAFT.period_from=$("prFrom").value||null;
+  DRAFT.period_to=$("prTo").value||null;
+  DRAFT.title=$("prTitle").value.trim()||"Премия";
+  DRAFT.pct_manual=$("prPctManual").checked;
+}
+
+function scheduleSave(){
+  if(AUTOSAVE_T) clearTimeout(AUTOSAVE_T);
+  $("prSaveHint").textContent="✎ Сохранение...";
+  $("prSaveHint").className="pr-save-hint saving";
+  AUTOSAVE_T=setTimeout(async()=>{
+    collectFromUI();
+    const r=await CGB_PAYROLL.saveDraft(DRAFT.id,{
+      title:DRAFT.title,period_from:DRAFT.period_from,period_to:DRAFT.period_to,
+      fund_amount:DRAFT.fund_amount,data:DRAFT.data,pct_manual:DRAFT.pct_manual
+    });
+    if(r.ok){$("prSaveHint").textContent="✓ Сохранено "+new Date().toLocaleTimeString("ru-RU",{timeZone:"Europe/Moscow"});$("prSaveHint").className="pr-save-hint saved"}
+    else {$("prSaveHint").textContent="⚠ Ошибка: "+r.error;$("prSaveHint").className="pr-save-hint err"}
+  },800);
+}
+
+["prFund","prFrom","prTo","prTitle"].forEach(id=>$(id).addEventListener("input",()=>{scheduleSave();render()}));
+$("prPctManual").addEventListener("change",()=>{scheduleSave();render();updatePctInputsDisabled()});
+function updatePctInputsDisabled(){
+  const manual=$("prPctManual").checked;
+  document.querySelectorAll(".pr-pct-in").forEach(el=>{el.disabled=!manual;el.title=manual?"":"Автоматически по количеству отделов"});
+}
+
+function render(){
+  collectFromUI();
+  const calc=CGB_PAYROLL.calc(DRAFT);
+  for(let i=0;i<calc.departments.length;i++){
+    if(!$("prPctManual").checked&&DRAFT.data.departments[i]) DRAFT.data.departments[i].pct=calc.departments[i].pct;
+  }
+  renderSummary(calc);
+  renderDepts(calc);
+  updatePctInputsDisabled();
+}
+
+function renderSummary(calc){
+  const totalActive=calc.departments.reduce((s,d)=>s+d.members.filter(m=>!m.excluded).length,0);
+  const pctBad=Math.abs(calc.total_pct-100)>0.5&&calc.departments.length>0;
+  $("prSummary").innerHTML=`
+    <div class="pr-sum">
+      <div class="pr-sum-item"><div class="pr-sum-lbl">Фонд</div><div class="pr-sum-val">${CGB_PAYROLL.fmtMoney(calc.fund)}</div></div>
+      <div class="pr-sum-item"><div class="pr-sum-lbl">Распределено</div><div class="pr-sum-val ${calc.overspend?'over':''}">${CGB_PAYROLL.fmtMoney(calc.total_spent)}</div></div>
+      <div class="pr-sum-item"><div class="pr-sum-lbl">Остаток</div><div class="pr-sum-val">${CGB_PAYROLL.fmtMoney(calc.fund-calc.total_spent)}</div></div>
+      <div class="pr-sum-item"><div class="pr-sum-lbl">Сумма % отделов</div><div class="pr-sum-val ${pctBad?'over':''}">${calc.total_pct.toFixed(1)}%${pctBad?' ⚠':''}</div></div>
+      <div class="pr-sum-item"><div class="pr-sum-lbl">Отделов</div><div class="pr-sum-val">${calc.departments.length}</div></div>
+      <div class="pr-sum-item"><div class="pr-sum-lbl">Активных</div><div class="pr-sum-val">${totalActive}</div></div>
+    </div>
+  `;
+}
+
+function renderDepts(calc){
+  const box=$("prDeptList");
+  if(!calc.departments.length){
+    box.innerHTML='<div class="apps-empty"><h3>Пока нет отделов</h3><p>Нажмите «+ Добавить отдел (из роли DS)»</p></div>';
+    return;
+  }
+  box.innerHTML=calc.departments.map((d,i)=>{
+    const active=d.members.filter(m=>!m.excluded).length;
+    const total=d.members.length;
+    return `<div class="pr-dept ${d.overspend?'over':''}" data-di="${i}">
+      <div class="pr-dept-head">
+        <div class="pr-dept-icon">${esc(d.icon||"🎖")}</div>
+        <input type="text" class="pr-dept-name-in" data-d-name value="${esc(d.name)}" title="Название отдела">
+        <div class="pr-dept-role">роль: ${esc(d.role_name||"—")}${d.role_id?"":" <span style='color:#e77070'>(нет ID)</span>"}</div>
+        <div style="flex:1"></div>
+        <label class="pr-toggle" title="Пинговать эту роль при отправке приказа в DS" style="padding:4px 10px;font-size:11px">
+          <input type="checkbox" data-d-ping ${d.ping?"checked":""} ${!d.role_id?"disabled":""}>
+          <span>🔔 Пинг</span>
+        </label>
+        <label class="pr-pct-lbl">%<input type="number" class="pr-pct-in" data-d-pct value="${d.pct||0}" min="0" max="100" step="0.1"></label>
+        <div class="pr-dept-sum">${CGB_PAYROLL.fmtMoney(d.dept_amount)}</div>
+        <button class="btn btn-ghost btn-sm" data-d-add title="Добавить сотрудника вручную">＋</button>
+        <button class="btn btn-ghost btn-sm" data-d-del title="Удалить отдел">🗑</button>
+      </div>
+      <div class="pr-mem-table">
+        <div class="pr-mem-hdr">
+          <div>№</div><div>ФИО</div><div>Статик</div><div>Отдел (DS)</div>
+          <div>Доля</div><div>Ручная сумма</div><div>Итог</div><div>Действия</div>
+        </div>
+        ${d.members.map((m,mi)=>renderMember(m,mi)).join("")}
+        <div class="pr-mem-foot">
+          Активных: <b>${active}</b> из ${total} · Сумма отдела: <b>${CGB_PAYROLL.fmtMoney(d.members_sum)}</b>${d.overspend?' <span class="pr-warn">⚠ перерасход!</span>':""}
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+  attachDeptHandlers();
+}
+
+function renderMember(m,mi){
+  const cls=m.excluded?"excluded":"";
+  return `<div class="pr-mem ${cls}" data-mi="${mi}">
+    <div>${mi+1}</div>
+    <div class="pr-mem-fio">${esc(m.fio)}${m.manual?' <span class="pr-manual-b">👤</span>':""}</div>
+    <div class="pr-mem-stat">${esc(m.static||"—")}</div>
+    <div class="pr-mem-dept">${esc(m.dept||"—")}</div>
+    <div><input type="number" class="pr-mem-share" data-m-share value="${m.share!=null?m.share:1}" min="0" step="0.1" ${m.excluded||m.override_amount?"disabled":""} title="Доля"></div>
+    <div><input type="text" class="pr-mem-override" data-m-ovr value="${m.override_amount!=null&&m.override_amount!==""?fmtMoneyInput(m.override_amount):""}" placeholder="—" ${m.excluded?"disabled":""} data-money-input title="Ручная сумма"></div>
+    <div class="pr-mem-amt">${CGB_PAYROLL.fmtMoney(m.amount||0)}</div>
+    <div class="pr-mem-acts">
+      <label class="pr-excl" title="Исключить"><input type="checkbox" data-m-excl ${m.excluded?"checked":""}> ✕</label>
+      ${m.manual?`<button class="btn btn-ghost btn-sm" data-m-del title="Убрать из реестра">🗑</button>`:""}
+    </div>
+  </div>`;
+}
+
+function attachDeptHandlers(){
+  document.querySelectorAll(".pr-dept").forEach(el=>{
+    const di=+el.dataset.di;
+    el.querySelector("[data-d-name]").addEventListener("input",e=>{DRAFT.data.departments[di].name=e.target.value;scheduleSave();updateSummary()});
+    el.querySelector("[data-d-pct]").addEventListener("input",e=>{DRAFT.data.departments[di].pct=Number(e.target.value)||0;scheduleSave();render()});
+    const pingEl=el.querySelector("[data-d-ping]");
+    if(pingEl) pingEl.addEventListener("change",e=>{DRAFT.data.departments[di].ping=e.target.checked;scheduleSave()});
+    el.querySelector("[data-d-add]").addEventListener("click",()=>openAddMember(di));
+    el.querySelector("[data-d-del]").addEventListener("click",()=>{
+      if(!confirm("Удалить отдел «"+DRAFT.data.departments[di].name+"»?")) return;
+      DRAFT.data.departments.splice(di,1);scheduleSave();render();
+    });
+    el.querySelectorAll(".pr-mem").forEach(mel=>{
+      const mi=+mel.dataset.mi;
+      const share=mel.querySelector("[data-m-share]");
+      const ovr=mel.querySelector("[data-m-ovr]");
+      const excl=mel.querySelector("[data-m-excl]");
+      const delBtn=mel.querySelector("[data-m-del]");
+      if(share) share.addEventListener("input",e=>{DRAFT.data.departments[di].members[mi].share=Number(e.target.value)||0;scheduleSave();render()});
+      if(ovr){
+        ovr.addEventListener("blur",e=>{
+          const v=e.target.value.trim();
+          DRAFT.data.departments[di].members[mi].override_amount=v?parseMoney(v):null;
+          scheduleSave();render();
+        });
+      }
+      if(excl) excl.addEventListener("change",e=>{DRAFT.data.departments[di].members[mi].excluded=e.target.checked;scheduleSave();render()});
+      if(delBtn) delBtn.addEventListener("click",()=>{
+        DRAFT.data.departments[di].members.splice(mi,1);scheduleSave();render();
+      });
+    });
+  });
+}
+
+function updateSummary(){renderSummary(CGB_PAYROLL.calc(DRAFT))}
+
+$("prAddDept").addEventListener("click",()=>{
+  const sel=$("prRoleSelect");
+  sel.innerHTML=['<option value="">— выберите роль —</option>'].concat(ROLES.filter(r=>r.name!=="@everyone").map(r=>`<option value="${r.role_id}">@${esc(r.name)}</option>`)).join("");
+  $("prDeptName").value="";$("prDeptIcon").value="🎖";$("prAddDeptMsg").textContent="";
+  $("prAddDeptModal").classList.add("active");
+});
+$("prAddDeptCancel").addEventListener("click",()=>$("prAddDeptModal").classList.remove("active"));
+$("prAddDeptModal").querySelector(".modal-close").addEventListener("click",()=>$("prAddDeptModal").classList.remove("active"));
+
+$("prAddDeptSave").addEventListener("click",async()=>{
+  const roleId=$("prRoleSelect").value;
+  if(!roleId){$("prAddDeptMsg").className="form-msg error";$("prAddDeptMsg").textContent="Выберите роль";return}
+  const role=ROLES.find(r=>r.role_id===roleId);
+  if(!role) return;
+  const name=$("prDeptName").value.trim()||role.name;
+  const icon=$("prDeptIcon").value.trim()||"🎖";
+  const members=await CGB_PAYROLL.fetchMembersByRoleId(roleId);
+  const existing=(DRAFT.data.departments||[]).findIndex(d=>d.role_id===roleId);
+  if(existing>=0){
+    if(!confirm("Отдел с этой ролью уже есть. Обновить участников (переписать)?")) return;
+    DRAFT.data.departments[existing].name=name;
+    DRAFT.data.departments[existing].icon=icon;
+    DRAFT.data.departments[existing].role_name=role.name;
+    const existingMap=new Map(DRAFT.data.departments[existing].members.map(m=>[m.discord_id||m.fio+"|"+m.static,m]));
+    DRAFT.data.departments[existing].members=members.map(m=>{
+      const key=m.discord_id||m.fio+"|"+m.static;
+      const old=existingMap.get(key);
+      return {discord_id:m.discord_id,fio:m.fio,static:m.static,dept:m.dept,
+        share:old?old.share:1,excluded:old?old.excluded:false,
+        override_amount:old?old.override_amount:null,manual:false};
+    });
+  } else {
+    DRAFT.data.departments.push({
+      role_id:roleId,role_name:role.name,name,icon,pct:0,
+      members:members.map(m=>({discord_id:m.discord_id,fio:m.fio,static:m.static,dept:m.dept,share:1,excluded:false,override_amount:null,manual:false}))
+    });
+  }
+  $("prAddDeptModal").classList.remove("active");
+  scheduleSave();render();
+});
+
+$("prRefreshMembers").addEventListener("click",async()=>{
+  if(!confirm("Пересинхронизировать участников всех отделов из ролей DS?\nВручную добавленные будут сохранены. Настройки долей/исключений — тоже.")) return;
+  await loadDsMembers();
+  for(const d of DRAFT.data.departments){
+    if(!d.role_id) continue;
+    const roleMembers=await CGB_PAYROLL.fetchMembersByRoleId(d.role_id);
+    const existingMap=new Map(d.members.map(m=>[m.discord_id||m.fio+"|"+m.static,m]));
+    const manualList=d.members.filter(m=>m.manual);
+    const roleList=roleMembers.map(m=>{
+      const key=m.discord_id||m.fio+"|"+m.static;
+      const old=existingMap.get(key);
+      return {discord_id:m.discord_id,fio:m.fio,static:m.static,dept:m.dept,
+        share:old?old.share:1,excluded:old?old.excluded:false,
+        override_amount:old?old.override_amount:null,manual:false};
+    });
+    d.members=roleList.concat(manualList);
+  }
+  scheduleSave();render();
+});
+
+function openAddMember(di){
+  ADD_DEPT_IDX=di;
+  $("prMemSearch").value="";
+  $("prMemDropdown").style.display="none";
+  $("prAddMemberSub").textContent="В отдел: "+DRAFT.data.departments[di].name;
+  $("prAddMemberMsg").textContent="";
+  $("prAddMemberModal").classList.add("active");
+  setTimeout(()=>$("prMemSearch").focus(),100);
+}
+
+$("prAddMemberCancel").addEventListener("click",()=>$("prAddMemberModal").classList.remove("active"));
+$("prAddMemberModal").querySelector(".modal-close").addEventListener("click",()=>$("prAddMemberModal").classList.remove("active"));
+
+$("prMemSearch").addEventListener("input",e=>{
+  const q=e.target.value.trim().toLowerCase();
+  const box=$("prMemDropdown");
+  if(!q){box.style.display="none";return}
+  const digits=q.replace(/\D/g,"");
+  const matches=DS_MEMBERS.filter(m=>{
+    const fioLow=(m.fio||"").toLowerCase();
+    const statNorm=(m.static||"").replace(/\D/g,"");
+    return fioLow.includes(q) || (digits && statNorm.includes(digits));
+  }).slice(0,15);
+  if(!matches.length){
+    box.innerHTML='<div class="cr-dd-empty">Ничего не найдено</div>';
+    box.style.display="";return;
+  }
+  box.innerHTML=matches.map(m=>`<div class="cr-dd-item" data-did="${esc(m.did)}" data-fio="${esc(m.fio)}" data-static="${esc(m.static)}" data-dept="${esc(m.dept)}">
+    <div class="cr-dd-fio">${esc(m.fio)}</div>
+    <div class="cr-dd-meta">${m.static?`<span class="cr-dd-stat">${esc(m.static)}</span>`:""}${m.dept?`<span class="cr-dd-pos">${esc(m.dept)}</span>`:""}</div>
+  </div>`).join("");
+  box.style.display="";
+  box.querySelectorAll(".cr-dd-item").forEach(el=>el.addEventListener("mousedown",ev=>{
+    ev.preventDefault();
+    const di=ADD_DEPT_IDX;
+    const d=DRAFT.data.departments[di];
+    const exists=d.members.some(m=>m.discord_id===el.dataset.did||(el.dataset.static&&m.static===el.dataset.static));
+    if(exists){$("prAddMemberMsg").className="form-msg error";$("prAddMemberMsg").textContent="Уже добавлен в отдел";return}
+    d.members.push({
+      discord_id:el.dataset.did,fio:el.dataset.fio,static:el.dataset.static,
+      dept:el.dataset.dept,share:1,excluded:false,override_amount:null,manual:true
+    });
+    scheduleSave();render();
+    $("prAddMemberModal").classList.remove("active");
+  }));
+});
+
+$("prShowSettings").addEventListener("click",async()=>{
+  const c=window.CGB_AUTH.state.client;
+  const {data:channels}=await c.from("ds_channels").select("channel_id,name,parent_name").order("name",{ascending:true});
+  const chSel=$("prSetCh");
+  const cur=SETTINGS?SETTINGS.channel_id||"":"";
+  const byParent=new Map();
+  for(const ch of (channels||[])){const k=ch.parent_name||"Без категории";if(!byParent.has(k)) byParent.set(k,[]);byParent.get(k).push(ch)}
+  const parts=[`<option value="">— не выбрано —</option>`];
+  for(const [pn,list] of byParent){parts.push(`<optgroup label="${esc(pn)}">`);for(const ch of list) parts.push(`<option value="${ch.channel_id}" ${ch.channel_id===cur?"selected":""}>#${esc(ch.name)}</option>`);parts.push(`</optgroup>`)}
+  chSel.innerHTML=parts.join("");
+
+  const roleSel=$("prSetRole");
+  const curR=SETTINGS?SETTINGS.ping_role_id||"":"";
+  roleSel.innerHTML=[`<option value="">— не выбрано —</option>`].concat(ROLES.filter(r=>r.name!=="@everyone").map(r=>`<option value="${r.role_id}" ${r.role_id===curR?"selected":""}>@${esc(r.name)}</option>`)).join("");
+
+  $("prSetHeader").value=SETTINGS?SETTINGS.header_text||"ПРИКАЗ О ПРЕМИРОВАНИИ":"ПРИКАЗ О ПРЕМИРОВАНИИ";
+  $("prSetFooter").value=SETTINGS?SETTINGS.footer_text||"":"";
+  const om=(SETTINGS&&SETTINGS.output_mode)||"both";
+  document.querySelectorAll("[name=prOutMode]").forEach(r=>{r.checked=(r.value===om)});
+  $("prSetSplit").checked=!!(SETTINGS&&SETTINGS.split_by_dept);
+  $("prSettingsMsg").textContent="";
+  $("prSettingsModal").classList.add("active");
+});
+$("prSettingsCancel").addEventListener("click",()=>$("prSettingsModal").classList.remove("active"));
+$("prSettingsModal").querySelector(".modal-close").addEventListener("click",()=>$("prSettingsModal").classList.remove("active"));
+$("prSettingsSave").addEventListener("click",async()=>{
+  const msg=$("prSettingsMsg");
+  msg.className="form-msg info";msg.textContent="Сохранение...";
+  const outMode=(document.querySelector("[name=prOutMode]:checked")||{}).value||"both";
+  const r=await CGB_PAYROLL.saveSettings({
+    channel_id:$("prSetCh").value||null,
+    ping_role_id:$("prSetRole").value||null,
+    header_text:$("prSetHeader").value.trim()||"ПРИКАЗ О ПРЕМИРОВАНИИ",
+    footer_text:$("prSetFooter").value.trim()||null,
+    output_mode:outMode,
+    split_by_dept:$("prSetSplit").checked
+  });
+  if(!r.ok){msg.className="form-msg error";msg.textContent=r.error;return}
+  msg.className="form-msg success";msg.textContent="✓ Сохранено";
+  SETTINGS=await CGB_PAYROLL.fetchSettings();
+  setTimeout(()=>$("prSettingsModal").classList.remove("active"),700);
+});
+
+$("prPreviewDs").addEventListener("click",()=>{
+  const calc=CGB_PAYROLL.calc(DRAFT);
+  $("prPreviewBody").innerHTML=renderPreviewHtml(calc);
+  $("prPreviewModal").classList.add("active");
+});
+$("prPreviewClose").addEventListener("click",()=>$("prPreviewModal").classList.remove("active"));
+$("prPreviewModal").querySelector(".modal-close").addEventListener("click",()=>$("prPreviewModal").classList.remove("active"));
+
+function renderPreviewHtml(calc){
+  const head=(SETTINGS&&SETTINGS.header_text)||"ПРИКАЗ О ПРЕМИРОВАНИИ";
+  const foot=(SETTINGS&&SETTINGS.footer_text)||"Бухгалтерия ЦГБ №3 · Министерство Здравоохранения";
+  const periodTxt=DRAFT.period_from||DRAFT.period_to?`ЗА ПЕРИОД: ${fmtDateRu(DRAFT.period_from)} — ${fmtDateRu(DRAFT.period_to)}`:"";
+  const dateNow=new Date().toLocaleDateString("ru-RU",{timeZone:"Europe/Moscow",day:"2-digit",month:"long",year:"numeric"});
+  return `<div class="pr-preview" id="prPreviewCapture">
+    <div class="pr-pv-inner">
+      <div class="pr-pv-corner tl"></div>
+      <div class="pr-pv-corner tr"></div>
+      <div class="pr-pv-corner bl"></div>
+      <div class="pr-pv-corner br"></div>
+
+      <div class="pr-pv-section pr-pv-part-head" data-part="head">
+        <div class="pr-pv-head">
+          <div class="pr-pv-emblem-wrap">
+            <div class="pr-pv-emblem">◈</div>
+            <div class="pr-pv-emblem-line"></div>
+            <div class="pr-pv-emblem-star">★</div>
+            <div class="pr-pv-emblem-line"></div>
+            <div class="pr-pv-emblem">◈</div>
+          </div>
+          <div class="pr-pv-title">${esc(head)}</div>
+          <div class="pr-pv-subtitle">№ ${new Date().getTime().toString().slice(-6)} · ${esc(dateNow)}</div>
+          <div class="pr-pv-name">«${esc(DRAFT.title||"Премия")}»</div>
+          ${periodTxt?`<div class="pr-pv-period">${esc(periodTxt)}</div>`:""}
+          <div class="pr-pv-fund-box">
+            <div class="pr-pv-fund-lbl">ОБЩИЙ ФОНД</div>
+            <div class="pr-pv-fund-val">${CGB_PAYROLL.fmtMoney(calc.fund)}</div>
+          </div>
+        </div>
+      </div>
+
+      ${calc.departments.map((d,di)=>{
+        const active=d.members.filter(m=>!m.excluded);
+        if(!active.length) return "";
+        return `<div class="pr-pv-section pr-pv-part-dept" data-part="dept-${di}">
+          <div class="pr-pv-dept">
+            <div class="pr-pv-dept-head">
+              <div class="pr-pv-dept-icon">${esc(d.icon||"🎖")}</div>
+              <div class="pr-pv-dept-title">${esc(d.name)}</div>
+              <div class="pr-pv-dept-meta"><span>${(+d.pct).toFixed(1)}%</span> · <b>${CGB_PAYROLL.fmtMoney(d.dept_amount)}</b></div>
+            </div>
+            <div class="pr-pv-mems">${active.map((m,mi)=>{
+              const num=String(mi+1).padStart(2,"0");
+              return `<div class="pr-pv-mem">
+                <span class="pr-pv-mnum">${num}</span>
+                <span class="pr-pv-mfio">${esc(m.fio)}</span>
+                ${m.static?`<span class="pr-pv-mstat">${esc(m.static)}</span>`:""}
+                <span class="pr-pv-mdots"></span>
+                <span class="pr-pv-mamt">${CGB_PAYROLL.fmtMoney(m.amount)}</span>
+              </div>`;
+            }).join("")}</div>
+          </div>
+        </div>`;
+      }).join("")}
+
+      <div class="pr-pv-section pr-pv-part-foot" data-part="foot">
+        <div class="pr-pv-totals">
+          <div class="pr-pv-tot-row"><span>Итого выдано:</span><b>${CGB_PAYROLL.fmtMoney(calc.total_spent)}</b></div>
+          <div class="pr-pv-tot-row"><span>Остаток фонда:</span><b>${CGB_PAYROLL.fmtMoney(calc.fund-calc.total_spent)}</b></div>
+        </div>
+        <div class="pr-pv-footer">${esc(foot)}</div>
+      </div>
+    </div>
+  </div>`;
+}
+function fmtDateRu(iso){if(!iso) return "—";try{return new Date(iso).toLocaleDateString("ru-RU",{timeZone:"Europe/Moscow",day:"2-digit",month:"long",year:"numeric"})}catch(e){return iso}}
+
+$("prShowArchive").addEventListener("click",async()=>{
+  const list=await CGB_PAYROLL.listArchive(30);
+  $("prArchiveBody").innerHTML=list.length?list.map(a=>{
+    const calc=CGB_PAYROLL.calc(a);
+    return `<div class="pr-arc-item">
+      <div class="pr-arc-head">
+        <b>${esc(a.title||"—")}</b>
+        <span class="pr-arc-date">${a.sent_at?new Date(a.sent_at).toLocaleString("ru-RU",{timeZone:"Europe/Moscow"}):"—"}</span>
+        <span class="pr-arc-fund">${CGB_PAYROLL.fmtMoney(a.fund_amount||0)}</span>
+      </div>
+      <div class="pr-arc-sub">${a.period_from||"?"} — ${a.period_to||"?"} · отделов ${calc.departments.length} · отправил: ${esc(a.sent_by_name||"—")}</div>
+    </div>`;
+  }).join(""):"<div class='apps-empty'>Архив пуст</div>";
+  $("prArchiveModal").classList.add("active");
+});
+$("prArchiveClose").addEventListener("click",()=>$("prArchiveModal").classList.remove("active"));
+$("prArchiveModal").querySelector(".modal-close").addEventListener("click",()=>$("prArchiveModal").classList.remove("active"));
+
+async function generatePreviewImage(){
+  const calc=CGB_PAYROLL.calc(DRAFT);
+  const holder=document.createElement("div");
+  holder.style.cssText="position:fixed;left:-99999px;top:0;width:900px;padding:0";
+  holder.innerHTML=renderPreviewHtml(calc);
+  document.body.appendChild(holder);
+  try{
+    const target=holder.querySelector("#prPreviewCapture");
+    const canvas=await html2canvas(target,{backgroundColor:"#0e1a13",scale:2,logging:false,useCORS:true});
+    return canvas.toDataURL("image/png");
+  }finally{
+    holder.remove();
+  }
+}
+
+async function generateSplitImages(){
+  const calc=CGB_PAYROLL.calc(DRAFT);
+  const head=(SETTINGS&&SETTINGS.header_text)||"ПРИКАЗ О ПРЕМИРОВАНИИ";
+  const foot=(SETTINGS&&SETTINGS.footer_text)||"Бухгалтерия ЦГБ №3 · Министерство Здравоохранения";
+  const parts=[];
+  const holder=document.createElement("div");
+  holder.style.cssText="position:fixed;left:-99999px;top:0;width:900px;padding:0";
+  document.body.appendChild(holder);
+  try{
+    const headHtml=`<div class="pr-preview"><div class="pr-pv-inner">
+      <div class="pr-pv-corner tl"></div><div class="pr-pv-corner tr"></div>
+      <div class="pr-pv-corner bl"></div><div class="pr-pv-corner br"></div>
+      <div class="pr-pv-head" style="border-bottom:none;margin-bottom:0;padding-bottom:6px">
+        <div class="pr-pv-emblem-wrap">
+          <div class="pr-pv-emblem">◈</div><div class="pr-pv-emblem-line"></div>
+          <div class="pr-pv-emblem-star">★</div><div class="pr-pv-emblem-line"></div>
+          <div class="pr-pv-emblem">◈</div>
+        </div>
+        <div class="pr-pv-title">${esc(head)}</div>
+        <div class="pr-pv-subtitle">№ ${new Date().getTime().toString().slice(-6)} · ${esc(new Date().toLocaleDateString("ru-RU",{timeZone:"Europe/Moscow",day:"2-digit",month:"long",year:"numeric"}))}</div>
+        <div class="pr-pv-name">«${esc(DRAFT.title||"Премия")}»</div>
+        ${DRAFT.period_from||DRAFT.period_to?`<div class="pr-pv-period">ЗА ПЕРИОД: ${esc(fmtDateRu(DRAFT.period_from))} — ${esc(fmtDateRu(DRAFT.period_to))}</div>`:""}
+        <div class="pr-pv-fund-box">
+          <div class="pr-pv-fund-lbl">ОБЩИЙ ФОНД</div>
+          <div class="pr-pv-fund-val">${CGB_PAYROLL.fmtMoney(calc.fund)}</div>
+        </div>
+      </div>
+    </div></div>`;
+    holder.innerHTML=headHtml;
+    parts.push(await html2canvas(holder.firstElementChild,{backgroundColor:"#0e1a13",scale:2,logging:false}).then(c=>c.toDataURL("image/png")));
+
+    for(let di=0;di<calc.departments.length;di++){
+      const d=calc.departments[di];
+      const active=d.members.filter(m=>!m.excluded);
+      if(!active.length) continue;
+      const deptHtml=`<div class="pr-preview"><div class="pr-pv-inner">
+        <div class="pr-pv-corner tl"></div><div class="pr-pv-corner tr"></div>
+        <div class="pr-pv-corner bl"></div><div class="pr-pv-corner br"></div>
+        <div class="pr-pv-dept" style="margin:0">
+          <div class="pr-pv-dept-head">
+            <div class="pr-pv-dept-icon">${esc(d.icon||"🎖")}</div>
+            <div class="pr-pv-dept-title">${esc(d.name)}</div>
+            <div class="pr-pv-dept-meta"><span>${(+d.pct).toFixed(1)}%</span> · <b>${CGB_PAYROLL.fmtMoney(d.dept_amount)}</b></div>
+          </div>
+          <div class="pr-pv-mems">${active.map((m,mi)=>{
+            const num=String(mi+1).padStart(2,"0");
+            return `<div class="pr-pv-mem">
+              <span class="pr-pv-mnum">${num}</span>
+              <span class="pr-pv-mfio">${esc(m.fio)}</span>
+              ${m.static?`<span class="pr-pv-mstat">${esc(m.static)}</span>`:""}
+              <span class="pr-pv-mdots"></span>
+              <span class="pr-pv-mamt">${CGB_PAYROLL.fmtMoney(m.amount)}</span>
+            </div>`;
+          }).join("")}</div>
+        </div>
+      </div></div>`;
+      holder.innerHTML=deptHtml;
+      parts.push(await html2canvas(holder.firstElementChild,{backgroundColor:"#0e1a13",scale:2,logging:false}).then(c=>c.toDataURL("image/png")));
+    }
+
+    const footHtml=`<div class="pr-preview"><div class="pr-pv-inner">
+      <div class="pr-pv-corner tl"></div><div class="pr-pv-corner tr"></div>
+      <div class="pr-pv-corner bl"></div><div class="pr-pv-corner br"></div>
+      <div class="pr-pv-totals" style="margin-top:0;border-top:none">
+        <div class="pr-pv-tot-row"><span>Итого выдано:</span><b>${CGB_PAYROLL.fmtMoney(calc.total_spent)}</b></div>
+        <div class="pr-pv-tot-row"><span>Остаток фонда:</span><b>${CGB_PAYROLL.fmtMoney(calc.fund-calc.total_spent)}</b></div>
+      </div>
+      <div class="pr-pv-footer">${esc(foot)}</div>
+    </div></div>`;
+    holder.innerHTML=footHtml;
+    parts.push(await html2canvas(holder.firstElementChild,{backgroundColor:"#0e1a13",scale:2,logging:false}).then(c=>c.toDataURL("image/png")));
+
+    return parts;
+  }finally{
+    holder.remove();
+  }
+}
+
+$("prSend").addEventListener("click",async()=>{
+  const calc=CGB_PAYROLL.calc(DRAFT);
+  if(!calc.departments.length){alert("Добавьте хотя бы один отдел");return}
+  if(calc.overspend){if(!confirm("⚠ Перерасход! Сумма выданного больше фонда. Всё равно отправить?")) return}
+  if(Math.abs(calc.total_pct-100)>0.5&&DRAFT.pct_manual!==false){if(!confirm("⚠ Сумма % отделов = "+calc.total_pct.toFixed(1)+"% (должно быть 100). Всё равно отправить?")) return}
+  const s=SETTINGS||await CGB_PAYROLL.fetchSettings();
+  if(!s||!s.channel_id){alert("Настройте канал DS в настройках");return}
+  const outMode=(s&&s.output_mode)||"both";
+  if(!confirm("Отправить приказ о премировании в DS?\nФормат: "+outMode+"\nПосле отправки черновик уйдёт в архив.")) return;
+  collectFromUI();
+  await CGB_PAYROLL.saveDraft(DRAFT.id,{
+    title:DRAFT.title,period_from:DRAFT.period_from,period_to:DRAFT.period_to,
+    fund_amount:DRAFT.fund_amount,data:DRAFT.data,pct_manual:DRAFT.pct_manual,status:"draft"
+  });
+
+  const split=!!(s&&s.split_by_dept);
+  let imageData=null, imageParts=null;
+  if(outMode==="image"||outMode==="both"){
+    const btn=$("prSend");
+    const oldTxt=btn.innerHTML;btn.innerHTML="🖼 Генерация...";btn.disabled=true;
+    try{
+      if(split){
+        imageParts=await generateSplitImages();
+      } else {
+        imageData=await generatePreviewImage();
+      }
+    }catch(e){
+      alert("Ошибка генерации картинки: "+e.message+"\nБудет отправлен только текст.");
+    }
+    btn.innerHTML=oldTxt;btn.disabled=false;
+  }
+
+  const c=window.CGB_AUTH.state.client;
+  const displayName=(function(){try{return localStorage.getItem("cgb-my-display-name")||""}catch(e){return""}})();
+  const {error}=await c.from("payroll_send_requests").insert({
+    draft_id:DRAFT.id,
+    requested_by:window.CGB_AUTH.state.user.id,
+    requested_by_name:displayName,
+    image_data:imageData,
+    image_parts:imageParts,
+    output_mode:outMode,
+    split_by_dept:split
+  });
+  if(error){alert("Не удалось отправить запрос: "+error.message);return}
+  alert("Приказ отправлен на публикацию. Через ~10-15 сек бот опубликует его в DS.\nПосле публикации создастся новый пустой черновик.");
+  setTimeout(async()=>{
+    DRAFT=await CGB_PAYROLL.ensureDraft();
+    fillDraftUI();render();
+  },20000);
+});
+
+if(window.CGB_ROLES) CGB_ROLES.onChange(boot);
+setTimeout(boot,600);
+</script>
+
+</body>
+</html>

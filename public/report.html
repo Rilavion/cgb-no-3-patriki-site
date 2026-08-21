@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<title>Еженедельный отчёт · ЦГБ №3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=26">
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+<div class="bg-noise"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ВС"></div>
+      <div class="brand-text">
+        <span class="brand-label">Отчётность</span>
+        <span class="brand-name">Еженедельный отчёт</span>
+      </div>
+    </a>
+    <nav class="nav" id="mainNav">
+      <a href="index.html" data-page="index.html" data-transition>Главная</a>
+      <a href="info.html" data-page="info.html" data-transition>Информация</a>
+      <a href="services.html" data-page="services.html" data-transition>Услуги</a>
+      <a href="meds.html" data-page="meds.html" data-transition>Медикаменты</a>
+      <a href="ustav.html" data-page="ustav.html" data-transition>Устав</a>
+      <a href="learn.html" data-page="learn.html" data-transition data-loggedin>Учебные материалы</a>
+      <a href="tests.html" data-page="tests.html" data-transition data-loggedin>Тестирование</a>
+      <a href="composition.html" data-page="composition.html" data-transition>Состав</a>
+      <a href="docs.html" data-page="docs.html" data-transition data-perm="docs:view">Документы</a>
+      <a href="news.html" data-page="news.html" data-transition>Новости</a>
+      <a href="autopark.html" data-page="autopark.html" data-transition>Автопарк</a>
+      <a href="map.html" data-page="map.html" data-transition>Карта</a>
+      <a href="faq.html" data-page="faq.html" data-transition>FAQ</a>
+      <a href="complaints.html" data-page="complaints.html" data-transition>Жалобы</a>
+      <a href="supply.html" data-page="supply.html" data-transition data-perm="supply:view">Поставки</a>
+      <a href="apps.html" data-page="apps.html" data-transition data-perm="apps:view">Заявления</a>
+      <a href="vp.html" data-page="vp.html" data-transition data-perm="vp:view">Проверки АБ</a>
+      <a href="complaints-review.html" data-page="complaints-review.html" data-transition data-perm="complaints:review,complaints:view">Рассмотрение жалоб</a>
+      <a href="complaints-stats.html" data-page="complaints-stats.html" data-transition data-perm="complaints:review,complaints:view">Статистика жалоб</a>
+      <a href="leave.html" data-page="leave.html" data-transition data-loggedin>Отгул</a>
+      <a href="vacation-ic.html" data-page="vacation-ic.html" data-transition data-loggedin>Отпуск IC</a>
+      <a href="vacation-ooc.html" data-page="vacation-ooc.html" data-transition data-loggedin>Отпуск OOC</a>
+      <a href="dismissal.html" data-page="dismissal.html" data-transition data-loggedin>Увольнение</a>
+      <a href="promotion.html" data-page="promotion.html" data-transition data-loggedin>Повышение</a>
+      <a href="restoration.html" data-page="restoration.html" data-transition>Восстановление в ЦГБ №3</a>
+      <a href="appointment.html" data-page="appointment.html" data-transition>Запись к врачу</a>
+      <a href="requests-review.html" data-page="requests-review.html" data-transition data-perm="requests:review,requests:view">Рассмотрение заявок</a>
+      <a href="requests-stats.html" data-page="requests-stats.html" data-transition data-perm="requests:review,requests:view">Статистика заявок</a>
+      <a href="payroll.html" data-page="payroll.html" data-transition data-perm="payroll:view">Реестр премирования</a>
+      <a href="report.html" data-page="report.html" data-transition>Еженедельный отчёт</a>
+      <a href="report-settings.html" data-page="report-settings.html" data-transition data-perm="report:settings">Настройки отчётов</a>
+      <a href="vp-request.html" data-page="vp-request.html" data-transition data-perm="vp_request:submit">Запрос на наказание</a>
+      <a href="vp-request-settings.html" data-page="vp-request-settings.html" data-transition data-perm="vp_request:settings">Настройки запросов АБ</a>
+      <a href="lk.html" data-page="lk.html" data-transition>Личный кабинет</a>
+    </nav>
+    <div class="header-actions">
+      <a href="lk.html" class="btn btn-ghost btn-sm">Личный кабинет</a>
+      <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="apps-head">
+    <div class="container">
+      <div class="apps-head-ribbon"><span class="apps-head-ribbon-line"></span><span class="apps-head-ribbon-emblem">◈</span><span class="apps-head-ribbon-name">Еженедельный отчёт</span><span class="apps-head-ribbon-emblem">◈</span><span class="apps-head-ribbon-line"></span></div>
+      <h1 class="apps-head-title">Еженедельный отчёт</h1>
+      <div class="apps-head-subtitle">Выбери шаблон для своего подразделения и заполни поля</div>
+    </div>
+  </section>
+
+  <section class="apps-body">
+    <div class="container" style="max-width:900px">
+      <div id="repGuard" style="display:none">
+        <div class="apps-guard-box"><div class="apps-guard-icon">📭</div><h2>Форма недоступна</h2><p>Администратор ещё не настроил ни один шаблон отчёта.</p></div>
+      </div>
+
+      <div id="repRoot" style="display:none">
+        <div class="stats-filters" style="margin-bottom:16px">
+          <div class="stats-filters-grid" style="grid-template-columns:1fr">
+            <div class="stats-filter">
+              <label>Шаблон отчёта</label>
+              <select id="repFormSel"></select>
+            </div>
+          </div>
+        </div>
+
+        <form id="repForm" class="apps-form" onsubmit="return false">
+          <div class="cf-group">
+            <div class="cf-group-title">👤 Данные подающего</div>
+            <div class="cf-group-body">
+              <div class="msg-row">
+                <div class="form-group msg-flex-1"><label>ФИО <span style="color:#e97a7a">*</span></label><input class="msg-input" id="repFio" required placeholder="Начните вводить ФИО..." data-dsac data-dsac-stat="#repStatic" data-dsac-pos="#repPos"></div>
+                <div class="form-group msg-flex-1"><label>Статик <span style="color:#e97a7a">*</span></label><input class="msg-input" id="repStatic" required placeholder="123-456"></div>
+              </div>
+              <div class="form-group"><label>Должность <span style="color:#e97a7a">*</span></label><input class="msg-input" id="repPos" required placeholder="Врач · Приёмное отделение"></div>
+            </div>
+          </div>
+
+          <div id="repDynamic"></div>
+
+          <div class="apps-cfg-actions" style="margin-top:20px">
+            <button type="button" class="btn btn-gold" id="repSend">📤 Отправить отчёт</button>
+            <button type="button" class="btn btn-ghost btn-sm" id="repClear">✕ Очистить</button>
+            <span class="stats-copy-msg" id="repMsg"></span>
+          </div>
+        </form>
+
+        <div id="repHistory" style="margin-top:24px"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="modal-back" id="loginModal">
+  <div class="modal"><button class="modal-close" aria-label="Закрыть">✕</button><h3>Вход</h3>
+    <form><div class="form-group"><label>Email</label><input type="email" name="email" required></div><div class="form-group"><label>Пароль</label><input type="password" name="password" required></div><button class="btn btn-gold" style="width:100%" type="submit">Войти</button><div class="form-msg"></div></form></div>
+</div>
+
+<footer class="footer"><div class="container"><div class="footer-bottom"><span>© <span id="year"></span> · ЦГБ №3 · Центральная Городская</span><span class="footer-note">🐞 Нашли баг? Обратитесь: <b>@rilavion</b></span></div></div></footer>
+
+<script src="assets/js/core/async-state.js?v=1"></script>
+<script src="assets/js/core/supabase-loader.js?v=17"></script>
+<script src="assets/js/core/config.js?v=17"></script>
+<script src="assets/js/core/auth.js?v=17"></script>
+<script src="assets/js/core/roles-engine.js?v=17"></script>
+<script src="assets/js/utils/ds-autocomplete.js?v=17"></script>
+<script src="assets/js/ui/main.js?v=23"></script>
+<script src="assets/js/utils/format-utils.js?v=17"></script>
+<script src="assets/js/ui/holiday-engine.js?v=17"></script>
+<script src="assets/js/ui/settings-panel.js?v=17"></script>
+<script src="assets/js/ui/sound-engine.js?v=17"></script>
+<script src="assets/js/ui/search-engine.js?v=17"></script>
+<script src="assets/js/utils/ds-cache.js?v=17"></script>
+<script src="assets/js/ui/notify-engine.js?v=19"></script>
+<script src="assets/js/ui/notify-live.js?v=17"></script>
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+const LS_KEY="cgb_report_draft_v1";
+let FORMS=[], CURFORM=null;
+
+async function boot(){
+  $("repGuard").style.display="none"; $("repRoot").style.display="";
+  await loadForms();
+  restoreDraft();
+}
+
+async function waitClient(){
+  for(let i=0;i<60;i++){
+    const st=window.CGB_AUTH&&window.CGB_AUTH.state;
+    if(st&&st.ready&&st.client) return st.client;
+    await new Promise(r=>setTimeout(r,150));
+  }
+  return null;
+}
+
+async function loadForms(){
+  const c=await waitClient();
+  if(!c){ $("repMsg").className="stats-copy-msg err"; $("repMsg").textContent="Сервис временно недоступен — обновите страницу"; return; }
+  const {data,error}=await c.from("report_forms").select("*").eq("active",true).order("sort_order").order("label");
+  if(error){ $("repMsg").className="stats-copy-msg err"; $("repMsg").textContent="Ошибка загрузки шаблонов: "+error.message; return; }
+  FORMS=data||[];
+  if(!FORMS.length){
+    $("repDynamic").innerHTML='<div class="apps-guard-box" style="margin-top:20px"><div class="apps-guard-icon">📭</div><h2>Нет шаблонов</h2><p>Администратор ещё не настроил ни один шаблон отчёта. Обратитесь к нему.</p></div>';
+    return;
+  }
+  const cur=localStorage.getItem(LS_KEY+"_form")||FORMS[0].id;
+  $("repFormSel").innerHTML=FORMS.map(f=>`<option value="${esc(f.id)}" ${f.id===cur?"selected":""}>${esc(f.icon||"📋")} ${esc(f.label)}</option>`).join("");
+  $("repFormSel").addEventListener("change",()=>{
+    localStorage.setItem(LS_KEY+"_form",$("repFormSel").value);
+    selectForm($("repFormSel").value);
+  });
+  selectForm(cur);
+}
+
+function selectForm(id){
+  CURFORM=FORMS.find(f=>f.id===id)||FORMS[0];
+  if(!CURFORM){ $("repDynamic").innerHTML=""; return; }
+  renderFields();
+}
+
+function renderFields(){
+  const fields=Array.isArray(CURFORM.fields)?CURFORM.fields:[];
+  if(!fields.length){ $("repDynamic").innerHTML='<div class="cf-group"><div class="cf-group-body"><div class="msg-help">В этом шаблоне ещё нет полей.</div></div></div>'; return; }
+  const html=`<div class="cf-group">
+    <div class="cf-group-title">📝 ${esc(CURFORM.label)}</div>
+    <div class="cf-group-body">
+      ${fields.map(f=>renderField(f)).join("")}
+    </div>
+  </div>`;
+  $("repDynamic").innerHTML=html;
+}
+
+function renderField(f){
+  const key=esc(f.key||"");
+  const lbl=esc(f.label||f.key||"—");
+  const req=f.required?`<span style="color:#e97a7a">*</span>`:"";
+  const ph=esc(f.placeholder||"");
+  const help=f.help?`<div class="msg-help">${esc(f.help)}</div>`:"";
+  const t=f.type||"text";
+  const id="repF_"+key;
+  if(t==="textarea"){
+    const rows=Math.max(2,parseInt(f.rows)||4);
+    return `<div class="form-group"><label>${lbl} ${req}</label><textarea id="${id}" class="msg-input" rows="${rows}" placeholder="${ph}"></textarea>${help}</div>`;
+  }
+  if(t==="select"){
+    const opts=Array.isArray(f.options)?f.options:[];
+    return `<div class="form-group"><label>${lbl} ${req}</label><select id="${id}" class="msg-input"><option value="">— выбрать —</option>${opts.map(o=>`<option value="${esc(o)}">${esc(o)}</option>`).join("")}</select>${help}</div>`;
+  }
+  if(t==="checkbox"){
+    return `<div class="form-group"><label style="cursor:pointer"><input type="checkbox" id="${id}" style="margin-right:8px;transform:scale(1.2)">${lbl} ${req}</label>${help}</div>`;
+  }
+  const inputType={number:"number",date:"date",url:"url",text:"text"}[t]||"text";
+  return `<div class="form-group"><label>${lbl} ${req}</label><input type="${inputType}" id="${id}" class="msg-input" placeholder="${ph}">${help}</div>`;
+}
+
+function collectValues(){
+  const fields=Array.isArray(CURFORM.fields)?CURFORM.fields:[];
+  const values={};
+  const missing=[];
+  for(const f of fields){
+    const el=$("repF_"+f.key);
+    if(!el) continue;
+    let v=null;
+    if(f.type==="checkbox") v=el.checked;
+    else v=el.value;
+    if(f.required && (v===null || v==="" || v===false)) missing.push(f.label||f.key);
+    values[f.key]=v;
+  }
+  return { values, missing };
+}
+
+function saveDraft(){
+  try{
+    const state={ form:CURFORM&&CURFORM.id, fio:$("repFio").value, static:$("repStatic").value, pos:$("repPos").value };
+    if(CURFORM){
+      state.values={};
+      for(const f of (CURFORM.fields||[])){
+        const el=$("repF_"+f.key);
+        if(!el) continue;
+        state.values[f.key]=f.type==="checkbox"?el.checked:el.value;
+      }
+    }
+    localStorage.setItem(LS_KEY,JSON.stringify(state));
+  }catch(e){}
+}
+function restoreDraft(){
+  try{
+    const s=JSON.parse(localStorage.getItem(LS_KEY)||"{}");
+    if(s.fio) $("repFio").value=s.fio;
+    if(s.static) $("repStatic").value=s.static;
+    if(s.pos) $("repPos").value=s.pos;
+    if(s.values && CURFORM){
+      for(const k of Object.keys(s.values)){
+        const el=$("repF_"+k);
+        if(!el) continue;
+        if(el.type==="checkbox") el.checked=!!s.values[k];
+        else el.value=s.values[k]||"";
+      }
+    }
+  }catch(e){}
+}
+
+$("repFio").addEventListener("input",saveDraft);
+$("repStatic").addEventListener("input",saveDraft);
+$("repPos").addEventListener("input",saveDraft);
+$("repDynamic").addEventListener("input",saveDraft);
+$("repDynamic").addEventListener("change",saveDraft);
+
+$("repClear").addEventListener("click",()=>{
+  if(!confirm("Очистить всю форму?")) return;
+  localStorage.removeItem(LS_KEY);
+  $("repFio").value=""; $("repStatic").value=""; $("repPos").value="";
+  renderFields();
+});
+
+$("repSend").addEventListener("click",async()=>{
+  const msg=$("repMsg");
+  if(!CURFORM){ msg.className="stats-copy-msg err"; msg.textContent="Выбери шаблон"; return; }
+  const fio=$("repFio").value.trim(), stat=$("repStatic").value.trim(), pos=$("repPos").value.trim();
+  if(!fio||!stat||!pos){ msg.className="stats-copy-msg err"; msg.textContent="Заполни ФИО, Статик и Должность"; return; }
+  const {values,missing}=collectValues();
+  if(missing.length){ msg.className="stats-copy-msg err"; msg.textContent="Заполни: "+missing.join(", "); return; }
+
+  msg.className="stats-copy-msg info"; msg.textContent="⏳ Отправка…";
+  $("repSend").disabled=true;
+  try{
+    const c=window.CGB_AUTH.state.client;
+    const user=window.CGB_AUTH.state&&window.CGB_AUTH.state.user;
+    const row={
+      form_id:CURFORM.id,
+      submitter_uid:user?user.id:null,
+      submitter_email:user?(user.email||null):null,
+      submitter_fio:fio, submitter_static:stat, submitter_position:pos,
+      values, status:"pending"
+    };
+    const {data,error}=await c.from("report_send_requests").insert(row).select().single();
+    if(error) throw error;
+    msg.className="stats-copy-msg ok"; msg.textContent="✓ Отчёт в очереди. Бот опубликует в течение 15 сек.";
+    pollStatus(data.id);
+  }catch(e){
+    msg.className="stats-copy-msg err"; msg.textContent="✗ "+e.message;
+  } finally {
+    $("repSend").disabled=false;
+  }
+});
+
+async function pollStatus(id){
+  const c=await waitClient();
+  if(!c) return;
+  const msg=$("repMsg");
+  const isLogged=window.CGB_AUTH.state&&window.CGB_AUTH.state.user;
+  if(!isLogged){
+    msg.className="stats-copy-msg ok"; msg.textContent="✓ Отчёт отправлен. Проверь публикацию в Discord через 10-15 сек.";
+    localStorage.removeItem(LS_KEY);
+    return;
+  }
+  for(let i=0;i<20;i++){
+    await new Promise(r=>setTimeout(r,3000));
+    const {data}=await c.from("report_send_requests").select("status,message,ds_message_id").eq("id",id).maybeSingle();
+    if(!data) continue;
+    if(data.status==="done"){
+      msg.className="stats-copy-msg ok"; msg.textContent="✓ Опубликовано в Discord!";
+      localStorage.removeItem(LS_KEY);
+      return;
+    }
+    if(data.status==="error"){
+      msg.className="stats-copy-msg err"; msg.textContent="✗ Ошибка бота: "+(data.message||"неизвестно");
+      return;
+    }
+  }
+  msg.className="stats-copy-msg info"; msg.textContent="⏳ Отчёт в очереди, статус обновится позже. Проверь Discord.";
+}
+
+if(window.CGB_ROLES) CGB_ROLES.onChange(boot);
+setTimeout(boot,600);
+</script>
+
+</body>
+</html>
