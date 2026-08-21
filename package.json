@@ -1,0 +1,13 @@
+{
+  "name": "cgb-no-3-patriki-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Статический frontend портала ЦГБ №3",
+  "type": "module",
+  "scripts": {
+    "check": "node tools/check-site.mjs"
+  },
+  "engines": {
+    "node": ">=20.11.0"
+  }
+}

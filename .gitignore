@@ -1,0 +1,26 @@
+# Секреты и локальные настройки
+.env
+**/.env
+*.key
+*.pem
+
+# Зависимости и служебные файлы
+node_modules/
+**/node_modules/
+__pycache__/
+*.py[cod]
+*.log
+
+# Локальные архивы и дампы базы
+*.tar
+*.tar.gz
+*.zip
+*.dump
+*.backup
+
+# Файлы редакторов и ОС
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
