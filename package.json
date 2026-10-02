@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "check": "node tools/check-site.mjs",
-    "check:security": "node tools/check-security.mjs"
+    "check:security": "node tools/check-security.mjs",
+    "check:postgres": "node tools/check-postgres.mjs",
+    "check:postgres-contract": "node tools/check-postgres-contract.mjs"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.8"

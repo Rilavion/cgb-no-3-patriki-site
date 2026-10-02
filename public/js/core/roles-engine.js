@@ -179,20 +179,20 @@ window.CGB_ROLES=(function(){
   async function removeUser(userId){
     const s=window.CGB_AUTH.state;
     if(!s.client) return {ok:false,error:"no client"};
-    if(!userId) return {ok:false,error:"Не указан пользователь"};
+    if(!isAdmin()) return {ok:false,error:"Недостаточно прав"};
+    if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(userId||""))) return {ok:false,error:"Не указан пользователь"};
     if(s.user&&s.user.id===userId) return {ok:false,error:"Нельзя удалить собственную учётную запись"};
     try{
       const {data}=await s.client.auth.getSession();
       const token=data&&data.session&&data.session.access_token;
       if(!token) return {ok:false,error:"Сессия истекла. Войдите заново."};
-      const response=await fetch("/api/admin/users/delete",{
-        method:"POST",
-        headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},
-        body:JSON.stringify({user_id:userId})
+      const response=await fetch("/api/v1/auth/admin/users/"+encodeURIComponent(userId),{
+        method:"DELETE",
+        headers:{"Authorization":"Bearer "+token}
       });
       let payload={};
       try{payload=await response.json()}catch(e){}
-      if(!response.ok||!payload.ok) return {ok:false,error:payload.error||("Ошибка сервера: "+response.status)};
+      if(!response.ok||payload.ok===false||payload.error) return {ok:false,error:payload.error||("Ошибка сервера: "+response.status)};
       return {ok:true};
     }catch(e){return {ok:false,error:e.message||"Не удалось удалить пользователя"}}
   }
