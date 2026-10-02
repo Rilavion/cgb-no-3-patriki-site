@@ -18,11 +18,11 @@ const check=(actual,expected,label)=>{assert.deepEqual(actual,expected,label);ch
 async function as(role,uid,fn){
   await db.exec(`set role ${role};`);
   await db.query("select set_config('request.jwt.claim.sub',$1,false)",[uid||'']);
-  try{return await fn()}finally{await db.exec('reset role');await db.exec("reset request.jwt.claim.sub;")}
+  try{return await fn()}catch(error){await db.exec('rollback');throw error}finally{await db.exec('reset role');await db.exec("reset request.jwt.claim.sub;")}
 }
-async function denied(role,uid,sql,args=[]){
+async function denied(role,uid,sql,args=[],expectedCode=null){
   let blocked=false;
-  await as(role,uid,async()=>{try{await db.query(sql,args)}catch(e){blocked=true}});
+  await as(role,uid,async()=>{try{await db.query(sql,args)}catch(e){await db.exec('rollback');if(expectedCode)check(e.code,expectedCode,`denial code ${sql}`);blocked=true}});
   check(blocked,true,`must deny ${sql}`);
 }
 try{
@@ -42,18 +42,18 @@ try{
   const setup=fs.readFileSync(path.join(root,'database/legacy-supabase/SUPABASE-SETUP.sql'),'utf8').replace(/create extension if not exists pgcrypto(?: with schema extensions)?;/g,'');
   await db.exec(setup);
   await db.query('insert into auth.users(id) values($1),($2),($3),($4)',[admin,user,editor,restricted]);
-  await db.query("insert into public.user_roles(user_id,role) values($1,'admin'),($2,'user'),($3,'editor'),($4,'ss')",[admin,user,editor,restricted]);
   await db.exec(`insert into public.custom_roles(key,name,permissions) values('editor','Editor','{"news":{"view":true,"create":true,"edit":true}}');
-    insert into public.custom_roles(key,name,permissions) values('restricted','Restricted','{"news":{"edit":true}}');
-    update public.user_roles set custom_role_id=(select id from public.custom_roles where key='restricted') where role='ss';
+    insert into public.custom_roles(key,name,base_role,permissions) values('restricted','Restricted','ss','{"news":{"edit":true}}');
     insert into public.news(title) values('Original');
     insert into public.complaints(submitter_fio) values('Private');
     insert into public.request_forms(id,title) values('leave','Leave');
     insert into public.complaint_form(id,enabled) values(1,true);
     insert into public.supply_form(id,enabled) values(1,true);
-    insert into public.tests(id,title,published,max_attempts,pass_score,questions_per_run,result_channel_id) values('00000000-0000-0000-0000-000000000021','Exam',true,1,70,1,'configured-channel');
+    insert into public.tests(id,title,published,max_attempts,pass_score,questions_per_run,result_channel_id) values('00000000-0000-0000-0000-000000000021','Exam',true,0,70,1,'configured-channel');
     insert into public.tests(id,title,published) values('00000000-0000-0000-0000-000000000022','Draft',false);
     insert into public.test_questions(id,test_id,kind,text,options,correct,points) values('00000000-0000-0000-0000-000000000031','00000000-0000-0000-0000-000000000021','single','Question','["A","B"]','["A"]',2);`);
+  await db.query("insert into public.user_roles(user_id,role) values($1,'admin'),($2,'user'),($3,'editor'),($4,'ss')",[admin,user,editor,restricted]);
+  await db.exec("update public.user_roles set custom_role_id=(select id from public.custom_roles where key='restricted') where role='ss'");
   for(const role of ['anon','authenticated']){
     const uid=role==='anon'?null:user;
     check(await as(role,uid,()=>scalar('select count(*)::int from public.complaints')),0,'private complaints');
@@ -67,10 +67,14 @@ try{
     check(await as(role,uid,()=>scalar("update public.news set title='forged' returning title" ).catch(()=>null)),null,'no news update');
   }
   check(await as('authenticated',user,()=>scalar('select count(*)::int from public.user_roles')),1,'only own role visible');
-  await denied('authenticated',user,"select public.staff_upsert_role($1,'admin',null,null)",[user]);
+  await denied('authenticated',user,"select public.staff_upsert_role($1,'admin',null,null)",[user],'42501');
   await db.exec("update public.user_roles set role='user' where role='admin'");
-  await denied('authenticated',user,"select public.staff_upsert_role($1,'admin',null,null)",[user]);
+  await denied('authenticated',user,"select public.staff_upsert_role($1,'admin',null,null)",[user],'42501');
   await db.query("update public.user_roles set role='admin' where user_id=$1",[admin]);
+  await denied('authenticated',admin,"select public.staff_upsert_role($1,'invented',null,null)",[user],'22023');
+  await denied('authenticated',admin,"update public.user_roles set role='invented' where user_id=$1",[user],'22023');
+  await denied('authenticated',admin,"select public.staff_upsert_role($1,'admin',null,(select id from public.custom_roles where key='restricted'))",[user],'22023');
+  await as('authenticated',admin,()=>db.query("select public.staff_upsert_role($1,'user','User',null)",[user]));checks++;
   await as('authenticated',editor,()=>db.exec("insert into public.news(title) values('Allowed')"));checks++;
   check(await as('authenticated',editor,()=>scalar("select public.cgb_security_can('payroll','edit')")),false,'news editor cannot edit payroll');
   check(await as('authenticated',restricted,()=>scalar("select public.cgb_security_can('vp','edit')")),false,'custom role replaces ss fallback');
@@ -85,6 +89,12 @@ try{
   await denied('anon',null,"select public.submit_request('leave','{}','Fio','123-456','discord')");
   await db.exec('update public.complaint_form set enabled=false');
   await denied('anon',null,"select public.submit_complaint('{}','Fio','124-456','discord','Target','100-200',null,null)");
+  await db.exec('update public.complaint_form set enabled=true');
+  const publicComplaint=await as('anon',null,()=>scalar("select id from public.submit_complaint('{}','Fio','125-456','discord','Target','100-200',null,'https://example.test/evidence')"));
+  check(typeof publicComplaint,'string','public complaint submission works');
+  const publicSupply=await as('anon',null,()=>scalar("select public.submit_supply_request('Fio','126-456','discord','{}')"));
+  check(typeof publicSupply,'string','public supply submission works');
+  await denied('anon',null,"insert into public.supply_requests(fio,static_id) values('Forged','126-456')",[],'42501');
   const testId='00000000-0000-0000-0000-000000000021';
   const questionId='00000000-0000-0000-0000-000000000031';
   const preview=await as('anon',null,()=>scalar('select public.cgb_test_preview($1)',[testId]));
@@ -130,6 +140,38 @@ try{
   await denied('authenticated',editor,"insert into public.payroll_drafts(title) values('forged')");
   const authenticatedRun=await as('authenticated',user,()=>scalar('select public.cgb_start_test($1,$2,$3,$4)',[testId,'Fio','888-888','discord4']));
   await denied('anon',null,'select public.cgb_finish_test($1,$2)',[authenticatedRun.token,'{}']);
+  const limitedId='00000000-0000-0000-0000-000000000023';
+  await db.query("insert into public.tests(id,title,published,max_attempts,pass_score) values($1,'Limited',true,1,70)",[limitedId]);
+  await db.query("insert into public.test_questions(test_id,kind,text,options,correct,points) values($1,'single','Limited question','[\"A\",\"B\"]','[\"A\"]',2)",[limitedId]);
+  const publicLimited=await as('anon',null,()=>scalar('select public.cgb_start_test($1,$2,$3,$4)',[limitedId,'Candidate','101-101','public-candidate']));
+  check(publicLimited.questions.length,1,'limited recruitment test remains public');
+  await denied('anon',null,'select public.cgb_start_test($1,$2,$3,$4)',[limitedId,'Candidate','101-101','public-candidate']);
+  const changedPublic=await as('anon',null,()=>scalar('select public.cgb_start_test($1,$2,$3,$4)',[limitedId,'Candidate','102-102','changed-public']));
+  check(changedPublic.questions.length,1,'anonymous identity is still self-declared');
+  const limitedRun=await as('authenticated',user,()=>scalar('select public.cgb_start_test($1,$2,$3,$4)',[limitedId,'Fio','111-111','limited']));
+  await denied('authenticated',user,'select public.cgb_start_test($1,$2,$3,$4)',[limitedId,'Other','222-222','changed']);
+  await denied('authenticated',editor,'select public.cgb_finish_test($1,$2)',[limitedRun.token,'{}']);
+  await denied('anon',null,'select public.cgb_finish_test($1,$2)',[limitedRun.token,'{}']);
+  await as('authenticated',user,()=>db.query('select public.cgb_finish_test($1,$2)',[limitedRun.token,'{}']));checks++;
+  await denied('authenticated',user,'select public.cgb_start_test($1,$2,$3,$4)',[limitedId,'Other','333-333','changed-again']);
+  const separateRun=await as('authenticated',editor,()=>scalar('select public.cgb_start_test($1,$2,$3,$4)',[limitedId,'Editor','444-444','separate']));
+  check(separateRun.questions.length,1,'separate account has its own limit');
+  const noRole='00000000-0000-0000-0000-000000000099';
+  await denied('authenticated',noRole,'select public.cgb_start_test($1,$2,$3,$4)',[limitedId,'No role','999-999','no-role']);
+  await db.query('delete from public.user_roles where user_id=$1',[editor]);
+  await denied('authenticated',editor,'select public.cgb_finish_test($1,$2)',[separateRun.token,'{}']);
+  await db.exec("insert into public.ds_members(discord_id,parsed_fio,parsed_static) values('private-member','Private employee','987-654'); insert into public.payroll_drafts(title,fund_amount) values('Private payroll',1000)");
+  check(await scalar('select count(*)::int from public.ds_members'),1,'private member fixture exists');
+  check(await scalar('select count(*)::int from public.payroll_drafts')>0,true,'private payroll fixture exists');
+  for(const role of ['anon','authenticated']){
+    const uid=role==='anon'?null:user;
+    await denied(role,uid,'select public.count_test_attempts($1,$2,$3)',[testId,'555-555','discord'],'42501');
+    await denied(role,uid,'select public.check_test_blocked($1,$2,$3)',[testId,'555-555','discord'],'42501');
+    for(const table of ['ds_members','requests','complaints','supply_requests','test_attempts','payroll_drafts','violations_registry']){
+      check(await as(role,uid,()=>scalar(`select count(*)::int from public.${table}`)),0,`${table} private for ${role}`);
+    }
+    check(await as(role,uid,()=>scalar("select count(*)::int from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='public' and p.proname='submit_test_attempt' and has_function_privilege(current_user,p.oid,'EXECUTE')")),0,'all obsolete submit overloads revoked');
+  }
   check(await scalar("select has_function_privilege('anon','public.submit_test_attempt(uuid,text,text,text,jsonb,integer,integer,numeric,boolean,timestamptz)','EXECUTE')"),false,'obsolete score RPC revoked');
   check(await scalar("select has_function_privilege('authenticated','public.cgb_public_question(jsonb)','EXECUTE')"),false,'internal helper private');
   const calls=[];
@@ -147,4 +189,4 @@ try{
   check(context.window.CGB_SECURITY.url('https://example.test/photo.webp',true),'https://example.test/photo.webp','image allowed');
   check(context.window.CGB_SECURITY.localUrl('https://evil.test'),'#','external notification link blocked');
   console.log(`Security checks passed: ${checks}`);
-}catch(error){console.error(error.message);if(error.query)console.error(error.query);process.exitCode=1}finally{await db.close()}
+}catch(error){console.error(error.stack);if(error.query)console.error(error.query);process.exitCode=1}finally{await db.close()}

@@ -506,6 +506,27 @@ begin
 end;
 $$;
 
+create or replace function public.cgb_validate_user_role()
+returns trigger language plpgsql security definer set search_path = pg_catalog, public, pg_temp as $$
+begin
+  if new.role is null or (new.role not in ('admin','ss','user')
+    and not exists(select 1 from public.custom_roles where key=new.role)) then
+    raise exception 'invalid role' using errcode='22023';
+  end if;
+  if new.custom_role_id is not null and not exists(
+    select 1 from public.custom_roles where id=new.custom_role_id
+      and (base_role=new.role or key=new.role)
+      and (new.role<>'admin' or base_role='admin')
+  ) then
+    raise exception 'invalid custom role' using errcode='22023';
+  end if;
+  return new;
+end;
+$$;
+drop trigger if exists cgb_validate_user_role on public.user_roles;
+create trigger cgb_validate_user_role before insert or update of role,custom_role_id on public.user_roles
+  for each row execute function public.cgb_validate_user_role();
+
 create table if not exists public.cgb_test_runs (
   token uuid primary key default gen_random_uuid(),
   test_id uuid not null references public.tests(id) on delete cascade,
@@ -522,6 +543,7 @@ create table if not exists public.cgb_test_runs (
 alter table public.cgb_test_runs enable row level security;
 revoke all on public.cgb_test_runs from public, anon, authenticated;
 create index if not exists cgb_test_runs_identity_idx on public.cgb_test_runs(test_id,lower(static_id),lower(discord));
+create index if not exists cgb_test_runs_account_idx on public.cgb_test_runs(test_id,user_id);
 
 create table if not exists public.cgb_submission_limits (
   key text primary key,
@@ -572,22 +594,29 @@ create or replace function public.cgb_start_test(p_test_id uuid,p_fio text,p_sta
 returns jsonb language plpgsql security definer set search_path = pg_catalog, public, pg_temp as $$
 declare t public.tests; r public.cgb_test_runs; qs jsonb; n integer;
 begin
-  if p_static !~ '^[0-9]{3}-[0-9]{3}$' or nullif(btrim(p_fio),'') is null
+  if p_static is null or p_static !~ '^[0-9]{3}-[0-9]{3}$' or nullif(btrim(p_fio),'') is null
     or nullif(btrim(p_discord),'') is null or length(p_fio)>200 or length(p_discord)>100 then
     raise exception 'invalid participant' using errcode='22023';
   end if;
   perform pg_advisory_xact_lock(hashtextextended(p_test_id::text,0));
   select * into t from public.tests where id=p_test_id and published;
   if not found then raise exception 'test unavailable'; end if;
-  if public.check_test_blocked(p_test_id,p_static,p_discord) is not null then raise exception 'participant blocked'; end if;
+  if auth.uid() is not null and not exists(select 1 from public.user_roles where user_id=auth.uid()) then
+    raise exception 'invalid test account' using errcode='42501';
+  end if;
+  if public.check_test_blocked(p_test_id,p_static,p_discord) is not null then
+    raise exception 'Прохождение заблокировано: %',public.check_test_blocked(p_test_id,p_static,p_discord);
+  end if;
   select * into r from public.cgb_test_runs where test_id=p_test_id and attempt_id is null
     and expires_at>now() and lower(static_id)=lower(p_static) and lower(discord)=lower(p_discord)
     and user_id is not distinct from auth.uid() order by started_at desc limit 1;
   if found then raise exception 'test already started'; end if;
   select count(*) into n from public.cgb_test_runs where test_id=p_test_id
-    and (lower(static_id)=lower(p_static) or lower(discord)=lower(p_discord));
+    and (lower(static_id)=lower(p_static) or lower(discord)=lower(p_discord)
+      or (auth.uid() is not null and user_id=auth.uid()));
   if t.max_attempts>0 and greatest(n,public.count_test_attempts(p_test_id,p_static,p_discord))>=t.max_attempts then
-    raise exception 'max attempts reached';
+    raise exception 'Исчерпан лимит попыток (%/%). Обратитесь к СС для сброса.',
+      greatest(n,public.count_test_attempts(p_test_id,p_static,p_discord)),t.max_attempts;
   end if;
   select coalesce(jsonb_agg(s.q order by s.position),'[]'::jsonb) into qs from (
     select to_jsonb(q) q, row_number() over(order by case when t.shuffle_questions then random() else q.sort::float end,q.id) position
@@ -612,6 +641,9 @@ declare r public.cgb_test_runs; q jsonb; a jsonb; c jsonb; k text; pts integer;
 begin
   select * into r from public.cgb_test_runs where token=p_token for update;
   if not found or r.user_id is distinct from auth.uid() then raise exception 'invalid test session' using errcode='42501'; end if;
+  if r.user_id is not null and not exists(select 1 from public.user_roles where user_id=r.user_id) then
+    raise exception 'invalid test account' using errcode='42501';
+  end if;
   if r.attempt_id is not null then
     select * into result from public.test_attempts where id=r.attempt_id;
     return jsonb_build_object('id',result.id,'score',result.score,'max_score',result.total,'percent',result.percent,'passed',result.passed);
@@ -664,7 +696,7 @@ begin
     if f.prosecdef then execute format('alter function %s set search_path = pg_catalog, public, pg_temp',f.oid::regprocedure); end if;
     if f.proname = any(array['is_admin','cgb_security_can','cgb_security_access','can_edit_site_data',
       'get_complaint_form','get_supply_form','submit_complaint','submit_request','submit_supply_request',
-      'count_test_attempts','check_test_blocked','cgb_test_preview','cgb_start_test','cgb_finish_test']) then
+      'cgb_test_preview','cgb_start_test','cgb_finish_test']) then
       execute format('grant execute on function %s to anon, authenticated',f.oid::regprocedure);
     elsif f.proname = any(array['staff_upsert_role','ensure_payroll_draft','archive_payroll_draft','request_test_result']) then
       execute format('grant execute on function %s to authenticated',f.oid::regprocedure);

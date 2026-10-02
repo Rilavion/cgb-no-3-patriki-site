@@ -125,12 +125,6 @@ async function tryStart(){
   STARTING=true;
   try{
   msg.className="form-msg info";msg.textContent="Проверка...";
-  const bl=await CGB_TESTS.checkBlocked(TEST.id,st,dc);
-  if(bl.blocked){msg.className="form-msg error";msg.textContent="Прохождение заблокировано: "+bl.reason;return}
-  if(TEST.max_attempts>0){
-    const att=await CGB_TESTS.attemptsFor(TEST.id,st,dc);
-    if(att.count>=TEST.max_attempts){msg.className="form-msg error";msg.textContent="Исчерпан лимит попыток ("+att.count+"/"+TEST.max_attempts+"). Обратитесь к СС для сброса.";return}
-  }
   $("fStartBtn").disabled=true;
   const started=await CGB_TESTS.startAttempt(TEST.id,fio,st,dc);
   if(!started.ok){msg.className="form-msg error";msg.textContent=started.error;$("fStartBtn").disabled=false;return}

@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-02",
+  "fileCount": 11,
+  "files": [
+    {
+      "path": "database/legacy-supabase/SECURITY-HARDENING.sql",
+      "bytes": 29182,
+      "sha256": "48e4d9321904db0b8164745d0efafbe8d15ff13d809435baa1ddd4ec31e3147f"
+    },
+    {
+      "path": "database/legacy-supabase/SUPABASE-FIX.sql",
+      "bytes": 44275,
+      "sha256": "7ecd69957ce0931818ed7d25668bfc9c271bba19ff6f9875cb89b5d619b0b2f0"
+    },
+    {
+      "path": "database/legacy-supabase/SUPABASE-SETUP.sql",
+      "bytes": 74140,
+      "sha256": "c236772ad3a1f8c3f9df51afff0163c0ec2d31d8f2dbb263364e21887fd62dad"
+    },
+    {
+      "path": "database/legacy-supabase/SUPABASE-UPDATE-roles.sql",
+      "bytes": 34421,
+      "sha256": "7d185bc92bd38af839af760474c577db4a439319f59cb6369640a024373eca4e"
+    },
+    {
+      "path": "database/legacy-supabase/SUPABASE-UPDATE-site-data.sql",
+      "bytes": 33602,
+      "sha256": "ef3355d4d67c9057c2f40370b05b9b683f4a5b3f6a6c0e6ef58853ba713a463d"
+    },
+    {
+      "path": "database/legacy-supabase/supabase-migration.sql",
+      "bytes": 44654,
+      "sha256": "191fca27ddafdf5793440a3a78d90fd4ad7275e34f6326a526100f16b3033bcb"
+    },
+    {
+      "path": "docs/SECURITY-RECHECK-V3.md",
+      "bytes": 10946,
+      "sha256": "32996f39985a5561842aca1aa3282bcfef13e8b72fbafa6f49a1031dd4fd45bd"
+    },
+    {
+      "path": "docs/SECURITY-UPDATE-V3-FILES.json"
+    },
+    {
+      "path": "public/test.html",
+      "bytes": 16406,
+      "sha256": "18c21eadd8947a840c46240856ca6fa800240af75fbe4a29ae10f5516c00f090"
+    },
+    {
+      "path": "tools/check-postgres.mjs",
+      "bytes": 5414,
+      "sha256": "5377526e10e29e152584e99543e3f263ee0fcf430110a566ddb098da84f1bd83"
+    },
+    {
+      "path": "tools/check-security.mjs",
+      "bytes": 19405,
+      "sha256": "b2e8e65be32b81df28d0f3f26184f698d1959944edd8eb43cd4dd675f36e3975"
+    }
+  ]
+}

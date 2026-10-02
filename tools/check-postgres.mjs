@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 
-const excluded=new Set(['upd','updv2','archive','node_modules','.git']);
+const excluded=new Set(['upd','updv2','updv3','archive','node_modules','.git']);
 function walk(directory){
   if(!fs.existsSync(directory)) return [];
   return fs.readdirSync(directory,{withFileTypes:true}).flatMap(entry=>{
