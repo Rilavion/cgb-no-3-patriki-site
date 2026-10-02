@@ -1,0 +1,369 @@
+{
+  "date": "2026-10-02",
+  "fileCount": 73,
+  "files": [
+    {
+      "path": "database/legacy-supabase/SECURITY-HARDENING.sql",
+      "bytes": 27485,
+      "sha256": "cd6f6bdd5f1c1e11634238a1ace6206d7f93ec736e3f0fe6f4283a846b887ff9"
+    },
+    {
+      "path": "database/legacy-supabase/SUPABASE-FIX.sql",
+      "bytes": 42578,
+      "sha256": "6c56a67b58d6078e6fb40b1a946c630fad4a402e1ce83264d9f3e152662f5e5c"
+    },
+    {
+      "path": "database/legacy-supabase/SUPABASE-SETUP.sql",
+      "bytes": 72646,
+      "sha256": "0b856b9c05be7f453554989ab859bdd50b3a9a35a1e92c25534e4ae1586d1401"
+    },
+    {
+      "path": "database/legacy-supabase/SUPABASE-UPDATE-roles.sql",
+      "bytes": 32724,
+      "sha256": "e8bf48e874befc46d6e43784e9ee3bb4c22aebdd6a41ca48da77f0edc002f93d"
+    },
+    {
+      "path": "database/legacy-supabase/SUPABASE-UPDATE-site-data.sql",
+      "bytes": 31905,
+      "sha256": "736c7f24ffdf1844dfbd31412ff37c05c9eae087f548db8c41af0c5f488f6db6"
+    },
+    {
+      "path": "database/legacy-supabase/supabase-migration.sql",
+      "bytes": 42966,
+      "sha256": "0c311bbbc2b7abf50a95bcc6c9e45d6de5cefaeafc9b33de507e77af72777170"
+    },
+    {
+      "path": "deploy/nginx/cgb3-domain.conf",
+      "bytes": 4190,
+      "sha256": "6df089d9f50d70a948924c3f495b46f3ee9815c983c8b960eb9a91110e427bdf"
+    },
+    {
+      "path": "docs/SECURITY-AUDIT.md",
+      "bytes": 16763,
+      "sha256": "8c7d2d629b07109e8b05017ab798dc3d06fcba020275b4da143bf02b4075cafa"
+    },
+    {
+      "path": "docs/SECURITY-UPDATE-FILES.json"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 668,
+      "sha256": "c562d53001dd96e3651df214d7782885d6a729776332ead88cc82dbb83a18345"
+    },
+    {
+      "path": "package.json",
+      "bytes": 402,
+      "sha256": "e1a5e6278f2d9667b4632cfe9d777e7f952c296a265bbaea40b37ec2d825a160"
+    },
+    {
+      "path": "public/appointment.html",
+      "bytes": 42211,
+      "sha256": "297df63a5b6369c3ca1663f1390e80553605096a96fee91ab89ac2c55612433d"
+    },
+    {
+      "path": "public/apps-stats.html",
+      "bytes": 30001,
+      "sha256": "15aac9f6d639aa1e018538f6d9c4d1de1d5928b5063b87786713b82228abf804"
+    },
+    {
+      "path": "public/apps.html",
+      "bytes": 31591,
+      "sha256": "32d6374a279e92e55f7bda994c837a55da58261435766ecc3c3665f391f0d011"
+    },
+    {
+      "path": "public/autopark.html",
+      "bytes": 25170,
+      "sha256": "ff7b16c5aa1cf34c54d11c0cf7ac440373fc1cbadf476a2ee45a9d5da2728d3e"
+    },
+    {
+      "path": "public/complaints-form.html",
+      "bytes": 16923,
+      "sha256": "b356a9d7153c1196ad6d88328c3858b2350d93cbb5b9cc4282c49d260d6c79f8"
+    },
+    {
+      "path": "public/complaints-review.html",
+      "bytes": 65369,
+      "sha256": "1c63938743ebb3f8435df865dc51aa63d1b3d541852ce047c40dd6922eec679c"
+    },
+    {
+      "path": "public/complaints-settings.html",
+      "bytes": 17680,
+      "sha256": "0b89f4c6df3a56d4fb0fc7b11d88d2057354c9e425f2214a232f0bfe3b06900c"
+    },
+    {
+      "path": "public/complaints-stats.html",
+      "bytes": 27709,
+      "sha256": "64e03fec8f6a5e4a061fce9bd26c050cd115d134864972c1f8a87b3dd568b565"
+    },
+    {
+      "path": "public/complaints.html",
+      "bytes": 15825,
+      "sha256": "d50c7e7a963640d59f7cf26f95f8756f9af82ffc4d71f11f39c4f8eb71a3fa6d"
+    },
+    {
+      "path": "public/composition.html",
+      "bytes": 90312,
+      "sha256": "2f34e83c3fa03f716a69da555ab726e3dc2e3cf7fed8ead189888fc60eb9d1d4"
+    },
+    {
+      "path": "public/dismissal.html",
+      "bytes": 39981,
+      "sha256": "e3782fdf1b345a31566660e66c733b81aacb8db98ce4f60e608349f632af606d"
+    },
+    {
+      "path": "public/docs.html",
+      "bytes": 38844,
+      "sha256": "b3f6eb3264b6909fde0fbc9e52580d10a04cf0e03862e2a783772dece49e58b4"
+    },
+    {
+      "path": "public/faq.html",
+      "bytes": 20066,
+      "sha256": "0ce1cad589d2e1de04526000064f04c4fed8d72ab8cf954c797a9fee3e0dc877"
+    },
+    {
+      "path": "public/index.html",
+      "bytes": 14019,
+      "sha256": "ee93917d926c734931ecb88cf22dc5a6152e7729db20d4cf26c0f20f944870c4"
+    },
+    {
+      "path": "public/info.html",
+      "bytes": 38518,
+      "sha256": "fdab98bfeda4a5da8a83f05e39fafe34adff47dc7e640fbbbd71d0e716ae7fb0"
+    },
+    {
+      "path": "public/js/core/auth.js",
+      "bytes": 8135,
+      "sha256": "619f3e72e6ef4c884b999761dc8e8472667981d2bb21400c81dfa621e83b3c9e"
+    },
+    {
+      "path": "public/js/core/config.js",
+      "bytes": 815,
+      "sha256": "dd29a71be00b98f500660c767d58512c65473dc299e91048a119bb2d09ac471b"
+    },
+    {
+      "path": "public/js/core/roles-engine.js",
+      "bytes": 12019,
+      "sha256": "293fe5db1884ac1f4799c72fba9f3c791f536a6ee6e6734ce4566877bf269aa5"
+    },
+    {
+      "path": "public/js/core/supabase-loader.js",
+      "bytes": 1250,
+      "sha256": "4b062754044e9834e6ed75e3c87370c5f22ef4c4c9e8d4a031584b5cbaa69044"
+    },
+    {
+      "path": "public/js/features/autopark-engine.js",
+      "bytes": 1825,
+      "sha256": "2f468eb04a26add1881f4db0f3d49e2041e22c959f9d0747e0c3c579880719b8"
+    },
+    {
+      "path": "public/js/features/docs-templates.js",
+      "bytes": 25866,
+      "sha256": "84da869b14808014b5e946094c3041ff7cebd7abaf381ee751344e02a99d3ddf"
+    },
+    {
+      "path": "public/js/features/news.js",
+      "bytes": 4355,
+      "sha256": "ce3e30016d5b8ef2045f985eebb4c1e2227857497ef5bd0ee371f53bbd424ff8"
+    },
+    {
+      "path": "public/js/features/requests-engine.js",
+      "bytes": 8714,
+      "sha256": "775cfe59f3af0ab8a97b2f51019f34bbec55768d4b27c2af397f377638095ec0"
+    },
+    {
+      "path": "public/js/features/tests-engine.js",
+      "bytes": 15018,
+      "sha256": "fe48696d782f462554ceb3878494a595efa12844a0c2304b0c90f83dfea045ce"
+    },
+    {
+      "path": "public/js/features/ustav-engine.js",
+      "bytes": 10174,
+      "sha256": "f7083f83f02b8ac7b2e4f0d016e5f2b102c9587f15eb1b7d8c09ba60335ca4a4"
+    },
+    {
+      "path": "public/js/ui/main.js",
+      "bytes": 45544,
+      "sha256": "de4af4fab838549cc7656530d560d06a50bc01aff71d3fa2d0a773b422adbdb8"
+    },
+    {
+      "path": "public/js/ui/notify-engine.js",
+      "bytes": 8478,
+      "sha256": "8d775b5f553a85b91c5501aefef8745b1964cb3c546fec686719cac3c61b4709"
+    },
+    {
+      "path": "public/js/ui/notify-live.js",
+      "bytes": 8137,
+      "sha256": "9fbc2cfd67b277033b5f912e506b50620b6a79738c1469b86a1618211daa0e02"
+    },
+    {
+      "path": "public/js/ui/search-engine.js",
+      "bytes": 17994,
+      "sha256": "fc37ca75b4fb3a182465e23c902c0cd7a190d5ce430bd847062c96803e1a75dd"
+    },
+    {
+      "path": "public/js/utils/ds-autocomplete.js",
+      "bytes": 13276,
+      "sha256": "1084519d23f1272fec175a5467a39d8a2a7c8ac8041be8c83569553f58cd917c"
+    },
+    {
+      "path": "public/js/utils/ds-cache.js",
+      "bytes": 967,
+      "sha256": "ffa627006c284b7070d8e7bf9f70af813d831a698771dd8eb97dd71314a733db"
+    },
+    {
+      "path": "public/learn.html",
+      "bytes": 22474,
+      "sha256": "daa0ad36691c172f550f3db85c469e0332c30e521b6db26130e12ca5f4ebf3c8"
+    },
+    {
+      "path": "public/leave.html",
+      "bytes": 39977,
+      "sha256": "e7a4e0768f012851ed055c5880970d38352cb4dbfbdea3da5cd26a4dcb3e76ba"
+    },
+    {
+      "path": "public/lk.html",
+      "bytes": 44646,
+      "sha256": "4757b655dea7e3548519c278b887383bc6c894cfd0e6f6c44ba9eed8bb65c8a3"
+    },
+    {
+      "path": "public/map.html",
+      "bytes": 26044,
+      "sha256": "410aa86a42d06e66c359ac8d6e8ea6058b28cc87b851d4b18b97dcdd43a02a10"
+    },
+    {
+      "path": "public/meds.html",
+      "bytes": 47466,
+      "sha256": "e40ed159c0c87b96efbb2e2c5fbc3f45d29f2441ab4c7cf88f272f97c6748ce9"
+    },
+    {
+      "path": "public/news.html",
+      "bytes": 24329,
+      "sha256": "c411aaea8432c423d73cc4b4c9a9a0ab15d6149e0168e854446237d7c503eea5"
+    },
+    {
+      "path": "public/payroll.html",
+      "bytes": 48617,
+      "sha256": "b41140143cf95a9341de3a660a59a8f87ad154d4f1297d9d093acc1a26d7be99"
+    },
+    {
+      "path": "public/promotion.html",
+      "bytes": 39981,
+      "sha256": "0faae40b1fdb207aacf76f60812a702484c4e7519b4f29e50884699940dac850"
+    },
+    {
+      "path": "public/report-settings.html",
+      "bytes": 20317,
+      "sha256": "06987eb6b04c06cd64f0ee0feeb8b6049d8487bbd8efebc5badac5f2a4c67f8e"
+    },
+    {
+      "path": "public/report.html",
+      "bytes": 18283,
+      "sha256": "a990647960491117714a5a77f188daf661afc51ef12f50ba1b13637ff1e373c3"
+    },
+    {
+      "path": "public/requests-review.html",
+      "bytes": 23580,
+      "sha256": "a530c35367a744fe8b622dbe1cc0d84477e12e4d8096a6c1e111c02921609548"
+    },
+    {
+      "path": "public/requests-settings.html",
+      "bytes": 30051,
+      "sha256": "bc3ab944501f3f9d4f5c2754ed59d992b4337b82ade2c82e9f77625f8ba176d0"
+    },
+    {
+      "path": "public/requests-stats.html",
+      "bytes": 23647,
+      "sha256": "2d6568f4de4493cbc765c0404ee055dcfb5e5609f1169681d04b9a98bb8d4e57"
+    },
+    {
+      "path": "public/restoration.html",
+      "bytes": 40024,
+      "sha256": "278eba7b9acdc65dc223d94431f1c731cc51c7de993d9558a6747bea91e490c0"
+    },
+    {
+      "path": "public/roles.html",
+      "bytes": 7897,
+      "sha256": "32f998b78137437e40f86229d4111a71b61b724849db9dac584ef51a7c3e14cc"
+    },
+    {
+      "path": "public/services.html",
+      "bytes": 62485,
+      "sha256": "d299a3f5e8916930a00832158d717c73300fb4ae90e7d5c15c1a50d85a9571cf"
+    },
+    {
+      "path": "public/supply-admin.html",
+      "bytes": 14991,
+      "sha256": "f25e0f28ef7f3e8eb61a2d1635a30462294a34e6ce226a83d6a85571474f2d71"
+    },
+    {
+      "path": "public/supply-stats.html",
+      "bytes": 31119,
+      "sha256": "0bd505542b9682e12aea4c87b3b13a392fbbd47689c247fbbc71ba7f2373d06a"
+    },
+    {
+      "path": "public/supply.html",
+      "bytes": 9983,
+      "sha256": "6482533bb5f2c1eec35421295e4ccaaff7a129f3fbe0390d9fd4ab6df6ca77a6"
+    },
+    {
+      "path": "public/team.html",
+      "bytes": 91478,
+      "sha256": "6a3a5a47f7dd5ac8839fd731d6b73dd838ec242905ba72e7fc4c72481a3546bb"
+    },
+    {
+      "path": "public/telegram-settings.html",
+      "bytes": 17987,
+      "sha256": "929aaa4be402477847419f7bb12c15a72b455b336e7bab7af67d15b8fe710526"
+    },
+    {
+      "path": "public/test-editor.html",
+      "bytes": 36151,
+      "sha256": "73f6f17d64e6e977dc54bf30b8e9ddeb5bb68bc1dc594eb599846cce13d3b7ec"
+    },
+    {
+      "path": "public/test.html",
+      "bytes": 16913,
+      "sha256": "4e224cb935e7d53503863810e6ed039d4439aeff286ec3d6eeaf3042d35271ae"
+    },
+    {
+      "path": "public/tests.html",
+      "bytes": 33065,
+      "sha256": "b130a79a545c1c6085de6bcf1db33348a452706a2c86242b87a05edfef173117"
+    },
+    {
+      "path": "public/ustav.html",
+      "bytes": 49232,
+      "sha256": "fd60180c8c1eb83b73b7b1be30d972d6b25faba39d4e10e335022e68c169b667"
+    },
+    {
+      "path": "public/vacation-ic.html",
+      "bytes": 39983,
+      "sha256": "303ecc05aad0341bdbce40ae353bd50723fd7ca3f1d6824862ccce6fe467e436"
+    },
+    {
+      "path": "public/vacation-ooc.html",
+      "bytes": 39984,
+      "sha256": "fe2c84b11c36afe510f08e188da8d22c02884c7d4af4b030b24e57e83dd0f85e"
+    },
+    {
+      "path": "public/vp-request-settings.html",
+      "bytes": 20614,
+      "sha256": "760a7d62787bce4623b8bd2015f81b5d0c1022edd5eec8b5d2de666c95e0a19a"
+    },
+    {
+      "path": "public/vp-request.html",
+      "bytes": 20499,
+      "sha256": "8a1b46e8ae29087bc4c0a820b38b378bd53d3e3f47f6c34833192586f760e70c"
+    },
+    {
+      "path": "public/vp.html",
+      "bytes": 82058,
+      "sha256": "99096177f7428f9bb414c87cd88e74e79da243f50e756e3bb487ac8bc6ddb5e9"
+    },
+    {
+      "path": "tools/check-security.mjs",
+      "bytes": 14457,
+      "sha256": "51514bcd86d8b814f21c7cfadd98003f75c864bcc0eee0a4fd4187e3056a37a6"
+    }
+  ]
+}

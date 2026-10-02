@@ -1,4 +1,8 @@
 (function(){
+  const escapeSearch=value=>String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const searchUrl=value=>{
+    try{const url=new URL(String(value||""),location.href);return url.origin===location.origin&&/^https?:$/.test(url.protocol)?String(value):"#"}catch(e){return "#"}
+  };
   const root=document.documentElement;
   const saved=localStorage.getItem("cgb-theme");
   if(saved==="light") root.setAttribute("data-theme","light");
@@ -24,7 +28,7 @@
     if(document.getElementById("cgbRoleWorklogScript")||window.CGB_WORKLOG) return;
     const script=document.createElement("script");
     script.id="cgbRoleWorklogScript";
-    script.src="assets/js/ui/audit-feed.js?v=2";
+    script.src="js/ui/audit-feed.js?v=2";
     document.head.appendChild(script);
   }
 
@@ -215,7 +219,7 @@
       nav.innerHTML="";
       const header=document.createElement("div");
       header.className="nav-header";
-      header.innerHTML=`<div class="nav-header-emblem"><img src="assets/images/brand/logo.png" alt=""></div>
+      header.innerHTML=`<div class="nav-header-emblem"><img src="images/brand/logo.png" alt=""></div>
         <div class="nav-header-label">ЦГБ №3</div>
         <div class="nav-header-unit">ЦГБ №3</div>`;
       nav.appendChild(header);
@@ -451,19 +455,19 @@
       const list=(words.length?DATASET.filter(match):DATASET).filter(canSee).slice(0,120);
       visible=list;selectedIdx=0;
       if(!list.length){
-        results.innerHTML=`<div class="search-empty">Ничего не найдено по запросу «${q}»</div>`;
+        results.innerHTML=`<div class="search-empty">Ничего не найдено по запросу «${escapeSearch(q)}»</div>`;
         return;
       }
-      const groups={};
+      const groups=Object.create(null);
       list.forEach(d=>{(groups[d.group]=groups[d.group]||[]).push(d)});
       let idx=0;
       results.innerHTML=Object.keys(groups).map(g=>
-        `<div class="search-group">${g}</div>`+
-        groups[g].map(d=>`<div class="search-result" data-idx="${idx++}" data-href="${d.href}">
+        `<div class="search-group">${escapeSearch(g)}</div>`+
+        groups[g].map(d=>`<div class="search-result" data-idx="${idx++}" data-href="${escapeSearch(searchUrl(d.href))}">
           <div class="search-result-icon">${iconFor(g)}</div>
           <div class="search-result-body">
-            <div class="search-result-title">${d.title}</div>
-            <div class="search-result-hint">${d.hint}</div>
+            <div class="search-result-title">${escapeSearch(d.title)}</div>
+            <div class="search-result-hint">${escapeSearch(d.hint)}</div>
           </div>
           <div class="search-result-arrow">↵</div>
         </div>`).join("")
@@ -481,6 +485,9 @@
     function open(){modal.classList.add("active");setTimeout(()=>{input.focus();input.select()},50);render("")}
     function close(){modal.classList.remove("active");input.value=""}
     function go(href){
+      href=String(href||"");
+      const candidate=href.split("|")[0];
+      if(searchUrl(candidate)==="#") return;
       close();
       if(href.includes("|")){
         const [page,anchor]=href.split("|");

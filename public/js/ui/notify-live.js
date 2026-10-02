@@ -113,7 +113,7 @@ window.CGB_NOTIFY_LIVE=(function(){
       document.body.appendChild(box);
     }
     const el=document.createElement("a");
-    el.href=it.url;
+    el.href=window.CGB_SECURITY.localUrl(it.url);
     el.style.cssText="pointer-events:auto;background:linear-gradient(160deg,#2a4838,#07242e);border:1px solid #22d3ee;border-radius:12px;padding:12px 14px;color:#eaf6fa;text-decoration:none;box-shadow:0 12px 30px rgba(0,0,0,.5),0 0 20px rgba(34,211,238,.25);animation:cgbToastIn .35s cubic-bezier(.2,.9,.2,1);cursor:pointer;font-family:Inter,sans-serif";
     const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
     el.innerHTML=`<div style="font:700 13px/1.2 Inter;color:#a5f3fc;margin-bottom:4px">${esc(it.title)}</div><div style="font:400 12px/1.3 Inter;color:#a9ccd6">${esc(it.body||"")}</div>`;

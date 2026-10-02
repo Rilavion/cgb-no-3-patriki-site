@@ -1,0 +1,150 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import vm from 'node:vm';
+import {pathToFileURL} from 'node:url';
+
+const modulePath=process.argv[2];
+const {PGlite}=await import(modulePath?pathToFileURL(modulePath).href:'@electric-sql/pglite');
+const db=new PGlite();
+const root=path.resolve(import.meta.dirname,'..');
+let checks=0;
+const admin='00000000-0000-0000-0000-000000000001';
+const user='00000000-0000-0000-0000-000000000002';
+const editor='00000000-0000-0000-0000-000000000003';
+const restricted='00000000-0000-0000-0000-000000000004';
+const scalar=async(sql,args=[])=>Object.values((await db.query(sql,args)).rows[0])[0];
+const check=(actual,expected,label)=>{assert.deepEqual(actual,expected,label);checks++};
+async function as(role,uid,fn){
+  await db.exec(`set role ${role};`);
+  await db.query("select set_config('request.jwt.claim.sub',$1,false)",[uid||'']);
+  try{return await fn()}finally{await db.exec('reset role');await db.exec("reset request.jwt.claim.sub;")}
+}
+async function denied(role,uid,sql,args=[]){
+  let blocked=false;
+  await as(role,uid,async()=>{try{await db.query(sql,args)}catch(e){blocked=true}});
+  check(blocked,true,`must deny ${sql}`);
+}
+try{
+  await db.exec(`create role anon; create role authenticated; create role service_role bypassrls;
+    create schema auth; create schema storage;
+    create table auth.users(id uuid primary key,raw_user_meta_data jsonb);
+    create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;
+    grant usage on schema auth to anon,authenticated; grant execute on function auth.uid() to anon,authenticated;
+    create publication supabase_realtime;
+    create table storage.objects(id uuid primary key default gen_random_uuid(),bucket_id text,name text);
+    create table storage.buckets(id text primary key,file_size_limit bigint,allowed_mime_types text[]);
+    alter table storage.objects enable row level security;
+    grant usage on schema storage to anon,authenticated;
+    grant select,insert,update,delete on storage.objects to anon,authenticated;
+    create policy original_storage_write on storage.objects for all to authenticated using(true) with check(true);
+    insert into storage.buckets(id) values('composition-photos'),('autopark-photos');`);
+  const setup=fs.readFileSync(path.join(root,'database/legacy-supabase/SUPABASE-SETUP.sql'),'utf8').replace(/create extension if not exists pgcrypto(?: with schema extensions)?;/g,'');
+  await db.exec(setup);
+  await db.query('insert into auth.users(id) values($1),($2),($3),($4)',[admin,user,editor,restricted]);
+  await db.query("insert into public.user_roles(user_id,role) values($1,'admin'),($2,'user'),($3,'editor'),($4,'ss')",[admin,user,editor,restricted]);
+  await db.exec(`insert into public.custom_roles(key,name,permissions) values('editor','Editor','{"news":{"view":true,"create":true,"edit":true}}');
+    insert into public.custom_roles(key,name,permissions) values('restricted','Restricted','{"news":{"edit":true}}');
+    update public.user_roles set custom_role_id=(select id from public.custom_roles where key='restricted') where role='ss';
+    insert into public.news(title) values('Original');
+    insert into public.complaints(submitter_fio) values('Private');
+    insert into public.request_forms(id,title) values('leave','Leave');
+    insert into public.complaint_form(id,enabled) values(1,true);
+    insert into public.supply_form(id,enabled) values(1,true);
+    insert into public.tests(id,title,published,max_attempts,pass_score,questions_per_run,result_channel_id) values('00000000-0000-0000-0000-000000000021','Exam',true,1,70,1,'configured-channel');
+    insert into public.tests(id,title,published) values('00000000-0000-0000-0000-000000000022','Draft',false);
+    insert into public.test_questions(id,test_id,kind,text,options,correct,points) values('00000000-0000-0000-0000-000000000031','00000000-0000-0000-0000-000000000021','single','Question','["A","B"]','["A"]',2);`);
+  for(const role of ['anon','authenticated']){
+    const uid=role==='anon'?null:user;
+    check(await as(role,uid,()=>scalar('select count(*)::int from public.complaints')),0,'private complaints');
+    check(await as(role,uid,()=>scalar('select count(*)::int from public.test_questions')),0,'answer key private');
+    check(await as(role,uid,()=>scalar('select count(*)::int from public.tests')),1,'draft hidden');
+    check(await as(role,uid,()=>scalar('select count(*)::int from public.news')),1,'public news readable');
+    await denied(role,uid,"insert into public.news(title) values('forged')");
+    await denied(role,uid,"insert into public.test_attempts(fio,score) values('forged',999)");
+    await denied(role,uid,'select public.ensure_payroll_draft()');
+    await denied(role,uid,"select public.request_test_result(gen_random_uuid(),null,null)");
+    check(await as(role,uid,()=>scalar("update public.news set title='forged' returning title" ).catch(()=>null)),null,'no news update');
+  }
+  check(await as('authenticated',user,()=>scalar('select count(*)::int from public.user_roles')),1,'only own role visible');
+  await denied('authenticated',user,"select public.staff_upsert_role($1,'admin',null,null)",[user]);
+  await db.exec("update public.user_roles set role='user' where role='admin'");
+  await denied('authenticated',user,"select public.staff_upsert_role($1,'admin',null,null)",[user]);
+  await db.query("update public.user_roles set role='admin' where user_id=$1",[admin]);
+  await as('authenticated',editor,()=>db.exec("insert into public.news(title) values('Allowed')"));checks++;
+  check(await as('authenticated',editor,()=>scalar("select public.cgb_security_can('payroll','edit')")),false,'news editor cannot edit payroll');
+  check(await as('authenticated',restricted,()=>scalar("select public.cgb_security_can('vp','edit')")),false,'custom role replaces ss fallback');
+  check(await as('authenticated',restricted,()=>scalar("select public.cgb_security_can('news','edit')")),true,'explicit custom permission');
+  await db.exec("update public.custom_roles set permissions='{\"tests\":{\"view\":true}}' where key='restricted'");
+  check(await as('authenticated',restricted,()=>scalar('select count(*)::int from public.test_questions')),0,'tests view does not expose answer key');
+  await db.exec("update public.custom_roles set permissions='{\"news\":{\"edit\":true}}' where key='restricted'");
+  await denied('authenticated',user,"insert into storage.objects(bucket_id,name) values('composition-photos','malicious.html')");
+  await as('authenticated',admin,()=>db.exec("insert into storage.objects(bucket_id,name) values('composition-photos','photo.webp')"));checks++;
+  await denied('anon',null,"select public.submit_request('invented','{}','Fio','123-456','discord')");
+  await as('anon',null,()=>db.exec("select public.submit_request('leave','{}','Fio','123-456','discord')"));checks++;
+  await denied('anon',null,"select public.submit_request('leave','{}','Fio','123-456','discord')");
+  await db.exec('update public.complaint_form set enabled=false');
+  await denied('anon',null,"select public.submit_complaint('{}','Fio','124-456','discord','Target','100-200',null,null)");
+  const testId='00000000-0000-0000-0000-000000000021';
+  const questionId='00000000-0000-0000-0000-000000000031';
+  const preview=await as('anon',null,()=>scalar('select public.cgb_test_preview($1)',[testId]));
+  check('correct' in preview[0],false,'preview has no answer key');
+  check(preview[0].text,'Question','modern question schema');
+  const run=await as('anon',null,()=>scalar('select public.cgb_start_test($1,$2,$3,$4)',[testId,'Fio','555-555','discord']));
+  check('correct' in run.questions[0],false,'run has no answer key');
+  await denied('anon',null,'select public.cgb_start_test($1,$2,$3,$4)',[testId,'Fio','555-555','discord']);
+  await denied('anon',null,"select public.submit_test_attempt($1,'Fio','555-555',null,'{}',999,1,100,true,now())",[testId]);
+  const result=await as('anon',null,()=>scalar('select public.cgb_finish_test($1,$2)',[run.token,JSON.stringify({[questionId]:'B',score:999,percent:100,passed:true})]));
+  check(result.score,0,'browser cannot forge score');check(result.passed,false,'browser cannot forge passed');
+  const replay=await as('anon',null,()=>scalar('select public.cgb_finish_test($1,$2)',[run.token,JSON.stringify({[questionId]:'A'})]));
+  check(replay,result,'session replay cannot change score');
+  check(await scalar('select count(*)::int from public.test_result_requests'),1,'one delivery per attempt');
+  check(await scalar('select channel_id from public.test_result_requests'),'configured-channel','server chooses destination');
+  await denied('anon',null,'select public.cgb_finish_test(gen_random_uuid(),$1)',['{}']);
+  const migration=fs.readFileSync(path.join(root,'database/legacy-supabase/SECURITY-HARDENING.sql'),'utf8');
+  await db.exec(migration);checks++;
+  await db.exec("create policy old_unsafe_policy on public.news for all to authenticated using(true) with check(true)");
+  await denied('authenticated',user,"insert into public.news(title) values('policy bypass')");
+  for(const file of ['SUPABASE-FIX.sql','SUPABASE-UPDATE-roles.sql','SUPABASE-UPDATE-site-data.sql']){
+    await db.exec(fs.readFileSync(path.join(root,'database/legacy-supabase',file),'utf8').replace(/create extension if not exists pgcrypto;/g,''));checks++;
+    await denied('authenticated',user,"insert into public.news(title) values('legacy bypass')");
+  }
+  await db.exec(fs.readFileSync(path.join(root,'database/legacy-supabase/supabase-migration.sql'),'utf8').replace(/create extension if not exists pgcrypto(?: with schema extensions)?;/g,''));checks++;
+  await denied('authenticated',user,"insert into public.news(title) values('migration bypass')");
+  await db.exec(`insert into public.custom_roles(key,name,permissions) values('operator','Operator','{"vp_request":{"submit":true}}');`);
+  await db.query("update public.user_roles set role='operator',custom_role_id=null where user_id=$1",[restricted]);
+  await denied('authenticated',restricted,"insert into public.violations_registry(status,requested_by_uid,issued_by_uid) values('active',$1,$1)",[restricted]);
+  await as('authenticated',restricted,()=>db.query("insert into public.violations_registry(status,requested_by_uid,issued_by_uid) values('pending',$1,$1)",[restricted]));checks++;
+  await denied('authenticated',restricted,"insert into public.violations_registry(status,requested_by_uid,issued_by_uid,reviewed_at) values('pending',$1,$1,now())",[restricted]);
+  check(await as('authenticated',user,()=>scalar('select count(*)::int from public.violations_registry')),0,'registry private');
+  const correctRun=await as('anon',null,()=>scalar('select public.cgb_start_test($1,$2,$3,$4)',[testId,'Fio','666-666','discord2']));
+  const correctResult=await as('anon',null,()=>scalar('select public.cgb_finish_test($1,$2)',[correctRun.token,JSON.stringify({[questionId]:'A'})]));
+  check(correctResult.score,2,'correct answer gets server score');check(correctResult.percent,100,'server calculates percent');check(correctResult.passed,true,'server calculates pass');
+  const expired=await as('anon',null,()=>scalar('select public.cgb_start_test($1,$2,$3,$4)',[testId,'Fio','777-777','discord3']));
+  await db.query("update public.cgb_test_runs set expires_at=now()-interval '1 minute' where token=$1",[expired.token]);
+  await denied('anon',null,'select public.cgb_finish_test($1,$2)',[expired.token,JSON.stringify({[questionId]:'A'})]);
+  await denied('authenticated',user,'select public.cgb_validate_submission($1,$2,$3,$4,$5)',['forged','{}','Fio','123-456','discord']);
+  await db.exec('grant all on all tables in schema public to service_role; grant usage on schema public to service_role');
+  await as('service_role',null,()=>db.exec("insert into public.ds_channels(channel_id,name) values('service-channel','Bot')"));checks++;
+  check(await as('authenticated',user,()=>scalar('select count(*)::int from public.ds_channels')),0,'bot metadata private');
+  await denied('authenticated',editor,"insert into public.payroll_drafts(title) values('forged')");
+  const authenticatedRun=await as('authenticated',user,()=>scalar('select public.cgb_start_test($1,$2,$3,$4)',[testId,'Fio','888-888','discord4']));
+  await denied('anon',null,'select public.cgb_finish_test($1,$2)',[authenticatedRun.token,'{}']);
+  check(await scalar("select has_function_privilege('anon','public.submit_test_attempt(uuid,text,text,text,jsonb,integer,integer,numeric,boolean,timestamptz)','EXECUTE')"),false,'obsolete score RPC revoked');
+  check(await scalar("select has_function_privilege('authenticated','public.cgb_public_question(jsonb)','EXECUTE')"),false,'internal helper private');
+  const calls=[];
+  const testContext={window:{CGB_AUTH:{whenReady:async()=>{},state:{client:{rpc:async(name,args)=>{calls.push({name,args});return {data:{id:'result',score:0,max_score:2,percent:0,passed:false}}}}}}},console};
+  vm.runInNewContext(fs.readFileSync(path.join(root,'public/js/features/tests-engine.js'),'utf8'),testContext);
+  const frontendResult=await testContext.window.CGB_TESTS.submitAttempt({static_id:'888-888',token:authenticatedRun.token,answers:{},score:999,percent:100,passed:true});
+  check(frontendResult.attempt.passed,false,'frontend displays server verdict');
+  check(calls[0].name,'cgb_finish_test','frontend uses protected RPC');
+  check(Object.keys(calls[0].args).sort(),['p_answers','p_token'],'frontend does not submit verdict');
+  const context={window:{},location:{href:'https://example.test/test',origin:'https://example.test'},URL};
+  vm.runInNewContext(fs.readFileSync(path.join(root,'public/js/core/config.js'),'utf8'),context);
+  for(const bad of ['javascript:alert(1)','JaVaScRiPt:alert(1)','data:text/html,<script>','file:///etc/passwd','https://name:password@example.test']){
+    check(context.window.CGB_SECURITY.url(bad),'','unsafe URL blocked');
+  }
+  check(context.window.CGB_SECURITY.url('https://example.test/photo.webp',true),'https://example.test/photo.webp','image allowed');
+  check(context.window.CGB_SECURITY.localUrl('https://evil.test'),'#','external notification link blocked');
+  console.log(`Security checks passed: ${checks}`);
+}catch(error){console.error(error.message);if(error.query)console.error(error.query);process.exitCode=1}finally{await db.close()}

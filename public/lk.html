@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
-<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<link rel="icon" href="images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="images/brand/logo.png">
 <title>Личный кабинет — ЦГБ №3</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=26">
+<link rel="stylesheet" href="css/style.css?v=26">
 <style id="cgb-admin-guard">
 [data-admin]{display:none !important}
 body.cgb-is-admin .nav a[data-admin],body.cgb-is-admin .footer-col a[data-admin]{display:inline-flex !important}
@@ -44,7 +44,7 @@ body.cgb-is-admin .footer-col a[data-admin]{display:block !important}
 <header class="topbar">
   <div class="topbar-inner">
     <a class="brand" href="index.html">
-      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ВС"></div>
+      <div class="brand-icon"><img src="images/brand/logo.png" alt="ВС"></div>
       <div class="brand-text">
         <span class="brand-label">Министерство Здравоохранения</span>
         <span class="brand-name">ЦГБ №3 · Центральная Городская</span>
@@ -359,23 +359,23 @@ body.cgb-is-admin .footer-col a[data-admin]{display:block !important}
   </div>
 </div>
 
-<script src="assets/js/core/async-state.js?v=1"></script>
-<script src="assets/js/core/supabase-loader.js?v=18"></script>
-<script src="assets/js/core/config.js?v=18"></script>
-<script src="assets/js/ui/main.js?v=23"></script>
-<script src="assets/js/utils/format-utils.js?v=18"></script>
-<script src="assets/js/core/auth.js?v=19"></script>
-<script src="assets/js/core/roles-engine.js?v=19"></script>
-<script src="assets/js/ui/holiday-engine.js?v=18"></script>
-<script src="assets/js/ui/settings-panel.js?v=18"></script>
-<script src="assets/js/ui/sound-engine.js?v=18"></script>
-<script src="assets/js/features/faq-engine.js?v=18"></script>
-<script src="assets/js/ui/search-engine.js?v=18"></script>
-<script src="assets/js/utils/ds-cache.js?v=18"></script>
-<script src="assets/js/ui/notify-engine.js?v=19"></script>
-<script src="assets/js/ui/notify-live.js?v=18"></script>
+<script src="js/core/async-state.js?v=1"></script>
+<script src="js/core/supabase-loader.js?v=18"></script>
+<script src="js/core/config.js?v=18"></script>
+<script src="js/ui/main.js?v=23"></script>
+<script src="js/utils/format-utils.js?v=18"></script>
+<script src="js/core/auth.js?v=19"></script>
+<script src="js/core/roles-engine.js?v=19"></script>
+<script src="js/ui/holiday-engine.js?v=18"></script>
+<script src="js/ui/settings-panel.js?v=18"></script>
+<script src="js/ui/sound-engine.js?v=18"></script>
+<script src="js/features/faq-engine.js?v=18"></script>
+<script src="js/ui/search-engine.js?v=18"></script>
+<script src="js/utils/ds-cache.js?v=18"></script>
+<script src="js/ui/notify-engine.js?v=19"></script>
+<script src="js/ui/notify-live.js?v=18"></script>
 
-<script src="assets/js/features/lk-engine.js?v=18"></script>
+<script src="js/features/lk-engine.js?v=18"></script>
 <script>
 document.getElementById("year").textContent=new Date().getFullYear();
 const $=id=>document.getElementById(id);
@@ -536,7 +536,7 @@ function applyAuditFilter(){
     const color=TYPE_COLORS[it.type]||"var(--gold)";
     const label=TYPE_LABELS[it.type]||"Запись";
     const who=it.who&&it.who!=="—"?`<span class="lk-audit-meta-sep">·</span><span class="lk-audit-who">👤 ${esc(it.who)}</span>`:"";
-    return `<a class="lk-audit-item" href="${it.href}" style="--item-color:${color}">
+    return `<a class="lk-audit-item" href="${esc(window.CGB_SECURITY.localUrl(it.href))}" style="--item-color:${esc(color)}">
       <span class="lk-audit-icon">${it.icon}</span>
       <div class="lk-audit-body">
         <div class="lk-audit-title">${esc(it.title)}</div>
@@ -568,7 +568,7 @@ function renderHolidayUI(){
     const color=id==="custom"?(cfg.custom&&cfg.custom.color||p.color):p.color;
     const icon=id==="custom"?(cfg.custom&&cfg.custom.icon||p.icon):p.icon;
     const label=id==="custom"?(cfg.custom&&cfg.custom.label||p.label):p.label;
-    return `<button class="hf-preset ${isActive?"active":""}" data-preset="${id}" style="--hf-color:${color}">
+    return `<button class="hf-preset ${isActive?"active":""}" data-preset="${id}" style="--hf-color:${esc(color)}">
       <span class="hf-preset-icon">${icon}</span>${esc(label)}
     </button>`;
   }).join("");

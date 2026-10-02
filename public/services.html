@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
-<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<link rel="icon" href="images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="images/brand/logo.png">
 <title>Услуги и цены · ЦГБ №3</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=26">
+<link rel="stylesheet" href="css/style.css?v=26">
 <style>
 .sv-hero{padding:72px 0 8px;text-align:center;position:relative;overflow:visible}
 .sv-hero::before{
@@ -255,7 +255,7 @@ input[type="color"].sv-color{width:44px;height:34px;padding:2px;border:1px solid
 <header class="topbar">
   <div class="topbar-inner">
     <a class="brand" href="index.html">
-      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ЦГБ"></div>
+      <div class="brand-icon"><img src="images/brand/logo.png" alt="ЦГБ"></div>
       <div class="brand-text">
         <span class="brand-label">Министерство Здравоохранения</span>
         <span class="brand-name">ЦГБ №3 · Центральная Городская</span>
@@ -463,19 +463,19 @@ input[type="color"].sv-color{width:44px;height:34px;padding:2px;border:1px solid
   </div>
 </div>
 
-<script src="assets/js/core/async-state.js?v=1"></script>
-<script src="assets/js/core/supabase-loader.js?v=18"></script>
-<script src="assets/js/core/config.js?v=18"></script>
-<script src="assets/js/core/auth.js?v=18"></script>
-<script src="assets/js/core/roles-engine.js?v=18"></script>
-<script src="assets/js/ui/main.js?v=23"></script>
-<script src="assets/js/ui/holiday-engine.js?v=18"></script>
-<script src="assets/js/ui/sound-engine.js?v=18"></script>
-<script src="assets/js/ui/search-engine.js?v=18"></script>
-<script src="assets/js/ui/notify-engine.js?v=19"></script>
-<script src="assets/js/ui/notify-live.js?v=18"></script>
-<script src="assets/js/features/site-data-engine.js?v=18"></script>
-<script src="assets/vendor/html2canvas.min.js?v=4"></script>
+<script src="js/core/async-state.js?v=1"></script>
+<script src="js/core/supabase-loader.js?v=18"></script>
+<script src="js/core/config.js?v=18"></script>
+<script src="js/core/auth.js?v=18"></script>
+<script src="js/core/roles-engine.js?v=18"></script>
+<script src="js/ui/main.js?v=23"></script>
+<script src="js/ui/holiday-engine.js?v=18"></script>
+<script src="js/ui/sound-engine.js?v=18"></script>
+<script src="js/ui/search-engine.js?v=18"></script>
+<script src="js/ui/notify-engine.js?v=19"></script>
+<script src="js/ui/notify-live.js?v=18"></script>
+<script src="js/features/site-data-engine.js?v=18"></script>
+<script src="vendor/html2canvas.min.js?v=4"></script>
 <script>
 document.getElementById("year").textContent=new Date().getFullYear();
 const $=id=>document.getElementById(id);
@@ -678,7 +678,7 @@ function svExportMarkup(cat){
   const date=new Date().toLocaleDateString("ru-RU",{day:"2-digit",month:"2-digit",year:"numeric"});
   return `<section class="svx-sheet" style="--svx-color:${svExportColor(cat)}">
     <div class="svx-brand">
-      <img src="assets/images/brand/logo.png" alt="ЦГБ №3">
+      <img src="images/brand/logo.png" alt="ЦГБ №3">
       <div class="svx-brand-copy"><div class="svx-brand-over">Министерство здравоохранения</div><div class="svx-brand-name">ЦГБ №3 · Центральная Городская</div></div>
       <div class="svx-price-label">Прайс-лист медицинских услуг</div>
     </div>
@@ -791,7 +791,7 @@ edSide.addEventListener("click",e=>{
 
 function renderEd(){
   edSide.querySelectorAll("[data-tab]").forEach(el=>el.classList.toggle("active",el.dataset.tab===edTab));
-  $("edCatList").innerHTML=ED.categories.map(c=>`<div class="chap-item ${edTab==="cat"&&edCat===c.id?"active":""}" data-cat="${c.id}"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(c.icon||"")} ${esc(c.title||"Без названия")}</span></div>`).join("");
+  $("edCatList").innerHTML=ED.categories.map(c=>`<div class="chap-item ${edTab==="cat"&&edCat===c.id?"active":""}" data-cat="${esc(c.id)}"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(c.icon||"")} ${esc(c.title||"Без названия")}</span></div>`).join("");
   if(edTab==="hero") renderEdHero();
   else if(edTab==="sale") renderEdSale();
   else if(edTab==="banner") renderEdBanner();

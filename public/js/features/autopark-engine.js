@@ -3,11 +3,13 @@ window.CGB_AUTOPARK=(function(){
   async function uploadPhoto(file){
     const c=client();if(!c) return {ok:false,error:"no client"};
     if(!file) return {ok:false,error:"no file"};
+    if(!['image/jpeg','image/png','image/webp','image/gif'].includes(file.type)) return {ok:false,error:"Поддерживаются JPG, PNG, WebP или GIF."};
     if(file.size>10*1024*1024) return {ok:false,error:"Файл больше 10 МБ."};
     if(window.CGB_IMG&&window.CGB_IMG.compress){
       file=await window.CGB_IMG.compress(file,{maxW:1200,maxH:900,quality:0.82});
     }
-    const ext=(file.name.match(/\.([a-z0-9]+)$/i)||[])[1]||"webp";
+    const ext=({'image/jpeg':'jpg','image/png':'png','image/webp':'webp','image/gif':'gif'})[file.type];
+    if(!ext) return {ok:false,error:"Поддерживаются JPG, PNG, WebP или GIF."};
     const path="veh_"+Date.now()+"_"+Math.random().toString(36).slice(2,8)+"."+ext.toLowerCase();
     try{
       const {error}=await c.storage.from("autopark-photos").upload(path,file,{contentType:file.type||undefined,upsert:false});

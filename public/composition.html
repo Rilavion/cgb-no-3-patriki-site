@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
-<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<link rel="icon" href="images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="images/brand/logo.png">
 <title>Состав — ЦГБ №3</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=35">
+<link rel="stylesheet" href="css/style.css?v=35">
 <style id="cgb-admin-guard">
 [data-admin]{display:none !important}
 body.cgb-is-admin .nav a[data-admin],body.cgb-is-admin .footer-col a[data-admin]{display:inline-flex !important}
@@ -38,7 +38,7 @@ body.cgb-is-admin .footer-col a[data-admin]{display:block !important}
 <header class="topbar">
   <div class="topbar-inner">
     <a class="brand" href="index.html">
-      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ВС"></div>
+      <div class="brand-icon"><img src="images/brand/logo.png" alt="ВС"></div>
       <div class="brand-text">
         <span class="brand-label">Министерство Здравоохранения</span>
         <span class="brand-name">ЦГБ №3 · Центральная Городская</span>
@@ -270,24 +270,24 @@ body.cgb-is-admin .footer-col a[data-admin]{display:block !important}
   </div>
 </div>
 
-<script src="assets/vendor/html2canvas.min.js?v=4"></script>
-<script src="assets/js/core/async-state.js?v=1"></script>
-<script src="assets/js/core/supabase-loader.js?v=18"></script>
-<script src="assets/js/core/config.js?v=18"></script>
-<script src="assets/js/ui/main.js?v=23"></script>
-<script src="assets/js/utils/format-utils.js?v=18"></script>
-<script src="assets/js/ui/holiday-engine.js?v=18"></script>
-<script src="assets/js/ui/settings-panel.js?v=18"></script>
-<script src="assets/js/ui/sound-engine.js?v=18"></script>
-<script src="assets/js/features/faq-engine.js?v=18"></script>
-<script src="assets/js/ui/search-engine.js?v=18"></script>
-<script src="assets/js/utils/ds-cache.js?v=18"></script>
-<script src="assets/js/ui/notify-engine.js?v=19"></script>
-<script src="assets/js/ui/notify-live.js?v=18"></script>
-<script src="assets/js/core/auth.js?v=18"></script>
-<script src="assets/js/core/roles-engine.js?v=18"></script>
-<script src="assets/js/ui/select-enhance.js?v=18"></script>
-<script src="assets/js/features/composition-engine.js?v=21"></script>
+<script src="vendor/html2canvas.min.js?v=4"></script>
+<script src="js/core/async-state.js?v=1"></script>
+<script src="js/core/supabase-loader.js?v=18"></script>
+<script src="js/core/config.js?v=18"></script>
+<script src="js/ui/main.js?v=23"></script>
+<script src="js/utils/format-utils.js?v=18"></script>
+<script src="js/ui/holiday-engine.js?v=18"></script>
+<script src="js/ui/settings-panel.js?v=18"></script>
+<script src="js/ui/sound-engine.js?v=18"></script>
+<script src="js/features/faq-engine.js?v=18"></script>
+<script src="js/ui/search-engine.js?v=18"></script>
+<script src="js/utils/ds-cache.js?v=18"></script>
+<script src="js/ui/notify-engine.js?v=19"></script>
+<script src="js/ui/notify-live.js?v=18"></script>
+<script src="js/core/auth.js?v=18"></script>
+<script src="js/core/roles-engine.js?v=18"></script>
+<script src="js/ui/select-enhance.js?v=18"></script>
+<script src="js/features/composition-engine.js?v=21"></script>
 <script>
 document.getElementById("year").textContent=new Date().getFullYear();
 
@@ -315,8 +315,8 @@ function initials(name){
 }
 function avatar(p,size,color){
   const bg=color||"#3d5a49";
-  if(p&&p.photo) return `<div class="avatar" style="width:${size}px;height:${size}px"><img src="${esc(p.photo)}" alt=""></div>`;
-  return `<div class="avatar avatar-init" style="width:${size}px;height:${size}px;background:linear-gradient(145deg,${bg},${shade(bg,-20)})"><span>${esc(initials(p&&p.name||""))}</span></div>`;
+  if(p&&p.photo) return `<div class="avatar" style="width:${size}px;height:${size}px"><img src="${esc(window.CGB_SECURITY.url(p.photo,true))}" alt=""></div>`;
+  return `<div class="avatar avatar-init" style="width:${size}px;height:${size}px;background:linear-gradient(145deg,${esc(bg)},${shade(bg,-20)})"><span>${esc(initials(p&&p.name||""))}</span></div>`;
 }
 function shade(hex,percent){
   const h=hex.replace("#","");const n=parseInt(h,16);
@@ -345,11 +345,11 @@ function rankInfoOf(m){
 function memberCardHtml(sub,m,origIdx,color){
   const r=rankInfoOf(m);
   const hasPhoto=!!(m&&m.photo);
-  const drag=editing?`draggable="true" data-drag-src="${sub.id}::${origIdx}"`:"";
-  return `<div class="hier-member ${editing?"is-draggable":""}" data-member-index="${origIdx}" style="--m-color:${color}" ${drag}>
+  const drag=editing?`draggable="true" data-drag-src="${esc(sub.id)}::${origIdx}"`:"";
+  return `<div class="hier-member ${editing?"is-draggable":""}" data-member-index="${origIdx}" style="--m-color:${esc(color)}" ${drag}>
     <div class="hier-member-photo ${hasPhoto?"":"no-photo"}">
-      ${hasPhoto?`<img src="${esc(m.photo)}" alt="" style="${photoStyle(m)}">`:`<span class="hier-officer-initials">${esc(initials(m.name||""))}</span>`}
-      ${r.label?`<div class="hier-member-rank-tag" style="background:${color}">${esc(r.label)}</div>`:""}
+      ${hasPhoto?`<img src="${esc(window.CGB_SECURITY.url(m.photo,true))}" alt="" style="${photoStyle(m)}">`:`<span class="hier-officer-initials">${esc(initials(m.name||""))}</span>`}
+      ${r.label?`<div class="hier-member-rank-tag" style="background:${esc(color)}">${esc(r.label)}</div>`:""}
     </div>
     <div class="hier-member-body">
       <div class="hier-member-name">${esc(m.name)}</div>
@@ -361,8 +361,8 @@ function memberCardHtml(sub,m,origIdx,color){
     </div>
     ${editing?`<div class="hier-member-actions">
       <button class="mini-icon-btn drag-handle" title="Перетащить">⋮⋮</button>
-      <button class="mini-icon-btn" data-edit-member="${sub.id}::${origIdx}" title="Редактировать">✎</button>
-      <button class="mini-icon-btn danger" data-del-member="${sub.id}::${origIdx}" title="Удалить">×</button>
+      <button class="mini-icon-btn" data-edit-member="${esc(sub.id)}::${origIdx}" title="Редактировать">✎</button>
+      <button class="mini-icon-btn danger" data-del-member="${esc(sub.id)}::${origIdx}" title="Удалить">×</button>
     </div>`:""}
   </div>`;
 }
@@ -442,11 +442,11 @@ function renderSub(sub,subIndex){
     for(let c=0;c<cols;c++){
       const key=r+":"+c;
       const cell=map[key];
-      const dropAttrs=editing?`data-drop-cell="${sub.id}::${r}::${c}"`:"";
+      const dropAttrs=editing?`data-drop-cell="${esc(sub.id)}::${r}::${c}"`:"";
       if(cell){
         cells+=`<div class="hier-grid-cell filled" ${dropAttrs}>${memberCardHtml(sub,cell.m,cell.i,color)}</div>`;
       } else if(editing){
-        cells+=`<div class="hier-grid-cell empty" ${dropAttrs} data-empty-add="${sub.id}::${r}::${c}" title="Кликнуть — добавить бойца · Перетащить — сюда"><div class="hier-empty-slot"><span>+</span></div></div>`;
+        cells+=`<div class="hier-grid-cell empty" ${dropAttrs} data-empty-add="${esc(sub.id)}::${r}::${c}" title="Кликнуть — добавить бойца · Перетащить — сюда"><div class="hier-empty-slot"><span>+</span></div></div>`;
       } else {
         cells+=`<div class="hier-grid-cell hollow" aria-hidden="true"></div>`;
       }
@@ -455,18 +455,18 @@ function renderSub(sub,subIndex){
   }
 
   const orderBtns=editing?`<div class="hier-sub-order" aria-label="Положение отдела">
-    <button type="button" class="hier-sub-order-btn" data-move-sub="${sub.id}:-1" title="Переместить отдел выше" aria-label="Переместить ${esc(sub.name)} выше" ${subIndex===0?"disabled":""}>↑</button>
-    <button type="button" class="hier-sub-order-btn" data-move-sub="${sub.id}:1" title="Переместить отдел ниже" aria-label="Переместить ${esc(sub.name)} ниже" ${subIndex===STATE.subs.length-1?"disabled":""}>↓</button>
+    <button type="button" class="hier-sub-order-btn" data-move-sub="${esc(sub.id)}:-1" title="Переместить отдел выше" aria-label="Переместить ${esc(sub.name)} выше" ${subIndex===0?"disabled":""}>↑</button>
+    <button type="button" class="hier-sub-order-btn" data-move-sub="${esc(sub.id)}:1" title="Переместить отдел ниже" aria-label="Переместить ${esc(sub.name)} ниже" ${subIndex===STATE.subs.length-1?"disabled":""}>↓</button>
   </div>`:"";
-  const editBtn=editing?`<button class="hier-edit-btn hier-sub-edit-btn" data-edit-sub="${sub.id}" title="Настройки отдела" aria-label="Настройки ${esc(sub.name)}">⚙</button>`:"";
-  const addBtn=editing?`<button class="hier-officer hier-officer-add" data-add-member="${sub.id}">＋ Добавить в подразделение</button>`:"";
-  return `<section class="hier-sub-section" style="--sub-color:${color};--sub-color-2:${shade(color,-25)}">
+  const editBtn=editing?`<button class="hier-edit-btn hier-sub-edit-btn" data-edit-sub="${esc(sub.id)}" title="Настройки отдела" aria-label="Настройки ${esc(sub.name)}">⚙</button>`:"";
+  const addBtn=editing?`<button class="hier-officer hier-officer-add" data-add-member="${esc(sub.id)}">＋ Добавить в подразделение</button>`:"";
+  return `<section class="hier-sub-section" style="--sub-color:${esc(color)};--sub-color-2:${shade(color,-25)}">
     <div class="hier-sub-head">
       ${orderBtns}
       <div class="hier-sub-title">${esc(sub.name)}</div>
       ${editBtn}
     </div>
-    <div class="hier-grid hier-grid-rows" data-sub-id="${sub.id}">${gridRows}</div>
+    <div class="hier-grid hier-grid-rows" data-sub-id="${esc(sub.id)}">${gridRows}</div>
     ${addBtn?`<div class="hier-add-wrap">${addBtn}</div>`:""}
   </section>`;
 }
@@ -481,7 +481,7 @@ function render(){
     <div class="hier-cmd-inner">
       <div class="hier-cmd-badge">Главный врач больницы</div>
       <div class="hier-officer-photo hier-cmd-photo ${cmdHasPhoto?"":"no-photo"}">
-        ${cmdHasPhoto?`<img src="${esc(cmd.photo)}" alt="" style="${photoStyle(cmd)}">`:`<span class="hier-officer-initials">${cmdFilled?esc(initials(cmd.name)):"—"}</span>`}
+        ${cmdHasPhoto?`<img src="${esc(window.CGB_SECURITY.url(cmd.photo,true))}" alt="" style="${photoStyle(cmd)}">`:`<span class="hier-officer-initials">${cmdFilled?esc(initials(cmd.name)):"—"}</span>`}
       </div>
       <div class="hier-cmd-body">
         <div class="hier-cmd-name">${cmdFilled?esc(cmd.name):`<span style="opacity:.5">Вакансия</span>`}</div>
@@ -503,9 +503,9 @@ function render(){
         const p=STATE.hq[slot.key]||{};
         const filled=!!p.name;
         const hasPhoto=!!(p&&p.photo);
-        return `<div class="hier-officer ${filled?"":"hier-officer-empty"}" data-hq="${slot.key}">
+        return `<div class="hier-officer ${filled?"":"hier-officer-empty"}" data-hq="${esc(slot.key)}">
           <div class="hier-officer-photo ${hasPhoto?"":"no-photo"}">
-            ${hasPhoto?`<img src="${esc(p.photo)}" alt="" style="${photoStyle(p)}">`:`<span class="hier-officer-initials">${filled?esc(initials(p.name)):"—"}</span>`}
+            ${hasPhoto?`<img src="${esc(window.CGB_SECURITY.url(p.photo,true))}" alt="" style="${photoStyle(p)}">`:`<span class="hier-officer-initials">${filled?esc(initials(p.name)):"—"}</span>`}
             ${slot.badge?`<div class="hier-officer-role-tag">${esc(slot.badge)}</div>`:""}
           </div>
           <div class="hier-officer-body">
@@ -517,8 +517,8 @@ function render(){
             </div>
           </div>
           ${editing?`<div class="hier-edit-group">
-            <button class="hier-edit-btn hier-edit-corner" data-edit-hq="${slot.key}" title="Изменить должность/данные">✎</button>
-            ${!slot.locked?`<button class="hier-edit-btn hier-edit-corner danger" data-del-hq="${slot.key}" title="Удалить должность">×</button>`:""}
+            <button class="hier-edit-btn hier-edit-corner" data-edit-hq="${esc(slot.key)}" title="Изменить должность/данные">✎</button>
+            ${!slot.locked?`<button class="hier-edit-btn hier-edit-corner danger" data-del-hq="${esc(slot.key)}" title="Удалить должность">×</button>`:""}
           </div>`:""}
         </div>`;
       }).join("")}
@@ -788,7 +788,7 @@ function expBuildHtml(opts){
   wrap.innerHTML=`
     <div class="exp-cover">
       <div class="exp-cover-emblem">
-        <img src="assets/images/brand/logo.png" crossorigin="anonymous" alt="">
+        <img src="images/brand/logo.png" crossorigin="anonymous" alt="">
       </div>
       <div class="exp-cover-text">
         <div class="exp-cover-eyebrow">Министерство Здравоохранения</div>
@@ -1270,7 +1270,7 @@ function photoField(current,zoom,x,y){
   const imgStyle=`transform:scale(${z});object-position:${px}% ${py}%`;
   return `<div class="form-group"><label>Фото</label>
     <div class="photo-controls">
-      <div class="photo-preview"><div class="photo-preview-inner">${current?`<img src="${esc(current)}" style="${imgStyle}">`:`<span>Нет фото</span>`}</div></div>
+      <div class="photo-preview"><div class="photo-preview-inner">${current?`<img src="${esc(window.CGB_SECURITY.url(current,true))}" style="${imgStyle}">`:`<span>Нет фото</span>`}</div></div>
       <div class="photo-actions">
         <input type="url" name="photo" value="${esc(current)}" placeholder="https://... или Data URL">
         <div style="display:flex;gap:6px">
@@ -1316,7 +1316,7 @@ function bindPhotoField(form){
   }
   function sync(){
     const v=urlInput.value.trim();
-    previewInner.innerHTML=v?`<img src="${esc(v)}" style="${imgStyle()}">`:`<span>Нет фото</span>`;
+    previewInner.innerHTML=v?`<img src="${esc(window.CGB_SECURITY.url(v,true))}" style="${imgStyle()}">`:`<span>Нет фото</span>`;
     updateVals();
   }
   function applyStyle(){

@@ -3,6 +3,18 @@ window.CGB_AUTH=(function(){
   const listeners=[];
   let initPromise=null;
   let authRevision=0;
+  function clearPrivateCaches(){
+    for(const storage of [localStorage,sessionStorage]){
+      try{
+        for(let i=storage.length-1;i>=0;i--){
+          const key=storage.key(i);
+          if(/^cgb-(?:search-cache|dscache|dsac-members|notify-queue)/.test(key||"")) storage.removeItem(key);
+        }
+      }catch(e){}
+    }
+    if(window.CGB_SEARCH) window.CGB_SEARCH.invalidate();
+    if(window.CGB_DSAC) window.CGB_DSAC.invalidate();
+  }
 
   function emit(){listeners.forEach(fn=>{try{fn(state)}catch(e){}})}
   function onChange(fn){listeners.push(fn);fn(state);return()=>{const i=listeners.indexOf(fn);if(i>=0) listeners.splice(i,1)}}
@@ -24,6 +36,7 @@ window.CGB_AUTH=(function(){
 
   async function rejectRevokedSession(){
     authRevision++;
+    clearPrivateCaches();
     state.user=null;emit();updateUI();
     try{await state.client.auth.signOut()}catch(e){}
   }
@@ -32,6 +45,7 @@ window.CGB_AUTH=(function(){
     const revision=++authRevision;
     if(!candidate){
       const changed=!!state.user;
+      clearPrivateCaches();
       state.user=null;
       if(changed){emit();updateUI()}
       return false;
@@ -43,6 +57,7 @@ window.CGB_AUTH=(function(){
       return false;
     }
     const changed=!state.user||state.user.id!==candidate.id;
+    if(changed) clearPrivateCaches();
     state.user=candidate;
     state.error=null;
     if(changed){emit();updateUI()}
@@ -88,7 +103,7 @@ window.CGB_AUTH=(function(){
       const {data}=await state.client.auth.getSession();
       const initialUser=data&&data.session?data.session.user:null;
       if(initialUser) await applySessionUser(initialUser);
-      else state.user=null;
+      else {state.user=null;clearPrivateCaches()}
       state.client.auth.onAuthStateChange((_ev,session)=>{
         setTimeout(()=>applySessionUser(session&&session.user||null),0);
       });

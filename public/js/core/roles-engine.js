@@ -45,10 +45,8 @@ window.CGB_ROLES=(function(){
       myCustomRole=null;
       ready=true;
       resolvedUserId="";
-      console.log("[CGB_ROLES] Нет клиента/пользователя. auth.state =",s);
       emit();apply();return null;
     }
-    console.log("[CGB_ROLES] Загружаем роль для user_id =",s.user.id,"email =",s.user.email);
     let nextRole=null;
     let nextPermissions={};
     let nextCustomRole=null;
@@ -82,7 +80,8 @@ window.CGB_ROLES=(function(){
     myCustomRole=nextCustomRole;
     ready=true;
     resolvedUserId=userId;
-    console.log("[CGB_ROLES] ✓ Роль:",myRole,"custom:",myCustomRole&&myCustomRole.name);
+    if(window.CGB_SEARCH) window.CGB_SEARCH.invalidate();
+    if(window.CGB_DSAC) window.CGB_DSAC.invalidate();
     emit();
     apply();
     return myRole;
@@ -131,14 +130,10 @@ window.CGB_ROLES=(function(){
   function isStaff(){return myRole==="admin"||myRole==="ss"}
   function can(section,action){
     if(myRole==="admin") return true;
-    const sec=myPermissions[section];
-    const roleKey=(myCustomRole&&myCustomRole.key)||myRole;
-    // Совместимость с ранее созданной системной ролью: доступ к форме запроса
-    // должен оставаться видимым, пока обновлённые permissions загружаются из Supabase.
-    if(!sec&&roleKey==="ab_operator"&&section==="vp_request"&&(action==null||action==="submit")) return true;
+    const sec=Object.prototype.hasOwnProperty.call(myPermissions,section)?myPermissions[section]:null;
     if(!sec) return false;
-    if(action==null) return !!sec.view;
-    return !!sec[action];
+    if(action==null) return Object.prototype.hasOwnProperty.call(sec,"view")&&sec.view===true;
+    return Object.prototype.hasOwnProperty.call(sec,action)&&sec[action]===true;
   }
 
   async function listCustomRoles(){
@@ -232,7 +227,7 @@ window.CGB_ROLES=(function(){
       try{await tempClient.auth.signOut()}catch(e){}
       if(!uid) return {ok:true,warning:"Пользователь создан, но user_id не получен (возможно требуется подтверждение email). Проставь роль вручную после его первого входа."};
       await new Promise(res=>setTimeout(res,300));
-      const r=await setRole(uid,role,displayName,customRoleId);
+      let r=await setRole(uid,role,displayName,customRoleId);
       if(!r.ok && String(r.error||"").indexOf("violates")>=0){
         // ретрай с устаревшей RPC: role мог уйти null = понятная подсказка
         r={ok:false,error:r.error+" — выполни заново весь SUPABASE-FIX.sql (блоки 1 и 9): "+(r.error||"")};

@@ -20,7 +20,6 @@ window.CGB_REQUESTS=(function(){
     if(!c){console.warn("[REQ] getForm("+kind+"): нет client (auth не готов)");return null}
     const {data,error}=await c.from("request_forms").select("*").eq("id",kind).maybeSingle();
     if(error) console.warn("[REQ] getForm error:",error.message);
-    console.log("[REQ] getForm("+kind+") →",data);
     return data;
   }
   async function saveForm(row){
@@ -28,13 +27,11 @@ window.CGB_REQUESTS=(function(){
     row.updated_at=new Date().toISOString();
     const s=window.CGB_AUTH.state;
     if(s.user) row.updated_by=s.user.id;
-    console.log("[REQ] saveForm payload:",JSON.parse(JSON.stringify(row)));
     const {data,error}=await c.from("request_forms").upsert(row).select().maybeSingle();
     if(error){
       console.warn("[REQ] saveForm error:",error);
       return {ok:false,error:error.message};
     }
-    console.log("[REQ] saveForm → back:",data);
     if(row.rank_matrix && data && !data.rank_matrix){
       return {ok:false,error:"Колонка rank_matrix не найдена в таблице request_forms. Выполните SQL/SUPABASE-REQUESTS-V113.sql в Supabase."};
     }
@@ -148,7 +145,6 @@ window.CGB_REQUESTS=(function(){
         if(v.expires_at){const t=new Date(v.expires_at).getTime();if(!isNaN(t)&&t<now) return false}
         return true;
       });
-      console.log("[REQ] checkActiveViolations("+stat+")="+matched.length,"total in reg:",data.length);
       return matched.length;
     }catch(e){console.warn("[REQ] checkActiveViolations exc:",e.message);return 0}
   }

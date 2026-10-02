@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
-<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<link rel="icon" href="images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="images/brand/logo.png">
 <title>Карта - ЦГБ №3 · ЦГБ №3</title>
-<link rel="icon" href="assets/images/brand/logo.png">
+<link rel="icon" href="images/brand/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=26">
+<link rel="stylesheet" href="css/style.css?v=26">
 <style id="cgb-admin-guard">
 [data-admin]{display:none !important}
 body.cgb-is-admin .nav a[data-admin],body.cgb-is-admin .footer-col a[data-admin]{display:inline-flex !important}
@@ -186,14 +186,14 @@ html,body{overflow:hidden}
   </div>
 </div>
 
-<script src="assets/js/core/async-state.js?v=1"></script>
-<script src="assets/js/core/supabase-loader.js?v=18"></script>
-<script src="assets/js/core/config.js?v=18"></script>
-<script src="assets/js/ui/main.js?v=23"></script>
-<script src="assets/js/ui/search-engine.js?v=18"></script>
-<script src="assets/js/core/auth.js?v=18"></script>
-<script src="assets/js/core/roles-engine.js?v=18"></script>
-<script src="assets/js/features/map-data.js?v=18"></script>
+<script src="js/core/async-state.js?v=1"></script>
+<script src="js/core/supabase-loader.js?v=18"></script>
+<script src="js/core/config.js?v=18"></script>
+<script src="js/ui/main.js?v=23"></script>
+<script src="js/ui/search-engine.js?v=18"></script>
+<script src="js/core/auth.js?v=18"></script>
+<script src="js/core/roles-engine.js?v=18"></script>
+<script src="js/features/map-data.js?v=18"></script>
 <script>
 (function(){
 "use strict";
@@ -332,7 +332,7 @@ function openInfoPanel(m){
   $("mapBtnList").classList.remove("on");
   var ipImg=$("mapIpImg");
   if(m.photo&&m.photo.indexOf("http")===0){
-    ipImg.innerHTML='<img src="'+m.photo+'" alt="'+esc(m.name)+'">';
+    ipImg.innerHTML='<img src="'+esc(window.CGB_SECURITY.url(m.photo,true))+'" alt="'+esc(m.name)+'">';
   }else if(m.photo){
     ipImg.innerHTML='<div class="map-info-img-empty">'+esc(m.photo)+'</div>';
   }else{
@@ -347,9 +347,9 @@ function openInfoPanel(m){
   var descEl=$("mapIpDesc");
   if(m.cat==="ТОЧКИ ПОСТАВОК"){
     var h="";
-    if(m.desc&&m.desc.indexOf("http")===0) h+='<img src="'+m.desc+'" alt="'+esc(m.name)+'">';
+    if(m.desc&&m.desc.indexOf("http")===0) h+='<img src="'+esc(window.CGB_SECURITY.url(m.desc,true))+'" alt="'+esc(m.name)+'">';
     else if(m.desc) h+='<p>'+esc(m.desc)+'</p>';
-    if(m.desc2&&m.desc2.indexOf("http")===0) h+='<img src="'+m.desc2+'" alt="'+esc(m.name)+' (2)">';
+    if(m.desc2&&m.desc2.indexOf("http")===0) h+='<img src="'+esc(window.CGB_SECURITY.url(m.desc2,true))+'" alt="'+esc(m.name)+' (2)">';
     descEl.innerHTML=h||'<span style="opacity:.6;font-style:italic">Нет описания</span>';
   }else{
     descEl.textContent=m.desc||"Описание отсутствует";

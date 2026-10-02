@@ -7,16 +7,18 @@ window.CGB_SEARCH=(function(){
   const CACHE_KEY="cgb-search-cache-v2";
   const TTL=5*60*1000;
   let cache=null;
+  let cacheUser="";
+  function userId(){const s=window.CGB_AUTH&&window.CGB_AUTH.state;return s&&s.user&&s.user.id||""}
 
   function readCache(){
     try{
       const c=JSON.parse(sessionStorage.getItem(CACHE_KEY)||"null");
-      if(c&&c.at&&Date.now()-c.at<TTL) return c.data;
+      if(c&&c.user===userId()&&c.at&&Date.now()-c.at<TTL) return c.data;
     }catch(e){}
     return null;
   }
   function writeCache(data){
-    try{sessionStorage.setItem(CACHE_KEY,JSON.stringify({at:Date.now(),data}))}catch(e){}
+    try{sessionStorage.setItem(CACHE_KEY,JSON.stringify({user:userId(),at:Date.now(),data}))}catch(e){}
   }
   function low(s){return String(s==null?"":s).toLowerCase()}
 
@@ -91,6 +93,8 @@ window.CGB_SEARCH=(function(){
   ];
 
   async function build(force){
+    const owner=userId();
+    if(cacheUser!==owner){cache=null;cacheUser=owner}
     if(!force){
       const c=cache||readCache();
       if(c){cache=c;return c}
@@ -203,6 +207,7 @@ window.CGB_SEARCH=(function(){
       window.CGB_USTAV_TOC.forEach(t=>data.push({group:"Разделы устава",title:t.label,hint:"Устав ЦГБ №3",href:"ustav.html#doc/ustav--"+t.id,kw:low(t.label)}));
     }
 
+    if(owner!==userId()) return STATIC.slice();
     cache=data;writeCache(data);
     return data;
   }

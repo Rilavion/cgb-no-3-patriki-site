@@ -74,8 +74,13 @@ window.CGB_TESTS=(function(){
     return {ok:true};
   }
 
-  async function fetchQuestions(testId){
+  async function fetchQuestions(testId,publicOnly){
     const c=await client();if(!c) return [];
+    if(publicOnly){
+      const {data,error}=await c.rpc("cgb_test_preview",{p_test_id:testId});
+      if(error) throw new Error(error.message);
+      return data||[];
+    }
     const {data}=await c.from("test_questions").select("*").eq("test_id",testId).order("sort",{ascending:true});
     return data||[];
   }
@@ -134,7 +139,7 @@ window.CGB_TESTS=(function(){
     const c=await client();if(!c) return {ok:false,error:"no client"};
     const s=window.CGB_AUTH&&window.CGB_AUTH.state;
     const name=(function(){try{return localStorage.getItem("cgb-my-display-name")||(s&&s.user&&s.user.email)||"admin"}catch(e){return "admin"}})();
-    const {error}=await c.from("test_blocks").upsert({test_id:testId,kind,value:String(value||"").trim(),reason:reason||null,blocked_by:s&&s.user?s.user.id:null,blocked_by_name:name},{onConflict:"test_id,kind,value"});
+    const {error}=await c.from("test_blocks").insert({test_id:testId,kind,value:String(value||"").trim(),reason:reason||null,blocked_by:s&&s.user?s.user.id:null,blocked_by_name:name});
     if(error) return {ok:false,error:error.message};
     return {ok:true};
   }
@@ -193,7 +198,10 @@ window.CGB_TESTS=(function(){
   async function resetAttempts(testId,staticId,discord){
     const c=await client();if(!c) return {ok:false,error:"no client"};
     let q=c.from("test_attempts").delete().eq("test_id",testId);
-    if(staticId&&discord) q=q.or(`static_id.eq.${staticId},discord.eq.${discord}`);
+    if(staticId&&discord){
+      const filterValue=v=>'"'+String(v).replace(/\\/g,"\\\\").replace(/"/g,'\\"')+'"';
+      q=q.or(`static_id.eq.${filterValue(staticId)},discord.eq.${filterValue(discord)}`);
+    }
     else if(staticId) q=q.eq("static_id",staticId);
     else if(discord) q=q.eq("discord",discord);
     else return {ok:false,error:"no key"};
@@ -263,20 +271,16 @@ window.CGB_TESTS=(function(){
   async function submitAttempt(payload){
     const c=await client();if(!c) return {ok:false,error:"no client"};
     if(!validStatic(payload.static_id)) return {ok:false,error:"Некорректный статик, ожидается 000-000"};
-    const {data,error}=await c.rpc("submit_test_attempt",{
-      p_test_id:payload.test_id,
-      p_fio:String(payload.fio||"").trim(),
-      p_static:String(payload.static_id||"").trim(),
-      p_discord:payload.discord?String(payload.discord).trim():null,
-      p_answers:payload.answers||{},
-      p_score:payload.score,
-      p_max:payload.max_score,
-      p_percent:payload.percent,
-      p_passed:payload.passed,
-      p_started:payload.started_at||new Date().toISOString()
-    });
+    const {data,error}=await c.rpc("cgb_finish_test",{p_token:payload.token,p_answers:payload.answers||{}});
     if(error) return {ok:false,error:error.message};
-    return {ok:true,attempt:{id:data}};
+    return {ok:true,attempt:data};
+  }
+
+  async function startAttempt(testId,fio,staticId,discord){
+    const c=await client();if(!c) return {ok:false,error:"no client"};
+    const {data,error}=await c.rpc("cgb_start_test",{p_test_id:testId,p_fio:fio,p_static:staticId,p_discord:discord});
+    if(error) return {ok:false,error:error.message};
+    return {ok:true,run:data};
   }
 
   async function requestResult(attemptId,channelId,pingDiscord,isRepeat){
@@ -320,5 +324,5 @@ window.CGB_TESTS=(function(){
     return data||[];
   }
 
-  return {esc,validStatic,slugify,resultChannelId,fetchCategories,saveCategory,removeCategory,fetchTests,fetchTest,saveTest,removeTest,fetchQuestions,saveQuestion,removeQuestion,reorderQuestions,fetchPingLines,savePingLine,removePingLine,fetchBlocks,addBlock,removeBlock,attemptsFor,checkBlocked,fetchAttempts,updateAttempt,resetAttempts,grade,pickQuestionsForRun,submitAttempt,requestResult,pollResult,fetchDsChannels};
+  return {esc,validStatic,slugify,resultChannelId,fetchCategories,saveCategory,removeCategory,fetchTests,fetchTest,saveTest,removeTest,fetchQuestions,saveQuestion,removeQuestion,reorderQuestions,fetchPingLines,savePingLine,removePingLine,fetchBlocks,addBlock,removeBlock,attemptsFor,checkBlocked,fetchAttempts,updateAttempt,resetAttempts,grade,pickQuestionsForRun,startAttempt,submitAttempt,requestResult,pollResult,fetchDsChannels};
 })();

@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
-<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<link rel="icon" href="images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="images/brand/logo.png">
 <title>ЦГБ №3 — Тестирование</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=26">
+<link rel="stylesheet" href="css/style.css?v=26">
 <style id="cgb-admin-guard">
 [data-admin]{display:none !important}
 [data-staff]{display:none !important}
@@ -28,7 +28,7 @@ body.cgb-is-staff [data-staff]:not(.nav a){display:initial !important}
 <header class="topbar">
   <div class="topbar-inner">
     <a class="brand" href="index.html">
-      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ВС"></div>
+      <div class="brand-icon"><img src="images/brand/logo.png" alt="ВС"></div>
       <div class="brand-text"><span class="brand-label">Министерство Здравоохранения</span><span class="brand-name">ЦГБ №3 · Центральная Городская</span></div>
     </a>
     <nav class="nav" id="mainNav">
@@ -188,18 +188,18 @@ body.cgb-is-staff [data-staff]:not(.nav a){display:initial !important}
 
 <div class="fab-stack"><button class="fab" id="fabUp" title="Наверх"><svg viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8z"/></svg></button></div>
 
-<script src="assets/js/core/async-state.js?v=1"></script>
-<script src="assets/js/core/supabase-loader.js?v=18"></script>
-<script src="assets/js/core/config.js?v=18"></script>
-<script src="assets/js/core/auth.js?v=18"></script>
-<script src="assets/js/core/roles-engine.js?v=18"></script>
-<script src="assets/js/features/tests-engine.js?v=20"></script>
-<script src="assets/js/ui/main.js?v=23"></script>
-<script src="assets/js/ui/search-engine.js?v=18"></script>
-<script src="assets/js/utils/format-utils.js?v=18"></script>
-<script src="assets/js/ui/holiday-engine.js?v=18"></script>
-<script src="assets/js/ui/settings-panel.js?v=18"></script>
-<script src="assets/js/ui/sound-engine.js?v=18"></script>
+<script src="js/core/async-state.js?v=1"></script>
+<script src="js/core/supabase-loader.js?v=18"></script>
+<script src="js/core/config.js?v=18"></script>
+<script src="js/core/auth.js?v=18"></script>
+<script src="js/core/roles-engine.js?v=18"></script>
+<script src="js/features/tests-engine.js?v=20"></script>
+<script src="js/ui/main.js?v=23"></script>
+<script src="js/ui/search-engine.js?v=18"></script>
+<script src="js/utils/format-utils.js?v=18"></script>
+<script src="js/ui/holiday-engine.js?v=18"></script>
+<script src="js/ui/settings-panel.js?v=18"></script>
+<script src="js/ui/sound-engine.js?v=18"></script>
 <script>
 document.getElementById("year").textContent=new Date().getFullYear();
 const $=id=>document.getElementById(id);
@@ -266,7 +266,7 @@ function renderList(){
               ${t.time_limit_minutes?`<span title="Лимит">⏱ ${t.time_limit_minutes}м</span>`:""}
             </div>
             <div class="test-card-acts">
-              <a class="btn btn-gold" href="${esc(url)}">Начать тест →</a>
+              <a class="btn btn-gold" href="${esc(window.CGB_SECURITY.url(url))}">Начать тест →</a>
               <a class="btn btn-ghost btn-sm" data-perm-edit-test="1" href="test-editor?t=${encodeURIComponent(t.id)}" style="display:none">✎</a>
             </div>
           </div>`;
@@ -319,11 +319,11 @@ async function renderAdminCats(){
   if(!CATS.length){box.innerHTML=`<div class="apps-empty"><p>Категорий нет</p></div>`;return}
   box.innerHTML=CATS.map(c=>`<div class="tests-cat-row">
     <span class="tests-cat-dot" style="background:${esc(c.color)}"></span>
-    <input type="text" data-cat-name="${c.id}" value="${esc(c.name)}" class="vp-search" style="flex:1">
-    <input type="color" data-cat-color="${c.id}" value="${esc(c.color||'#22d3ee')}" style="width:44px;height:36px;border-radius:6px;border:1px solid var(--gold-b);cursor:pointer">
-    <input type="number" data-cat-sort="${c.id}" value="${c.sort||100}" style="width:70px" class="vp-search">
-    <button class="btn btn-ghost btn-sm" data-cat-save="${c.id}">💾</button>
-    <button class="btn btn-ghost btn-sm" data-cat-del="${c.id}">🗑</button>
+    <input type="text" data-cat-name="${esc(c.id)}" value="${esc(c.name)}" class="vp-search" style="flex:1">
+    <input type="color" data-cat-color="${esc(c.id)}" value="${esc(c.color||'#22d3ee')}" style="width:44px;height:36px;border-radius:6px;border:1px solid var(--gold-b);cursor:pointer">
+    <input type="number" data-cat-sort="${esc(c.id)}" value="${c.sort||100}" style="width:70px" class="vp-search">
+    <button class="btn btn-ghost btn-sm" data-cat-save="${esc(c.id)}">💾</button>
+    <button class="btn btn-ghost btn-sm" data-cat-del="${esc(c.id)}">🗑</button>
   </div>`).join("");
   box.querySelectorAll("[data-cat-save]").forEach(b=>b.addEventListener("click",async()=>{
     const id=b.dataset.catSave;

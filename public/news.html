@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
-<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<link rel="icon" href="images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="images/brand/logo.png">
 <title>Новости — ЦГБ №3</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=26">
+<link rel="stylesheet" href="css/style.css?v=26">
 </head>
 <body>
 <canvas id="bgCanvas"></canvas>
@@ -19,7 +19,7 @@
 <header class="topbar">
   <div class="topbar-inner">
         <a class="brand" href="index.html">
-      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ЦГБ"></div>
+      <div class="brand-icon"><img src="images/brand/logo.png" alt="ЦГБ"></div>
       <div class="brand-text">
         <span class="brand-label">Министерство Здравоохранения</span>
         <span class="brand-name">ЦГБ №3 · Центральная Городская</span>
@@ -201,21 +201,21 @@
   </div>
 </div>
 
-<script src="assets/js/core/async-state.js?v=1"></script>
-<script src="assets/js/core/supabase-loader.js?v=18"></script>
-<script src="assets/js/core/config.js?v=18"></script>
-<script src="assets/js/ui/main.js?v=23"></script>
-<script src="assets/js/ui/holiday-engine.js?v=18"></script>
-<script src="assets/js/ui/sound-engine.js?v=18"></script>
-<script src="assets/js/features/faq-engine.js?v=18"></script>
-<script src="assets/js/ui/search-engine.js?v=18"></script>
-<script src="assets/js/ui/notify-engine.js?v=19"></script>
-<script src="assets/js/core/auth.js?v=18"></script>
-<script src="assets/js/core/roles-engine.js?v=18"></script>
-<script src="assets/js/features/news.js?v=19"></script>
-<script src="assets/js/features/news-reader.js?v=19"></script>
-<script src="assets/js/ui/select-enhance.js?v=18"></script>
-<script src="assets/js/utils/draft-engine.js?v=18"></script>
+<script src="js/core/async-state.js?v=1"></script>
+<script src="js/core/supabase-loader.js?v=18"></script>
+<script src="js/core/config.js?v=18"></script>
+<script src="js/ui/main.js?v=23"></script>
+<script src="js/ui/holiday-engine.js?v=18"></script>
+<script src="js/ui/sound-engine.js?v=18"></script>
+<script src="js/features/faq-engine.js?v=18"></script>
+<script src="js/ui/search-engine.js?v=18"></script>
+<script src="js/ui/notify-engine.js?v=19"></script>
+<script src="js/core/auth.js?v=18"></script>
+<script src="js/core/roles-engine.js?v=18"></script>
+<script src="js/features/news.js?v=19"></script>
+<script src="js/features/news-reader.js?v=19"></script>
+<script src="js/ui/select-enhance.js?v=18"></script>
+<script src="js/utils/draft-engine.js?v=18"></script>
 <script>
 document.getElementById("year").textContent=new Date().getFullYear();
 
@@ -234,10 +234,10 @@ function esc(s){return CGB_NEWS.esc(s)}
 
 function heroHtml(n){
   const heroImg=CGB_NEWS.firstImage(n);
-  const img=heroImg?`<img src="${esc(heroImg)}" alt="${esc(n.title)}" loading="lazy">`:"";
+  const img=heroImg?`<img src="${esc(window.CGB_SECURITY.url(heroImg,true))}" alt="${esc(n.title)}" loading="lazy">`:"";
   const t=CGB_NEWS.tagInfo(n.tag);
   const d=CGB_NEWS.deptInfo(n.dept);
-  return `<div class="news-hero" data-news-id="${n.id}">
+  return `<div class="news-hero" data-news-id="${esc(n.id)}">
     <div class="news-hero-thumb">${img}
       <div class="news-thumb-badges" style="top:20px;left:20px">
         <span class="news-thumb-tag ${t.cls}">${t.label}</span>
@@ -260,10 +260,10 @@ function cardHtml(n){
 
 function itemHtml(n){
   const heroImg=CGB_NEWS.firstImage(n);
-  const img=heroImg?`<img src="${esc(heroImg)}" alt="${esc(n.title)}" loading="lazy">`:"";
+  const img=heroImg?`<img src="${esc(window.CGB_SECURITY.url(heroImg,true))}" alt="${esc(n.title)}" loading="lazy">`:"";
   const t=CGB_NEWS.tagInfo(n.tag);
   const d=CGB_NEWS.deptInfo(n.dept);
-  return `<article class="news-item" data-news-id="${n.id}">
+  return `<article class="news-item" data-news-id="${esc(n.id)}">
     <div class="news-thumb">${img}
       <div class="news-thumb-badges">
         <span class="news-thumb-tag ${t.cls}">${t.label}</span>

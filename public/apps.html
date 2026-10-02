@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
-<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<link rel="icon" href="images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="images/brand/logo.png">
 <title> Электронные заявления</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=26">
+<link rel="stylesheet" href="css/style.css?v=26">
 <style id="cgb-admin-guard">
 [data-admin]{display:none !important}
 [data-staff]{display:none !important}
@@ -26,7 +26,7 @@ body.cgb-is-staff [data-staff]:not(.nav a){display:initial !important}
 <header class="topbar">
   <div class="topbar-inner">
     <a class="brand" href="index.html">
-      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ВС"></div>
+      <div class="brand-icon"><img src="images/brand/logo.png" alt="ВС"></div>
       <div class="brand-text">
         <span class="brand-label">Министерство Здравоохранения</span>
         <span class="brand-name">ЦГБ №3 · Центральная Городская</span>
@@ -156,7 +156,7 @@ body.cgb-is-staff [data-staff]:not(.nav a){display:initial !important}
   <div class="container">
     <div class="footer-inner">
       <div class="footer-brand">
-        <div class="brand-icon" style="width:44px;height:44px"><img src="assets/images/brand/logo.png" alt=""></div>
+        <div class="brand-icon" style="width:44px;height:44px"><img src="images/brand/logo.png" alt=""></div>
         <p style="color:var(--muted);font-size:13px;margin-top:12px">Служебный раздел. Доступ ограничен.</p>
       </div>
       <div class="footer-col">
@@ -253,22 +253,22 @@ body.cgb-is-staff [data-staff]:not(.nav a){display:initial !important}
   </div>
 </div>
 
-<script src="assets/js/core/async-state.js?v=1"></script>
-<script src="assets/js/core/supabase-loader.js?v=17"></script>
-<script src="assets/js/core/config.js?v=17"></script>
-<script src="assets/js/core/auth.js?v=17"></script>
-<script src="assets/js/core/roles-engine.js?v=17"></script>
-<script src="assets/js/features/apps-engine.js?v=17"></script>
-<script src="assets/js/ui/main.js?v=23"></script>
-<script src="assets/js/utils/format-utils.js?v=17"></script>
-<script src="assets/js/ui/holiday-engine.js?v=17"></script>
-<script src="assets/js/ui/sound-engine.js?v=17"></script>
-<script src="assets/js/ui/settings-panel.js?v=17"></script>
-<script src="assets/js/features/faq-engine.js?v=17"></script>
-<script src="assets/js/ui/search-engine.js?v=17"></script>
-<script src="assets/js/utils/ds-cache.js?v=17"></script>
-<script src="assets/js/ui/notify-engine.js?v=19"></script>
-<script src="assets/js/ui/notify-live.js?v=17"></script>
+<script src="js/core/async-state.js?v=1"></script>
+<script src="js/core/supabase-loader.js?v=17"></script>
+<script src="js/core/config.js?v=17"></script>
+<script src="js/core/auth.js?v=17"></script>
+<script src="js/core/roles-engine.js?v=17"></script>
+<script src="js/features/apps-engine.js?v=17"></script>
+<script src="js/ui/main.js?v=23"></script>
+<script src="js/utils/format-utils.js?v=17"></script>
+<script src="js/ui/holiday-engine.js?v=17"></script>
+<script src="js/ui/sound-engine.js?v=17"></script>
+<script src="js/ui/settings-panel.js?v=17"></script>
+<script src="js/features/faq-engine.js?v=17"></script>
+<script src="js/ui/search-engine.js?v=17"></script>
+<script src="js/utils/ds-cache.js?v=17"></script>
+<script src="js/ui/notify-engine.js?v=19"></script>
+<script src="js/ui/notify-live.js?v=17"></script>
 <script>
 document.getElementById("year").textContent=new Date().getFullYear();
 const $=id=>document.getElementById(id);
@@ -385,7 +385,7 @@ function renderField(k,v,rowId){
     <div class="apps-field-key">${key}</div>
     <div class="apps-field-val">
       <div class="apps-media-controls">
-        <a class="apps-media-btn apps-media-btn-open" href="${esc(url)}" target="_blank" rel="noopener">
+        <a class="apps-media-btn apps-media-btn-open" href="${esc(window.CGB_SECURITY.url(url))}" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3zM5 5h5v2H5v12h12v-5h2v5c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2z"/></svg>
           Открыть в новом окне
         </a>
@@ -396,10 +396,10 @@ function renderField(k,v,rowId){
         <span class="apps-media-url">${esc(url)}</span>
       </div>
       <div class="apps-media-frame" id="frame-${uid}" hidden>
-        <iframe src="${esc(url)}" loading="lazy" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" allow="fullscreen"></iframe>
+        <iframe src="${esc(window.CGB_SECURITY.url(url,true))}" loading="lazy" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" allow="fullscreen"></iframe>
         <div class="apps-media-frame-note">Если превью пустое — сайт запрещает встраивание. Откройте в новом окне ↗</div>
       </div>
-      ${urls.length>1?`<div class="apps-media-more">Дополнительные ссылки: ${urls.slice(1).map(u=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(u)}</a>`).join(", ")}</div>`:""}
+      ${urls.length>1?`<div class="apps-media-more">Дополнительные ссылки: ${urls.slice(1).map(u=>`<a href="${esc(window.CGB_SECURITY.url(u))}" target="_blank" rel="noopener">${esc(u)}</a>`).join(", ")}</div>`:""}
     </div>
   </div>`;
 }
@@ -426,7 +426,7 @@ function renderCard(r,i){
     <button class="apps-btn apps-btn-arc" data-act="archive" title="В архив">▣ В архив</button>
     ${status!=="new"?`<button class="apps-btn apps-btn-back" data-act="restore" title="Вернуть в новые">↺ Вернуть</button>`:""}
   `);
-  const link=r.message_link?`<a class="apps-card-link" href="${esc(r.message_link)}" target="_blank" rel="noopener" title="Открыть в Discord">↗</a>`:"";
+  const link=r.message_link?`<a class="apps-card-link" href="${esc(window.CGB_SECURITY.url(r.message_link))}" target="_blank" rel="noopener" title="Открыть в Discord">↗</a>`:"";
   return `<article class="apps-card" data-id="${r.id}">
     <div class="apps-card-head">
       <div class="apps-card-idx">#${String(i+1).padStart(3,"0")}</div>

@@ -64,10 +64,10 @@ window.CGB_NEWS=(function(){
   function deptsList(){return Object.keys(DEPTS).map(k=>({key:k,label:DEPTS[k].label}))}
 
   function firstImage(n){
-    if(n.image) return n.image;
+    if(n.image) return window.CGB_SECURITY.url(n.image,true);
     if(n.images){
-      if(Array.isArray(n.images)&&n.images.length) return n.images[0];
-      if(typeof n.images==="string"&&n.images.trim()) return n.images.split(/[\s,]+/).filter(Boolean)[0];
+      if(Array.isArray(n.images)&&n.images.length) return window.CGB_SECURITY.url(n.images[0],true);
+      if(typeof n.images==="string"&&n.images.trim()) return window.CGB_SECURITY.url(n.images.split(/[\s,]+/).filter(Boolean)[0],true);
     }
     return "";
   }
@@ -79,7 +79,7 @@ window.CGB_NEWS=(function(){
       if(Array.isArray(n.images)) n.images.forEach(x=>{if(x&&arr.indexOf(x)<0) arr.push(x)});
       else if(typeof n.images==="string") n.images.split(/[\s,]+/).filter(Boolean).forEach(x=>{if(arr.indexOf(x)<0) arr.push(x)});
     }
-    return arr;
+    return arr.map(u=>window.CGB_SECURITY.url(u,true)).filter(Boolean);
   }
 
   function cardHtml(n){
@@ -87,7 +87,7 @@ window.CGB_NEWS=(function(){
     const imgHtml=img?`<img src="${esc(img)}" alt="${esc(n.title)}" loading="lazy">`:"";
     const t=tagInfo(n.tag);
     const d=deptInfo(n.dept);
-    return `<div class="news-card" data-news-id="${n.id}">
+    return `<div class="news-card" data-news-id="${esc(n.id)}">
       <div class="news-thumb">
         <div class="news-thumb-badges">
           <span class="news-thumb-tag ${t.cls}">${t.label}</span>

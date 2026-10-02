@@ -5,7 +5,11 @@
   "description": "Статический frontend портала ЦГБ №3",
   "type": "module",
   "scripts": {
-    "check": "node tools/check-site.mjs"
+    "check": "node tools/check-site.mjs",
+    "check:security": "node tools/check-security.mjs"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.5.8"
   },
   "engines": {
     "node": ">=20.11.0"

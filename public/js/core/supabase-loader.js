@@ -1,10 +1,7 @@
 (function(){
   if(window.supabase){console.log("[CGB_SB_LOADER] supabase уже загружен");return}
   const sources=[
-    "assets/vendor/supabase.js",
-    "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.8/dist/umd/supabase.js",
-    "https://unpkg.com/@supabase/supabase-js@2.110.8/dist/umd/supabase.js",
-    "https://esm.sh/@supabase/supabase-js@2.110.8/dist/umd/supabase.js"
+    "vendor/supabase.js"
   ];
   let idx=0;
   function tryLoad(){

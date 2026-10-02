@@ -1,5 +1,5 @@
 window.CGB_USTAV=(function(){
-  const DEFAULT_EMBLEM="assets/images/brand/logo.png";
+  const DEFAULT_EMBLEM="images/brand/logo.png";
 
   // На сайте ОДИН документ — Устав (слаг ustav, старый svod-ustavov подхватывается
   // страницей ustav.html как легаси). Армейских заглушек больше нет: если база
@@ -18,10 +18,10 @@ window.CGB_USTAV=(function(){
   function assetUrl(value){
     const raw=String(value||"").trim();
     if(!raw) return raw;
-    if(raw==="logo.png"||raw==="/logo.png") return "assets/images/brand/logo.png";
-    if(raw==="logo.svg"||raw==="/logo.svg") return "assets/images/brand/logo.svg";
-    if(raw==="fon.png"||raw==="/fon.png") return "assets/images/brand/fon.png";
-    return raw.replace(/^\/?assets\/images\/ustav\//,"assets/ustav/").replace(/^\/?assets\/images\/map\//,"assets/");
+    if(raw==="logo.png"||raw==="/logo.png") return "images/brand/logo.png";
+    if(raw==="logo.svg"||raw==="/logo.svg") return "images/brand/logo.svg";
+    if(raw==="fon.png"||raw==="/fon.png") return "images/brand/fon.png";
+    return window.CGB_SECURITY.url(raw.replace(/^\/?assets\/images\/ustav\//,"ustav/").replace(/^\/?assets\/images\/map\//,""),true);
   }
   function paragraphs(text){
     return String(text||"").split(/\n{2,}/).map(p=>p.trim()).filter(Boolean).map(p=>`<p>${esc(p).replace(/\n/g,"<br>")}</p>`).join("");

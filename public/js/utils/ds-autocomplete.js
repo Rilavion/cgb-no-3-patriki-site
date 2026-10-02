@@ -8,6 +8,8 @@ window.CGB_DSAC=(function(){
   let loading=null;
   const LS_KEY="cgb-dsac-members-v2";
   const LS_TTL=10*60*1000;
+  let loadedUser="";
+  function userId(){const s=window.CGB_AUTH&&window.CGB_AUTH.state;return s&&s.user&&s.user.id||""}
 
   function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 
@@ -43,12 +45,12 @@ window.CGB_DSAC=(function(){
 
   function readLS(){
     try{
-      const j=JSON.parse(localStorage.getItem(LS_KEY)||"null");
-      if(j&&j.at&&Date.now()-j.at<LS_TTL&&Array.isArray(j.data)) return j.data;
+      const j=JSON.parse(sessionStorage.getItem(LS_KEY)||"null");
+      if(userId()&&j&&j.user===userId()&&j.at&&Date.now()-j.at<LS_TTL&&Array.isArray(j.data)) return j.data;
     }catch(e){}
     return null;
   }
-  function writeLS(list){try{localStorage.setItem(LS_KEY,JSON.stringify({at:Date.now(),data:list}))}catch(e){}}
+  function writeLS(list){try{sessionStorage.setItem(LS_KEY,JSON.stringify({user:userId(),at:Date.now(),data:list}))}catch(e){}}
 
   async function waitForClient(timeoutMs){
     const deadline=Date.now()+(timeoutMs||10000);
@@ -61,6 +63,10 @@ window.CGB_DSAC=(function(){
   }
 
   async function load(force){
+    if(window.CGB_AUTH&&window.CGB_AUTH.whenReady) await window.CGB_AUTH.whenReady(10000);
+    const owner=userId();
+    if(owner!==loadedUser){DS_LIST=null;loadedUser=owner}
+    if(!owner) return [];
     if(DS_LIST && DS_LIST.length && !force) return DS_LIST;
     if(loading) return loading;
     loading=(async()=>{
@@ -73,7 +79,9 @@ window.CGB_DSAC=(function(){
         const {data,error}=await c.from("ds_members").select("parsed_fio,parsed_static,parsed_dept,discord_id,raw_nick,display_name,username").eq("active",true).limit(2000);
         if(error){
           console.warn("[dsac] load:",error.message);
-          return readLS()||[];
+          DS_LIST=null;
+          try{sessionStorage.removeItem(LS_KEY)}catch(e){}
+          return [];
         }
         const seen=new Set();
         const list=(data||[]).map(m=>{
@@ -92,9 +100,10 @@ window.CGB_DSAC=(function(){
           const k=m.fio+"|"+m.static;
           if(seen.has(k)) return false; seen.add(k); return true;
         });
-        if(list.length){ DS_LIST=list; writeLS(list); }
+        if(owner!==userId()) return [];
+        DS_LIST=list;writeLS(list);
         console.log("[dsac] loaded",list.length);
-        return list.length?list:(readLS()||[]);
+        return list;
       }catch(e){
         console.warn("[dsac]:",e.message);
         return readLS()||[];
@@ -300,5 +309,5 @@ window.CGB_DSAC=(function(){
     setTimeout(bindAll,3000);
   }
 
-  return { load, bind, bindAll, parseNick, invalidate(){ DS_LIST=null; try{localStorage.removeItem(LS_KEY)}catch(e){} } };
+  return { load, bind, bindAll, parseNick, invalidate(){ DS_LIST=null; try{localStorage.removeItem(LS_KEY);sessionStorage.removeItem(LS_KEY)}catch(e){} } };
 })();

@@ -1,7 +1,7 @@
 window.CGB_DOC_TEMPLATES=(function(){
   "use strict";
 
-  const EMBLEM="assets/images/brand/logo.png";
+  const EMBLEM="images/brand/logo.png";
   const GROUPS={
     requisites:"Реквизиты документа",
     addressee:"Адресат",

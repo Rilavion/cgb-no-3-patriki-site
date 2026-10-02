@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
-<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<link rel="icon" href="images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="images/brand/logo.png">
 <title>ЦГБ №3 — Прохождение теста</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=26">
+<link rel="stylesheet" href="css/style.css?v=26">
 </head>
 <body>
 <canvas id="bgCanvas"></canvas>
@@ -18,7 +18,7 @@
 <header class="topbar">
   <div class="topbar-inner">
     <a class="brand" href="index.html">
-      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ВС"></div>
+      <div class="brand-icon"><img src="images/brand/logo.png" alt="ВС"></div>
       <div class="brand-text"><span class="brand-label">Министерство Здравоохранения</span><span class="brand-name">ЦГБ №3 · Тестирование</span></div>
     </a>
     <div class="header-actions" style="margin-left:auto">
@@ -43,15 +43,15 @@
   <div class="container"><div class="footer-bottom"><span>© <span id="year"></span> · ЦГБ №3 · Центральная Городская</span><span class="footer-note">🐞 Нашли баг? Обратитесь: <b>@rilavion</b></span></div></div>
 </footer>
 
-<script src="assets/js/core/async-state.js?v=1"></script>
-<script src="assets/js/core/supabase-loader.js?v=18"></script>
-<script src="assets/js/core/config.js?v=18"></script>
-<script src="assets/js/core/auth.js?v=18"></script>
-<script src="assets/js/core/roles-engine.js?v=18"></script>
-<script src="assets/js/features/tests-engine.js?v=20"></script>
-<script src="assets/js/ui/main.js?v=23"></script>
-<script src="assets/js/ui/search-engine.js?v=18"></script>
-<script src="assets/js/utils/format-utils.js?v=18"></script>
+<script src="js/core/async-state.js?v=1"></script>
+<script src="js/core/supabase-loader.js?v=18"></script>
+<script src="js/core/config.js?v=18"></script>
+<script src="js/core/auth.js?v=18"></script>
+<script src="js/core/roles-engine.js?v=18"></script>
+<script src="js/features/tests-engine.js?v=20"></script>
+<script src="js/ui/main.js?v=23"></script>
+<script src="js/ui/search-engine.js?v=18"></script>
+<script src="js/utils/format-utils.js?v=18"></script>
 <script>
 document.getElementById("year").textContent=new Date().getFullYear();
 const $=id=>document.getElementById(id);
@@ -64,13 +64,14 @@ let TEST=null,QS=[],PINGS=[],BLOCKS=[];
 let USER={fio:"",static_id:"",discord:""};
 let ANSWERS={};
 let STARTED_AT=null,TIMER=null,DEADLINE=null;
+let RUN_TOKEN=null,SUBMITTING=false,STARTING=false;
 
 async function boot(){
   if(!TID){root.innerHTML=`<div class="apps-empty"><h3>Тест не указан</h3><p><a href="tests.html" data-page="tests.html">← К списку тестов</a></p></div>`;return}
   TEST=await CGB_TESTS.fetchTest(TID);
   if(!TEST){root.innerHTML=`<div class="apps-empty"><h3>Тест не найден</h3><p>Возможно он ещё не опубликован или ссылка устарела.<br><a href="tests.html" data-page="tests.html">← К списку тестов</a></p></div>`;return}
   document.title="Тест · "+TEST.title;
-  [QS,PINGS,BLOCKS]=await Promise.all([CGB_TESTS.fetchQuestions(TEST.id),CGB_TESTS.fetchPingLines(TEST.id),CGB_TESTS.fetchBlocks(TEST.id)]);
+  [QS,PINGS]=await Promise.all([CGB_TESTS.fetchQuestions(TEST.id,true),CGB_TESTS.fetchPingLines(TEST.id)]);
   renderIntro();
 }
 
@@ -111,6 +112,7 @@ function renderIntro(){
 }
 
 async function tryStart(){
+  if(STARTING) return;
   const fio=$("fFio").value.trim();
   const st=$("fStatic").value.trim();
   const dc=$("fDiscord").value.trim();
@@ -120,6 +122,8 @@ async function tryStart(){
   if(!CGB_TESTS.validStatic(st)){msg.className="form-msg error";msg.textContent="Статик должен быть в формате 000-000";return}
   if(!dc){msg.className="form-msg error";msg.textContent="Введите Discord для получения результата";return}
   if(!QS.length){msg.className="form-msg error";msg.textContent="В тесте нет вопросов";return}
+  STARTING=true;
+  try{
   msg.className="form-msg info";msg.textContent="Проверка...";
   const bl=await CGB_TESTS.checkBlocked(TEST.id,st,dc);
   if(bl.blocked){msg.className="form-msg error";msg.textContent="Прохождение заблокировано: "+bl.reason;return}
@@ -127,18 +131,24 @@ async function tryStart(){
     const att=await CGB_TESTS.attemptsFor(TEST.id,st,dc);
     if(att.count>=TEST.max_attempts){msg.className="form-msg error";msg.textContent="Исчерпан лимит попыток ("+att.count+"/"+TEST.max_attempts+"). Обратитесь к СС для сброса.";return}
   }
+  $("fStartBtn").disabled=true;
+  const started=await CGB_TESTS.startAttempt(TEST.id,fio,st,dc);
+  if(!started.ok){msg.className="form-msg error";msg.textContent=started.error;$("fStartBtn").disabled=false;return}
+  RUN_TOKEN=started.run.token;
+  ACTIVE_QS=started.run.questions;
   msg.className="form-msg";msg.textContent="";
   USER={fio,static_id:st,discord:dc};
   ANSWERS={};
-  STARTED_AT=new Date().toISOString();
-  if(TEST.time_limit_minutes){DEADLINE=Date.now()+TEST.time_limit_minutes*60*1000}
+  STARTED_AT=started.run.started_at;
+  if(TEST.time_limit_minutes){DEADLINE=new Date(started.run.expires_at).getTime()}
   renderQuestions();
+  }catch(error){msg.className="form-msg error";msg.textContent=error.message}
+  finally{STARTING=false;const button=$("fStartBtn");if(button)button.disabled=false}
 }
 
 let ACTIVE_QS=[];
 
 function renderQuestions(){
-  ACTIVE_QS=CGB_TESTS.pickQuestionsForRun(QS,TEST);
   const graded=ACTIVE_QS.filter(q=>q.kind!=="prefilled");
   const html=[`<div class="test-run">
     <div class="test-run-head">
@@ -168,7 +178,7 @@ function renderQuestions(){
       html.push(`<div class="test-q" data-qid="${q.id}">
         <div class="test-q-num">Вопрос ${vidx} из ${graded.length} <span class="tq-pts">${q.points||1} балл${(q.points||1)>1?"а":""}</span></div>
         <div class="test-q-text">${esc(q.text).replace(/\n/g,"<br>")}</div>
-        ${(q.images||[]).length?`<div class="test-q-images">${q.images.map(u=>`<img src="${esc(u)}" alt="" onerror="this.style.display='none'">`).join("")}</div>`:""}
+        ${(q.images||[]).length?`<div class="test-q-images">${q.images.map(u=>`<img src="${esc(window.CGB_SECURITY.url(u,true))}" alt="" onerror="this.style.display='none'">`).join("")}</div>`:""}
         <div class="te-hint" style="margin:8px 0 4px">↕ Расставьте пункты в правильном порядке (кнопки ↑ / ↓)</div>
         <div class="test-q-order" data-ord="${q.id}">
           ${items.map(t=>`<div class="test-ord-item" data-val="${esc(t)}">
@@ -183,11 +193,11 @@ function renderQuestions(){
     html.push(`<div class="test-q" data-qid="${q.id}">
       <div class="test-q-num">Вопрос ${vidx} из ${graded.length} <span class="tq-pts">${q.points||1} балл${(q.points||1)>1?"а":""}</span></div>
       <div class="test-q-text">${esc(q.text).replace(/\n/g,"<br>")}</div>
-      ${(q.images||[]).length?`<div class="test-q-images">${q.images.map(u=>`<img src="${esc(u)}" alt="" onerror="this.style.display='none'">`).join("")}</div>`:""}
+      ${(q.images||[]).length?`<div class="test-q-images">${q.images.map(u=>`<img src="${esc(window.CGB_SECURITY.url(u,true))}" alt="" onerror="this.style.display='none'">`).join("")}</div>`:""}
       <div class="test-q-opts">
         ${(q.options||[]).map((o,oi)=>{const oim=(q.option_images||[])[oi];return `<label class="test-q-opt">
           <input type="${q.kind==="multi"?"checkbox":"radio"}" name="q_${q.id}" value="${esc(o)}">
-          <span><span class="test-q-opt-txt">${esc(o)}</span>${oim?`<img class="test-q-opt-img" src="${esc(oim)}" alt="" onerror="this.style.display='none'">`:""}</span>
+          <span><span class="test-q-opt-txt">${esc(o)}</span>${oim?`<img class="test-q-opt-img" src="${esc(window.CGB_SECURITY.url(oim,true))}" alt="" onerror="this.style.display='none'">`:""}</span>
         </label>`}).join("")}
       </div>
     </div>`);
@@ -243,6 +253,7 @@ function startTimer(){
 }
 
 async function submitTest(auto){
+  if(SUBMITTING) return;
   const msg=$("tSubMsg");
   const gradedQs=ACTIVE_QS.filter(q=>q.kind!=="prefilled");
   if(!auto){
@@ -265,18 +276,15 @@ async function submitTest(auto){
     if(q.kind==="single") ANSWERS[q.id]=inputs.length?inputs[0].value:null;
     else ANSWERS[q.id]=Array.from(inputs).map(i=>i.value);
   }
-  const graded=CGB_TESTS.grade(ACTIVE_QS,ANSWERS);
-  const passed=graded.percent>=(TEST.pass_score||70);
+  SUBMITTING=true;
   msg.className="form-msg info";msg.textContent="Отправка результата...";
   $("tSubmitBtn").disabled=true;
   const r=await CGB_TESTS.submitAttempt({
     test_id:TEST.id,fio:USER.fio,static_id:USER.static_id,discord:USER.discord,
-    answers:ANSWERS,score:graded.score,max_score:graded.max_score,percent:graded.percent,
-    passed:passed,started_at:STARTED_AT
+    answers:ANSWERS,token:RUN_TOKEN
   });
-  if(!r.ok){msg.className="form-msg error";msg.textContent=r.error;$("tSubmitBtn").disabled=false;return}
-  const delivery=await CGB_TESTS.requestResult(r.attempt.id,CGB_TESTS.resultChannelId(TEST),USER.discord,false);
-  renderResult(graded,passed,delivery);
+  if(!r.ok){SUBMITTING=false;msg.className="form-msg error";msg.textContent=r.error;$("tSubmitBtn").disabled=false;return}
+  renderResult(r.attempt,r.attempt.passed,{ok:true});
 }
 
 function renderResult(graded,passed,delivery){

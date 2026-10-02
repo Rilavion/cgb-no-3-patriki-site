@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
-<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<link rel="icon" href="images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="images/brand/logo.png">
 <title>ЦГБ №3 — Рассмотрение жалоб</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=26">
+<link rel="stylesheet" href="css/style.css?v=26">
 <style id="cgb-admin-guard">
 [data-admin]{display:none !important}
 [data-staff]{display:none !important}
@@ -26,7 +26,7 @@ body.cgb-is-staff [data-staff]:not(.nav a){display:initial !important}
 <header class="topbar">
   <div class="topbar-inner">
     <a class="brand" href="index.html">
-      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ВС"></div>
+      <div class="brand-icon"><img src="images/brand/logo.png" alt="ВС"></div>
       <div class="brand-text">
         <span class="brand-label">Администрация</span>
         <span class="brand-name">Рассмотрение жалоб</span>
@@ -302,23 +302,23 @@ body.cgb-is-staff [data-staff]:not(.nav a){display:initial !important}
 
 <footer class="footer"><div class="container"><div class="footer-bottom"><span>© <span id="year"></span> · ЦГБ №3 · Центральная Городская</span><span class="footer-note">🐞 Нашли баг? Обратитесь: <b>@rilavion</b></span></div></div></footer>
 
-<script src="assets/js/core/async-state.js?v=1"></script>
-<script src="assets/js/core/supabase-loader.js?v=17"></script>
-<script src="assets/js/core/config.js?v=17"></script>
-<script src="assets/js/utils/ds-autocomplete.js?v=17"></script>
-<script src="assets/js/ui/main.js?v=23"></script>
-<script src="assets/js/ui/holiday-engine.js?v=17"></script>
-<script src="assets/js/ui/settings-panel.js?v=17"></script>
-<script src="assets/js/ui/sound-engine.js?v=17"></script>
-<script src="assets/js/core/auth.js?v=17"></script>
-<script src="assets/js/core/roles-engine.js?v=17"></script>
-<script src="assets/js/ui/search-engine.js?v=17"></script>
-<script src="assets/js/utils/ds-cache.js?v=17"></script>
-<script src="assets/js/ui/notify-engine.js?v=19"></script>
-<script src="assets/js/ui/notify-live.js?v=17"></script>
-<script src="assets/js/utils/format-utils.js?v=17"></script>
-<script src="assets/js/features/complaints-engine.js?v=17"></script>
-<script src="assets/js/features/registry-engine.js?v=17"></script>
+<script src="js/core/async-state.js?v=1"></script>
+<script src="js/core/supabase-loader.js?v=17"></script>
+<script src="js/core/config.js?v=17"></script>
+<script src="js/utils/ds-autocomplete.js?v=17"></script>
+<script src="js/ui/main.js?v=23"></script>
+<script src="js/ui/holiday-engine.js?v=17"></script>
+<script src="js/ui/settings-panel.js?v=17"></script>
+<script src="js/ui/sound-engine.js?v=17"></script>
+<script src="js/core/auth.js?v=17"></script>
+<script src="js/core/roles-engine.js?v=17"></script>
+<script src="js/ui/search-engine.js?v=17"></script>
+<script src="js/utils/ds-cache.js?v=17"></script>
+<script src="js/ui/notify-engine.js?v=19"></script>
+<script src="js/ui/notify-live.js?v=17"></script>
+<script src="js/utils/format-utils.js?v=17"></script>
+<script src="js/features/complaints-engine.js?v=17"></script>
+<script src="js/features/registry-engine.js?v=17"></script>
 <script>
 document.getElementById("year").textContent=new Date().getFullYear();
 const $=id=>document.getElementById(id);
@@ -489,7 +489,7 @@ function openVpReqModal(id){
     ${v.kind==="confinement"&&v.confinement_minutes?`<div class="cr-tb-box" style="margin-top:10px"><div class="cr-tb-title">⏱ Срок</div><div class="cr-tb-body">${v.confinement_minutes} мин</div></div>`:""}
     ${extra.article?`<div class="cr-tb-box" style="margin-top:10px"><div class="cr-tb-title">📖 Статья</div><div class="cr-tb-body">${esc(extra.article)}</div></div>`:""}
     ${extra.norms?`<div class="cr-tb-box" style="margin-top:10px"><div class="cr-tb-title">📜 Нарушенные нормы</div><div class="cr-tb-body">${esc(extra.norms).replace(/\n/g,"<br>")}</div></div>`:""}
-    ${v.evidence_url?`<div class="cr-tb-box" style="margin-top:10px"><div class="cr-tb-title">🔗 Доказательства</div><div class="cr-tb-body"><a href="${esc(v.evidence_url)}" target="_blank" style="color:var(--gold)">Открыть →</a></div></div>`:""}
+    ${v.evidence_url?`<div class="cr-tb-box" style="margin-top:10px"><div class="cr-tb-title">🔗 Доказательства</div><div class="cr-tb-body"><a href="${esc(window.CGB_SECURITY.url(v.evidence_url))}" target="_blank" style="color:var(--gold)">Открыть →</a></div></div>`:""}
     <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
       ${canEdit?`<button class="btn btn-ghost btn-sm" id="crVpqEditBtn">✎ Редактировать</button>`:""}
       ${canReview?`<button class="btn btn-gold btn-sm" id="crVpqApprove">✅ Одобрить (выдать наказание)</button>`:""}
@@ -597,7 +597,7 @@ function renderComplaintsList(list,box,emptyEl){
   box.innerHTML=list.map(c=>{
     const v=VERDICTS.find(x=>x.key===c.verdict);
     const badge=c.status==="decided"&&v?`<span class="cr-verd-badge" style="background:${v.color}22;border:1px solid ${v.color};color:${v.color}">${v.icon} ${esc(v.label)}</span>`:`<span class="cr-verd-badge cr-pending">⏳ Ожидает</span>`;
-    return `<div class="cr-item" data-id="${c.id}">
+    return `<div class="cr-item" data-id="${esc(c.id)}">
       <div class="cr-item-head">
         <div class="cr-item-code"><code>${esc(c.code)}</code></div>
         <div class="cr-item-target">👤 <b>${esc(c.target_fio||"—")}</b> ${c.target_static?`<span class="cr-static">${esc(c.target_static)}</span>`:""}</div>
@@ -620,7 +620,7 @@ async function openDetail(id){
   const valuesRows=Object.entries(c.values||{}).filter(([k,v])=>v&&!skipKeys.has(k)).map(([k,val])=>{
     return `<div class="cr-kv"><div class="cr-k">${esc(labelOf(k))}</div><div class="cr-v">${esc(val)}</div></div>`;
   }).join("");
-  const evLink=c.evidence_url?`<a href="${esc(c.evidence_url)}" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">🔗 Открыть доказательство</a>`:"";
+  const evLink=c.evidence_url?`<a href="${esc(window.CGB_SECURITY.url(c.evidence_url))}" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">🔗 Открыть доказательство</a>`:"";
   const canReview=window.CGB_ROLES&&window.CGB_ROLES.can("complaints","review");
   const canDelete=window.CGB_ROLES&&window.CGB_ROLES.can("complaints","delete");
   const verdictBlock=c.status==="decided"?`
@@ -876,7 +876,7 @@ function itemHtml(x){
     </div>
     <div class="cr-reg-item-body">
       <div class="cr-reg-reason">${esc(x.reason)}</div>
-      ${x.evidence_url?`<a href="${esc(x.evidence_url)}" target="_blank" rel="noopener" class="cr-reg-ev">🔗 доказательство</a>`:""}
+      ${x.evidence_url?`<a href="${esc(window.CGB_SECURITY.url(x.evidence_url))}" target="_blank" rel="noopener" class="cr-reg-ev">🔗 доказательство</a>`:""}
       <div class="cr-reg-issued">Выдал: <b>${esc(x.issued_by_name||"—")}</b></div>
       ${removed?`<div class="cr-reg-remd">✕ Снято ${ruDT(x.removed_at)} · ${esc(x.removed_by_name||"—")}${x.removed_reason?`: <i>${esc(x.removed_reason)}</i>`:""}</div>`:""}
     </div>

@@ -81,9 +81,9 @@ window.CGB_NOTIFY=(function(){
     }
     const el=document.createElement("div");
     el.className="cgb-toast";
-    el.innerHTML=`<div class="cgb-toast-icon">${n.icon}</div>
+    el.innerHTML=`<div class="cgb-toast-icon">${esc(n.icon)}</div>
       <div class="cgb-toast-body">
-        <div class="cgb-toast-label">${n.label}${n.tag?" · "+esc(n.tag):""}</div>
+        <div class="cgb-toast-label">${esc(n.label)}${n.tag?" · "+esc(n.tag):""}</div>
         <div class="cgb-toast-title">${esc(n.title)}</div>
       </div>
       <button class="cgb-toast-close" title="Закрыть">✕</button>`;
@@ -91,7 +91,7 @@ window.CGB_NOTIFY=(function(){
     requestAnimationFrame(()=>el.classList.add("visible"));
     const close=()=>{el.classList.remove("visible");setTimeout(()=>el.remove(),350)};
     el.querySelector(".cgb-toast-close").addEventListener("click",e=>{e.stopPropagation();close()});
-    el.addEventListener("click",()=>{location.href=n.href});
+    el.addEventListener("click",()=>{location.href=window.CGB_SECURITY.localUrl(n.href)});
     setTimeout(close,6500);
   }
   function esc(s){return String(s||"").replace(/[<>&"']/g,c=>({"<":"&lt;",">":"&gt;","&":"&amp;",'"':"&quot;","'":"&#39;"}[c]))}
@@ -136,10 +136,10 @@ window.CGB_NOTIFY=(function(){
         </div>
       </div>
       <div class="cgb-np-body">${q.length?q.map(n=>`
-        <a class="cgb-np-item ${n.unread?"unread":""}" href="${n.href}">
-          <div class="cgb-np-icon">${n.icon}</div>
+        <a class="cgb-np-item ${n.unread?"unread":""}" href="${esc(window.CGB_SECURITY.localUrl(n.href))}">
+          <div class="cgb-np-icon">${esc(n.icon)}</div>
           <div class="cgb-np-content">
-            <div class="cgb-np-label">${n.label}${n.tag?" · "+esc(n.tag):""}</div>
+            <div class="cgb-np-label">${esc(n.label)}${n.tag?" · "+esc(n.tag):""}</div>
             <div class="cgb-np-name">${esc(n.title)}</div>
             <div class="cgb-np-time">${timeAgo(n.at)}</div>
           </div>

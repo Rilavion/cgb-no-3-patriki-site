@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="assets/images/brand/logo.png" type="image/png">
-<link rel="apple-touch-icon" href="assets/images/brand/logo.png">
+<link rel="icon" href="images/brand/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="images/brand/logo.png">
 <title> Проверки АБ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=26">
+<link rel="stylesheet" href="css/style.css?v=26">
 <style id="cgb-admin-guard">
 [data-admin]{display:none !important}
 [data-staff]{display:none !important}
@@ -26,7 +26,7 @@ body.cgb-is-staff [data-staff]:not(.nav a){display:initial !important}
 <header class="topbar">
   <div class="topbar-inner">
     <a class="brand" href="index.html">
-      <div class="brand-icon"><img src="assets/images/brand/logo.png" alt="ВС"></div>
+      <div class="brand-icon"><img src="images/brand/logo.png" alt="ВС"></div>
       <div class="brand-text">
         <span class="brand-label">Министерство Здравоохранения</span>
         <span class="brand-name">ЦГБ №3 · Центральная Городская</span>
@@ -377,7 +377,7 @@ body.cgb-is-staff [data-staff]:not(.nav a){display:initial !important}
   <div class="container">
     <div class="footer-inner">
       <div class="footer-brand">
-        <div class="brand-icon" style="width:44px;height:44px"><img src="assets/images/brand/logo.png" alt=""></div>
+        <div class="brand-icon" style="width:44px;height:44px"><img src="images/brand/logo.png" alt=""></div>
         <p style="color:var(--muted);font-size:13px;margin-top:12px">Служебный раздел. Доступ ограничен.</p>
       </div>
       <div class="footer-col">
@@ -417,22 +417,22 @@ body.cgb-is-staff [data-staff]:not(.nav a){display:initial !important}
   </div>
 </div>
 
-<script src="assets/js/core/async-state.js?v=1"></script>
-<script src="assets/js/core/supabase-loader.js?v=18"></script>
-<script src="assets/js/core/config.js?v=18"></script>
-<script src="assets/js/core/auth.js?v=18"></script>
-<script src="assets/js/core/roles-engine.js?v=18"></script>
-<script src="assets/js/features/vp-engine.js?v=18"></script>
-<script src="assets/js/ui/main.js?v=23"></script>
-<script src="assets/js/utils/format-utils.js?v=18"></script>
-<script src="assets/js/ui/holiday-engine.js?v=18"></script>
-<script src="assets/js/ui/sound-engine.js?v=18"></script>
-<script src="assets/js/ui/settings-panel.js?v=18"></script>
-<script src="assets/js/features/faq-engine.js?v=18"></script>
-<script src="assets/js/ui/search-engine.js?v=18"></script>
-<script src="assets/js/utils/ds-cache.js?v=18"></script>
-<script src="assets/js/ui/notify-engine.js?v=19"></script>
-<script src="assets/js/ui/notify-live.js?v=18"></script>
+<script src="js/core/async-state.js?v=1"></script>
+<script src="js/core/supabase-loader.js?v=18"></script>
+<script src="js/core/config.js?v=18"></script>
+<script src="js/core/auth.js?v=18"></script>
+<script src="js/core/roles-engine.js?v=18"></script>
+<script src="js/features/vp-engine.js?v=18"></script>
+<script src="js/ui/main.js?v=23"></script>
+<script src="js/utils/format-utils.js?v=18"></script>
+<script src="js/ui/holiday-engine.js?v=18"></script>
+<script src="js/ui/sound-engine.js?v=18"></script>
+<script src="js/ui/settings-panel.js?v=18"></script>
+<script src="js/features/faq-engine.js?v=18"></script>
+<script src="js/ui/search-engine.js?v=18"></script>
+<script src="js/utils/ds-cache.js?v=18"></script>
+<script src="js/ui/notify-engine.js?v=19"></script>
+<script src="js/ui/notify-live.js?v=18"></script>
 <script>
 document.getElementById("year").textContent=new Date().getFullYear();
 const $=id=>document.getElementById(id);
@@ -520,10 +520,10 @@ function renderRow(m,index){
   const evUrl=check.evidence_url||"";
   const evBtn=hasNo
     ? (evUrl
-        ? `<a class="vp-ev-btn vp-ev-ok" href="${esc(evUrl)}" target="_blank" rel="noopener" data-ev-open="${m.discord_id}" title="Открыть доказательство: ${esc(evUrl)}">🔗</a>`
+        ? `<a class="vp-ev-btn vp-ev-ok" href="${esc(window.CGB_SECURITY.url(evUrl))}" target="_blank" rel="noopener" data-ev-open="${m.discord_id}" title="Открыть доказательство: ${esc(evUrl)}">🔗</a>`
         : `<button class="vp-ev-btn vp-ev-req" data-ev-edit="${m.discord_id}" title="Требуется ссылка на доказательство (есть НЕТ)">⚠</button>`)
     : (evUrl
-        ? `<a class="vp-ev-btn vp-ev-info" href="${esc(evUrl)}" target="_blank" rel="noopener" title="Доказательство: ${esc(evUrl)}">🔗</a>`
+        ? `<a class="vp-ev-btn vp-ev-info" href="${esc(window.CGB_SECURITY.url(evUrl))}" target="_blank" rel="noopener" title="Доказательство: ${esc(evUrl)}">🔗</a>`
         : `<button class="vp-ev-btn vp-ev-empty" data-ev-edit="${m.discord_id}" title="Добавить ссылку на доказательство">＋</button>`);
   const idx=String(index+1).padStart(2,"0");
   return `<tr data-id="${m.discord_id}">
@@ -752,10 +752,10 @@ function updateEvBtnUI(id){
   if(!td) return;
   let html="";
   if(hasNo){
-    if(evUrl) html=`<a class="vp-ev-btn vp-ev-ok" href="${esc(evUrl)}" target="_blank" rel="noopener" title="Открыть доказательство: ${esc(evUrl)}">🔗</a>`;
+    if(evUrl) html=`<a class="vp-ev-btn vp-ev-ok" href="${esc(window.CGB_SECURITY.url(evUrl))}" target="_blank" rel="noopener" title="Открыть доказательство: ${esc(evUrl)}">🔗</a>`;
     else html=`<button class="vp-ev-btn vp-ev-req" data-ev-edit="${id}" title="Требуется ссылка на доказательство">⚠</button>`;
   } else if(evUrl){
-    html=`<a class="vp-ev-btn vp-ev-info" href="${esc(evUrl)}" target="_blank" rel="noopener" title="Доказательство: ${esc(evUrl)}">🔗</a>`;
+    html=`<a class="vp-ev-btn vp-ev-info" href="${esc(window.CGB_SECURITY.url(evUrl))}" target="_blank" rel="noopener" title="Доказательство: ${esc(evUrl)}">🔗</a>`;
   } else {
     html=`<button class="vp-ev-btn vp-ev-empty" data-ev-edit="${id}" title="Добавить ссылку на доказательство">＋</button>`;
   }
@@ -1442,7 +1442,7 @@ async function openArcDetail(id){
                 const ic=v==="yes"?"✓":v==="no"?"✕":v==="absent"?"○":"—";
                 return `<td class="vp-cell ${cls}"><div class="vp-pill-t" style="font-size:14px;font-weight:700">${ic}</div></td>`;
               }).join("")}
-              <td class="vp-td-ev">${m.evidence_url?`<a class="vp-ev-btn vp-ev-ok" href="${esc(m.evidence_url)}" target="_blank" rel="noopener" title="${esc(m.evidence_url)}">🔗</a>`:`<span class="vp-checker-empty">—</span>`}</td>
+              <td class="vp-td-ev">${m.evidence_url?`<a class="vp-ev-btn vp-ev-ok" href="${esc(window.CGB_SECURITY.url(m.evidence_url))}" target="_blank" rel="noopener" title="${esc(m.evidence_url)}">🔗</a>`:`<span class="vp-checker-empty">—</span>`}</td>
               <td class="vp-td-checker">${m.checked_by_name?`<div class="vp-checker">${esc(m.checked_by_name)}</div>`:`<span class="vp-checker-empty">—</span>`}</td>
             </tr>`;
           }).join("")}</tbody>
